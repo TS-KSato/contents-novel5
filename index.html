@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>銀竜の導き（占いコア雛形）</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;margin:0;background:#0b0d12;color:#fff}
+    .wrap{max-width:560px;margin:0 auto;padding:20px}
+    h1{font-size:20px;font-weight:700;margin:8px 0 16px}
+    .card{background:#151826;border:1px solid #27304a;border-radius:14px;padding:16px;margin:12px 0}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    button{appearance:none;border:1px solid #2f3b63;background:#1a2034;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}
+    button:hover{background:#232b45}
+    .muted{color:#aeb7d0;font-size:12px}
+    .stars{letter-spacing:2px;font-size:18px}
+    .pill{display:inline-block;background:#24304f;border:1px solid #34416b;border-radius:999px;padding:4px 10px;font-size:12px;margin-right:6px}
+    .grid{display:grid;grid-template-columns:1fr;gap:10px}
+    .label{font-size:12px;color:#9fb1da;margin-bottom:6px}
+    .big{font-size:28px}
+    .msg{margin-top:6px;color:#cdd5ea}
+    .gate{opacity:.7}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>銀竜の導き</h1>
+
+    <div class="card">
+      <div class="label">今日は誰と話す？</div>
+      <div class="row" id="charButtons">
+        <button data-char="ルナル">ルナル（銀竜）</button>
+        <button data-char="アラン">アラン（人間）</button>
+        <button data-char="リリア">リリア（妖精）</button>
+      </div>
+      <div class="muted">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</div>
+    </div>
+
+    <div id="result" class="grid"></div>
+
+    <div class="card">
+      <div class="label">会員ステータス</div>
+      <div>
+        <span class="pill" id="statusPill">無料会員</span>
+        <button id="toggleDemo">（デモ）有料/無料 切替</button>
+      </div>
+      <div class="muted">本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
+    </div>
+  </div>
+
+  <script>
+    // ======= 設定 =======
+    const CSV_PATH = "./fortune_messages.csv"; // 同じフォルダに置く
+    // ポジ寄り確率（★★★★★15%, ★★★★☆30%, ★★★☆☆35%, ★★☆☆☆15%, ★☆☆☆☆5%）
+    const STAR_WEIGHTS = {5:15, 4:30, 3:35, 2:15, 1:5};
+    // デモ用：有料/無料（本番はサーバで判定して埋め込む）
+    let isPremium = false;
+
+    // ======= ユーティリティ（簡易CSVパーサ：カンマ区切り／ダブルクオート対応）=======
+    function parseCSV(text){
+      const rows = [];
+      let cur = [], val = "", inQ = false;
+      for (let i=0;i<text.length;i++){
+        const c = text[i], n = text[i+1];
+        if (inQ){
+          if (c === '"' && n === '"'){ val += '"'; i++; }
+          else if (c === '"'){ inQ = false; }
+          else { val += c; }
+        } else {
+          if (c === '"'){ inQ = true; }
+          else if (c === ','){ cur.push(val); val=""; }
+          else if (c === '\n'){ cur.push(val); rows.push(cur); cur=[]; val=""; }
+          else if (c === '\r'){ /* skip */ }
+          else { val += c; }
+        }
+      }
+      if (val.length || cur.length) { cur.push(val); rows.push(cur); }
+      const header = rows.shift();
+      return rows.map(r => Object.fromEntries(header.map((h,idx)=>[h, r[idx] ?? ""])));
+    }
+
+    // ======= 乱数：日付＋キャラで毎日固定（軽量シード）=======
+    function hashStr(s){
+      let h = 2166136261>>>0;
+      for (let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h,16777619); }
+      return h>>>0;
+    }
+    function mulberry32(a){
+      return function(){
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+    }
+    function pickStarsDeterministic(character){
+      const today = new Date();
+      const key = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}|${character}`;
+      const rng = mulberry32(hashStr(key));
+      // 重み付き抽選（確率分布は固定）
+      const entries = Object.entries(STAR_WEIGHTS); // [[stars, weight],...]
+      const total = entries.reduce((s,[,w])=>s+Number(w),0);
+      let r = rng() * total;
+      for (const [stars, weight] of entries){
+        if (r < weight) return Number(stars);
+        r -= weight;
+      }
+      return 3;
+    }
+
+    // ======= データ読み込み =======
+    let records = [];
+    fetch(CSV_PATH)
+      .then(r => r.ok ? r.text() : Promise.reject("CSVが読み込めませんでした"))
+      .then(text => { records = parseCSV(text); })
+      .catch(err => {
+        console.error(err);
+        alert("占いデータの読み込みに失敗しました。CSVの配置を確認してください。");
+      });
+
+    // ======= 表示ロジック =======
+    const resultEl = document.getElementById("result");
+    const statusPill = document.getElementById("statusPill");
+    const toggleDemo = document.getElementById("toggleDemo");
+    toggleDemo.addEventListener("click", ()=>{ isPremium = !isPremium; statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員"; if (lastChar) showFor(lastChar); });
+
+    function starText(n){
+      return "★★★★★☆☆☆☆☆".slice(5-n, 10-n); // 5個/10個テク
+    }
+
+    function findMessage(category, stars, character){
+      // category,stars,character で一致する1件を返す
+      return records.find(r => r.category===category && Number(r.stars)===Number(stars) && r.character===character)?.message || "";
+    }
+
+    let lastChar = null;
+    function showFor(character){
+      lastChar = character;
+      if (!records.length){ resultEl.innerHTML = `<div class="card">データ読込中...</div>`; return; }
+
+      // 今日の星（キャラで固定）
+      const starsOverall = pickStarsDeterministic(character);
+      const starsAction  = pickStarsDeterministic(character + "|act");   // 種別でシードをずらす
+      const starsMind    = pickStarsDeterministic(character + "|mind");
+
+      // 全体運（無料でも表示）
+      const msgOverall = findMessage("全体運", starsOverall, character);
+
+      // 行動運・精神運（有料のみ）
+      const msgAction = findMessage("行動運", starsAction, character);
+      const msgMind   = findMessage("精神運", starsMind, character);
+
+      // レンダリング
+      resultEl.innerHTML = `
+        <div class="card">
+          <div class="label">選択したキャラクター</div>
+          <div class="big">${character}</div>
+        </div>
+
+        <div class="card">
+          <div class="label">全体運（無料）</div>
+          <div class="stars">${starText(starsOverall)}</div>
+          <div class="msg">「${msgOverall}」</div>
+        </div>
+
+        <div class="card ${isPremium ? "" : "gate"}">
+          <div class="label">行動運（有料）</div>
+          ${isPremium ? `
+            <div class="stars">${starText(starsAction)}</div>
+            <div class="msg">「${msgAction}」</div>
+          ` : `
+            <div class="muted">有料会員で表示されます</div>
+          `}
+        </div>
+
+        <div class="card ${isPremium ? "" : "gate"}">
+          <div class="label">精神運（有料）</div>
+          ${isPremium ? `
+            <div class="stars">${starText(starsMind)}</div>
+            <div class="msg">「${msgMind}」</div>
+          ` : `
+            <div class="muted">有料会員で表示されます</div>
+          `}
+        </div>
+      `;
+    }
+
+    // キャラ選択ハンドラ
+    document.getElementById("charButtons").addEventListener("click", (e)=>{
+      const btn = e.target.closest("button[data-char]");
+      if (!btn) return;
+      showFor(btn.dataset.char);
+    });
+  </script>
+</body>
+</html>
