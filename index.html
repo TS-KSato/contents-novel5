@@ -8,7 +8,6 @@
   <style>
     body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;margin:0;background:#0b0d12;color:#fff}
     .wrap{max-width:560px;margin:0 auto;padding:20px}
-    h1{font-size:20px;font-weight:700;margin:8px 0 16px}
     .card{background:#151826;border:1px solid #27304a;border-radius:14px;padding:16px;margin:12px 0}
     .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
     button.char-btn{background:none;border:none;cursor:pointer;text-align:center}
@@ -19,7 +18,6 @@
     .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
     .pill:hover{background:#18213a}
     .pill.accent{background:#1a3358;border-color:#34507c}
-    .pill.ghost{opacity:.8}
     .big{font-size:28px}
     .msg{margin-top:6px;color:#cdd5ea}
     .gate{opacity:.7}
@@ -29,34 +27,33 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- ヘッダー -->
+    <!-- ヘッダー（上部はシンプルに画像で演出） -->
     <header style="text-align:center; padding:20px 10px">
       <img src="./assets/logo.png" alt="運命の銀竜暦" style="max-width:220px; height:auto; margin-bottom:8px">
       <p style="font-size:14px; color:#aeb7d0; margin:0">銀竜の言葉を継ぐ継承者の物語</p>
     </header>
 
-    <!-- キャラ選択 -->
+    <!-- キャラ選択（画像ボタン） -->
     <div class="card">
       <div class="label" style="text-align:center;margin-bottom:8px">今日は誰と話す？</div>
       <div class="row" id="charButtons">
         <button data-char="ルナル" class="char-btn">
-          <img src="./assets/char-lunal.png" alt="ルナル">
-          <div>ルナル</div>
+          <img src="./assets/char-lunal.png" alt="ルナル"><div>ルナル</div>
         </button>
         <button data-char="アラン" class="char-btn">
-          <img src="./assets/char-alan.png" alt="アラン">
-          <div>アラン</div>
+          <img src="./assets/char-alan.png" alt="アラン"><div>アラン</div>
         </button>
         <button data-char="リリア" class="char-btn">
-          <img src="./assets/char-lilia.png" alt="リリア">
-          <div>リリア</div>
+          <img src="./assets/char-lilia.png" alt="リリア"><div>リリア</div>
         </button>
       </div>
       <div class="muted" style="text-align:center;margin-top:8px">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</div>
     </div>
 
-    <div id="result" class="grid"></div>
+    <!-- 占い結果 -->
+    <div id="result"></div>
 
+    <!-- 会員ステータス（デモ切替） -->
     <div class="card">
       <div class="label">会員ステータス</div>
       <div>
@@ -66,7 +63,7 @@
       <div class="muted">※本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
     </div>
 
-    <!-- フッター -->
+    <!-- フッター（導線と法務） -->
     <footer>
       <div class="links">
         <a href="./list.html" class="pill">おまけページ</a>
@@ -84,80 +81,51 @@
   </div>
 
   <script>
-    const CSV_PATH = "./fortune_messages.csv";
-    const STAR_WEIGHTS = {5:15, 4:30, 3:35, 2:15, 1:5};
-    let isPremium = false;
+    // ===== 設定 =====
+    const JSON_PATH = "./fortune_messages.json";
+    let isPremium = false; // 本番はサーバ側で判定して埋め込む
 
-    function parseCSV(text){
-      const rows = [];
-      let cur = [], val = "", inQ = false;
-      for (let i=0;i<text.length;i++){
-        const c = text[i], n = text[i+1];
-        if (inQ){
-          if (c === '"' && n === '"'){ val += '"'; i++; }
-          else if (c === '"'){ inQ = false; }
-          else { val += c; }
-        } else {
-          if (c === '"'){ inQ = true; }
-          else if (c === ','){ cur.push(val); val=""; }
-          else if (c === '\n'){ cur.push(val); rows.push(cur); cur=[]; val=""; }
-          else if (c === '\r'){ }
-          else { val += c; }
-        }
-      }
-      if (val.length || cur.length) { cur.push(val); rows.push(cur); }
-      const header = rows.shift();
-      return rows.map(r => Object.fromEntries(header.map((h,idx)=>[h, r[idx] ?? ""])));
-    }
-
-    function hashStr(s){
-      let h = 2166136261>>>0;
-      for (let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h,16777619); }
-      return h>>>0;
-    }
-    function mulberry32(a){
-      return function(){
-        let t = a += 0x6D2B79F5;
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      }
-    }
-    function pickStarsDeterministic(character){
-      const today = new Date();
-      const key = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}|${character}`;
+    // ===== starの確率（JSONのweightsに従う）+ 日付固定乱数 =====
+    function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+    function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
+    function pickStarsDeterministic(character, weights){
+      const d = new Date();
+      const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}|${character}`;
       const rng = mulberry32(hashStr(key));
-      const entries = Object.entries(STAR_WEIGHTS);
+      const entries = Object.entries(weights); // [["5",15],...]
       const total = entries.reduce((s,[,w])=>s+Number(w),0);
       let r = rng() * total;
-      for (const [stars, weight] of entries){
-        if (r < weight) return Number(stars);
-        r -= weight;
-      }
+      for(const [star, w] of entries){ if(r < w) return Number(star); r -= w; }
       return 3;
     }
 
-    let records = [];
-    fetch(CSV_PATH)
-      .then(r => r.ok ? r.text() : Promise.reject("CSVが読み込めませんでした"))
-      .then(text => { records = parseCSV(text); })
+    // ===== データ読込 =====
+    let MESSAGES = null;
+    let WEIGHTS = null;
+
+    fetch(JSON_PATH)
+      .then(r => r.ok ? r.json() : Promise.reject("JSONが読み込めませんでした"))
+      .then(json => {
+        MESSAGES = json.messages;
+        WEIGHTS = json.weights;
+      })
       .catch(err => {
         console.error(err);
-        alert("占いデータの読み込みに失敗しました。CSVの配置を確認してください。");
+        alert("占いデータの読み込みに失敗しました。fortune_messages.json の配置を確認してください。");
       });
 
+    // ===== 便利関数 =====
     const resultEl = document.getElementById("result");
     const statusPill = document.getElementById("statusPill");
     const toggleDemo = document.getElementById("toggleDemo");
     toggleDemo.addEventListener("click", ()=>{ isPremium = !isPremium; statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員"; if (lastChar) showFor(lastChar); });
 
-    function starText(n){
-      return "★★★★★☆☆☆☆☆".slice(5-n, 10-n);
+    function starText(n){ return "★★★★★☆☆☆☆☆".slice(5-n, 10-n); }
+    function getMessage(category, stars, character){
+      const cat = MESSAGES?.[category]; if(!cat) return "";
+      const byStar = cat[String(stars)]; if(!byStar) return "";
+      return byStar?.[character] || "";
     }
-    function findMessage(category, stars, character){
-      return records.find(r => r.category===category && Number(r.stars)===Number(stars) && r.character===character)?.message || "";
-    }
-
     function ctaBlock(isPremium){
       if (isPremium) return `
         <div class="card">
@@ -183,18 +151,19 @@
         </div>`;
     }
 
+    // ===== 表示 =====
     let lastChar = null;
     function showFor(character){
       lastChar = character;
-      if (!records.length){ resultEl.innerHTML = `<div class="card">データ読込中...</div>`; return; }
+      if (!MESSAGES || !WEIGHTS){ resultEl.innerHTML = `<div class="card">データ読込中...</div>`; return; }
 
-      const starsOverall = pickStarsDeterministic(character);
-      const starsAction  = pickStarsDeterministic(character + "|act");
-      const starsMind    = pickStarsDeterministic(character + "|mind");
+      const sOverall = pickStarsDeterministic(character, WEIGHTS);
+      const sAction  = pickStarsDeterministic(character + "|act", WEIGHTS);
+      const sMind    = pickStarsDeterministic(character + "|mind", WEIGHTS);
 
-      const msgOverall = findMessage("全体運", starsOverall, character);
-      const msgAction  = findMessage("行動運", starsAction,  character);
-      const msgMind    = findMessage("精神運", starsMind,    character);
+      const mOverall = getMessage("全体運", sOverall, character);
+      const mAction  = getMessage("行動運", sAction,  character);
+      const mMind    = getMessage("精神運", sMind,    character);
 
       resultEl.innerHTML = `
         <div class="card">
@@ -204,16 +173,16 @@
 
         <div class="card">
           <div class="label">全体運（無料）</div>
-          <div class="stars">${starText(starsOverall)}</div>
-          <div class="msg">「${msgOverall}」</div>
+          <div class="stars">${starText(sOverall)}</div>
+          <div class="msg">「${mOverall}」</div>
           <div class="muted" style="margin-top:6px">※詳細は有料会員で開放されます</div>
         </div>
 
         <div class="card ${isPremium ? "" : "gate"}">
           <div class="label">行動運（有料）</div>
           ${isPremium ? `
-            <div class="stars">${starText(starsAction)}</div>
-            <div class="msg">「${msgAction}」</div>
+            <div class="stars">${starText(sAction)}</div>
+            <div class="msg">「${mAction}」</div>
           ` : `
             <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
           `}
@@ -222,8 +191,8 @@
         <div class="card ${isPremium ? "" : "gate"}">
           <div class="label">精神運（有料）</div>
           ${isPremium ? `
-            <div class="stars">${starText(starsMind)}</div>
-            <div class="msg">「${msgMind}」</div>
+            <div class="stars">${starText(sMind)}</div>
+            <div class="msg">「${mMind}」</div>
           ` : `
             <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
           `}
@@ -233,6 +202,7 @@
       `;
     }
 
+    // キャラ選択
     document.getElementById("charButtons").addEventListener("click", (e)=>{
       const btn = e.target.closest("button[data-char]");
       if (!btn) return;
