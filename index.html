@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>運命の銀竜暦｜占いトップ</title>
-<meta name="description" content="運命の銀竜暦の占いトップ。無料は全体運のみ。有料で行動運・精神運が開放。小説ページやおまけページにもアクセス。">
+  <title>運命の銀竜暦｜占いトップ</title>
+  <meta name="description" content="運命の銀竜暦の占いトップ。無料は全体運のみ。有料で行動運・精神運が開放。小説ページやおまけページにもアクセス。">
   <style>
     body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;margin:0;background:#0b0d12;color:#fff}
     .wrap{max-width:560px;margin:0 auto;padding:20px}
@@ -15,22 +15,32 @@
     button:hover{background:#232b45}
     .muted{color:#aeb7d0;font-size:12px}
     .stars{letter-spacing:2px;font-size:18px}
-    .pill{display:inline-block;background:#24304f;border:1px solid #34416b;border-radius:999px;padding:4px 10px;font-size:12px;margin-right:6px}
-    .grid{display:grid;grid-template-columns:1fr;gap:10px}
-    .label{font-size:12px;color:#9fb1da;margin-bottom:6px}
+    .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
+    .pill:hover{background:#18213a}
+    .pill.accent{background:#1a3358;border-color:#34507c}
+    .pill.ghost{opacity:.8}
     .big{font-size:28px}
     .msg{margin-top:6px;color:#cdd5ea}
     .gate{opacity:.7}
-      .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
-  .pill:hover{background:#18213a}
-  .pill.accent{background:#1a3358;border-color:#34507c}
-  .pill.ghost{opacity:.8}
+    footer{margin:16px 0 8px;color:#aeb7d0;font-size:12px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>運命の銀竜暦</h1>
 
+    <!-- 基本導線 -->
+    <nav class="nav-basic" style="margin:8px 0 12px; display:flex; flex-wrap:wrap; gap:8px">
+      <a href="./list.html" class="pill">おまけページ</a>
+      <a href="./novel.html" class="pill">小説ページ</a>
+      <a href="./signup.html" class="pill accent">会員登録</a>
+      <a href="./terms.html" class="pill ghost">利用規約</a>
+      <a href="./law.html" class="pill ghost">特定商取引</a>
+      <a href="./privacy.html" class="pill ghost">個人情報保護方針</a>
+      <a href="./devices.html" class="pill ghost">対応機種</a>
+    </nav>
+
+    <!-- キャラ選択 -->
     <div class="card">
       <div class="label">今日は誰と話す？</div>
       <div class="row" id="charButtons">
@@ -49,27 +59,27 @@
         <span class="pill" id="statusPill">無料会員</span>
         <button id="toggleDemo">（デモ）有料/無料 切替</button>
       </div>
-      <div class="muted">本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
+      <div class="muted">※本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
     </div>
+
+    <!-- フッター -->
+    <footer>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="./terms.html" class="pill" style="font-size:12px">利用規約</a>
+        <a href="./law.html" class="pill" style="font-size:12px">特定商取引</a>
+        <a href="./privacy.html" class="pill" style="font-size:12px">個人情報保護方針</a>
+        <a href="./devices.html" class="pill" style="font-size:12px">対応機種</a>
+      </div>
+      <div style="margin-top:8px">© 運命の銀竜暦</div>
+    </footer>
   </div>
-<nav class="nav-basic" style="margin:8px 0 12px; display:flex; flex-wrap:wrap; gap:8px">
-  <a href="./list.html" class="pill">おまけページ</a>
-  <a href="./novel.html" class="pill">小説ページ</a>
-  <a href="./signup.html" class="pill accent">会員登録</a>
-  <a href="./terms.html" class="pill ghost">利用規約</a>
-  <a href="./law.html" class="pill ghost">特定商取引</a>
-  <a href="./privacy.html" class="pill ghost">個人情報保護方針</a>
-  <a href="./devices.html" class="pill ghost">対応機種</a>
-</nav>
+
   <script>
-    // ======= 設定 =======
-    const CSV_PATH = "./fortune_messages.csv"; // 同じフォルダに置く
-    // ポジ寄り確率（★★★★★15%, ★★★★☆30%, ★★★☆☆35%, ★★☆☆☆15%, ★☆☆☆☆5%）
+    const CSV_PATH = "./fortune_messages.csv";
     const STAR_WEIGHTS = {5:15, 4:30, 3:35, 2:15, 1:5};
-    // デモ用：有料/無料（本番はサーバで判定して埋め込む）
     let isPremium = false;
 
-    // ======= ユーティリティ（簡易CSVパーサ：カンマ区切り／ダブルクオート対応）=======
+    // 簡易CSVパーサ
     function parseCSV(text){
       const rows = [];
       let cur = [], val = "", inQ = false;
@@ -83,7 +93,7 @@
           if (c === '"'){ inQ = true; }
           else if (c === ','){ cur.push(val); val=""; }
           else if (c === '\n'){ cur.push(val); rows.push(cur); cur=[]; val=""; }
-          else if (c === '\r'){ /* skip */ }
+          else if (c === '\r'){ }
           else { val += c; }
         }
       }
@@ -92,7 +102,6 @@
       return rows.map(r => Object.fromEntries(header.map((h,idx)=>[h, r[idx] ?? ""])));
     }
 
-    // ======= 乱数：日付＋キャラで毎日固定（軽量シード）=======
     function hashStr(s){
       let h = 2166136261>>>0;
       for (let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h,16777619); }
@@ -110,8 +119,7 @@
       const today = new Date();
       const key = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}|${character}`;
       const rng = mulberry32(hashStr(key));
-      // 重み付き抽選（確率分布は固定）
-      const entries = Object.entries(STAR_WEIGHTS); // [[stars, weight],...]
+      const entries = Object.entries(STAR_WEIGHTS);
       const total = entries.reduce((s,[,w])=>s+Number(w),0);
       let r = rng() * total;
       for (const [stars, weight] of entries){
@@ -121,7 +129,6 @@
       return 3;
     }
 
-    // ======= データ読み込み =======
     let records = [];
     fetch(CSV_PATH)
       .then(r => r.ok ? r.text() : Promise.reject("CSVが読み込めませんでした"))
@@ -131,19 +138,41 @@
         alert("占いデータの読み込みに失敗しました。CSVの配置を確認してください。");
       });
 
-    // ======= 表示ロジック =======
     const resultEl = document.getElementById("result");
     const statusPill = document.getElementById("statusPill");
     const toggleDemo = document.getElementById("toggleDemo");
     toggleDemo.addEventListener("click", ()=>{ isPremium = !isPremium; statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員"; if (lastChar) showFor(lastChar); });
 
     function starText(n){
-      return "★★★★★☆☆☆☆☆".slice(5-n, 10-n); // 5個/10個テク
+      return "★★★★★☆☆☆☆☆".slice(5-n, 10-n);
+    }
+    function findMessage(category, stars, character){
+      return records.find(r => r.category===category && Number(r.stars)===Number(stars) && r.character===character)?.message || "";
     }
 
-    function findMessage(category, stars, character){
-      // category,stars,character で一致する1件を返す
-      return records.find(r => r.category===category && Number(r.stars)===Number(stars) && r.character===character)?.message || "";
+    function ctaBlock(isPremium){
+      if (isPremium) return `
+        <div class="card">
+          <div class="label">次はどこへ？</div>
+          <div class="row">
+            <a class="pill" href="./list.html">おまけページ</a>
+            <a class="pill" href="./novel.html">小説ページ</a>
+          </div>
+        </div>`;
+      return `
+        <div class="card">
+          <div class="label">有料会員になると</div>
+          <ul style="margin:6px 0 0 18px; color:#cdd5ea; font-size:13px; line-height:1.6">
+            <li>行動運・精神運の★評価が毎日開放</li>
+            <li>広告なし・占い履歴の保存</li>
+            <li>名言アーカイブや世界観資料にフルアクセス</li>
+          </ul>
+          <div style="margin-top:10px" class="row">
+            <a class="pill accent" href="./signup.html">会員登録へ</a>
+            <a class="pill" href="./list.html">おまけページ</a>
+            <a class="pill" href="./novel.html">小説ページ</a>
+          </div>
+        </div>`;
     }
 
     let lastChar = null;
@@ -151,19 +180,14 @@
       lastChar = character;
       if (!records.length){ resultEl.innerHTML = `<div class="card">データ読込中...</div>`; return; }
 
-      // 今日の星（キャラで固定）
       const starsOverall = pickStarsDeterministic(character);
-      const starsAction  = pickStarsDeterministic(character + "|act");   // 種別でシードをずらす
+      const starsAction  = pickStarsDeterministic(character + "|act");
       const starsMind    = pickStarsDeterministic(character + "|mind");
 
-      // 全体運（無料でも表示）
       const msgOverall = findMessage("全体運", starsOverall, character);
+      const msgAction  = findMessage("行動運", starsAction,  character);
+      const msgMind    = findMessage("精神運", starsMind,    character);
 
-      // 行動運・精神運（有料のみ）
-      const msgAction = findMessage("行動運", starsAction, character);
-      const msgMind   = findMessage("精神運", starsMind, character);
-
-      // レンダリング
       resultEl.innerHTML = `
         <div class="card">
           <div class="label">選択したキャラクター</div>
@@ -174,6 +198,7 @@
           <div class="label">全体運（無料）</div>
           <div class="stars">${starText(starsOverall)}</div>
           <div class="msg">「${msgOverall}」</div>
+          <div class="muted" style="margin-top:6px">※詳細は有料会員で開放されます</div>
         </div>
 
         <div class="card ${isPremium ? "" : "gate"}">
@@ -182,7 +207,7 @@
             <div class="stars">${starText(starsAction)}</div>
             <div class="msg">「${msgAction}」</div>
           ` : `
-            <div class="muted">有料会員で表示されます</div>
+            <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
           `}
         </div>
 
@@ -192,13 +217,14 @@
             <div class="stars">${starText(starsMind)}</div>
             <div class="msg">「${msgMind}」</div>
           ` : `
-            <div class="muted">有料会員で表示されます</div>
+            <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
           `}
         </div>
+
+        ${ctaBlock(isPremium)}
       `;
     }
 
-    // キャラ選択ハンドラ
     document.getElementById("charButtons").addEventListener("click", (e)=>{
       const btn = e.target.closest("button[data-char]");
       if (!btn) return;
