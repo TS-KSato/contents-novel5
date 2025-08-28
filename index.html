@@ -2,66 +2,155 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜占いトップ</title>
   <meta name="description" content="運命の銀竜暦の占いトップ。無料は全体運のみ。有料で行動運・精神運が開放。小説ページやおまけページにもアクセス。">
   <style>
-    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;margin:0;background:#0b0d12;color:#fff}
-    .wrap{max-width:560px;margin:0 auto;padding:20px}
-    .card{background:#151826;border:1px solid #27304a;border-radius:14px;padding:16px;margin:12px 0}
-    .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-    button.char-btn{background:none;border:none;cursor:pointer;text-align:center}
-    button.char-btn img{width:90px;height:90px;border-radius:50%;border:2px solid #27304a}
-    button.char-btn div{margin-top:6px;color:#fff;font-size:14px}
-    .muted{color:#aeb7d0;font-size:12px}
-    .stars{letter-spacing:2px;font-size:18px}
-    .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
-    .pill:hover{background:#18213a}
-    .pill.accent{background:#1a3358;border-color:#34507c}
-    .big{font-size:28px}
-    .msg{margin-top:6px;color:#cdd5ea}
-    .gate{opacity:.7}
-    footer{margin:16px 0 8px;color:#aeb7d0;font-size:12px;text-align:center}
-    footer .links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:6px}
+    /* ===== ベース：スマホ縦画面向け rem スケール ===== */
+    html { font-size: 16px; } /* ユーザー設定で拡大された場合にも追従 */
+    :root{
+      --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
+      --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
+      --radius: 0.875rem; /* 14px相当 */
+      --pad: 1rem;        /* 16px */
+      --gap: 0.75rem;     /* 12px */
+      --tap: 2.75rem;     /* 44px（最小タップ領域） */
+    }
+    * { box-sizing: border-box; }
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+      line-height: 1.7; font-size: 1rem; /* 16px */
+      -webkit-text-size-adjust: 100%;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap{ max-width: 35rem; margin: 0 auto; padding: 1.25rem; } /* 560px相当, 20px */
+
+    /* 見出しは可変（clamp）で過不足を抑制 */
+    h1{
+      margin: 0 0 1rem;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 5.5vw, 1.5rem); /* 20px〜24px */
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    /* カードUI（余白・角丸・境界は rem 基準） */
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--pad);
+      margin: 0.75rem 0;
+    }
+
+    /* 行レイアウト */
+    .row{ display:flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+
+    /* キャラボタン（画像＋テキスト） */
+    button.char-btn{
+      appearance: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      min-height: var(--tap);
+      min-width: var(--tap);
+      padding: 0.25rem;
+      border-radius: 0.5rem;
+    }
+    button.char-btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+    button.char-btn img{
+      width: 5.625rem; height: 5.625rem; /* 90px */
+      border-radius: 50%;
+      border: 0.125rem solid var(--line); /* 2px */
+      object-fit: cover;
+    }
+    button.char-btn div{
+      margin-top: 0.375rem; /* 6px */
+      font-size: 0.875rem;  /* 14px */
+    }
+
+    /* テキストユーティリティ */
+    .muted{ color: var(--muted); font-size: 0.875rem; } /* 14px */
+    .label{ font-size: 0.9375rem; color: #cfe1ff; margin-bottom: 0.5rem; } /* 15px */
+    .big{ font-size: clamp(1.25rem, 5vw, 1.75rem); line-height: 1.2; } /* 20〜28px */
+    .msg{ margin-top: 0.375rem; color:#cdd5ea; font-size: 1rem; }
+    .stars{ letter-spacing: 0.125rem; font-size: 1.125rem; } /* 18px */
+    .gate{ opacity: .7; }
+
+    /* Pill リンク／ボタン（rem&em混合：中身は相対） */
+    .pill{
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid var(--line); background: #11172a;
+      padding: 0.375rem 0.625rem; /* 6px 10px */
+      border-radius: 999px; font-size: 0.8125rem; /* 13px */
+      min-height: var(--tap); /* 44px確保 */
+    }
+    .pill:hover{ background:#18213a; }
+    .pill.accent{ background: var(--accent-2); border-color: var(--accent-2-b); color:#fff; }
+    .pill.small{ min-height: 2rem; font-size: 0.75rem; } /* 法務リンク用微小サイズ */
+
+    /* フッター */
+    footer{
+      margin: 1rem 0 0.5rem; color: var(--muted); font-size: 0.75rem; text-align: center;
+    }
+    footer .links{
+      display:flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 0.5rem;
+    }
+
+    /* ボタン（汎用） */
+    button{
+      font-size: 1em; /* コンテナに相対 */
+      min-height: var(--tap);
+      padding: 0.625rem 0.875rem; /* 10px 14px */
+      border-radius: 0.625rem; /* 10px */
+      border: 1px solid #2f3b63;
+      background: #1a2034; color: #fff;
+      cursor: pointer;
+    }
+    button:hover{ background:#232b45; }
+    button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- ヘッダー（上部はシンプルに画像で演出） -->
-    <header style="text-align:center; padding:20px 10px">
-      <img src="./assets/logo.png" alt="運命の銀竜暦" style="max-width:220px; height:auto; margin-bottom:8px">
-      <p style="font-size:14px; color:#aeb7d0; margin:0">銀竜の言葉を継ぐ継承者の物語</p>
+    <!-- ヘッダー（画像で補完・テキストは最小限） -->
+    <header style="text-align:center; padding: 1.25rem 0.625rem;">
+      <img src="./assets/logo.png" alt="運命の銀竜暦" style="max-width: 13.75rem; height:auto; margin-bottom: 0.5rem;" />
+      <p class="muted" style="margin:0;">銀竜の言葉を継ぐ継承者の物語</p>
     </header>
 
     <!-- キャラ選択（画像ボタン） -->
-    <div class="card">
-      <div class="label" style="text-align:center;margin-bottom:8px">今日は誰と話す？</div>
+    <section class="card" aria-labelledby="chooseCharacter">
+      <div id="chooseCharacter" class="label" style="text-align:center;">今日は誰と話す？</div>
       <div class="row" id="charButtons">
-        <button data-char="ルナル" class="char-btn">
-          <img src="./assets/char-lunal.png" alt="ルナル"><div>ルナル</div>
+        <button data-char="ルナル" class="char-btn" aria-label="ルナルと話す">
+          <img src="./assets/char-lunal.png" alt="ルナルのアイコン"><div>ルナル</div>
         </button>
-        <button data-char="アラン" class="char-btn">
-          <img src="./assets/char-alan.png" alt="アラン"><div>アラン</div>
+        <button data-char="アラン" class="char-btn" aria-label="アランと話す">
+          <img src="./assets/char-alan.png" alt="アランのアイコン"><div>アラン</div>
         </button>
-        <button data-char="リリア" class="char-btn">
-          <img src="./assets/char-lilia.png" alt="リリア"><div>リリア</div>
+        <button data-char="リリア" class="char-btn" aria-label="リリアと話す">
+          <img src="./assets/char-lilia.png" alt="リリアのアイコン"><div>リリア</div>
         </button>
       </div>
-      <div class="muted" style="text-align:center;margin-top:8px">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</div>
-    </div>
+      <p class="muted" style="text-align:center; margin-top: 0.5rem;">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</p>
+    </section>
 
     <!-- 占い結果 -->
-    <div id="result"></div>
+    <section id="result" aria-live="polite"></section>
 
     <!-- 会員ステータス（デモ切替） -->
-    <div class="card">
-      <div class="label">会員ステータス</div>
-      <div>
-        <span class="pill" id="statusPill">無料会員</span>
-        <button id="toggleDemo">（デモ）有料/無料 切替</button>
+    <section class="card" aria-labelledby="memberStatus">
+      <div id="memberStatus" class="label">会員ステータス</div>
+      <div class="row" style="justify-content:flex-start;">
+        <span class="pill" id="statusPill" aria-live="polite">無料会員</span>
+        <button id="toggleDemo" aria-pressed="false" aria-label="有料/無料のデモ切替">（デモ）有料/無料 切替</button>
       </div>
-      <div class="muted">※本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
-    </div>
+      <p class="muted">※本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</p>
+    </section>
 
     <!-- フッター（導線と法務） -->
     <footer>
@@ -71,28 +160,28 @@
         <a href="./signup.html" class="pill accent">会員登録</a>
       </div>
       <div class="links">
-        <a href="./terms.html" class="pill" style="font-size:12px">利用規約</a>
-        <a href="./law.html" class="pill" style="font-size:12px">特定商取引</a>
-        <a href="./privacy.html" class="pill" style="font-size:12px">個人情報保護方針</a>
-        <a href="./devices.html" class="pill" style="font-size:12px">対応機種</a>
+        <a href="./terms.html" class="pill small">利用規約</a>
+        <a href="./law.html" class="pill small">特定商取引</a>
+        <a href="./privacy.html" class="pill small">個人情報保護方針</a>
+        <a href="./devices.html" class="pill small">対応機種</a>
       </div>
-      <div style="margin-top:8px">© 運命の銀竜暦</div>
+      <div style="margin-top:0.5rem;">© 運命の銀竜暦</div>
     </footer>
   </div>
 
   <script>
-    // ===== 設定 =====
+    // ===== 設定（JSONに一本化） =====
     const JSON_PATH = "./fortune_messages.json";
-    let isPremium = false; // 本番はサーバ側で判定して埋め込む
+    let isPremium = false; // 本番はサーバで判定
 
-    // ===== starの確率（JSONのweightsに従う）+ 日付固定乱数 =====
+    // ===== 日付固定乱数（品質一貫性） =====
     function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
     function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
     function pickStarsDeterministic(character, weights){
       const d = new Date();
       const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}|${character}`;
       const rng = mulberry32(hashStr(key));
-      const entries = Object.entries(weights); // [["5",15],...]
+      const entries = Object.entries(weights); // [["5",15], ...]
       const total = entries.reduce((s,[,w])=>s+Number(w),0);
       let r = rng() * total;
       for(const [star, w] of entries){ if(r < w) return Number(star); r -= w; }
@@ -100,25 +189,22 @@
     }
 
     // ===== データ読込 =====
-    let MESSAGES = null;
-    let WEIGHTS = null;
-
+    let MESSAGES = null, WEIGHTS = null;
     fetch(JSON_PATH)
       .then(r => r.ok ? r.json() : Promise.reject("JSONが読み込めませんでした"))
-      .then(json => {
-        MESSAGES = json.messages;
-        WEIGHTS = json.weights;
-      })
-      .catch(err => {
-        console.error(err);
-        alert("占いデータの読み込みに失敗しました。fortune_messages.json の配置を確認してください。");
-      });
+      .then(json => { MESSAGES = json.messages; WEIGHTS = json.weights; })
+      .catch(err => { console.error(err); alert("占いデータの読み込みに失敗しました。fortune_messages.json の配置を確認してください。"); });
 
-    // ===== 便利関数 =====
+    // ===== ユーティリティ =====
     const resultEl = document.getElementById("result");
     const statusPill = document.getElementById("statusPill");
     const toggleDemo = document.getElementById("toggleDemo");
-    toggleDemo.addEventListener("click", ()=>{ isPremium = !isPremium; statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員"; if (lastChar) showFor(lastChar); });
+    toggleDemo.addEventListener("click", ()=>{
+      isPremium = !isPremium;
+      toggleDemo.setAttribute("aria-pressed", String(isPremium));
+      statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員";
+      if (lastChar) showFor(lastChar);
+    });
 
     function starText(n){ return "★★★★★☆☆☆☆☆".slice(5-n, 10-n); }
     function getMessage(category, stars, character){
@@ -138,12 +224,12 @@
       return `
         <div class="card">
           <div class="label">有料会員になると</div>
-          <ul style="margin:6px 0 0 18px; color:#cdd5ea; font-size:13px; line-height:1.6">
+          <ul style="margin:0.375rem 0 0 1rem; color:#cdd5ea; font-size:0.9375rem; line-height:1.6">
             <li>行動運・精神運の★評価が毎日開放</li>
             <li>広告なし・占い履歴の保存</li>
             <li>名言アーカイブや世界観資料にフルアクセス</li>
           </ul>
-          <div style="margin-top:10px" class="row">
+          <div class="row" style="margin-top: 0.625rem;">
             <a class="pill accent" href="./signup.html">会員登録へ</a>
             <a class="pill" href="./list.html">おまけページ</a>
             <a class="pill" href="./novel.html">小説ページ</a>
@@ -166,35 +252,35 @@
       const mMind    = getMessage("精神運", sMind,    character);
 
       resultEl.innerHTML = `
-        <div class="card">
-          <div class="label">選択したキャラクター</div>
+        <div class="card" aria-labelledby="selChar">
+          <div id="selChar" class="label">選択したキャラクター</div>
           <div class="big">${character}</div>
         </div>
 
-        <div class="card">
-          <div class="label">全体運（無料）</div>
-          <div class="stars">${starText(sOverall)}</div>
-          <div class="msg">「${mOverall}」</div>
-          <div class="muted" style="margin-top:6px">※詳細は有料会員で開放されます</div>
+        <div class="card" aria-labelledby="overall">
+          <div id="overall" class="label">全体運（無料）</div>
+          <div class="stars" aria-label="全体運の評価">${starText(sOverall)}</div>
+          <p class="msg">「${mOverall}」</p>
+          <p class="muted" style="margin-top: 0.375rem;">※詳細は有料会員で開放されます</p>
         </div>
 
-        <div class="card ${isPremium ? "" : "gate"}">
-          <div class="label">行動運（有料）</div>
+        <div class="card ${isPremium ? "" : "gate"}" aria-labelledby="act">
+          <div id="act" class="label">行動運（有料）</div>
           ${isPremium ? `
-            <div class="stars">${starText(sAction)}</div>
-            <div class="msg">「${mAction}」</div>
+            <div class="stars" aria-label="行動運の評価">${starText(sAction)}</div>
+            <p class="msg">「${mAction}」</p>
           ` : `
-            <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
+            <p class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:0.375rem;">会員登録</a></p>
           `}
         </div>
 
-        <div class="card ${isPremium ? "" : "gate"}">
-          <div class="label">精神運（有料）</div>
+        <div class="card ${isPremium ? "" : "gate"}" aria-labelledby="mind">
+          <div id="mind" class="label">精神運（有料）</div>
           ${isPremium ? `
-            <div class="stars">${starText(sMind)}</div>
-            <div class="msg">「${mMind}」</div>
+            <div class="stars" aria-label="精神運の評価">${starText(sMind)}</div>
+            <p class="msg">「${mMind}」</p>
           ` : `
-            <div class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:6px">会員登録</a></div>
+            <p class="muted">会員登録で表示されます → <a href="./signup.html" class="pill" style="margin-left:0.375rem;">会員登録</a></p>
           `}
         </div>
 
