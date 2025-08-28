@@ -10,9 +10,10 @@
     .wrap{max-width:560px;margin:0 auto;padding:20px}
     h1{font-size:20px;font-weight:700;margin:8px 0 16px}
     .card{background:#151826;border:1px solid #27304a;border-radius:14px;padding:16px;margin:12px 0}
-    .row{display:flex;gap:8px;flex-wrap:wrap}
-    button{appearance:none;border:1px solid #2f3b63;background:#1a2034;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}
-    button:hover{background:#232b45}
+    .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    button.char-btn{background:none;border:none;cursor:pointer;text-align:center}
+    button.char-btn img{width:90px;height:90px;border-radius:50%;border:2px solid #27304a}
+    button.char-btn div{margin-top:6px;color:#fff;font-size:14px}
     .muted{color:#aeb7d0;font-size:12px}
     .stars{letter-spacing:2px;font-size:18px}
     .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
@@ -22,33 +23,36 @@
     .big{font-size:28px}
     .msg{margin-top:6px;color:#cdd5ea}
     .gate{opacity:.7}
-    footer{margin:16px 0 8px;color:#aeb7d0;font-size:12px}
+    footer{margin:16px 0 8px;color:#aeb7d0;font-size:12px;text-align:center}
+    footer .links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:6px}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>運命の銀竜暦</h1>
-
-    <!-- 基本導線 -->
-    <nav class="nav-basic" style="margin:8px 0 12px; display:flex; flex-wrap:wrap; gap:8px">
-      <a href="./list.html" class="pill">おまけページ</a>
-      <a href="./novel.html" class="pill">小説ページ</a>
-      <a href="./signup.html" class="pill accent">会員登録</a>
-      <a href="./terms.html" class="pill ghost">利用規約</a>
-      <a href="./law.html" class="pill ghost">特定商取引</a>
-      <a href="./privacy.html" class="pill ghost">個人情報保護方針</a>
-      <a href="./devices.html" class="pill ghost">対応機種</a>
-    </nav>
+    <!-- ヘッダー -->
+    <header style="text-align:center; padding:20px 10px">
+      <img src="./assets/logo.png" alt="運命の銀竜暦" style="max-width:220px; height:auto; margin-bottom:8px">
+      <p style="font-size:14px; color:#aeb7d0; margin:0">銀竜の言葉を継ぐ継承者の物語</p>
+    </header>
 
     <!-- キャラ選択 -->
     <div class="card">
-      <div class="label">今日は誰と話す？</div>
+      <div class="label" style="text-align:center;margin-bottom:8px">今日は誰と話す？</div>
       <div class="row" id="charButtons">
-        <button data-char="ルナル">ルナル（銀竜）</button>
-        <button data-char="アラン">アラン（人間）</button>
-        <button data-char="リリア">リリア（妖精）</button>
+        <button data-char="ルナル" class="char-btn">
+          <img src="./assets/char-lunal.png" alt="ルナル">
+          <div>ルナル</div>
+        </button>
+        <button data-char="アラン" class="char-btn">
+          <img src="./assets/char-alan.png" alt="アラン">
+          <div>アラン</div>
+        </button>
+        <button data-char="リリア" class="char-btn">
+          <img src="./assets/char-lilia.png" alt="リリア">
+          <div>リリア</div>
+        </button>
       </div>
-      <div class="muted">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</div>
+      <div class="muted" style="text-align:center;margin-top:8px">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</div>
     </div>
 
     <div id="result" class="grid"></div>
@@ -64,7 +68,12 @@
 
     <!-- フッター -->
     <footer>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="links">
+        <a href="./list.html" class="pill">おまけページ</a>
+        <a href="./novel.html" class="pill">小説ページ</a>
+        <a href="./signup.html" class="pill accent">会員登録</a>
+      </div>
+      <div class="links">
         <a href="./terms.html" class="pill" style="font-size:12px">利用規約</a>
         <a href="./law.html" class="pill" style="font-size:12px">特定商取引</a>
         <a href="./privacy.html" class="pill" style="font-size:12px">個人情報保護方針</a>
@@ -79,7 +88,6 @@
     const STAR_WEIGHTS = {5:15, 4:30, 3:35, 2:15, 1:5};
     let isPremium = false;
 
-    // 簡易CSVパーサ
     function parseCSV(text){
       const rows = [];
       let cur = [], val = "", inQ = false;
