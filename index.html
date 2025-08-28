@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>運命の銀竜暦</title>
+<title>運命の銀竜暦｜占いトップ</title>
+<meta name="description" content="運命の銀竜暦の占いトップ。無料は全体運のみ。有料で行動運・精神運が開放。小説ページやおまけページにもアクセス。">
   <style>
     body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;margin:0;background:#0b0d12;color:#fff}
     .wrap{max-width:560px;margin:0 auto;padding:20px}
@@ -20,6 +21,10 @@
     .big{font-size:28px}
     .msg{margin-top:6px;color:#cdd5ea}
     .gate{opacity:.7}
+      .pill{color:#9fd3ff;text-decoration:none;border:1px solid #27304a;padding:6px 10px;border-radius:999px;background:#11172a;font-size:13px}
+  .pill:hover{background:#18213a}
+  .pill.accent{background:#1a3358;border-color:#34507c}
+  .pill.ghost{opacity:.8}
   </style>
 </head>
 <body>
@@ -47,7 +52,15 @@
       <div class="muted">本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</div>
     </div>
   </div>
-
+<nav class="nav-basic" style="margin:8px 0 12px; display:flex; flex-wrap:wrap; gap:8px">
+  <a href="./list.html" class="pill">おまけページ</a>
+  <a href="./novel.html" class="pill">小説ページ</a>
+  <a href="./signup.html" class="pill accent">会員登録</a>
+  <a href="./terms.html" class="pill ghost">利用規約</a>
+  <a href="./law.html" class="pill ghost">特定商取引</a>
+  <a href="./privacy.html" class="pill ghost">個人情報保護方針</a>
+  <a href="./devices.html" class="pill ghost">対応機種</a>
+</nav>
   <script>
     // ======= 設定 =======
     const CSV_PATH = "./fortune_messages.csv"; // 同じフォルダに置く
