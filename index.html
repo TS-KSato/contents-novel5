@@ -3,193 +3,231 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>運命の銀竜暦｜占いトップ</title>
-  <meta name="description" content="運命の銀竜暦の占いトップ。無料は全体運のみ。有料で行動運・精神運が開放。小説ページやおまけページにもアクセス。">
+  <title>運命の銀竜暦｜今日の占いを受け取る</title>
+  <meta name="description" content="銀竜の言葉を継ぐ者へ。ワンタップで今日の占い、物語、竜の食卓。無料は総合、有料で9カテゴリが開放。">
   <style>
     html { font-size: 16px; }
     :root{
       --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
       --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
-      --radius: 0.875rem; --pad: 1rem; --gap: 0.75rem; --tap: 2.75rem;
+      --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
+      --success:#6bd8a6; --warning:#ffd27e;
     }
-    * { box-sizing: border-box; }
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
-      line-height: 1.7; font-size: 1rem; -webkit-text-size-adjust: 100%;
-      text-rendering: optimizeLegibility;
-    }
-    .wrap{ max-width: 35rem; margin: 0 auto; padding: 1.25rem; }
+    *{ box-sizing:border-box }
+    body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif; line-height:1.75; -webkit-text-size-adjust:100%; text-rendering:optimizeLegibility; }
+    .wrap{ max-width:40rem; margin:0 auto; padding:1rem; }
 
-    h1{
-      margin: 0 0 1rem;
-      font-weight: 700;
-      font-size: clamp(1.25rem, 5.5vw, 1.5rem);
-      line-height: 1.2;
-      text-align: center;
-    }
+    /* ===== Hero ===== */
+    .hero{ position:relative; overflow:hidden; border-radius:calc(var(--radius) * 1.2); border:1px solid var(--line); background: radial-gradient(120% 120% at 100% 0%, #1d2a4a 0%, #0c1220 55%, #0b0d12 100%); padding:1.25rem; margin-top:.5rem; }
+    .hero h1{ margin:0 0 .25rem; font-size:clamp(1.35rem,6vw,1.75rem); line-height:1.25; letter-spacing:.02em; }
+    .hero .lead{ color:#cfe1ff; margin:.25rem 0 .75rem; font-size:1rem }
+    .cta{ display:flex; gap:.5rem; flex-wrap:wrap }
+    .btn{ appearance:none; border:1px solid var(--accent-2-b); background:var(--accent-2); color:#fff; border-radius:.75rem; padding:.625rem .9rem; min-height:var(--tap); font-size:1rem; cursor:pointer }
+    .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
+    .btn.secondary{ background:#11172a; border-color:#2f3b63; color:#d7e6ff }
+    .meta{ color:var(--muted); font-size:.85rem }
 
-    .card{
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: var(--pad);
-      margin: 0.75rem 0;
-    }
+    /* Pills / tags */
+    .pills{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
+    .pill{ display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line); background:#11172a; color:#cfe1ff; border-radius:999px; padding:.25rem .6rem; font-size:.8rem }
 
-    .row{ display:flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    /* ===== Cards ===== */
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin:.75rem 0 }
+    .label{ font-size:.95rem; color:#cfe1ff; margin-bottom:.5rem }
 
-    button.char-btn{
-      appearance: none; background: none; border: none; cursor: pointer; text-align: center;
-      min-height: var(--tap); min-width: var(--tap); padding: 0.25rem; border-radius: 0.5rem;
-    }
-    button.char-btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
-    button.char-btn img{
-      width: 5.625rem; height: 5.625rem; border-radius: 50%; border: 0.125rem solid var(--line); object-fit: cover;
-    }
-    button.char-btn div{ margin-top: 0.375rem; font-size: 0.875rem; }
+    /* Character row */
+    .row{ display:flex; gap:.75rem; flex-wrap:wrap; }
+    .char-btn{ appearance:none; background:none; border:1px solid var(--line); border-radius:.75rem; padding:.5rem; min-width:6rem; text-align:center; cursor:pointer }
+    .char-btn img{ width:4.75rem; height:4.75rem; border-radius:50%; border:1px solid #2b3559; object-fit:cover }
+    .char-btn div{ margin-top:.375rem; font-size:.875rem }
 
-    .muted{ color: var(--muted); font-size: 0.875rem; }
-    .label{ font-size: 0.9375rem; color: #cfe1ff; margin-bottom: 0.5rem; }
-    .big{ font-size: clamp(1.25rem, 5vw, 1.75rem); line-height: 1.2; }
-    .msg{ margin-top: 0.375rem; color:#cdd5ea; font-size: 1rem; }
-    .stars{ letter-spacing: 0.125rem; font-size: 1.125rem; }
-    .gate{ opacity: .7; }
+    /* Result box */
+    .result{ border:1px dashed #32426b; border-radius:.75rem; padding:.75rem; background:#0f1526 }
+    .stars{ letter-spacing:.12rem }
+    .lock{ opacity:.65 }
 
-    .pill{
-      display: inline-flex; align-items: center; justify-content: center;
-      color: var(--accent); text-decoration: none; border: 1px solid var(--line); background: #11172a;
-      padding: 0.375rem 0.625rem; border-radius: 999px; font-size: 0.8125rem; min-height: var(--tap);
-    }
-    .pill:hover{ background:#18213a; }
-    .pill.accent{ background: var(--accent-2); border-color: var(--accent-2-b); color:#fff; }
-    .pill.small{ min-height: 2rem; font-size: 0.75rem; }
+    /* Feature grid */
+    .grid{ display:grid; gap:.75rem; grid-template-columns:1fr 1fr; }
+    @media (max-width:480px){ .grid{ grid-template-columns:1fr } }
+    .tile{ text-decoration:none; color:inherit; border:1px solid var(--line); background:#10162a; border-radius:.75rem; padding:.75rem }
+    .tile:hover{ background:#15203a }
+    .tile .t1{ font-weight:700 }
+    .tile .t2{ font-size:.86rem; color:#aeb7d0 }
 
-    footer{ margin: 1rem 0 0.5rem; font-size: 0.75rem; text-align: center; }
-    footer .links{ display:flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 0.5rem; }
+    /* Social proof strip */
+    .strip{ display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:center; padding:.5rem; border:1px solid var(--line); border-radius:.75rem; background:#0f1528; font-size:.85rem }
 
-    button{
-      font-size: 1em; min-height: var(--tap); padding: 0.625rem 0.875rem;
-      border-radius: 0.625rem; border: 1px solid #2f3b63; background: #1a2034; color: #fff; cursor: pointer;
-    }
-    button:hover{ background:#232b45; }
-    button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+    footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1.25rem 0 .5rem }
+
+    /* Bottom nav (unchanged pattern) */
+    .bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9); backdrop-filter:blur(8px); border-top:1px solid var(--line) }
+    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr) }
+    .bn-btn{ appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.375rem 0; min-height:3.25rem; font-size:.75rem }
+    .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; border-radius:4px; border:1px solid var(--line); background:#16213c; display:flex; align-items:center; justify-content:center; font-size:.75rem }
+    .bn-accent{ color:#fff }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header style="text-align:center; padding: 1.25rem 0.625rem;">
-      <img src="./assets/logo.png" alt="運命の銀竜暦" style="max-width: 13.75rem; height:auto; margin-bottom: 0.5rem;" />
-      <p class="muted" style="margin:0;">銀竜の言葉を継ぐ継承者の物語</p>
-    </header>
+    <!-- ===== HERO / Primary CTA ===== -->
+    <section class="hero" aria-label="今日の占い">
+      <h1>銀竜からのことばを<br>ワンタップで受け取ろう</h1>
+      <p class="lead">無料で「総合運」を即表示。有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）。</p>
+      <div class="cta">
+        <button id="ctaGet" class="btn" data-evt="cta_primary">今日の占いを受け取る</button>
+        <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録（1分）</a>
+      </div>
+      <div class="pills" aria-hidden="true" style="margin-top:.75rem">
+        <span class="pill">日替わり固定ロジック</span>
+        <span class="pill">世界観に合わせた言葉設計</span>
+        <span class="pill">解約いつでも</span>
+      </div>
+    </section>
 
+    <!-- ===== Quick character choose ===== -->
     <section class="card" aria-labelledby="chooseCharacter">
-      <div id="chooseCharacter" class="label" style="text-align:center;">今日は誰と話す？</div>
+      <div id="chooseCharacter" class="label">語り手を選ぶ</div>
       <div class="row" id="charButtons">
-        <button data-char="ルナル" class="char-btn" aria-label="ルナルと話す">
-          <img src="./assets/char-lunal.png" alt="ルナルのアイコン"><div>ルナル</div>
-        </button>
-        <button data-char="アラン" class="char-btn" aria-label="アランと話す">
-          <img src="./assets/char-alan.png" alt="アランのアイコン"><div>アラン</div>
-        </button>
-        <button data-char="リリア" class="char-btn" aria-label="リリアと話す">
-          <img src="./assets/char-lilia.png" alt="リリアのアイコン"><div>リリア</div>
-        </button>
+        <button data-char="ルナル" class="char-btn" aria-label="ルナル" data-evt="char_pick"><img src="./assets/char-lunal.png" alt="ルナル"><div>ルナル</div></button>
+        <button data-char="アラン" class="char-btn" aria-label="アラン" data-evt="char_pick"><img src="./assets/char-alan.png" alt="アラン"><div>アラン</div></button>
+        <button data-char="リリア" class="char-btn" aria-label="リリア" data-evt="char_pick"><img src="./assets/char-lilia.png" alt="リリア"><div>リリア</div></button>
       </div>
-      <p class="muted" style="text-align:center; margin-top: 0.5rem;">※選ぶたびに当日の結果を表示。日付が変わると更新されます。</p>
+      <p class="meta" style="text-align:center; margin-top:.5rem">選ぶたび当日の結果を表示。日付が変わると更新。</p>
     </section>
 
-    <section id="result" aria-live="polite"></section>
-
-    <section class="card" aria-labelledby="memberStatus">
-      <div id="memberStatus" class="label">会員ステータス</div>
-      <div class="row" style="justify-content:flex-start;">
-        <span class="pill" id="statusPill" aria-live="polite">無料会員</span>
-        <button id="toggleDemo" aria-pressed="false" aria-label="有料/無料のデモ切替">（デモ）有料/無料 切替</button>
+    <!-- ===== Result ===== -->
+    <section id="result" class="card" aria-live="polite" style="display:none">
+      <div class="label">今日の結果</div>
+      <div class="result" id="resultBox">
+        <!-- JS inject -->
       </div>
-      <p class="muted">※本番ではキャリア決済完了後にサーバ側で有料フラグを付与してください。</p>
+      <div class="pills" style="margin-top:.75rem">
+        <a href="./zodiac.html" class="pill" data-evt="entry_zodiac">星座別診断</a>
+        <a href="./partner.html" class="pill" data-evt="entry_partner">今日のパートナー</a>
+        <a href="./serial.html" class="pill" data-evt="entry_serial">七夜の語り巻</a>
+      </div>
     </section>
-        <a href="./novel.html" class="pill">短編小説</a>
-        <a href="./zodiac.html" class="pill">星座別診断表</a>
-        <a href="./partner.html" class="pill">今日のパートナー</a>
-    <a href="./serial.html" class="pill">七夜の語り巻</a>
-    <a href="./food.html" class="pill">竜の食卓</a>
-    <footer>
-      <div class="links">
-        <a href="./signup.html" class="pill small">会員登録</a>
-        <a href="/" class="pill small">ログイン</a>
-        <a href="/" class="pill small">退会</a>
-        <a href="./terms.html" class="pill small">利用規約</a>
-        <a href="./law.html" class="pill small">特定商取引</a>
-        <a href="./privacy.html" class="pill small">個人情報保護方針</a>
-        <a href="./devices.html" class="pill small">対応機種</a>
-      </div>
-      <div style="margin-top:0.5rem;">© 運命の銀竜暦</div>
-    </footer>
+
+    <!-- ===== Teasers / Content hubs ===== -->
+    <section class="grid" aria-label="物語と食卓">
+      <a href="./food.html" class="tile" data-evt="entry_food">
+        <div class="t1">竜の食卓</div>
+        <div class="t2">現実に再現できる異界のレシピ。今日の一皿とキャラ別の食卓。</div>
+      </a>
+      <a href="./serial.html" class="tile" data-evt="entry_serial2">
+        <div class="t1">七夜の語り巻</div>
+        <div class="t2">継承者たちの短編連作。無料は抜粋、有料で全文。</div>
+      </a>
+      <a href="./novel.html" class="tile" data-evt="entry_novel">
+        <div class="t1">短編小説</div>
+        <div class="t2">銀竜世界の掌編。スキマ時間で。</div>
+      </a>
+      <a href="./zodiac.html" class="tile" data-evt="entry_zodiac2">
+        <div class="t1">星座診断</div>
+        <div class="t2">12星座×9カテゴリの見取り図。</div>
+      </a>
+    </section>
+
+    <!-- ===== Social proof /安心材料 ===== -->
+    <section class="strip" aria-label="案内">
+      <span>広告なし</span>
+      <span>個人情報は最小限</span>
+      <span>解約はマイページで即時</span>
+      <span>キャリア決済対応</span>
+    </section>
+
+    <footer>© 運命の銀竜暦</footer>
   </div>
 
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+    <div class="bn-grid">
+      <a class="bn-btn bn-accent" href="./index.html" aria-current="page"><span class="bn-icon">占</span><span>占い</span></a>
+      <a class="bn-btn" href="./list.html"><span class="bn-icon">お</span><span>おまけ</span></a>
+      <a class="bn-btn" href="./serial.html"><span class="bn-icon">巻</span><span>語り巻</span></a>
+      <a class="bn-btn" href="./food.html"><span class="bn-icon">食</span><span>食卓</span></a>
+      <a class="bn-btn" href="./signup.html"><span class="bn-icon">会</span><span>会員</span></a>
+    </div>
+  </nav>
+
 <script>
-  // ===== フォールバック（fetch失敗時に使う最小データ） =====
-  const FALLBACK_JSON = {
-    meta: { version: 2, characters: ["ルナル","アラン","リリア"], free_categories: ["総合"] },
-    weights: { "5": 18, "4": 32, "3": 30, "2": 15, "1": 5 },
-    categories: [
-      {"key":"総合","paid":false},{"key":"健康","paid":true},{"key":"平穏","paid":true},{"key":"生活","paid":true},
-      {"key":"対人","paid":true},{"key":"成長","paid":true},{"key":"目的","paid":true},{"key":"自由","paid":true},
-      {"key":"娯楽","paid":true},{"key":"評価","paid":true}
-    ],
-    messages: {
-      "総合": {
-        "5": { "ルナル": "今日は追い風だ。遠慮なく行こう。", "アラン": "思った以上に進む日。素直に踏み出そう。", "リリア": "光があなたを包む日。小さな奇跡を拾って。" },
-        "4": { "ルナル": "整っている。いつもより一歩深く。", "アラン": "流れは良好。段取りを意識すると吉。", "リリア": "澄んだ空気。迷ったら軽い方を。" },
-        "3": { "ルナル": "平常運。足場を固めておけ。", "アラン": "可もなく不可もなく。基本を丁寧に。", "リリア": "静かな日。無理せず整えて。" },
-        "2": { "ルナル": "焦りは不要。今日は守りを優先。", "アラン": "無理は禁物。小目標で十分。", "リリア": "休む勇気を。心に余白を。" },
-        "1": { "ルナル": "退くも勇。明日に力を残せ。", "アラン": "今日は小休止。最低限でOK。", "リリア": "やさしく過ごして。自分を責めないで。" }
-      }
+// ===== Config / Constants =====
+const JSON_PATH = "./fortune_messages.json";
+const FALLBACK = {
+  meta:{version:2, characters:["ルナル","アラン","リリア"], free_categories:["総合"]},
+  weights:{"5":18,"4":32,"3":30,"2":15,"1":5},
+  categories:[
+    {key:"総合",paid:false},{key:"健康",paid:true},{key:"平穏",paid:true},{key:"生活",paid:true},
+    {key:"対人",paid:true},{key:"成長",paid:true},{key:"目的",paid:true},{key:"自由",paid:true},
+    {key:"娯楽",paid:true},{key:"評価",paid:true}
+  ],
+  messages:{
+    "総合":{
+      "5":{ "ルナル":"今日は追い風だ。遠慮なく行こう。","アラン":"思った以上に進む日。素直に踏み出そう。","リリア":"光があなたを包む日。小さな奇跡を拾って。" },
+      "4":{ "ルナル":"整っている。いつもより一歩深く。","アラン":"流れは良好。段取りを意識すると吉。","リリア":"澄んだ空気。迷ったら軽い方を。" },
+      "3":{ "ルナル":"平常運。足場を固めておけ。","アラン":"可もなく不可もなく。基本を丁寧に。","リリア":"静かな日。無理せず整えて。" },
+      "2":{ "ルナル":"焦りは不要。今日は守りを優先。","アラン":"無理は禁物。小目標で十分。","リリア":"休む勇気を。心に余白を。" },
+      "1":{ "ルナル":"退くも勇。明日に力を残せ。","アラン":"今日は小休止。最低限でOK。","リリア":"やさしく過ごして。自分を責めないで。" }
     }
-  };
-
-  const JSON_PATH = "./fortune_messages.json";
-  let isPremium = false;
-
-  const TODAY_KEY = () => {
-    const d = new Date();
-    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-  };
-  const STORE_KEY = () => "fortune_locked_v2_" + TODAY_KEY();
-
-  function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
-  function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
-  function pickByWeights(weights, seedStr){
-    const rng = mulberry32(hashStr(seedStr));
-    const entries = Object.entries(weights);
-    const total = entries.reduce((s,[,w])=>s+Number(w),0);
-    let r = rng() * total;
-    for (const [star, w] of entries){ if (r < w) return Number(star); r -= w; }
-    return 3;
   }
-  function starText(n){ return "★★★★★☆☆☆☆☆".slice(5-n, 10-n); }
+};
 
-  let META=null, MESSAGES=null, WEIGHTS=null, CATEGORIES=null, CHARACTERS=null, FREE_KEYS=new Set(["総合"]);
-  function initWithJson(json){
-    META = json.meta||{};
-    WEIGHTS = json.weights||{"5":18,"4":32,"3":30,"2":15,"1":5};
-    MESSAGES = json.messages||{};
-    CATEGORIES = json.categories||[];
-    CHARACTERS = META.characters||["ルナル","アラン","リリア"];
-    if (Array.isArray(META.free_categories)) FREE_KEYS = new Set(META.free_categories);
-    restoreOrInit();
-  }
+let META=null, MESSAGES=null, WEIGHTS=null, CATEGORIES=null, CHARACTERS=null, FREE_KEYS=new Set(["総合"]), isPremium=false;
 
-  fetch(JSON_PATH)
-    .then(r => r.ok ? r.json() : Promise.reject("fetch not ok"))
-    .then(initWithJson)
-    .catch(err => {
-      console.warn("fortune_messages.json 読込失敗。フォールバックで続行します。", err);
-      initWithJson(FALLBACK_JSON);
-    });
+// ===== Utils =====
+function $(sel, el=document){ return el.querySelector(sel); }
+function esc(s){ return String(s||"").replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
+function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
+function starText(n){ return "★★★★★☆☆☆☆☆".slice(5-n,10-n); }
+function pickByWeights(weights, seed){ const rng=mulberry32(hashStr(seed)); const entries=Object.entries(weights); const total=entries.reduce((s,[,w])=>s+Number(w),0); let r=rng()*total; for(const [star,w] of entries){ if(r<w) return Number(star); r-=w; } return 3; }
 
-  // （以下は結果描画やイベント処理部分、元コードと同じ）
+// Tiny analytics hooks (GA4連携の置き換え想定)
+function track(name, detail){ document.dispatchEvent(new CustomEvent('track', {detail:{name, ...detail}})); }
+
+// ===== Render Result =====
+function renderResult(char){
+  const res = $('#result');
+  const box = $('#resultBox');
+  res.style.display = 'block';
+
+  const seed = `${todayKey()}|${char}|総合`;
+  const stars = pickByWeights(WEIGHTS, seed);
+  const msg = (MESSAGES?.["総合"]?.[String(stars)]?.[char]) || '今日の言葉は準備中です。';
+
+  const premiumList = CATEGORIES.filter(c=>c.paid);
+  const paidHtml = premiumList.map(c=>`<li class="lock">${esc(c.key)}：<span aria-hidden="true">🔒</span> 有料で開放</li>`).join('');
+
+  box.innerHTML = `
+    <div style="display:flex; gap:.75rem; align-items:center; margin-bottom:.25rem">
+      <div style="width:2.75rem; height:2.75rem; border-radius:50%; border:1px solid #2b3559; background:#10162a; display:flex; align-items:center; justify-content:center">${esc(char.slice(0,2))}</div>
+      <div>
+        <div class="stars" aria-label="運勢">${starText(stars)}</div>
+        <div style="color:#e8eeff; font-size:1rem; margin-top:.125rem">${esc(msg)}</div>
+      </div>
+    </div>
+    <hr style="border:none; border-top:1px solid var(--line); margin:.75rem 0" />
+    <div class="meta">無料会員：総合のみ表示 / 有料会員：9カテゴリが毎日開放</div>
+    <ul style="margin:.25rem 0 0 .9rem; padding:0">${paidHtml}</ul>
+    <div style="margin-top:.75rem; display:flex; gap:.5rem; flex-wrap:wrap">
+      <a href="./signup.html" class="btn" data-evt="upsell">有料プランを見る</a>
+      <a href="./zodiac.html" class="btn secondary" data-evt="zodiac_after">星座診断へ</a>
+    </div>
+  `;
+}
+
+// ===== Init JSON =====
+function initWithJson(json){
+  META=json.meta||{}; WEIGHTS=json.weights||FALLBACK.weights; MESSAGES=json.messages||FALLBACK.messages; CATEGORIES=json.categories||FALLBACK.categories; CHARACTERS= (json.meta?.characters)||FALLBACK.meta.characters; if(Array.isArray(json.meta?.free_categories)) FREE_KEYS=new Set(json.meta.free_categories);
+}
+
+fetch(JSON_PATH).then(r=>r.ok?r.json():Promise.reject('fetch not ok')).then(initWithJson).catch(()=>initWithJson(FALLBACK));
+
+// ===== Events =====
+$('#ctaGet').addEventListener('click', ()=>{ track('cta_primary',{}); const first = CHARACTERS?.[0]||'ルナル'; renderResult(first); window.scrollTo({top:$('#result').offsetTop - 12, behavior:'smooth'}); });
+$('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest('[data-char]'); if(!btn) return; const c = btn.getAttribute('data-char'); track('char_pick',{char:c}); renderResult(c); window.scrollTo({top:$('#result').offsetTop - 12, behavior:'smooth'}); });
+
 </script>
 </body>
 </html>
