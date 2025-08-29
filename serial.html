@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>運命の銀竜暦｜連載</title>
+  <meta name="description" content="エテルナリアの賢者たちが綴る連載。無料は抜粋、有料は全文を読めます。">
+  <style>
+    html { font-size: 16px; }
+    :root{
+      --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
+      --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
+      --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
+    }
+    *{ box-sizing:border-box }
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+      line-height:1.8; font-size:1rem; -webkit-text-size-adjust:100%;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap{ max-width:40rem; margin:0 auto; padding:1.25rem }
+    header{ text-align:center; padding:1rem .5rem; }
+    header h1{ margin:.25rem 0 .25rem; font-size:clamp(1.25rem,5.5vw,1.5rem); }
+    header .muted{ color:var(--muted); font-size:.875rem }
+    .nav{ display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin:.5rem 0 1rem; }
+    .pill{
+      display:inline-flex; align-items:center; justify-content:center;
+      color:var(--accent); text-decoration:none; background:#11172a; border:1px solid var(--line);
+      padding:.375rem .625rem; border-radius:999px; font-size:.8125rem; min-height:var(--tap);
+    }
+    .pill:hover{ background:#18213a }
+    .pill.accent{ background:var(--accent-2); border-color:var(--accent-2-b); color:#fff }
+
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin:.75rem 0; }
+    .label{ font-size:.9375rem; color:#cfe1ff; margin-bottom:.5rem }
+    .title{ font-size:1.125rem; font-weight:700; line-height:1.4; margin:.25rem 0 .25rem; }
+    .meta{ color:var(--muted); font-size:.8125rem; }
+    .lead{ color:#e8eeff; font-size:1rem; margin:.25rem 0 .5rem; }
+    .body{ color:#e0e6ff; font-size:1rem; }
+    .sep{ height:1px; background:var(--line); margin:.75rem 0; }
+    .grid{ display:grid; gap:.75rem; }
+    .lock{
+      display:inline-flex; align-items:center; gap:.375rem; font-size:.8125rem;
+      color:#d7e6ff; background:#13203a; border:1px solid #2b3b61; border-radius:999px; padding:.25rem .5rem;
+    }
+    footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .5rem }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>連載（無料は抜粋／有料は全文）</h1>
+      <p class="muted">週ごとに選出された三本の語り。<br>無料は抜粋のみ、有料は全文をお楽しみいただけます。</p>
+      <nav class="nav">
+        <a href="./index.html" class="pill">← 占いトップ</a>
+        <a href="./list.html" class="pill">おまけページ</a>
+        <span class="pill" id="statusPill">無料会員</span>
+        <button id="toggleDemo" class="pill" aria-pressed="false">（デモ）有料/無料 切替</button>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div class="label">今週の選出（※週ごとに固定・翌週刷新）</div>
+      <div id="articles" class="grid" aria-live="polite"></div>
+      <p class="meta" style="margin-top:.5rem;">※制作都合でファイルが少ない場合は、同一月の別話や過去作を選出することがあります。</p>
+    </section>
+
+    <footer>© 運命の銀竜暦</footer>
+  </div>
+
+<script>
+/* ================== 基本設定 ================== */
+const BASE_PATH = "./";               // 連番JSONの配置パス
+const FILE_PREFIX = "articles_";      // 例: articles_001.json
+const FILE_PAD = 3;                   // 001, 002, ...
+const PROBE_MAX = 200;                // 存在チェック上限
+const PICK_COUNT = 3;                 // 1週あたり表示件数
+let isPremium = false;                // 本番はサーバ側で判定
+
+/* ================== 無料抜粋の仕様 ==================
+ * 1記事JSONに「lead」「body（配列）」がある前提。
+ * 無料：lead + bodyの先頭N段落のみ表示（N=2を既定）
+ * 有料：全文（lead + body全段落）
+ * JSON側に free_paragraphs があればその数を優先
+ * 例：{ "lead":"...", "body":[ "...", "...", ... ], "free_paragraphs": 1 }
+ * ================================================== */
+const DEFAULT_FREE_PARAS = 2;
+
+/* ============ 週次シード（同週は同じ抽選） ============ */
+function getWeekKey(d=new Date()){
+  const onejan = new Date(d.getFullYear(),0,1);
+  const days = Math.floor((d - onejan) / 86400000);
+  const week = Math.floor((days + onejan.getDay()+6) / 7) + 1; // 簡易週番号
+  return `${d.getFullYear()}-W${week}`;
+}
+function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
+function shuffleDet(arr, seedStr){
+  const rng = mulberry32(hashStr(seedStr));
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(rng()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ============ UI ============ */
+const statusPill = document.getElementById("statusPill");
+document.getElementById("toggleDemo").addEventListener("click", ()=>{
+  isPremium = !isPremium;
+  statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員";
+  renderArticles(cachedArticles); // 再描画
+});
+
+/* ============ 連番ファイルの探索 ============ */
+async function fetchJson(path){
+  const res = await fetch(path, {cache: "no-cache"});
+  if(!res.ok) throw new Error(res.status+" "+res.statusText);
+  return res.json();
+}
+function pad(n, width=FILE_PAD){ return String(n).padStart(width,"0"); }
+
+async function probeFiles(){
+  const found = [];
+  const BATCH = 10; // 帯域に配慮して10本ずつ
+  for(let start=1; start<=PROBE_MAX; start+=BATCH){
+    const tasks = [];
+    for(let i=start; i<start+BATCH && i<=PROBE_MAX; i++){
+      const path = `${BASE_PATH}${FILE_PREFIX}${pad(i)}.json`;
+      tasks.push(
+        fetchJson(path).then(j=>({ok:true, j, id:i, path})).catch(_=>({ok:false}))
+      );
+    }
+    const results = await Promise.all(tasks);
+    for(const r of results){
+      if(!r.ok) continue;
+      // ファイル形式の許容：
+      // 1) 1記事構造（title/lead/body）
+      // 2) 月束構造（"語り巻" 配列に複数記事）← 将来の月単位ファイルにも耐性
+      if(Array.isArray(r.j["語り巻"])){
+        r.j["語り巻"].forEach((it, idx)=>{
+          // 正規化
+          found.push({
+            id: `${r.id}-${idx+1}`,
+            path: r.path,
+            data: normalizeArticle(it, r.j)
+          });
+        });
+      }else{
+        found.push({
+          id: r.id,
+          path: r.path,
+          data: normalizeArticle(r.j, null)
+        });
+      }
+    }
+    if(found.length >= 36) break; // 週選出には十分
+  }
+  return found;
+}
+
+/* ============ 記事正規化 ============ */
+function normalizeArticle(raw, parent){
+  // 受け入れる可能なキーを世界観/現代語双方でマッピング
+  const title = raw.題名 || raw.title || "（無題）";
+  const author = raw.語り手 || raw.author || "";
+  const role = raw.語り手の肩書 || raw.role || "";
+  const lead = raw.lead || raw.導入 || ""; // なければ後で本文先頭を代用
+  const body = Array.isArray(raw.body) ? raw.body
+              : (typeof raw.本文 === "string" ? raw.本文.split(/\n{2,}/) : []);
+  const date = raw.date || raw.日付 || raw.公開日 || (parent && parent.月度 ? parent.月度 : "");
+  const tags = raw.tags || raw.印 || [];
+  const source_hint = raw.source_hint || raw.出典 || "";
+  const free_paragraphs = Number.isInteger(raw.free_paragraphs) ? raw.free_paragraphs : null;
+
+  return { title, author, role, lead, body, date, tags, source_hint, free_paragraphs };
+}
+
+/* ============ 週次ランダム選出 ============ */
+function pickArticles(pool){
+  const seed = "serial|" + getWeekKey();
+  const shuffled = shuffleDet(pool, seed);
+  const seen = new Set();
+  const picks = [];
+  for(const a of shuffled){
+    if(seen.has(a.id)) continue;
+    picks.push(a);
+    seen.add(a.id);
+    if(picks.length >= PICK_COUNT) break;
+  }
+  return picks;
+}
+
+/* ============ 描画 ============ */
+const listEl = document.getElementById("articles");
+function esc(s){ return String(s||"").replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+
+function renderItem(a){
+  const d = a.data.date ? new Date(a.data.date) : null;
+  const meta = d && !isNaN(d) ? `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日` : esc(a.data.date||"");
+  const tags = (a.data.tags||[]).slice(0,3).map(esc).join("・");
+
+  // 抜粋長：JSONの free_paragraphs を優先、なければ既定値
+  const freeN = a.data.free_paragraphs ?? DEFAULT_FREE_PARAS;
+  const hasLead = !!(a.data.lead && a.data.lead.trim());
+  const freeBody = (a.data.body||[]).slice(0, Math.max(0, freeN));
+  const fullBody = (a.data.body||[]);
+
+  const freeHtml = `
+    ${ hasLead ? `<p class="lead">${esc(a.data.lead)}</p>` : "" }
+    <div class="body">${freeBody.map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+  `;
+
+  const fullHtml = `
+    ${ hasLead ? `<p class="lead">${esc(a.data.lead)}</p>` : "" }
+    <div class="body">${fullBody.map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+  `;
+
+  return `
+    <article class="card">
+      <div class="title">${esc(a.data.title)}</div>
+      <div class="meta">
+        ${(meta || "").trim() ? esc(meta) : ""}
+        ${tags ? ` / ${tags}` : ""}
+        ${a.data.author ? ` / 語り手：${esc(a.data.author)}` : ""}
+        ${a.data.role ? `（${esc(a.data.role)}）` : ""}
+      </div>
+      <div class="sep"></div>
+      ${ isPremium ? fullHtml
+                   : `${freeHtml}
+                       ${ fullBody.length > freeBody.length
+                           ? `<div class="sep"></div>
+                              <div class="lock">🔒 続きを読むには <a class="pill accent" href="./signup.html" style="margin-left:.5rem;">会員登録</a></div>`
+                           : `` }`
+      }
+      ${ a.data.source_hint ? `<div class="sep"></div><p class="meta">${esc(a.data.source_hint)}（※長文引用は避け要旨化）</p>` : "" }
+    </article>
+  `;
+}
+
+function renderArticles(arr){
+  if(!arr || !arr.length){
+    listEl.innerHTML = `<div class="card"><p class="meta">記事が見つかりませんでした。時間をおいて再度お試しください。</p></div>`;
+    return;
+  }
+  const picks = pickArticles(arr);
+  listEl.innerHTML = picks.map(renderItem).join("");
+}
+
+/* ============ 起動 ============ */
+let cachedArticles = [];
+(async function(){
+  try{
+    const pool = await probeFiles();
+    cachedArticles = pool;
+    renderArticles(pool);
+  }catch(e){
+    console.warn(e);
+    listEl.innerHTML = `<div class="card"><p class="meta">読み込みに失敗しました。</p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
