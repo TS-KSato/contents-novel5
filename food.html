@@ -132,7 +132,9 @@
 const JSON_PATH = "./recipe.json";
 
 /* ---------- ユーティリティ ---------- */
-function esc(s){ return String(s||"").replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]); }
+function esc(s){ 
+  return String(s||"").replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+}
 function todaySeed(){
   const d = new Date();
   // ユーザーの端末日付に基づき日替わり固定
