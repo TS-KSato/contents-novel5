@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>聖竜教の教え｜最古の賢人ライラが語る</title>
-  <meta name="description" content="この世界で最古の賢人ライラが、聖竜教の教えを一問一答でやさしく説く固定ページ。多種多様な種族と世代の悩みに答えるチャット風UI。">
+  <meta name="description" content="この世界の宗教『聖竜教』の教えを、最古の賢人ライラが一問一答で語る固定ページ。ライラ自身は信徒ではなく、長命ゆえの知見で中立に解き明かす。">
   <style>
     :root{
       --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
@@ -30,13 +30,13 @@
     .msg{ display:flex; align-items:flex-end; gap:.5rem; }
     .msg .bubble{ max-width:75%; padding:.6rem .9rem; border-radius:1rem; line-height:1.6; font-size:.95rem; }
     .msg.user{ justify-content:flex-start; }
-    .msg.user .bubble{ background:#141b30; border:1px solid #223054; border-top-left-radius:.4rem; }
+    .msg.user .bubble{ background:#141b30; border:1px solid #223054; border-top-left-radius:.45rem; }
     .msg.laila{ justify-content:flex-end; }
-    .msg.laila .bubble{ background:#23365e; border:1px solid #2e4677; border-top-right-radius:.4rem; }
+    .msg.laila .bubble{ background:#23365e; border:1px solid #2e4677; border-top-right-radius:.45rem; }
     .avatar{ width:2.2rem; height:2.2rem; border-radius:50%; border:1px solid var(--line); background:#10172a center/cover no-repeat; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:#cfe1ff; flex:0 0 auto; }
     .meta{ color:var(--muted); font-size:.8rem; margin-top:.25rem; }
 
-    /* Questions palette */
+    /* Dynamic questions & tags */
     .toolbar{ display:flex; gap:.5rem; flex-wrap:wrap; }
     .pill{ display:inline-flex; align-items:center; gap:.35rem; border:1px solid var(--line); background:var(--pill); color:#d7e6ff; border-radius:999px; padding:.35rem .65rem; font-size:.82rem; cursor:pointer; user-select:none; }
     .pill[aria-pressed="true"]{ outline:2px solid var(--accent); }
@@ -46,7 +46,6 @@
     .qbtn{ text-align:left; border:1px solid var(--line); background:#11172a; color:#cfe1ff; border-radius:.7rem; padding:.6rem .7rem; font-size:.9rem; cursor:pointer; }
     .qbtn:hover{ background:#16203a; }
 
-    /* Footer small print */
     footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .25rem; }
   </style>
 </head>
@@ -55,7 +54,7 @@
     <header>
       <h1>聖竜教の教え</h1>
       <div class="sub">最古の賢人ライラが語る</div>
-      <div class="note">※聖竜教が崇める聖竜は既に大地へ還った古の竜。ライラは信徒ではなく、長命ゆえに多くを知る語り部として教えを解き明かします。</div>
+      <div class="note">※聖竜教が崇める聖竜は既に大地へ還った古の竜。ライラは信徒ではなく、長命ゆえの知見で中立に解き明かします。</div>
     </header>
 
     <!-- Chat window -->
@@ -64,20 +63,9 @@
       <div class="meta" id="contextLine"></div>
     </section>
 
-    <!-- Filters & question palette -->
+    <!-- Dynamic tag toolbar & question list -->
     <section class="card" aria-label="質問を選ぶ">
-      <div class="toolbar" role="group" aria-label="カテゴリ">
-        <button class="pill" data-tag="all" aria-pressed="true">すべて</button>
-        <button class="pill" data-tag="体">竜の体（健康）</button>
-        <button class="pill" data-tag="眠り">竜の眠り（平穏）</button>
-        <button class="pill" data-tag="巣">竜の巣（生活）</button>
-        <button class="pill" data-tag="絆">竜の絆（対人）</button>
-        <button class="pill" data-tag="翼">竜の翼（成長）</button>
-        <button class="pill" data-tag="目">竜の目（目的）</button>
-        <button class="pill" data-tag="空">竜の空（自由）</button>
-        <button class="pill" data-tag="歌">竜の歌（娯楽）</button>
-        <button class="pill" data-tag="審判">竜の審判（評価）</button>
-      </div>
+      <div class="toolbar" id="toolbar" role="group" aria-label="教義カテゴリ"></div>
       <div id="qgrid" class="qgrid" style="margin-top:.6rem"></div>
     </section>
 
@@ -85,36 +73,48 @@
   </div>
 
 <script>
-// ====== Data fetch (externalized) ======
+// ===== JSON fetch (religion-only taxonomy) =====
 let QA = [];
+let TAGS = [];
 
 async function loadQA(){
-  try{
-    const res = await fetch('./laila_teachings.json', {cache:'no-cache'});
-    if(!res.ok) throw new Error('fetch failed');
-    const json = await res.json();
-    if(Array.isArray(json)) QA = json; else if(Array.isArray(json.items)) QA = json.items; else QA=[];
-  }catch(e){
-    console.warn('laila_teachings.json 読み込み失敗:', e);
-    QA = [];
+  const res = await fetch('./laila_teachings.json', {cache:'no-cache'});
+  if(!res.ok) throw new Error('fetch failed');
+  const json = await res.json();
+  const arr = Array.isArray(json) ? json : (Array.isArray(json.items) ? json.items : []);
+  // Normalize ids & collect tags (order of first appearance)
+  const seen = new Set();
+  TAGS = ['すべて'];
+  QA = arr.map((x,i)=>({ id: x.id ?? i+1, ...x }));
+  for(const x of QA){
+    const t = String(x.tag||'その他');
+    if(!seen.has(t)) { seen.add(t); TAGS.push(t); }
   }
 }
 
-// ====== Helpers ======
+// ===== Helpers =====
 const $ = (s,el=document)=>el.querySelector(s);
 function esc(s){ return String(s||"").replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-function avatarText(asker){ const r=asker?.race||"?"; return r.slice(0,2); }
+function avatarText(asker){ return (asker?.race||"?").slice(0,2); }
 
-// ====== Render ======
-const chat = document.getElementById('chat');
-const qgrid = document.getElementById('qgrid');
-const contextLine = document.getElementById('contextLine');
+// ===== Render =====
+const chat = $('#chat');
+const qgrid = $('#qgrid');
+const toolbar = $('#toolbar');
+const contextLine = $('#contextLine');
+let currentTag = 'すべて';
 
-function renderQGrid(tag="all"){
-  qgrid.innerHTML = QA.filter(x=> tag==="all"? true : x.tag===tag).map(x=>{
+function renderToolbar(){
+  toolbar.innerHTML = TAGS.map((t,idx)=>`<button class="pill" data-tag="${esc(t)}" aria-pressed="${idx===0}">${esc(t)}</button>`).join('');
+}
+
+function renderQGrid(tag='すべて'){
+  const list = QA.filter(x=> tag==='すべて' ? true : x.tag===tag);
+  qgrid.innerHTML = list.map(x=>{
     const cap = `${x.asker.race}／${x.asker.age}・${x.asker.name}`;
-    return `<button class="qbtn" data-id="${x.id}">❓ ${esc(x.q)}<div class="meta" style="margin-top:.25rem">${esc(cap)}・領域：${esc(x.tag)}</div></button>`;
-  }).join("");
+    return `<button class="qbtn" data-id="${x.id}">❓ ${esc(x.q)}<div class="meta" style="margin-top:.25rem">${esc(cap)}・分類：${esc(x.tag)}</div></button>`;
+  }).join('');
+  contextLine.textContent = tag==='すべて' ? '質問を選ぶか、上の分類で絞り込みができます。' : `分類：${tag} — 関連する問いが並びます。`;
 }
 
 function pushUser(q, asker){
@@ -137,38 +137,40 @@ function pushLaila(a){
       </div>
       <div class="avatar" style="background-image:url('./assets/avatar-laila.png')" title="ライラ">ラ</div>
     </div>`);
+  chat.scrollTop = chat.scrollHeight;
 }
 
 function ask(id){
-  const item = QA.find(x=>x.id==id); if(!item) return;
+  const item = QA.find(x=> String(x.id)===String(id)); if(!item) return;
   pushUser(item.q, item.asker);
-  setTimeout(()=>{ pushLaila(item.a); chat.scrollTop = chat.scrollHeight; }, 450);
+  setTimeout(()=> pushLaila(item.a), 420);
 }
 
-function setTag(tag){
-  document.querySelectorAll('.pill').forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.tag===tag)) );
-  renderQGrid(tag);
-  const map = {"体":"健康","眠り":"平穏","巣":"生活","絆":"対人","翼":"成長","目":"目的","空":"自由","歌":"娯楽","審判":"評価"};
-  contextLine.textContent = tag==="all" ? "質問を選ぶか、下のカテゴリで絞り込みができます。" : `領域：竜の${tag}（${map[tag]||""}）`;
-}
-
-// ====== Init ======
+// ===== Init =====
 (async function init(){
-  await loadQA();
-  renderQGrid('all');
-  contextLine.textContent = '質問を選ぶか、下のカテゴリで絞り込みができます。';
-  // 初回デモ対話（データがあれば先頭を出す）
-  if(QA.length){ ask(QA[0].id); }
+  try{
+    await loadQA();
+    renderToolbar();
+    renderQGrid('すべて');
+    // 初回デモ
+    if(QA.length) ask(QA[0].id);
 
-  qgrid.addEventListener('click', e=>{
-    const btn = e.target.closest('.qbtn'); if(!btn) return;
-    ask(btn.dataset.id);
-  });
+    qgrid.addEventListener('click', e=>{
+      const btn = e.target.closest('.qbtn'); if(!btn) return;
+      ask(btn.dataset.id);
+    });
 
-  document.querySelector('.toolbar').addEventListener('click', e=>{
-    const pill = e.target.closest('.pill'); if(!pill) return;
-    setTag(pill.dataset.tag);
-  });
+    toolbar.addEventListener('click', e=>{
+      const pill = e.target.closest('.pill'); if(!pill) return;
+      document.querySelectorAll('.pill').forEach(p=> p.setAttribute('aria-pressed','false'));
+      pill.setAttribute('aria-pressed','true');
+      currentTag = pill.dataset.tag;
+      renderQGrid(currentTag);
+    });
+  }catch(err){
+    contextLine.textContent = '教えの資料を読み込めませんでした。しばらくしてから再読み込みしてください。';
+    console.warn(err);
+  }
 })();
 </script>
 </body>
