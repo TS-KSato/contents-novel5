@@ -6,6 +6,7 @@
   <title>運命の銀竜暦｜今日のパートナー（有料）</title>
   <meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物9名から今日のパートナーを診断します。">
   <style>
+    /* ===== ベース（スマホ前提／zodiac準拠） ===== */
     html { font-size: 16px; }
     :root{
       --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
@@ -18,38 +19,50 @@
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
       line-height:1.7; font-size:1rem; -webkit-text-size-adjust:100%;
     }
-    .wrap{ max-width:40rem; margin:0 auto; padding:1.25rem }
-    header{ text-align:center; padding:1rem .5rem; }
-    header h1{ margin:.25rem 0 .5rem; font-size:clamp(1.25rem,5.5vw,1.5rem); }
-    .muted{ color:var(--muted); font-size:.875rem }
+    .wrap{ max-width:40rem; margin:0 auto; padding:1.25rem 1rem 5.5rem; }
 
-    .pill{
-      display:inline-flex; align-items:center; justify-content:center;
-      color:var(--accent); text-decoration:none; background:#11172a; border:1px solid var(--line);
-      padding:.375rem .625rem; border-radius:999px; font-size:.8125rem; min-height:var(--tap);
-    }
-    .pill:hover{ background:#18213a }
-    .pill.accent{ background:var(--accent-2); border-color:var(--accent-2-b); color:#fff }
+    /* ===== ヘッダー：上部は最小限（統一トーン） ===== */
+    header{ text-align:center; padding:.25rem .5rem 1rem; }
+    header h1{ margin:.25rem 0 .25rem; font-size:clamp(1.25rem,6vw,1.6rem); letter-spacing:.02em; }
+    .lead{ color:var(--muted); font-size:.9375rem; margin:.25rem auto 0; max-width:34rem; }
 
+    /* ===== カード ===== */
     .card{
-      background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad);
-      margin:.75rem 0;
+      background:var(--card); border:1px solid var(--line);
+      border-radius:var(--radius); padding:var(--pad); margin:.75rem 0;
     }
-    .label{ font-size:.9375rem; color:#cfe1ff; margin-bottom:.5rem }
-    .row{ display:flex; gap:.75rem; flex-wrap:wrap; align-items:center }
-    .controls{ display:grid; grid-template-columns:1fr 1fr; gap:.75rem }
-    @media (min-width:30rem){ .controls{ grid-template-columns:1fr 1fr 1fr } }
-    select, button, input[type="radio"] + label{
-      font-size:1rem;
+    .label{ font-size:.95rem; color:#cfe1ff; margin-bottom:.5rem; font-weight:700; }
+
+    /* ===== 入力グリッド（順序固定：月→日→性別） ===== */
+    .controls{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:.75rem;
     }
+    @media (min-width:30rem){
+      .controls{
+        grid-template-columns:1fr 1fr;
+        grid-template-areas:
+          "month day"
+          "gender gender";
+      }
+    }
+    .field{ display:flex; align-items:center; gap:.5rem; }
+    .field .unit{ color:#cfe1ff; font-size:.9375rem; }
+    .field.month{ grid-area: month; }
+    .field.day{ grid-area: day; }
+    .field.gender{ grid-area: gender; display:block; }
+
+    /* 選択UI（zodiac準拠） */
     select, button{
-      min-height:var(--tap); border-radius:.625rem; border:1px solid var(--line);
+      font-size:1rem; min-height:var(--tap); border-radius:.625rem; border:1px solid var(--line);
       background:#1a2034; color:#fff; padding:.5rem .75rem;
     }
     button{ cursor:pointer }
     button:hover{ background:#232b45 }
     button:focus-visible, select:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
 
+    /* 性別トグル（pill） */
     .radios{ display:flex; gap:.5rem; flex-wrap:wrap }
     .radio{
       display:inline-flex; align-items:center; gap:.375rem;
@@ -60,9 +73,8 @@
     .radio input:checked + span{ color:#fff }
     .radio span{ color:#cfe1ff; font-size:.875rem }
 
-    .partner{
-      display:flex; gap:.75rem; align-items:center; flex-wrap:nowrap;
-    }
+    /* 結果表示 */
+    .partner{ display:flex; gap:.75rem; align-items:center; flex-wrap:nowrap; }
     .avatar{
       width:3.5rem; height:3.5rem; border-radius:50%; border:1px solid var(--line);
       background:#10172a; display:flex; align-items:center; justify-content:center; font-weight:700;
@@ -70,51 +82,64 @@
     .pname{ font-size:1.0625rem; font-weight:700 }
     .prole{ color:#cdd5ea; font-size:.875rem }
     .line{ margin-top:.375rem; color:#e0e7ff; font-size:1rem }
-    .gate{ text-align:center }
+
+    /* フッターナビ（下部のみ表示） */
     footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .5rem }
-    .nav{ display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin:.5rem 0 1rem }
+    .footnav{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin:.5rem 0 0 }
+    .pill{
+      display:inline-flex; align-items:center; justify-content:center;
+      color:var(--accent); text-decoration:none; background:#11172a; border:1px solid var(--line);
+      padding:.5rem .75rem; border-radius:999px; font-size:.85rem; min-height:2.25rem;
+    }
+    .pill:hover{ background:#18213a }
+
+    /* 印刷時：余分を除去 */
+    @media print{
+      .footnav { display:none !important }
+      body{ background:#fff; color:#000 }
+      .card{ border-color:#999 }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <h1>今日のパートナー（有料）</h1>
-      <p class="muted">月・日と性別を入力すると、今日あなたに寄り添うパートナー（登場人物）が現れます。</p>
-      <nav class="nav">
-        <a href="./index.html" class="pill">← 占いトップ</a>
-        <a href="./list.html" class="pill">おまけページ</a>
-      </nav>
+      <p class="lead">
+        ここはエテルナリアの星占術師による診断です。<br>
+        月・日と性別を選ぶと、今日あなたに寄り添うパートナーが現れます。
+      </p>
     </header>
 
-    <!-- 有料ゲート：本番はサーバ側で判定。UIは案内のみ -->
-    <section id="gate" class="card gate" aria-live="polite">
+    <!-- 有料ゲート（デモ切替はUIのみ。判定は本番でサーバ側） -->
+    <section id="gate" class="card" aria-live="polite">
       <div class="label">有料会員限定ページ</div>
-      <p class="muted">※本番環境では有料会員のみ利用可能です。下の「デモ切替」で動作確認ができます。</p>
-      <div class="row">
+      <p class="lead" style="margin:.25rem 0 .75rem; font-size:.9rem;">
+        本番環境では有料会員のみ利用可能です。下の「デモ切替」で動作確認できます。
+      </p>
+      <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
         <span class="pill" id="statusPill">無料会員</span>
         <button id="toggleDemo" aria-pressed="false">（デモ）有料/無料 切替</button>
-        <a href="./signup.html" class="pill accent">会員登録へ</a>
+        <a href="./signup.html" class="pill" style="background:var(--accent-2); border-color:var(--accent-2-b); color:#fff;">会員登録へ</a>
       </div>
     </section>
 
-    <!-- 入力 -->
-    <section class="card">
-      <div class="label">入力</div>
-      <div class="controls">
-        <div>
-          <label for="month" class="muted">月</label>
-          <select id="month" aria-label="月">
-            <!-- 1〜12を生成 -->
-          </select>
+    <!-- 入力：月→日→性別（単位ラベルを直後表示） -->
+    <section class="card" aria-labelledby="input-lab">
+      <div id="input-lab" class="label">入力</div>
+      <div class="controls" role="group" aria-label="誕生日と性別の入力">
+        <div class="field month">
+          <label for="month" class="visually-hidden">月</label>
+          <select id="month" aria-label="月"></select>
+          <span class="unit">月</span>
         </div>
-        <div>
-          <label for="day" class="muted">日</label>
-          <select id="day" aria-label="日">
-            <!-- 1〜31を動的生成 -->
-          </select>
+        <div class="field day">
+          <label for="day" class="visually-hidden">日</label>
+          <select id="day" aria-label="日"></select>
+          <span class="unit">日</span>
         </div>
-        <div>
-          <span class="muted">性別</span>
+        <div class="field gender">
+          <span class="lead" style="display:block; font-size:.9rem; margin-bottom:.35rem;">性別</span>
           <div class="radios" role="group" aria-label="性別">
             <label class="radio"><input type="radio" name="gender" value="男性" checked><span>男性</span></label>
             <label class="radio"><input type="radio" name="gender" value="女性"><span>女性</span></label>
@@ -122,20 +147,37 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top:.75rem">
+      <div style="margin-top:.75rem;">
         <button id="btnGo">今日のパートナーを見る</button>
       </div>
-      <p class="muted" style="margin-top:.5rem">※生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
+      <p class="lead" style="margin-top:.5rem; font-size:.85rem;">※生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
     </section>
 
     <!-- 結果 -->
     <section id="result" aria-live="polite"></section>
 
+    <!-- 下部ナビ（上部ナビは置かない統一設計） -->
+    <section class="card" aria-label="ナビゲーション" style="text-align:center;">
+      <div class="footnav">
+        <a href="./index.html" class="pill">← 占いトップ</a>
+        <a href="./list.html" class="pill">おまけページ</a>
+      </div>
+    </section>
     <footer>© 運命の銀竜暦</footer>
   </div>
 
   <script>
-    // ======= 有料デモ切替（本番はサーバ判定） =======
+    // ===== アクセシビリティ：視覚的に隠す（スクリーンリーダー向け） =====
+    (function(){
+      const css = document.createElement('style');
+      css.innerHTML = `
+        .visually-hidden { position:absolute !important; width:1px; height:1px; margin:-1px; border:0; padding:0;
+          clip:rect(0 0 0 0); overflow:hidden; white-space:nowrap; }
+      `;
+      document.head.appendChild(css);
+    })();
+
+    // ===== 有料デモ切替（本番はサーバ判定） =====
     let isPremium = false;
     const statusPill = document.getElementById("statusPill");
     const toggleDemo = document.getElementById("toggleDemo");
@@ -143,194 +185,92 @@
       isPremium = !isPremium;
       toggleDemo.setAttribute("aria-pressed", String(isPremium));
       statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員";
-      renderGate();
     });
-    function renderGate(){
-      document.getElementById("gate").classList.toggle("gate", !isPremium);
-    }
-    renderGate();
 
-    // ======= データ：主要9名（1名＝台詞10） =======
-// ======= データ：主要9名（1名＝台詞10） =======
-const CHARACTERS = [
-  {
-    id:"lunal",
-    name:"ルナル",
-    role:"伝説的な最後のドラゴン（銀の古竜）",
-    lines:[
-      "恐れを越えよ。小さな一歩が、山を動かす。",
-      "急くな。大地は急がず、それでも芽は出る。",
-      "背筋を伸ばせ。世界はそれだけで道を空ける。",
-      "約束をひとつ果たせ。誇りは静かに積もる。",
-      "迷えば高きを見よ。星は常にそこにある。",
-      "守るべきを選べ。力はそのためにある。",
-      "休む日は弱さではない。翼は畳むから飛べる。",
-      "言葉は刃にも盾にもなる。今日は盾に使え。",
-      "苦い選択ほど静かに決めよ。響きが遠くなる。",
-      "君は独りではない。呼べば、古き翼が応える。"
-    ]
-  },
-  {
-    id:"alan",
-    name:"アラン",
-    role:"ルナルに育てられた人間の少年",
-    lines:[
-      "できることを三つ。終わったら胸を張ろう。",
-      "頼ってくれていい。僕はそのためにいる。",
-      "怖いなら一緒に行こう。足は二人分で軽くなる。",
-      "挨拶を先に。世界は少しやさしくなる。",
-      "失敗は明日の糧。今日の自分を責めなくていい。",
-      "小さな勝ちを重ねよう。自信はそこから育つ。",
-      "迷ったら深呼吸。答えは近くにいたりする。",
-      "大丈夫。君は思うより進めてるよ。",
-      "断る勇気も強さのひとつ。自分を守ろう。",
-      "夕方になったら少し歩こう。頭と心が整うから。"
-    ]
-  },
-  {
-    id:"lilia",
-    name:"リリア",
-    role:"銀色の光を放つ妖精（竜の魔力と自然の相互作用が生んだ存在）",
-    lines:[
-      "小さな喜びを拾ってね。今日はそれが御守りになるよ。",
-      "言葉をひとつ減らすと、伝わり方がやさしくなるの。",
-      "甘いお茶を一杯。心がほどける音がするよ。",
-      "光は見ようとした人にだけ見えるんだ。",
-      "急がなくていいよ。遅れて見える景色もあるから。",
-      "ありがとうを先に。扉が静かに開くよ。",
-      "短い散歩で、心のほつれが整うよ。",
-      "深呼吸。胸の奥に灯りがともるよ。",
-      "今日は自分にやさしくして。世界にもやさしくなれるから。",
-      "迷ったら軽い方へ。羽は無理を嫌うから。"
-    ]
-  },
-  {
-    id:"laila",
-    name:"ライラ",
-    role:"エルフの古老・古き語り部",
-    lines:[
-      "急ぐ話ほど腰を据えて聞こう。真は静けさの中にある。",
-      "始まりは物語の導入で十分。完璧は結末の仕事だ。",
-      "古い知恵は道標、若い勇気は歩み。どちらも欠かせない。",
-      "手帳に一行。記すことで迷いは形を失う。",
-      "言葉を選ぶときは、相手の季節を想うのだよ。",
-      "争うより整える。今日はその方が遠くへ行ける。",
-      "休息は物語の間（ま）。間があるから響くのだ。",
-      "礼を尽くせば扉は開く。すぐでなくても、必ず。",
-      "今日の学びを誰かに渡しなさい。知恵は循環で温まる。",
-      "別れは終わりではない。次章の余白にすぎない。"
-    ]
-  },
-  {
-    id:"drake",
-    name:"ドレイク・ストームブレイド",
-    role:"ルミノア地方の勇者・アランの兄のような剣士",
-    lines:[
-      "刃を抜く前に、心を抜け。決めるのは覚悟だ。",
-      "面倒は先に片づける。小さいうちなら一撃だ。",
-      "勝てない日は引け。傷は浅い方が明日に効く。",
-      "約束を一つ守れ。それだけで隊は動く。",
-      "一歩深く踏み込め。迷いは足に出る。",
-      "弱さを見せられる者が、本当に強い。",
-      "短期決戦でいこう。長引けば余計な刃が増える。",
-      "謝る時は早く、短く、正面から。",
-      "仲間を信じろ。背中はそれで守られる。",
-      "剣は理由のために抜く。怒りのためではない。"
-    ]
-  },
-  {
-    id:"mireia",
-    name:"ミレイア",
-    role:"ドレイクの病に伏せる妻",
-    lines:[
-      "無理は要らないわ。静かな時間が薬になる日もあるの。",
-      "できたことを数えて。できなかったことは風に流して。",
-      "お願いを一つだけ。あなた自身にもやさしくしてね。",
-      "小さな楽しみを用意しよう。心に花が咲くから。",
-      "助けを求めることは弱さじゃないの。絆の使い方よ。",
-      "休む勇気は前に進む力になるわ。",
-      "今日は窓辺の光を味方に。深呼吸して、肩を下ろして。",
-      "笑える話を一つ集めてみて。体も少し軽くなるから。",
-      "ゆっくりでいいの。歩幅はあなたが決めていい。",
-      "眠りを整えましょう。明日はきっとやさしい。"
-    ]
-  },
-  {
-    id:"king_nexart",
-    name:"ネクサート王",
-    role:"人間王国の支配者・不老不死を求める王",
-    lines:[
-      "時間は誰にも公平ではない。ゆえに今日を使い切れ。",
-      "目的を一つに絞れ。散れば、力も散る。",
-      "望みを言葉にせよ。曖昧な誓いは道を曇らせる。",
-      "代償を計算しろ。支払えるものだけを選ぶのだ。",
-      "噂より事実を集めよ。王冠は重いが、嘘はもっと重い。",
-      "退くことで勝てる戦がある。誇りは結果で守れ。",
-      "手を広げすぎるな。握れる分だけ掴め。",
-      "恐れを認めよ。目を逸らせば、支配される。",
-      "頼る先を三つ用意せよ。道は折れても続く。",
-      "夜の決断は避けろ。朝の光で同じことを考えよ。"
-    ]
-  },
-  {
-    id:"magnus",
-    name:"マグナス・ヴェイン",
-    role:"王室付き魔法使いの長・龍骨の杖の使い手",
-    lines:[
-      "仮説→小さな実験→結果。順序が魔を払う。",
-      "一次情報を確かめよ。曖昧さは呪いに等しい。",
-      "道具を一つ磨け。術は器に宿る。",
-      "数字で測れ。思い込みは霧と同じだ。",
-      "集中の前に静けさを。術式は静寂から立ち上がる。",
-      "準備に勝る魔法はない。今日は周到であれ。",
-      "過去の失敗は失敗ではない。未完成の手順だ。",
-      "他者の才を借りよ。協働は強力な触媒だ。",
-      "記録を残せ。明日の自分が最強の弟子となる。",
-      "限界は設計の問題だ。設計を変えれば道は開く。"
-    ]
-  },
-  {
-    id:"nester",
-    name:"ネスター・ルナ・ラテス",
-    role:"アルバトロス型鳥人の求道者・風の導き手",
-    lines:[
-      "高く飛べば、遠くが見える。視点を変えるだけで解ける謎がある。",
-      "荷を減らそう。羽は軽さを好む。",
-      "風向きを読むには、まず足を止めることだ。",
-      "目的は北星のように。迷えば見上げればいい。",
-      "遠回りのようでも、気流に乗れば速いこともある。",
-      "声を潜めると、世界の囁きが聞こえる。",
-      "地図を広げよ。道は一本ではない。",
-      "約束の時刻を守れ。風は待たない。",
-      "旅の仲間を大切に。翼は編まれて強くなる。",
-      "夕暮れ前に引き返せ。英断は撤退にも宿る。"
-    ]
-  }
-];
+    // ===== データ：主要9名（1名＝台詞10） =====
+    const CHARACTERS = [
+      { id:"lunal", name:"ルナル", role:"伝説的な最後のドラゴン（銀の古竜）", lines:[
+        "恐れを越えよ。小さな一歩が、山を動かす。","急くな。大地は急がず、それでも芽は出る。","背筋を伸ばせ。世界はそれだけで道を空ける。",
+        "約束をひとつ果たせ。誇りは静かに積もる。","迷えば高きを見よ。星は常にそこにある。","守るべきを選べ。力はそのためにある。",
+        "休む日は弱さではない。翼は畳むから飛べる。","言葉は刃にも盾にもなる。今日は盾に使え。","苦い選択ほど静かに決めよ。響きが遠くなる。","君は独りではない。呼べば、古き翼が応える。"
+      ]},
+      { id:"alan", name:"アラン", role:"ルナルに育てられた人間の少年", lines:[
+        "できることを三つ。終わったら胸を張ろう。","頼ってくれていい。僕はそのためにいる。","怖いなら一緒に行こう。足は二人分で軽くなる。",
+        "挨拶を先に。世界は少しやさしくなる。","失敗は明日の糧。今日の自分を責めなくていい。","小さな勝ちを重ねよう。自信はそこから育つ。",
+        "迷ったら深呼吸。答えは近くにいたりする。","大丈夫。君は思うより進めてるよ。","断る勇気も強さのひとつ。自分を守ろう。","夕方になったら少し歩こう。頭と心が整うから。"
+      ]},
+      { id:"lilia", name:"リリア", role:"銀色の光を放つ妖精（竜の魔力と自然の相互作用が生んだ存在）", lines:[
+        "小さな喜びを拾ってね。今日はそれが御守りになるよ。","言葉をひとつ減らすと、伝わり方がやさしくなるの。","甘いお茶を一杯。心がほどける音がするよ。",
+        "光は見ようとした人にだけ見えるんだ。","急がなくていいよ。遅れて見える景色もあるから。","ありがとうを先に。扉が静かに開くよ。",
+        "短い散歩で、心のほつれが整うよ。","深呼吸。胸の奥に灯りがともるよ。","今日は自分にやさしくして。世界にもやさしくなれるから。","迷ったら軽い方へ。羽は無理を嫌うから。"
+      ]},
+      { id:"laila", name:"ライラ", role:"エルフの古老・古き語り部", lines:[
+        "急ぐ話ほど腰を据えて聞こう。真は静けさの中にある。","始まりは物語の導入で十分。完璧は結末の仕事だ。","古い知恵は道標、若い勇気は歩み。どちらも欠かせない。",
+        "手帳に一行。記すことで迷いは形を失う。","言葉を選ぶときは、相手の季節を想うのだよ。","争うより整える。今日はその方が遠くへ行ける。",
+        "休息は物語の間（ま）。間があるから響くのだ。","礼を尽くせば扉は開く。すぐでなくても、必ず。","今日の学びを誰かに渡しなさい。知恵は循環で温まる。","別れは終わりではない。次章の余白にすぎない。"
+      ]},
+      { id:"drake", name:"ドレイク・ストームブレイド", role:"ルミノア地方の勇者・アランの兄のような剣士", lines:[
+        "刃を抜く前に、心を抜け。決めるのは覚悟だ。","面倒は先に片づける。小さいうちなら一撃だ。","勝てない日は引け。傷は浅い方が明日に効く。",
+        "約束を一つ守れ。それだけで隊は動く。","一歩深く踏み込め。迷いは足に出る。","弱さを見せられる者が、本当に強い。",
+        "短期決戦でいこう。長引けば余計な刃が増える。","謝る時は早く、短く、正面から。","仲間を信じろ。背中はそれで守られる。","剣は理由のために抜く。怒りのためではない。"
+      ]},
+      { id:"mireia", name:"ミレイア", role:"ドレイクの病に伏せる妻", lines:[
+        "無理は要らないわ。静かな時間が薬になる日もあるの。","できたことを数えて。できなかったことは風に流して。","お願いを一つだけ。あなた自身にもやさしくしてね。",
+        "小さな楽しみを用意しよう。心に花が咲くから。","助けを求めることは弱さじゃないの。絆の使い方よ。","休む勇気は前に進む力になるわ。",
+        "今日は窓辺の光を味方に。深呼吸して、肩を下ろして。","笑える話を一つ集めてみて。体も少し軽くなるから。","ゆっくりでいいの。歩幅はあなたが決めていい。","眠りを整えましょう。明日はきっとやさしい。"
+      ]},
+      { id:"king_nexart", name:"ネクサート王", role:"人間王国の支配者・不老不死を求める王", lines:[
+        "時間は誰にも公平ではない。ゆえに今日を使い切れ。","目的を一つに絞れ。散れば、力も散る。","望みを言葉にせよ。曖昧な誓いは道を曇らせる。",
+        "代償を計算しろ。支払えるものだけを選ぶのだ。","噂より事実を集めよ。王冠は重いが、嘘はもっと重い。","退くことで勝てる戦がある。誇りは結果で守れ。",
+        "手を広げすぎるな。握れる分だけ掴め。","恐れを認めよ。目を逸らせば、支配される。","頼る先を三つ用意せよ。道は折れても続く。","夜の決断は避けろ。朝の光で同じことを考えよ。"
+      ]},
+      { id:"magnus", name:"マグナス・ヴェイン", role:"王室付き魔法使いの長・龍骨の杖の使い手", lines:[
+        "仮説→小さな実験→結果。順序が魔を払う。","一次情報を確かめよ。曖昧さは呪いに等しい。","道具を一つ磨け。術は器に宿る。",
+        "数字で測れ。思い込みは霧と同じだ。","集中の前に静けさを。術式は静寂から立ち上がる。","準備に勝る魔法はない。今日は周到であれ。",
+        "過去の失敗は失敗ではない。未完成の手順だ。","他者の才を借りよ。協働は強力な触媒だ。","記録を残せ。明日の自分が最強の弟子となる。","限界は設計の問題だ。設計を変えれば道は開く。"
+      ]},
+      { id:"nester", name:"ネスター・ルナ・ラテス", role:"アルバトロス型鳥人の求道者・風の導き手", lines:[
+        "高く飛べば、遠くが見える。視点を変えるだけで解ける謎がある。","荷を減らそう。羽は軽さを好む。","風向きを読むには、まず足を止めることだ。",
+        "目的は北星のように。迷えば見上げればいい。","遠回りのようでも、気流に乗れば速いこともある。","声を潜めると、世界の囁きが聞こえる。",
+        "地図を広げよ。道は一本ではない。","約束の時刻を守れ。風は待たない。","旅の仲間を大切に。翼は編まれて強くなる。","夕暮れ前に引き返せ。英断は撤退にも宿る。"
+      ]}
+    ];
 
-    // ======= フォーム初期化 =======
+    // ===== フォーム初期化（並び：月→日） =====
     const monthSel = document.getElementById("month");
     const daySel   = document.getElementById("day");
-    for(let m=1;m<=12;m++){ const o=document.createElement("option"); o.value=o.textContent=m; monthSel.appendChild(o); }
+
+    for(let m=1;m<=12;m++){
+      const o=document.createElement("option");
+      o.value=o.textContent=m;
+      monthSel.appendChild(o);
+    }
+    function daysIn(m, y){
+      return [31, ( (y%4===0 && y%100!==0) || y%400===0 ) ? 29 : 28, 31,30,31,30,31,31,30,31,30,31][m-1];
+    }
     function fillDays(){
+      const y = new Date().getFullYear();
       const m = Number(monthSel.value||1);
-      const daysInMonth = [31, ( (new Date().getFullYear()%4===0 && new Date().getFullYear()%100!==0) || new Date().getFullYear()%400===0 ) ? 29 : 28, 31,30,31,30,31,31,30,31,30,31][m-1];
+      const n = daysIn(m, y);
+      const prev = Number(daySel.value||1);
       daySel.innerHTML = "";
-      for(let d=1; d<=daysInMonth; d++){ const o=document.createElement("option"); o.value=o.textContent=d; daySel.appendChild(o); }
+      for(let d=1; d<=n; d++){
+        const o=document.createElement("option");
+        o.value=o.textContent=d;
+        daySel.appendChild(o);
+      }
+      if (prev<=n) daySel.value = String(prev);
     }
     monthSel.addEventListener("change", fillDays);
     fillDays();
 
-    // ======= 決定ロジック：本日×(月日×性別) で一意 =======
+    // ===== 決定ロジック：本日×(月日×性別) で一意 =====
     function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
     function pickIndex(len, seed){ return hashStr(seed) % len; }
-
     function todayKey(){
       const d = new Date();
-      // 日替わり：YYYY-MM-DD（ユーザー側に合わせ端末時計でOK）
-      return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+      return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; // YYYY-M-D
     }
-
     function decidePartner(mm, dd, gender){
       const seed = `${todayKey()}|${mm}-${dd}|${gender}`;
       const pIdx = pickIndex(CHARACTERS.length, seed);
@@ -339,14 +279,17 @@ const CHARACTERS = [
       return { partner, line: partner.lines[lineIdx] };
     }
 
-    // ======= 表示 =======
+    // ===== 表示 =====
     const resultEl = document.getElementById("result");
     document.getElementById("btnGo").addEventListener("click", ()=>{
       if (!isPremium){
         resultEl.innerHTML = `
           <div class="card">
             <div class="label">ご利用には会員登録が必要です</div>
-            <p class="muted">このページは有料会員限定です。<br><a href="./signup.html" class="pill accent" style="margin-top:.5rem;display:inline-flex;">会員登録へ</a></p>
+            <p class="lead" style="font-size:.9rem;">
+              このページは有料会員限定です。<br>
+              <a href="./signup.html" class="pill" style="margin-top:.5rem; display:inline-flex; background:var(--accent-2); border-color:var(--accent-2-b); color:#fff;">会員登録へ</a>
+            </p>
           </div>`;
         return;
       }
@@ -365,8 +308,10 @@ const CHARACTERS = [
               <div class="prole">${partner.role}</div>
             </div>
           </div>
-          <p class="line" style="margin-top:.5rem;">「${line}」</p>
-          <p class="muted" style="margin-top:.5rem;">※本日は端末日付に基づき一意に決定されます。月・日・性別は来訪者ごとに異なる結果となる場合があります。</p>
+          <p class="line">「${line}」</p>
+          <p class="lead" style="margin-top:.5rem; font-size:.85rem;">
+            ※ 本日は端末日付に基づき一意に決定されます。月・日・性別により、来訪者ごとに結果が異なる場合があります。
+          </p>
         </div>
       `;
     });
