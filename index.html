@@ -75,6 +75,21 @@
   
   #calendarQuote .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));background-size:200% 100%;animation:sheen 1.6s infinite}
   @keyframes sheen{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  /* Improve first view: constrain hero height so next section peeks in */
+  .hero{
+    display:flex; flex-direction:column; justify-content:center;
+    min-height:42vh; max-height:56vh;
+  }
+  @media (max-height:740px){
+    .hero{ min-height:38vh; max-height:50vh; }
+  }
+  .scroll-hint{
+    position:absolute; left:50%; bottom:.35rem; transform:translateX(-50%);
+    font-size:1rem; color:var(--muted); text-decoration:none;
+    animation:hint-bounce 1.8s infinite; opacity:.9;
+  }
+  @keyframes hint-bounce{ 0%,100%{ transform:translate(-50%,0); } 50%{ transform:translate(-50%,.25rem); } }
 </style>
 </head>
 <body>
@@ -92,6 +107,7 @@
         <span class="pill">世界観に合わせた言葉設計</span>
         <span class="pill">解約いつでも</span>
       </div>
+      <a href="#calendarQuote" class="scroll-hint" aria-label="下へ">▼</a>
     </section>
 
     <!-- ===== Quick character choose ===== -->
@@ -135,6 +151,7 @@
       <div class="pills" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
         <button class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
       </div>
+      <a href="#calendarQuote" class="scroll-hint" aria-label="下へ">▼</a>
     </section>
 
 
