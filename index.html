@@ -71,8 +71,8 @@
   #calendarQuote .pill:active{transform:translateY(1px)}
 
   /* Force the calendar to be independent from any parent reveal logic */
-  .force-visible{display:block!important;visibility:visible!important;opacity:1!important;height:auto!important}
-  #calendarQuote{min-height:9rem}
+  
+  
   #calendarQuote .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));background-size:200% 100%;animation:sheen 1.6s infinite}
   @keyframes sheen{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
@@ -118,7 +118,7 @@
       </div>
     
     <!-- ===== Calendar & Quote ===== -->
-    <section id="calendarQuote" class="card force-visible" aria-live="polite">
+    <section id="calendarQuote" class="card" aria-live="polite">
       <div class="label">銀竜暦カレンダー</div>
       <div class="cal-head" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between;">
         <button class="pill" id="btnPrevDay" aria-label="前日へ">← 前日</button>
