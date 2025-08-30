@@ -69,6 +69,12 @@
   /* Calendar & Quote */
   #calendarQuote .pill{background:var(--accent-2);color:var(--accent);border:1px solid var(--accent-2-b)}
   #calendarQuote .pill:active{transform:translateY(1px)}
+
+  /* Force the calendar to be independent from any parent reveal logic */
+  .force-visible{display:block!important;visibility:visible!important;opacity:1!important;height:auto!important}
+  #calendarQuote{min-height:9rem}
+  #calendarQuote .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));background-size:200% 100%;animation:sheen 1.6s infinite}
+  @keyframes sheen{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 </head>
 <body>
@@ -112,7 +118,7 @@
       </div>
     
     <!-- ===== Calendar & Quote ===== -->
-    <section id="calendarQuote" class="card" aria-live="polite">
+    <section id="calendarQuote" class="card force-visible" aria-live="polite">
       <div class="label">銀竜暦カレンダー</div>
       <div class="cal-head" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between;">
         <button class="pill" id="btnPrevDay" aria-label="前日へ">← 前日</button>
@@ -122,9 +128,9 @@
       <div class="cal-sub" id="calHoliday" style="margin-top:.25rem;color:var(--muted)"></div>
       <div class="cal-quote" id="calQuote" style="margin-top:.75rem">
         <blockquote style="margin:0;font-size:1.05rem;line-height:1.6">
-          <span id="quoteText">…</span>
+          <span id="quoteText" class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:60%;min-height:1.2em"> </span>
         </blockquote>
-        <div id="quoteAuthor" class="meta" style="margin-top:.375rem">—</div>
+        <div id="quoteAuthor" class="meta" style="margin-top:.375rem"><span class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:8rem;min-height:1em"> </span></div>
       </div>
       <div class="pills" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
         <button class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
@@ -357,13 +363,10 @@ $('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest(
   let current = new Date();
 
   // === Load quotes.json ===
-  fetch('./quotes.json', {cache:'no-store'}).then(r=>r.json()).then(data=>{
-    quotes = data;
-    render();
-  }).catch(()=>{
-    quotes = {"01-01":[{"text":"（名言データが見つかりません）","author":"銀竜録"}]};
-    render();
-  });
+  render();
+  fetch('./quotes.json', {cache:'no-store'})
+    .then(r=>r.json()).then(data=>{ quotes = data; render(); })
+    .catch(()=>{ quotes = {"01-01":[{"text":"（名言データが見つかりません）","author":"銀竜録"}]}; render(); });
 
   function render(){
     const key = keyMMDD(current);
@@ -372,8 +375,8 @@ $('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest(
     elDate.textContent = fmtJP(current);
     const holi = japaneseHoliday(current);
     elHoliday.textContent = holi ? `祝日：${holi}` : '';
-    elQuoteText.textContent = item.text;
-    elQuoteAuthor.textContent = `— ${item.author}`;
+    elQuoteText.classList.remove('skeleton'); elQuoteText.textContent = item.text;
+    elQuoteAuthor.innerHTML = `— ${item.author}`;
   }
 
   // === Nav ===
