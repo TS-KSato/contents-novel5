@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜星座別診断表</title>
-  <meta name="description" content="12星座の性質をエテルナリア世界観で読み解く辞典。導き柱／重んずる界／役割相／親和元素／種族縁と短い伝承（ロア）を収録。">
+  <meta name="description" content="12星座の性質をエテルナリア世界観で読み解く固定ページ。ロア（短い伝承）を入口に、必要に応じて詳細属性を参照できます。">
   <style>
     /* ===== ベース（スマホ前提） ===== */
     html { font-size: 16px; }
@@ -26,12 +26,12 @@
     header{ text-align:center; padding:.25rem .5rem 1rem; }
     header h1{ margin:.25rem 0 .25rem; font-size:clamp(1.25rem,6vw,1.6rem); letter-spacing:.02em; }
     .lead{
-      color:var(--muted); font-size:.9375rem; margin:0 auto;
+      color:var(--muted); font-size:.9375rem; margin:.25rem auto 0;
       max-width:34rem;
     }
 
     /* ===== カード（1カラム固定） ===== */
-    .grid{ display:grid; gap:.75rem; grid-template-columns:1fr; } /* ← 常に1カラム */
+    .grid{ display:grid; gap:.75rem; grid-template-columns:1fr; }
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -42,13 +42,6 @@
     .z-rune{ font-size:1.25rem } /* 装飾記号 */
     .z-name{ font-weight:800; font-size:1.1rem; letter-spacing:.02em }
     .spacer{ flex:1 }
-    .copy-link{
-      display:inline-flex; align-items:center; gap:.25rem;
-      font-size:.8rem; background:#11172a; color:#cfe1ff;
-      border:1px solid var(--line); border-radius:999px; padding:.25rem .6rem;
-    }
-    .copy-link svg{ width:1rem; height:1rem }
-
     .element-badge{
       display:inline-flex; align-items:center; gap:.25rem;
       padding:.125rem .5rem; border-radius:999px; border:1px solid var(--line);
@@ -71,7 +64,6 @@
       padding:.125rem .5rem; border-radius:999px; border:1px solid var(--line);
       font-size:.75rem; color:#cfe1ff; background:#0f1424;
     }
-    .note{ margin-top:.35rem; font-size:.8rem; color:var(--muted) }
 
     /* ===== 下部ツール（ガイド＆フィルター） ===== */
     .tools{
@@ -91,6 +83,7 @@
     }
     button{ cursor:pointer }
     button:focus-visible, select:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
+    .note{ margin-top:.65rem; font-size:.85rem; color:var(--muted); }
 
     /* ===== フッター ===== */
     footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .5rem }
@@ -122,7 +115,7 @@
 
     /* 印刷時は余計なUIを除去 */
     @media print{
-      .tools, .fab, .footnav, .copy-link { display:none !important }
+      .tools, .fab, .footnav { display:none !important }
       body{ background:#fff; color:#000 }
       .card{ border-color:#999 }
     }
@@ -133,8 +126,8 @@
     <header id="top">
       <h1>星座別診断表</h1>
       <p class="lead">
-        12星座の名はそのままに、性質の読み解きをエテルナリアの語で記す辞典です。<br>
-        初めての方はまずロア（短い伝承）だけを読み、必要に応じて詳細属性を開いてください。
+        ここはエテルナリアの星占術師による星座診断です。<br>
+        星座から導いたあなたの属性をロア（短い伝承）から知ることができます。
       </p>
     </header>
 
@@ -143,7 +136,7 @@
       <div id="grid" class="grid"></div>
     </main>
 
-    <!-- 下部：用語ガイド＋フィルター（折りたたみ） -->
+    <!-- 下部：用語ガイド＋フィルター（折りたたみ）＋注意書き（1回だけ） -->
     <section class="tools" aria-label="用語ガイドと絞り込み">
       <details id="filterPanel">
         <summary>🔎 星座を絞り込む</summary>
@@ -177,6 +170,10 @@
           <p><strong>親和元素</strong>：性質が調和しやすい基調（炎／土／風／水）。</p>
           <p><strong>種族縁</strong>：<em>銀竜・人間・妖精</em>のいずれに近い響きを持つか。</p>
         </div>
+        <p class="note">
+          ※ このページはエテルナリア世界の設定をもとにした「世界観を紹介する参考資料」です。<br>
+          日替わり占いや有料の占い結果とは別に用意されています。
+        </p>
       </details>
     </section>
 
@@ -199,7 +196,7 @@
   </button>
 
   <script>
-    // ===== データ（固定辞典） =====
+    // ===== データ（固定記述） =====
     const ZODIACS = [
       { id:"aries",   記号:"⟡", 星座:"牡羊座", 導き柱:"剛意", 重んずる界:"社界", 役割相:"先陣", 親和元素:"炎", 種族縁:"銀竜",
         ロア:"額角の尖光のごとく始まりを告げる。ためらいを裂き、停滞を切り開く。" },
@@ -236,9 +233,8 @@
     const btnReset = document.getElementById('reset');
     const fab = document.getElementById('toTop');
 
-    // ===== カードHTML（主要情報のみ＋詳細は折りたたみ） =====
+    // ===== カードHTML（主要情報＋詳細は折りたたみ） =====
     function cardHTML(z){
-      const href = `#${z.id}`;
       return `
         <article id="${z.id}" class="card" tabindex="0" aria-label="${z.星座}の記述">
           <div class="z-head">
@@ -246,13 +242,6 @@
             <div class="z-name">${z.星座}</div>
             <span class="spacer"></span>
             <span class="element-badge" title="親和元素">${z.親和元素}</span>
-            <button class="copy-link" onclick="copyPermalink('${location.origin}${location.pathname}${href}')" aria-label="${z.星座}のリンクをコピー" data-gtag="copy_link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10 13a5 5 0 0 1 7 0l1 1a5 5 0 1 1-7 7l-1-1"></path>
-                <path d="M14 11a5 5 0 0 1-7 0l-1-1a5 5 0 1 1 7-7l1 1"></path>
-              </svg>
-              リンク
-            </button>
           </div>
 
           <div class="lore">${z.ロア}</div>
@@ -265,7 +254,6 @@
               <span class="badge" title="役割相">役割相：${z.役割相}</span>
               <span class="badge" title="種族縁">種族縁：${z.種族縁}</span>
             </div>
-            <div class="note">※ 辞典の記述であり、占いの結果とは独立しています。</div>
           </details>
         </article>
       `;
@@ -285,33 +273,9 @@
       grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>`;
     }
 
-    function copyPermalink(url){
-      navigator.clipboard?.writeText(url).then(()=>{
-        alert("パーマリンクをコピーしました。");
-      }).catch(()=>{
-        prompt("以下のURLをコピーしてください", url);
-      });
-      // GA4等のイベントフック例（必要に応じて差し替え）
-      if (window.gtag) gtag('event','copy_link',{location:url});
-    }
-
-    [fP,fR,fO,fK].forEach(el=> el?.addEventListener('change', ()=>{
-      render();
-      if (window.gtag) gtag('event','filter_change',{ id: el.id, value: el.value });
-    }));
-
-    btnReset?.addEventListener('click', ()=>{
-      fP.value=""; fR.value=""; fO.value=""; fK.value="";
-      render();
-      if (window.gtag) gtag('event','filter_reset');
-    });
-
-    function focusAnchor(){
-      if (location.hash){
-        const el = document.getElementById(location.hash.slice(1));
-        if (el){ el.focus({preventScroll:false}); }
-      }
-    }
+    // イベント
+    [fP,fR,fO,fK].forEach(el=> el?.addEventListener('change', render));
+    btnReset?.addEventListener('click', ()=>{ fP.value=""; fR.value=""; fO.value=""; fK.value=""; render(); });
 
     // ===== 先頭へ戻る（スクロールに応じて表示） =====
     const showFabAt = 360; // px
@@ -321,16 +285,12 @@
     }
     function scrollToTop(){
       window.scrollTo({ top:0, behavior:'smooth' });
-      if (window.gtag) gtag('event','to_top_click');
     }
     window.addEventListener('scroll', onScroll, { passive:true });
 
     // 初期化
     render();
-    window.addEventListener('hashchange', focusAnchor);
-    focusAnchor();
     onScroll(); // 初期の可視状態更新
   </script>
 </body>
 </html>
-
