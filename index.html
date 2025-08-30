@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の占いを受け取る</title>
-  <meta name="description" content="銀竜の言葉を継ぐ者へ。ワンタップで今日の占い、物語、竜の食卓。無料は総合、有料で9カテゴリが開放。">
+  <meta name="description" content="銀竜の言葉を継ぐ者へ。ワンタップで今日の占い、物語、竜の食卓。">
   <style>
     html { font-size: 16px; }
     :root{
@@ -93,14 +93,8 @@
       <p class="lead">無料で「総合運」を即表示。有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）。</p>
       <div class="cta">
         <button id="ctaGet" class="btn" data-evt="cta_primary">今日の占いを受け取る</button>
-        <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録（1分）</a>
+        <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録</a>
       </div>
-      <div class="pills" aria-hidden="true" style="margin-top:.75rem">
-        <span class="pill">日替わり固定ロジック</span>
-        <span class="pill">世界観に合わせた言葉設計</span>
-        <span class="pill">解約いつでも</span>
-      </div>
-    
       <a href="#calendarQuote" class="scroll-hint" aria-label="下へ">▼</a>
 </section>
 
@@ -120,11 +114,6 @@
       <div class="label">今日の結果</div>
       <div class="result" id="resultBox">
         <!-- JS inject -->
-      </div>
-      <div class="pills" style="margin-top:.75rem">
-        <a href="./zodiac.html" class="pill" data-evt="entry_zodiac">星座別診断</a>
-        <a href="./partner.html" class="pill" data-evt="entry_partner">今日のパートナー</a>
-        <a href="./serial.html" class="pill" data-evt="entry_serial">七夜の語り巻</a>
       </div>
     </section>
 
@@ -155,6 +144,10 @@
 
     <!-- ===== Teasers / Content hubs ===== -->
     <section class="grid" aria-label="物語と食卓">
+      <a href="./partner.html" class="tile" data-evt="entry_partner">
+        <div class="t1">今日のパートナー</div>
+        <div class="t2">銀竜の言葉を継ぐもの中から今日のパートナーを診断します。</div>
+      </a>
       <a href="./food.html" class="tile" data-evt="entry_food">
         <div class="t1">竜の食卓</div>
         <div class="t2">現実に再現できる異界のレシピ。今日の一皿とキャラ別の食卓。</div>
