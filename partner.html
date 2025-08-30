@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>運命の銀竜暦｜今日のパートナー（有料）</title>
-<meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物9名から今日のパートナーを診断します。">
+<title>運命の銀竜暦｜今日の導き手（有料）</title>
+<meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物9名から今日あなたを導く案内役を診断します。">
 <style>
-  /* ===== ベース（zodiac準拠＋占いサイト風の余白と丸み） ===== */
   :root{
     --bg:#0b0d12; --ink:#fff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
     --primary:#1a3358; --primary-b:#34507c; --accent:#9fd3ff;
@@ -22,22 +21,17 @@
   }
   .wrap{max-width:40rem;margin:0 auto;padding:20px 14px 80px}
 
-  /* ヘッダー：大きめ見出し＋短い説明（占いサイト調） */
   header{text-align:center;margin:4px 0 14px}
   h1{margin:8px 0 4px;font-size:clamp(22px,6vw,28px);letter-spacing:.02em}
   .lead{color:var(--muted);font-size:15px;margin:4px auto 0;max-width:34rem}
 
-  /* カード */
   .card{
     background:var(--card); border:1px solid var(--line);
     border-radius:20px; padding:20px; box-shadow:var(--shadow); margin:14px 0;
   }
   .label{font-weight:800;color:#cfe1ff;margin:0 0 8px}
 
-  /* 入力フォーム（1カラム・大きいタップ領域） */
-  .form{
-    display:grid; grid-template-columns:1fr; row-gap:16px;
-  }
+  .form{display:grid; grid-template-columns:1fr; row-gap:16px}
   .field{display:block}
   .field label{
     display:block; font-weight:700; font-size:15px; color:#d9e2ff; margin:0 0 6px;
@@ -47,9 +41,7 @@
     border:1px solid var(--line); background:#1a2034; color:#fff; font-size:16px;
   }
   select:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-  .hint{display:block;margin-top:6px;font-size:12.5px;color:#a9b7d7}
 
-  /* 性別：丸ピル（ボタン風） */
   .radios{display:flex;gap:8px;flex-wrap:wrap}
   .radio{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line);
     border-radius:999px;background:#11172a;cursor:pointer;user-select:none}
@@ -57,14 +49,12 @@
   .radio input:checked+span{color:#fff}
   .radio span{color:#cfe1ff;font-size:14px}
 
-  /* 主ボタン：太く丸く */
   .primary{
     background:var(--primary); border-color:var(--primary-b); font-weight:800; letter-spacing:.02em;
   }
   .primary:hover{filter:brightness(1.05)}
   .cta-area{margin-top:10px}
 
-  /* 結果 */
   .partner{display:flex;gap:12px;align-items:center}
   .avatar{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);
     background:#10172a;display:flex;align-items:center;justify-content:center;font-weight:800}
@@ -72,7 +62,6 @@
   .prole{color:#cdd5ea;font-size:14px}
   .line{margin-top:6px;color:#e0e7ff;font-size:16px}
 
-  /* フッターナビ */
   .footnav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   .pill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;
     padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:#11172a;
@@ -80,32 +69,20 @@
   .pill:hover{background:#18213a}
   footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:12px}
 
-  /* 印刷：余分を隠す */
   @media print{.footnav{display:none} body{background:#fff;color:#000} .card{border-color:#999;box-shadow:none}}
 </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>今日のパートナー（有料）</h1>
+      <h1>今日の導き手（有料）</h1>
       <p class="lead">
-        ここはエテルナリアの星占術師による診断です。<br>
-        月・日と性別を選ぶと、今日あなたに寄り添うパートナーが現れます。
+        ここはエテルナリアの星占術師による診断。<br>
+        月・日と性別を選ぶと、今日あなたを導く案内役が現れます。
       </p>
     </header>
 
-    <!-- 有料ゲート（デモ切替はUIのみ。判定は本番でサーバ側） -->
-    <section id="gate" class="card" aria-live="polite">
-      <div class="label">有料会員限定ページ</div>
-      <p class="lead" style="margin:2px 0 12px">本番環境では有料会員のみ利用可能です。下の「デモ切替」で動作確認できます。</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <span class="pill" id="statusPill">無料会員</span>
-        <button id="toggleDemo" aria-pressed="false" style="width:auto">（デモ）有料/無料 切替</button>
-        <a class="pill" href="./signup.html" style="background:var(--primary);border-color:var(--primary-b);color:#fff">会員登録へ</a>
-      </div>
-    </section>
-
-    <!-- 入力（占いサイト風：縦積み・でかボタン） -->
+    <!-- 入力 -->
     <section class="card" aria-labelledby="lab-input">
       <div id="lab-input" class="label">入力</div>
       <div class="form" role="group" aria-label="誕生日と性別の入力">
@@ -114,15 +91,13 @@
           <select id="month" aria-label="月を選択">
             <option value="" hidden>月を選ぶ</option>
           </select>
-          <small class="hint">例：5 を選ぶと 5月</small>
         </div>
 
         <div class="field">
           <label for="day">生まれた日</label>
-          <select id="day" aria-label="日を選択" disabled>
+          <select id="day" aria-label="日を選択">
             <option value="" hidden>日を選ぶ</option>
           </select>
-          <small class="hint">例：12 を選ぶと 12日</small>
         </div>
 
         <div class="field">
@@ -136,7 +111,7 @@
       </div>
 
       <div class="cta-area">
-        <button id="btnGo" class="primary">今日のパートナーを見る</button>
+        <button id="btnGo" class="primary">今日の導き手を見る</button>
       </div>
       <p class="lead" style="margin-top:8px;font-size:13px">※生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
     </section>
@@ -155,17 +130,7 @@
   </div>
 
 <script>
-  /* 有料デモ切替（本番はサーバ判定） */
-  let isPremium=false;
-  const statusPill=document.getElementById("statusPill");
-  const toggleDemo=document.getElementById("toggleDemo");
-  toggleDemo.addEventListener("click",()=>{
-    isPremium=!isPremium;
-    toggleDemo.setAttribute("aria-pressed",String(isPremium));
-    statusPill.textContent=isPremium?"有料会員（デモ）":"無料会員";
-  });
-
-  /* セレクト初期化：月→日（“月→日”の順をUIで固定） */
+  /* セレクト初期化：月 1–12、日 初期 1–31（UX向上） */
   const monthSel=document.getElementById("month");
   const daySel=document.getElementById("day");
 
@@ -174,24 +139,33 @@
     o.value=String(m); o.textContent=String(m);
     monthSel.appendChild(o);
   }
-
-  function daysIn(m,y){
-    return [31,((y%4===0&&y%100!==0)||y%400===0)?29:28,31,30,31,30,31,31,30,31,30,31][m-1];
-  }
-  function fillDays(){
-    const y=new Date().getFullYear();
-    const m=Number(monthSel.value||0);
+  function buildDayOptions(n){
     daySel.innerHTML='<option value="" hidden>日を選ぶ</option>';
-    if(!m){ daySel.disabled=true; return; }
-    const n=daysIn(m,y);
     for(let d=1; d<=n; d++){
       const o=document.createElement("option");
       o.value=String(d); o.textContent=String(d);
       daySel.appendChild(o);
     }
-    daySel.disabled=false;
   }
-  monthSel.addEventListener("change", fillDays);
+  // 初期は 1–31 を表示（「日が選べない」問題を解消）
+  buildDayOptions(31);
+
+  function daysIn(m,y){
+    return [31,((y%4===0&&y%100!==0)||y%400===0)?29:28,31,30,31,30,31,31,30,31,30,31][m-1];
+  }
+  function reflowDays(){
+    const y=new Date().getFullYear();
+    const m=Number(monthSel.value||0);
+    if(!m){ buildDayOptions(31); return; }
+    const n=daysIn(m,y);
+    const prev = daySel.value;
+    buildDayOptions(n);
+    // 月変更後も可能なら選択を維持（大きすぎた場合は未選択に戻る）
+    if(prev && Number(prev)<=n){ daySel.value=prev; }
+  }
+  monthSel.addEventListener("change", reflowDays);
+  // ページ復帰（BFCache）対応
+  window.addEventListener("pageshow", reflowDays);
 
   /* 決定ロジック（ダミーデータ） */
   const CHARACTERS=[
@@ -206,14 +180,6 @@
 
   const resultEl=document.getElementById("result");
   document.getElementById("btnGo").addEventListener("click",()=>{
-    if(!isPremium){
-      resultEl.innerHTML=`<div class="card"><div class="label">ご利用には会員登録が必要です</div>
-        <p class="lead" style="font-size:14px">
-          このページは有料会員限定です。<br>
-          <a href="./signup.html" class="pill" style="margin-top:8px;display:inline-flex;background:var(--primary);border-color:var(--primary-b);color:#fff">会員登録へ</a>
-        </p></div>`;
-      return;
-    }
     const mm = monthSel.value;
     const dd = daySel.value;
     if(!mm || !dd){
@@ -226,7 +192,7 @@
     const line=p.lines[pick(p.lines.length,seed+"|l")];
 
     resultEl.innerHTML = `<div class="card" aria-labelledby="p-lab">
-      <div id="p-lab" class="label">今日のパートナー</div>
+      <div id="p-lab" class="label">今日の導き手</div>
       <div class="partner">
         <div class="avatar" aria-hidden="true">${p.name.slice(0,2)}</div>
         <div><div class="pname">${p.name}</div><div class="prole">${p.role}</div></div>
