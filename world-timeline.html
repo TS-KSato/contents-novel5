@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>世界年表｜運命の銀竜暦</title>
+<meta name="description" content="銀竜の言葉を継ぐものの時代人の視点で、文明・文化・イデオロギー・政治体制・外交から読む世界年表。史料タグと信頼度で“見え方”が変わる。">
+<style>
+  :root{
+    --bg:#0b0d12; --ink:#fff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
+    --accent:#9fd3ff; --pill:#11172a; --pill-b:#27304a; --good:#9fffd3; --warn:#ffd89f; --risk:#ffb1b1;
+    --radius:18px; --pad:18px; --gap:12px; --tap:48px; --shadow:0 10px 24px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7}
+  a{color:#cfe1ff;text-decoration:none}
+  .wrap{max-width:980px;margin:0 auto;padding:20px 14px 96px}
+  header{text-align:center;margin:6px 0 12px}
+  h1{margin:8px 0 6px;font-size:clamp(22px,6vw,30px)}
+  .lead{color:var(--muted);font-size:14.5px}
+
+  .toolbar{position:sticky;top:0;z-index:10;background:linear-gradient(to bottom,var(--bg),rgba(11,13,18,.6));
+    backdrop-filter:blur(4px);padding:10px 0 8px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:8px 12px;border-radius:999px;background:var(--pill);border:1px solid var(--pill-b);color:#cfe1ff;font-size:13px;cursor:pointer;user-select:none}
+  .pill[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px}
+  .select{min-height:36px;border-radius:10px;border:1px solid var(--pill-b);background:#0f1424;color:#fff;padding:8px 10px}
+  .search{max-width:520px;margin:8px auto 0;display:flex;gap:8px}
+  .search input{flex:1;min-height:40px;border-radius:12px;border:1px solid var(--pill-b);background:#0f1424;color:#fff;padding:8px 10px}
+  .search button{min-height:40px;border-radius:10px;border:1px solid var(--pill-b);background:#16213a;color:#cfe1ff;padding:8px 12px}
+
+  .timeline{display:grid;gap:12px;margin-top:10px}
+  article.year{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+  .era{font-weight:800;color:#cfe1ff;font-size:14px;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .era small{color:var(--muted);font-weight:600}
+  .grid{display:grid;gap:8px}
+  .row2{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:start}
+  .k{color:#cfe1ff;font-weight:700;font-size:12.5px}
+  .v{color:#e8eeff;font-size:14.5px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .tag{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid var(--pill-b);background:#10172a;color:#cfe1ff;font-size:11.5px}
+  .lvl{font-weight:800}
+  .reli{border-color:#3b4360}
+  .r1{background:#1a1f33;color:#ffbfbf} .r2{background:#1a1f33;color:#ffd59c}
+  .r3{background:#1a1f33;color:#d9f7a1} .r4{background:#1a1f33;color:#cfe1ff}
+
+  .note{color:var(--muted);font-size:12.5px;margin-top:6px;text-align:center}
+  footer{margin-top:18px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>世界年表</h1>
+    <p class="lead">— アストラル紀100年前後に生きる我らの記 —<br>
+      史は語り手によって姿を変える。ここでは、文明・文化・思想・政と交わりを、我らの言葉で綴る。
+    </p>
+  </header>
+
+  <div class="toolbar" role="region" aria-label="年表ツールバー">
+    <div class="row" id="lensRow" aria-label="語り手レンズ">
+      <button class="pill" data-lens="scribe" aria-pressed="true">王国書記</button>
+      <button class="pill" data-lens="bard" aria-pressed="false">語り部</button>
+      <button class="pill" data-lens="guild" aria-pressed="false">交易ギルド書記</button>
+      <button class="pill" data-lens="faith" aria-pressed="false">聖竜教徒</button>
+    </div>
+    <div class="row" id="axisRow" aria-label="表示軸">
+      <button class="pill" data-axis="civil" aria-pressed="true">文明</button>
+      <button class="pill" data-axis="culture" aria-pressed="true">文化</button>
+      <button class="pill" data-axis="ideology" aria-pressed="true">イデオロギー</button>
+      <button class="pill" data-axis="politics" aria-pressed="true">政治体制</button>
+      <button class="pill" data-axis="diplomacy" aria-pressed="true">外交</button>
+    </div>
+    <div class="search" role="search">
+      <input id="q" placeholder="例：門 / 七大評議 / 居住区 / 光の祭り を検索">
+      <button id="btnSearch">検索</button>
+    </div>
+    <p class="note">※ 史料タグの意味：神話＝口承、旅記＝旅の記録、公文＝公文書、巷説＝噂、予兆＝預言・占星師の見立て。</p>
+  </div>
+
+  <section id="timeline" class="timeline" aria-live="polite"></section>
+
+  <footer>© 運命の銀竜暦 — 世界年表</footer>
+</div>
+
+<script>
+/* ========== データ ==========
+  文明レベル（lv）：0=前文明/口承、1=散村儀式、2=都市儀式、3=連邦魔装、4=門理論普及、5=竜機構域
+*/
+const DATA = [
+  {
+    id:"mythic",
+    span:"神話以前",
+    when:"アストラル紀以前（伝承）",
+    reli:"神話", lv:5,
+    civil:{ base:"竜は大地・海・空を繋ぐ“第一の文明”。石と魔力を編み上げ、地形ごと彫り替えたという。",
+            bard:"竜らは歌で山を起こし、風に橋を架けた、と古老は語る。",
+            faith:"聖竜の御業。形あるものはやがて還る〈大地帰還〉の律。"},
+    culture:{ base:"竜言語〈ドラクトング〉が学知の器。星の巡りを詠む詩と紋。",
+              bard:"星歌は今も子らの寝物語となり、竜の名は護符に刻まれる。"},
+    ideology:{ base:"循環と還元を善とする自然観。永遠は求めず。",
+               faith:"魂は巡り、器は替わる。これぞ聖なる循環。"},
+    politics:{ base:"合意制の“評議”があったと伝わるが、詳細は霧の中。"},
+    diplomacy:{ base:"他種は“庇護下の客人”。竜間には儀礼的競合があったらしい。"},
+    tags:["竜文明","大地帰還","星歌"]
+  },
+  {
+    id:"silver_remnant",
+    span:"銀竜の残光",
+    when:"アストラル紀100年前後（同時代）",
+    reli:"公文", lv:1,
+    civil:{ base:"我ら人間の魔法は粗く、多人数の儀式で小さな現象を得るにすぎぬ。だが古き竜は一頭で地を変える。", 
+            scribe:"王国は術士団を整え、儀式を制度化して秩序を保つ。",
+            guild:"儀式は人手と費用がかかる。交易路の整備が魔法より効く場面も多い。"},
+    culture:{ base:"多種族が散在し共存。語り部が街道で伝承を渡す。『光の祭り』は地方差こそあれ今も続く。"},
+    ideology:{ base:"“恐れと希望”が人の原動力。有限の命に価値を見出す教えが芽吹く。"},
+    politics:{ base:"小王と評議会が点在。王は権威を演出し、不老を求む者もいる。"},
+    diplomacy:{ base:"市と森と山の間で細い往来。聖域周辺は介入も抑制も細心だ。"},
+    tags:["粗野な魔法","語り部","聖域"]
+  },
+  {
+    id:"ancient_empire",
+    span:"古代魔法文明期",
+    when:"アストラル紀300-500年（伝聞）",
+    reli:"旅記", lv:4,
+    civil:{ base:"「朝露の魔法帝国」— 七大魔法評議会の合議統治。門の基礎理論と民生魔装が普及したとされる。"},
+    culture:{ base:"エルフのメモリアソングと人間の文字体系の融合、合同祭祀『光の祭り』の隆盛。"},
+    ideology:{ base:"多種族協働の実利主義。魔力は公共善。"},
+    politics:{ base:"合議と資源官僚制。中央はアストラルシズム峡谷。"},
+    diplomacy:{ base:"知と資源の交換が制度化。次元探査で国際協働。"},
+    tags:["朝露の魔法帝国","七大評議","門の理","民生魔装"]
+  },
+  {
+    id:"decline",
+    span:"衰退の道程",
+    when:"アストラル紀450-500年（伝聞）",
+    reli:"旅記", lv:3,
+    civil:{ base:"魔法資源の過採取と環境不安定化。次元研究の不安定現象が頻発。"},
+    culture:{ base:"中心と周縁の断絶が拡大。"},
+    ideology:{ base:"魔法エリートと民の格差が緊張を生む。"},
+    politics:{ base:"地方勢力が台頭、中央は弱体化。"},
+    diplomacy:{ base:"広域連携は軋み、内向きへ。"},
+    tags:["資源枯渇","不安定現象"]
+  },
+  {
+    id:"division",
+    span:"分断と対立",
+    when:"アストラル紀500-750年（伝聞）",
+    reli:"旅記", lv:2,
+    civil:{ base:"地域自給と非魔法技術が伸長。居住区制が広がる。"},
+    culture:{ base:"儀礼は分離・保守化しつつ、周縁に“記憶の共同体”。"},
+    ideology:{ base:"純血主義や神授説が伸び、対抗して技術平等主義も芽吹く。"},
+    politics:{ base:"連合・王国・要塞都市が並立。登録と監視が常態化。"},
+    diplomacy:{ base:"交易は縮退、海上中立商人が秩序を繋ぐ。"},
+    tags:["居住区","純血主義","登録制度","海上交易"]
+  },
+  {
+    id:"tension",
+    span:"緊張の積層",
+    when:"アストラル紀850-950年（伝聞）",
+    reli:"旅記", lv:2,
+    civil:{ base:"検問と登録が生活を縛る。地下の自治区が広がる。"},
+    culture:{ base:"抵抗の口承・秘密言語が広まる。"},
+    ideology:{ base:"差別法に抗して権利思想が胎動。"},
+    politics:{ base:"弾圧と反乱が往復。法の強化と自治の萌芽が併存。"},
+    diplomacy:{ base:"協定は形骸化、非公式停戦が点在。"},
+    tags:["差別法","地下抵抗","自治区","停戦"]
+  },
+  {
+    id:"gate_foreshadow",
+    span:"門の夢",
+    when:"未来視のささやき（同時代人には予兆）",
+    reli:"予兆", lv:4,
+    civil:{ base:"古代の〈門〉技術が甦り、移ろう民に新天地の選択肢を示すという。"},
+    culture:{ base:"『記憶を携え境を越える者』の寓話が芽吹く。"},
+    ideology:{ base:"覇権と純血から離れ、生の尊厳を守る志。"},
+    politics:{ base:"公権と民の連帯が密やかに交差する“影の合意”。"},
+    diplomacy:{ base:"穏健派同士の秘密協力が育つとの伝聞。"},
+    tags:["門","移住伝承","穏健派","影の合意"]
+  }
+];
+
+/* 語り手レンズごとの語彙置換・追記 */
+const LENS = {
+  scribe: { name:"王国書記",
+    tweak(k,text){ 
+      // 政治・秩序語を強める
+      if(k==="politics") return text.replaceAll("並立","並立（統御の対象）").replaceAll("自治","自治（王権の監督下）");
+      if(k==="ideology") return text.replaceAll("志","秩序理念");
+      return text;
+    }
+  },
+  bard: { name:"語り部",
+    tweak(k,text){
+      // 詩的表現を少し足す
+      return text.replaceAll("とされる","と歌われる").replaceAll("という","という噂だ")
+                 .replaceAll("芽吹く","芽吹き、囁かれる");
+    }
+  },
+  guild: { name:"交易ギルド書記",
+    tweak(k,text){
+      // 実利・流通語を追加
+      if(k==="civil") return text + " 市場と道の維持は魔法に勝る投資となる局面も多い。";
+      if(k==="diplomacy") return text.replaceAll("交易は縮退","交易は縮退するも航路は価値を増す");
+      return text;
+    }
+  },
+  faith: { name:"聖竜教徒",
+    tweak(k,text){
+      // 信仰語彙を付与（※ライラ本人は中立、ここは“熱心派”の声）
+      return text.replaceAll("竜","聖竜").replaceAll("門","聖なる門");
+    }
+  }
+};
+
+/* 史料タグ → 信頼度色 */
+const RELI = {
+  "神話":{cls:"r1",txt:"信頼度：伝承"},
+  "巷説":{cls:"r2",txt:"信頼度：噂"},
+  "旅記":{cls:"r3",txt:"信頼度：現地記録"},
+  "公文":{cls:"r4",txt:"信頼度：公文書"},
+  "予兆":{cls:"r2",txt:"信頼度：占星見立て"}
+};
+
+let lens = "scribe";
+const axes = new Set(["civil","culture","ideology","politics","diplomacy"]);
+
+const $list = document.getElementById('timeline');
+const $q = document.getElementById('q');
+
+/* 文明レベルの表示名 */
+function levelName(lv){
+  return ["Lv.0 前文明/口承","Lv.1 散村儀式","Lv.2 都市儀式","Lv.3 連邦魔装","Lv.4 門理論普及","Lv.5 竜機構域"][lv]||`Lv.${lv}`;
+}
+
+function render(items){
+  $list.innerHTML="";
+  items.forEach(d=>{
+    const rel = RELI[d.reli]||RELI["巷説"];
+    const tagLv = `<span class="tag"><span class="lvl">${levelName(d.lv)}</span></span>`;
+    const tagReli = `<span class="tag reli ${rel.cls}">${d.reli}｜${rel.txt}</span>`;
+    const tagArr = (d.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("");
+    const kv = (key,label)=>{
+      const base = d[key];
+      if(!base) return "";
+      let text = base.base||"";
+      const override = base[lens];
+      if(override) text = override;
+      else if(LENS[lens]?.tweak) text = LENS[lens].tweak(key,text);
+      return axes.has(key) ? `<div class="row2"><div class="k">${label}</div><div class="v">${text}</div></div>` : "";
+    };
+    const el = document.createElement("article");
+    el.className="year";
+    el.innerHTML = `
+      <div class="era">
+        <div>${d.span} <small>（${d.when}）</small></div>
+        <div class="tags">${tagLv}${tagReli}${tagArr}</div>
+      </div>
+      <div class="grid">
+        ${kv("civil","文明")}
+        ${kv("culture","文化")}
+        ${kv("ideology","イデオロギー")}
+        ${kv("politics","政治体制")}
+        ${kv("diplomacy","外交")}
+      </div>
+    `;
+    $list.appendChild(el);
+  });
+}
+
+function doSearch(){
+  const q=($q.value||"").trim();
+  if(!q){ render(DATA); return; }
+  const hit = DATA.filter(d=>{
+    const s = [d.span,d.when,d.reli,levelName(d.lv),(d.tags||[]).join(" "),
+      d.civil?.base,d.culture?.base,d.ideology?.base,d.politics?.base,d.diplomacy?.base].join(" ");
+    return s.includes(q);
+  });
+  render(hit);
+}
+
+document.getElementById('lensRow').addEventListener('click',(e)=>{
+  const b=e.target.closest('.pill'); if(!b) return;
+  [...document.querySelectorAll('#lensRow .pill')].forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  lens=b.dataset.lens; render(DATA);
+  // TODO: GA4 event: timeline_lens_change
+});
+document.getElementById('axisRow').addEventListener('click',(e)=>{
+  const b=e.target.closest('.pill'); if(!b) return;
+  const key=b.dataset.axis; const on=b.getAttribute('aria-pressed')==='true';
+  b.setAttribute('aria-pressed',String(!on));
+  if(on) axes.delete(key); else axes.add(key);
+  render(DATA);
+  // TODO: GA4 event: timeline_axis_toggle
+});
+document.getElementById('btnSearch').addEventListener('click',doSearch);
+$q.addEventListener('keydown',e=>{ if(e.key==="Enter") doSearch(); });
+
+render(DATA);
+</script>
+</body>
+</html>
