@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>世界年表｜運命の銀竜暦</title>
-  <meta name="description" content="アランたちの生きるエテルナリア世界の通史年表。">
+  <meta name="description" content="アランたちの生きるエテルナリア世界の通史年表">
   <style>
     :root{
       --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826; --accent:#9fd3ff;
@@ -57,6 +57,8 @@
       .tli:nth-child(4) .card{animation-delay:.14s}
       .tli:nth-child(5) .card{animation-delay:.18s}
       .tli:nth-child(6) .card{animation-delay:.22s}
+      .tli:nth-child(7) .card{animation-delay:.26s}
+      .tli:nth-child(8) .card{animation-delay:.30s}
       @keyframes rise{to{transform:none;opacity:1}}
     }
   </style>
@@ -65,219 +67,307 @@
   <div class="wrap">
     <header>
       <h1>世界年表</h1>
-      <p class="lead">— アランたちの生きるエテルナリア世界の通史年表 —</p>
+      <p class="lead">アランたちの生きるエテルナリア世界の通史年表</p>
     </header>
 
     <ol class="timeline" role="list">
-      <!-- 神話以前（竜の時代） -->
-      <li class="tli" id="era-mythic">
+      <!-- 先史時代（石器・部族連合） -->
+      <li class="tli" id="era-prehistory">
         <div class="dot" aria-hidden="true"></div>
-        <article class="card" aria-labelledby="mythic-title">
+        <article class="card" aria-labelledby="prehistory-title">
           <div class="era">
-            <h2 id="mythic-title">神話以前 — 竜の時代</h2>
-            <span class="when">（アストラル紀以前）</span>
+            <h2 id="prehistory-title">先史時代 — 石器と部族の時代</h2>
+            <span class="when">AK以前（年代不詳）</span>
           </div>
           <ul class="events">
             <li>
-              <time>約6600万年前</time>
+              <time>遠古</time>
               <div>
-                <div class="title">天空の炎</div>
-                <div class="desc">世界が焼け、竜の数が減ず。以後、強き竜ほど大地へ身を還す〈大地帰還〉を選んだと伝わる。</div>
+                <div class="title">狩猟採集の広がり</div>
+                <div class="desc">複数の人系・長命種が各地で分散居住。石器と骨角器による生活技術が定着した。</div>
               </div>
             </li>
             <li>
               <time>遠古</time>
               <div>
-                <div class="title">竜言語〈ドラクトング〉の記憶</div>
-                <div class="desc">星の運行と魔力の潮を刻む言語。歌と紋で学知を伝え、聖域と泉の起源となる痕跡を残した。</div>
+                <div class="title">部族連合の発生</div>
+                <div class="desc">季節移動と婚姻同盟で緩やかな連合が成立。争いは儀式化され、血讐の連鎖を抑える仕組みが芽生える。</div>
               </div>
             </li>
             <li>
-              <time>前史</time>
+              <time>遠古</time>
               <div>
-                <div class="title">アストラルシズム峡谷の生起</div>
-                <div class="desc">最強の竜〈アストラル〉の大地帰還により地形が裂け、魔力流と次元の薄さが生じた（後世の門研究の母胎）。</div>
+                <div class="title">竜との関係の二分</div>
+                <div class="desc">地域により竜は「守護神」として祀られ、別地域では「害」として追い払われた記録が口承に残る。</div>
               </div>
             </li>
           </ul>
         </article>
       </li>
 
-      <!-- 同時代（“現代”の視点） -->
+      <!-- 集住・農耕・初期交易 -->
+      <li class="tli" id="era-sedentarization">
+        <div class="dot" aria-hidden="true"></div>
+        <article class="card" aria-labelledby="sedentarization-title">
+          <div class="era">
+            <h2 id="sedentarization-title">集住期 — 開墾と村落の形成</h2>
+            <span class="when">AK前数千年〜AK前数百年</span>
+          </div>
+          <ul class="events">
+            <li>
+              <time>AK前2000</time>
+              <div>
+                <div class="title">牧畜・焼畑の開始</div>
+                <div class="desc">山麓と河谷で定住化が進み、穀と根菜の生産が安定。祭場と共同倉が村の中核となる。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK前1500</time>
+              <div>
+                <div class="title">市日の誕生</div>
+                <div class="desc">街道沿いに定期市が立ち、部族間の物々交換が制度化。簡易な度量衡の印が使われ始める。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK前1200</time>
+              <div>
+                <div class="title">鎖地（閉鎖地域）の成立</div>
+                <div class="desc">森エルフや島嶼系部族が外来者を禁じる慣行を制定。独自の婚姻規則と言語が強化された。</div>
+              </div>
+            </li>
+          </ul>
+        </article>
+      </li>
+
+      <!-- 貨幣・商業・都市国家 -->
+      <li class="tli" id="era-currency">
+        <div class="dot" aria-hidden="true"></div>
+        <article class="card" aria-labelledby="currency-title">
+          <div class="era">
+            <h2 id="currency-title">商業化期 — 貨幣と都市国家</h2>
+            <span class="when">AK前数百年〜AK0前後</span>
+          </div>
+          <ul class="events">
+            <li>
+              <time>AK前300</time>
+              <div>
+                <div class="title">通貨の概念の誕生</div>
+                <div class="desc">高純度金属片に印章を刻んだ「貝替貨（がいがえか）」が市で流通。後の硬貨制の原型となる。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK前200</time>
+              <div>
+                <div class="title">ギルドの萌芽</div>
+                <div class="desc">職能別の同業集団が自治規約を持ち、信用と計量を保証。商館が宿駅に併設された。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK前50</time>
+              <div>
+                <div class="title">都市国家の台頭</div>
+                <div class="desc">城壁と広場を中心に共和国風の統治が成立。周辺農村と相互依存が強まる。</div>
+              </div>
+            </li>
+          </ul>
+        </article>
+      </li>
+
+      <!-- “現代”視点の初期：銀竜の残光期 -->
       <li class="tli" id="era-silver">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="silver-title">
           <div class="era">
-            <h2 id="silver-title">銀竜の残光</h2>
-            <span class="when">アストラル紀0–120年</span>
+            <h2 id="silver-title">銀竜の残光期</h2>
+            <span class="when">AK0–120</span>
           </div>
           <ul class="events">
             <li>
-              <time>AK50–100</time>
+              <time>AK50</time>
               <div>
-                <div class="title">最後の竜〈シルバーミスト〉の記録</div>
-                <div class="desc">長命のエルフがその言葉を伝え、人は有限の命の価値を学ぶ。大地帰還ののち、聖域と泉が生まれた。</div>
+                <div class="title">聖域の成立</div>
+                <div class="desc">古竜の大地帰還後、泉や禁足林が各地に定着。巡礼と保護の慣行が生まれる。</div>
               </div>
             </li>
             <li>
               <time>AK80</time>
               <div>
                 <div class="title">儀式魔法の普及</div>
-                <div class="desc">人間の魔法は粗く、多人数の祈りで小成果を得る。竜一頭の規模には遠く、勤勉と協働が徳とされた。</div>
+                <div class="desc">人の魔法は多人数の祈りで小成果を得る段階。術士団と評議会が安全規範を整備。</div>
               </div>
             </li>
             <li>
               <time>AK100</time>
               <div>
-                <div class="title">市邦と小王の林立</div>
-                <div class="desc">評議会や小王国が点在。王は権威を演出し、不老の秘を求める者もあったが、聖域への介入には畏れが勝った。</div>
+                <div class="title">市邦と小王の並立</div>
+                <div class="desc">都市共和国・封君領・森の自治圏が隣接。対竜観は地域差が大きく、信仰と警戒が共存した。</div>
               </div>
             </li>
           </ul>
         </article>
       </li>
 
-      <!-- 古代魔法文明期（黄金の記憶） -->
+      <!-- 古代魔法文明（黄金期） -->
       <li class="tli" id="era-empire">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="empire-title">
           <div class="era">
-            <h2 id="empire-title">古代魔法文明期 — 朝露の帝国</h2>
-            <span class="when">アストラル紀300–500年</span>
+            <h2 id="empire-title">古代魔法文明 — 朝露の帝国</h2>
+            <span class="when">AK300–500</span>
           </div>
           <ul class="events">
             <li>
               <time>AK320</time>
               <div>
                 <div class="title">七大魔法評議会の成立</div>
-                <div class="desc">合議統治が整い、アストラルシズム峡谷を中心に広域支配が固まる。多種族の連携が制度化された。</div>
+                <div class="desc">合議制による広域統治。多種協働が制度化され、学寮・工房・軍務が分掌された。</div>
               </div>
             </li>
             <li>
               <time>AK350</time>
               <div>
-                <div class="title">魔法資源経済圏の形成</div>
-                <div class="desc">スカイアンビル山脈の鉱と植物素材が交易を潤し、民生魔装の生産が各都市へ広がる。</div>
+                <div class="title">硬貨制と税制の整備</div>
+                <div class="desc">銀貨・銅貨が標準化。関所・港で関税が徴収され、信用状が遠隔取引を支えた。</div>
               </div>
             </li>
             <li>
               <time>AK400</time>
               <div>
-                <div class="title">「魂の結晶」の開発</div>
-                <div class="desc">魔力の貯蔵・変換技術が確立され、民生用装置が普及。都市生活は一段と明るくなった。</div>
+                <div class="title">魂の結晶の実用化</div>
+                <div class="desc">魔力の貯蔵・変換装置が民生に普及。照明・運搬・医療が飛躍し、都市生活が安定。</div>
               </div>
             </li>
             <li>
               <time>AK420</time>
               <div>
-                <div class="title">〈門〉基礎理論の実証</div>
-                <div class="desc">峡谷での次元研究が進み、実験的構造物が建つ。学寮と工房が連携した黄金の時代。</div>
+                <div class="title">〈門〉基礎理論の確立</div>
+                <div class="desc">アストラルシズム峡谷で次元研究が進展。学術都市が栄え、国際的学寮同盟が結成された。</div>
               </div>
             </li>
             <li>
               <time>AK450</time>
               <div>
                 <div class="title">合同祭祀「光の祭り」</div>
-                <div class="desc">エルフのメモリアソングと人の文字文化が交わり、祭祀は帝国公式行事として昇格した。</div>
+                <div class="desc">エルフの記憶歌と人の文字芸術が融合。帝国公式行事となり文化統合の象徴となる。</div>
               </div>
             </li>
           </ul>
         </article>
       </li>
 
-      <!-- 衰退（中央の影り） -->
+      <!-- 帝国の翳り（経済・災害・分裂の芽） -->
       <li class="tli" id="era-decline">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="decline-title">
           <div class="era">
             <h2 id="decline-title">帝国の翳り</h2>
-            <span class="when">アストラル紀450–500年</span>
+            <span class="when">AK450–500</span>
           </div>
           <ul class="events">
             <li>
               <time>AK460</time>
               <div>
-                <div class="title">資源の過採取</div>
-                <div class="desc">魔法資源の枯渇と環境不安定化が報告され、中心と周縁の断絶が目に見え始める。</div>
+                <div class="title">資源枯渇と価格高騰</div>
+                <div class="desc">魔法資源の過採取で物価が乱高下。周縁部に密輸と私掘りが横行し、治安が悪化。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK472</time>
+              <div>
+                <div class="title">大噴火「黒い夏」</div>
+                <div class="desc">スカイアンビル山脈が噴火し寒冷化。飢饉と疫病が続き、人口が大きく減少した。</div>
               </div>
             </li>
             <li>
               <time>AK480</time>
               <div>
                 <div class="title">次元不安定現象の頻発</div>
-                <div class="desc">〈門〉研究の副作用と噂され、地方勢力が台頭。中央の権威は静かに衰えた。</div>
+                <div class="desc">〈門〉実験域で異常が増加。研究は制限され、地方勢力が自衛名目で軍備を拡張。</div>
               </div>
             </li>
           </ul>
         </article>
       </li>
 
-      <!-- 分断（制度の壁） -->
+      <!-- 分断と対立（制度化された線引き・内戦・鎖国例） -->
       <li class="tli" id="era-division">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="division-title">
           <div class="era">
             <h2 id="division-title">分断と対立</h2>
-            <span class="when">アストラル紀500–750年</span>
+            <span class="when">AK500–750</span>
           </div>
           <ul class="events">
             <li>
               <time>AK520</time>
               <div>
                 <div class="title">登録法と居住区制</div>
-                <div class="desc">種の違いを名よりも血で測る制度が敷かれ、都市は目に見えぬ壁を育てた。</div>
+                <div class="desc">血統・種別による登録が義務化。混住地区が縮小し、職域や通行に制限がかかる。</div>
               </div>
             </li>
             <li>
-              <time>AK600</time>
+              <time>AK560</time>
               <div>
-                <div class="title">海上中立商人の台頭</div>
-                <div class="desc">陸の交易は痩せ、中立旗を掲げる商人が海路で秩序の糸をつないだ。</div>
+                <div class="title">人類王権の分裂戦争</div>
+                <div class="desc">王位継承を巡る同族内戦が長期化。都市同盟が介入し、国境線が細かく引き直される。</div>
               </div>
             </li>
             <li>
-              <time>AK730</time>
+              <time>AK610</time>
               <div>
-                <div class="title">要塞都市の並立</div>
-                <div class="desc">連合・王国・要塞都市が互いに牽制。監視と検問が生活の常となる。</div>
+                <div class="title">森エルフの鎖国令</div>
+                <div class="desc">外来者の立入を禁じる布告。交易は指定門前での置き渡しに限定され、文化の独自化が進む。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK640</time>
+              <div>
+                <div class="title">ドワーフ諸鉱山の分派抗争</div>
+                <div class="desc">採掘権と技術秘伝を巡る内紛。一部都市は中立化し、海上中立商人が鉱産物流通を掌握。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK700</time>
+              <div>
+                <div class="title">竜観の断層</div>
+                <div class="desc">一部地域で竜像を破却する運動が発生。他地域では守護信仰が強まり、宗教的緊張が高まる。</div>
               </div>
             </li>
           </ul>
         </article>
       </li>
 
-      <!-- 緊張（抵抗と自治） -->
+      <!-- 緊張の積層（監視・地下自治・限定的停戦） -->
       <li class="tli" id="era-tension">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="tension-title">
           <div class="era">
             <h2 id="tension-title">緊張の積層</h2>
-            <span class="when">アストラル紀850–950年</span>
+            <span class="when">AK850–950</span>
           </div>
           <ul class="events">
             <li>
-              <time>AK880</time>
+              <time>AK860</time>
               <div>
-                <div class="title">差別法の強化</div>
-                <div class="desc">検問と登録が暮らしに食い込み、地下の自治区が広がる。口承の抵抗歌が密やかに伝わった。</div>
+                <div class="title">大疫病「灰の咳」</div>
+                <div class="desc">都市部で流行し、検問と隔離が常態化。記名通行が市民生活に深く入り込む。</div>
               </div>
             </li>
             <li>
-              <time>AK910</time>
+              <time>AK880</time>
               <div>
-                <div class="title">権利の言葉の胎動</div>
-                <div class="desc">聖と血を掲げる主張に対し、共に生きる権利を説く声が芽吹く。市場は夜明け前に立つようになった。</div>
+                <div class="title">地下自治区の形成</div>
+                <div class="desc">迫害を受けた集団が地下・峡谷・離島へ移住し自治。秘密言語と歌が連帯の印となる。</div>
               </div>
             </li>
             <li>
               <time>AK940</time>
               <div>
                 <div class="title">非公式停戦の点在</div>
-                <div class="desc">前線は冷え、影においてのみ合意が交わされる。公の協定は形骸化した。</div>
+                <div class="desc">前線は冷え、影の合意が局地的に成立。公的条約は形骸化したまま経済だけが細く続く。</div>
               </div>
             </li>
           </ul>
-          <p class="note">※ この先の出来事は本年表の範囲外（同時代人が把握し得た過去のみを収録）。</p>
         </article>
       </li>
     </ol>
