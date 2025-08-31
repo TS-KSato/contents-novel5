@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>運命の銀竜暦｜世界年表</title>
-  <meta name="description" content="銀竜時代の史観で綴る、エテルナリア世界の世界年表。">
+  <title>世界年表｜運命の銀竜暦</title>
+  <meta name="description" content="同時代人（銀竜の言葉を継ぐものの頃）が編んだ、エテルナリア世界の通史年表。時代見出しの下に「年＋出来事＋一行解説」を縦に配したワンカラム・タイムライン。">
   <style>
     :root{
       --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826; --accent:#9fd3ff;
@@ -14,16 +14,14 @@
     html{font-size:16px}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.75}
     a{color:var(--accent);text-decoration:none}
-
     .wrap{max-width:var(--max);margin:0 auto;padding:20px 14px 96px}
 
     header{text-align:center;margin:6px 0 18px}
     h1{margin:8px 0 8px;font-size:clamp(22px,6vw,30px);letter-spacing:.02em}
     .lead{color:var(--muted);font-size:14.5px;max-width:44rem;margin:0 auto}
 
-    /* --- Timeline --- */
-    .timeline{position:relative;margin:24px auto 0;padding-left:26px;max-width:720px}
-    /* vertical line */
+    /* Timeline backbone */
+    .timeline{position:relative;margin:24px auto 0;padding-left:26px;max-width:740px}
     .timeline::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(var(--line),rgba(39,48,74,.3));}
 
     .tli{position:relative;list-style:none;margin:0 0 22px}
@@ -34,27 +32,31 @@
     .era h2{margin:0;font-size:clamp(18px,4.5vw,22px)}
     .era .when{color:var(--muted);font-size:13.5px}
 
-    .summary{margin:8px 0 0;font-size:15.5px;color:#e8eeff}
-
-    /* subtle tag (optional) */
-    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#0f1424;color:#cfe1ff;font-size:11.5px}
+    /* Events list */
+    .events{margin:10px 0 0;padding:0;list-style:none}
+    .events li{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:10px 0;border-top:1px dashed rgba(207,225,255,.12)}
+    .events li:first-child{border-top:none;padding-top:0}
+    .events time{color:#cfe1ff;font-weight:800;white-space:nowrap}
+    .events .title{font-weight:800}
+    .events .desc{color:#e8eeff}
+    .note{color:var(--muted);font-size:12.5px;margin-top:8px}
 
     /* Back to top */
     .backtop{position:fixed;right:14px;bottom:18px;z-index:5;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#111a2c;color:#cfe1ff;box-shadow:var(--shadow)}
     .backtop:hover{filter:brightness(1.08)}
 
     /* Print */
-    @media print{.backtop{display:none} body{background:#fff;color:#000} .timeline::before{background:#ccc} .tli .card{box-shadow:none;border-color:#999} .tag{border-color:#aaa;background:#fff;color:#000}}
+    @media print{.backtop{display:none} body{background:#fff;color:#000} .timeline::before{background:#ccc} .tli .card{box-shadow:none;border-color:#999}}
 
     /* Motion */
     @media (prefers-reduced-motion:no-preference){
-      .tli .card{transform:translateY(6px);opacity:.0;animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+      .tli .card{transform:translateY(6px);opacity:.0;animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
       .tli:nth-child(1) .card{animation-delay:.02s}
       .tli:nth-child(2) .card{animation-delay:.06s}
       .tli:nth-child(3) .card{animation-delay:.10s}
       .tli:nth-child(4) .card{animation-delay:.14s}
       .tli:nth-child(5) .card{animation-delay:.18s}
+      .tli:nth-child(6) .card{animation-delay:.22s}
       @keyframes rise{to{transform:none;opacity:1}}
     }
   </style>
@@ -63,120 +65,219 @@
   <div class="wrap">
     <header>
       <h1>世界年表</h1>
-      <p class="lead">— エテルナリアの略年表 —<br>アランたちの生きる世界とは</p>
+      <p class="lead">— 同時代人（銀竜の言葉を継ぐものの頃）が記した通史 —</p>
     </header>
+
     <ol class="timeline" role="list">
-      <!-- 神話以前（伝承） -->
-      <li class="tli" id="era-mythic" data-era="mythic">
+      <!-- 神話以前（竜の時代） -->
+      <li class="tli" id="era-mythic">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="mythic-title">
           <div class="era">
-            <h2 id="mythic-title">神話以前</h2>
-            <span class="when">アストラル紀以前（伝承）</span>
+            <h2 id="mythic-title">神話以前 — 竜の時代</h2>
+            <span class="when">（アストラル紀以前）</span>
           </div>
-          <p class="summary">
-            <!-- ここに“銀竜時代の人々”の語彙で記述。例：
-            竜らは星歌で山を起こし、風に橋を架けたと古老は語る。やがて彼らは大地へ還り、
-            その足跡は泉と聖域となって残った。人の史は、その影の縁から始まる。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">伝承</span><span class="tag">大地帰還</span>
-          </div>
+          <ul class="events">
+            <li>
+              <time>約6600万年前</time>
+              <div>
+                <div class="title">天空の炎</div>
+                <div class="desc">世界が焼け、竜の数が減ず。以後、強き竜ほど大地へ身を還す〈大地帰還〉を選んだと伝わる。</div>
+              </div>
+            </li>
+            <li>
+              <time>遠古</time>
+              <div>
+                <div class="title">竜言語〈ドラクトング〉の記憶</div>
+                <div class="desc">星の運行と魔力の潮を刻む言語。歌と紋で学知を伝え、聖域と泉の起源となる痕跡を残した。</div>
+              </div>
+            </li>
+            <li>
+              <time>前史</time>
+              <div>
+                <div class="title">アストラルシズム峡谷の生起</div>
+                <div class="desc">最強の竜〈アストラル〉の大地帰還により地形が裂け、魔力流と次元の薄さが生じた（後世の門研究の母胎）。</div>
+              </div>
+            </li>
+          </ul>
         </article>
       </li>
 
-      <!-- 銀竜の残光（同時代） -->
-      <li class="tli" id="era-silver" data-era="silver_remnant">
+      <!-- 同時代（“現代”の視点） -->
+      <li class="tli" id="era-silver">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="silver-title">
           <div class="era">
-            <h2 id="silver-title">銀竜の残光</h2>
-            <span class="when">アストラル紀100年前後（同時代）</span>
+            <h2 id="silver-title">銀竜の残光 — 我らの時代</h2>
+            <span class="when">アストラル紀0–120年</span>
           </div>
-          <p class="summary">
-            <!-- 例：
-            我らの術は粗く、数人で祈り合わねば火一つ満足に起こせぬ。されど古き竜は、
-            ただ在るだけで泉を生み、森の気配を変える。有限の身であるがゆえ、日の重みを知る。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">同時代</span><span class="tag">語り部の記</span>
-          </div>
+          <ul class="events">
+            <li>
+              <time>AK50–100</time>
+              <div>
+                <div class="title">最後の竜〈シルバーミスト〉の記録</div>
+                <div class="desc">長命のエルフがその言葉を伝え、人は有限の命の価値を学ぶ。大地帰還ののち、聖域と泉が生まれた。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK80</time>
+              <div>
+                <div class="title">儀式魔法の普及</div>
+                <div class="desc">人間の魔法は粗く、多人数の祈りで小成果を得る。竜一頭の規模には遠く、勤勉と協働が徳とされた。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK100</time>
+              <div>
+                <div class="title">市邦と小王の林立</div>
+                <div class="desc">評議会や小王国が点在。王は権威を演出し、不老の秘を求める者もあったが、聖域への介入には畏れが勝った。</div>
+              </div>
+            </li>
+          </ul>
         </article>
       </li>
 
-      <!-- 古代魔法文明期（伝聞） -->
-      <li class="tli" id="era-empire" data-era="ancient_empire">
+      <!-- 古代魔法文明期（黄金の記憶） -->
+      <li class="tli" id="era-empire">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="empire-title">
           <div class="era">
-            <h2 id="empire-title">古代魔法文明期</h2>
-            <span class="when">アストラル紀300–500年（伝聞）</span>
+            <h2 id="empire-title">古代魔法文明期 — 朝露の帝国</h2>
+            <span class="when">アストラル紀300–500年</span>
           </div>
-          <p class="summary">
-            <!-- 例：
-            「朝露の帝国」は七つの評議が国を治め、門の理を民の用に開いたという。
-            光の祭りは歌と紋を結び、種の違いを越えたと旅の書にある。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">旅記</span><span class="tag">門の理</span>
-          </div>
+          <ul class="events">
+            <li>
+              <time>AK320</time>
+              <div>
+                <div class="title">七大魔法評議会の成立</div>
+                <div class="desc">合議統治が整い、アストラルシズム峡谷を中心に広域支配が固まる。多種族の連携が制度化された。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK350</time>
+              <div>
+                <div class="title">魔法資源経済圏の形成</div>
+                <div class="desc">スカイアンビル山脈の鉱と植物素材が交易を潤し、民生魔装の生産が各都市へ広がる。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK400</time>
+              <div>
+                <div class="title">「魂の結晶」の開発</div>
+                <div class="desc">魔力の貯蔵・変換技術が確立され、民生用装置が普及。都市生活は一段と明るくなった。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK420</time>
+              <div>
+                <div class="title">〈門〉基礎理論の実証</div>
+                <div class="desc">峡谷での次元研究が進み、実験的構造物が建つ。学寮と工房が連携した黄金の時代。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK450</time>
+              <div>
+                <div class="title">合同祭祀「光の祭り」</div>
+                <div class="desc">エルフのメモリアソングと人の文字文化が交わり、祭祀は帝国公式行事として昇格した。</div>
+              </div>
+            </li>
+          </ul>
         </article>
       </li>
 
-      <!-- 分断と対立（伝聞） -->
-      <li class="tli" id="era-division" data-era="division">
+      <!-- 衰退（中央の影り） -->
+      <li class="tli" id="era-decline">
+        <div class="dot" aria-hidden="true"></div>
+        <article class="card" aria-labelledby="decline-title">
+          <div class="era">
+            <h2 id="decline-title">帝国の翳り</h2>
+            <span class="when">アストラル紀450–500年</span>
+          </div>
+          <ul class="events">
+            <li>
+              <time>AK460</time>
+              <div>
+                <div class="title">資源の過採取</div>
+                <div class="desc">魔法資源の枯渇と環境不安定化が報告され、中心と周縁の断絶が目に見え始める。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK480</time>
+              <div>
+                <div class="title">次元不安定現象の頻発</div>
+                <div class="desc">〈門〉研究の副作用と噂され、地方勢力が台頭。中央の権威は静かに衰えた。</div>
+              </div>
+            </li>
+          </ul>
+        </article>
+      </li>
+
+      <!-- 分断（制度の壁） -->
+      <li class="tli" id="era-division">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="division-title">
           <div class="era">
             <h2 id="division-title">分断と対立</h2>
-            <span class="when">アストラル紀500–750年（伝聞）</span>
+            <span class="when">アストラル紀500–750年</span>
           </div>
-          <p class="summary">
-            <!-- 例：
-            居住区が壁を育て、登録は名よりも血を量った。技の平等を説く声は芽吹くも、
-            監視の網が暮らしを細くしたと聞く。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">旅記</span><span class="tag">居住区</span>
-          </div>
+          <ul class="events">
+            <li>
+              <time>AK520</time>
+              <div>
+                <div class="title">登録法と居住区制</div>
+                <div class="desc">種の違いを名よりも血で測る制度が敷かれ、都市は目に見えぬ壁を育てた。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK600</time>
+              <div>
+                <div class="title">海上中立商人の台頭</div>
+                <div class="desc">陸の交易は痩せ、中立旗を掲げる商人が海路で秩序の糸をつないだ。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK730</time>
+              <div>
+                <div class="title">要塞都市の並立</div>
+                <div class="desc">連合・王国・要塞都市が互いに牽制。監視と検問が生活の常となる。</div>
+              </div>
+            </li>
+          </ul>
         </article>
       </li>
 
-      <!-- 緊張の積層（伝聞） -->
-      <li class="tli" id="era-tension" data-era="tension">
+      <!-- 緊張（抵抗と自治） -->
+      <li class="tli" id="era-tension">
         <div class="dot" aria-hidden="true"></div>
         <article class="card" aria-labelledby="tension-title">
           <div class="era">
             <h2 id="tension-title">緊張の積層</h2>
-            <span class="when">アストラル紀850–950年（伝聞）</span>
+            <span class="when">アストラル紀850–950年</span>
           </div>
-          <p class="summary">
-            <!-- 例：
-            地下の区は歌で合図し、夜明け前に市場が立つ。法は固く、自治は柔らかい。
-            その間を、人は祈りと算盤で渡った。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">旅記</span><span class="tag">地下抵抗</span>
-          </div>
-        </article>
-      </li>
-
-      <!-- 門の夢（予兆） -->
-      <li class="tli" id="era-gate" data-era="gate_foreshadow">
-        <div class="dot" aria-hidden="true"></div>
-        <article class="card" aria-labelledby="gate-title">
-          <div class="era">
-            <h2 id="gate-title">門の夢</h2>
-            <span class="when">未来視のささやき（予兆）</span>
-          </div>
-          <p class="summary">
-            <!-- 例：
-            記憶を携え境を越える者の寓話が各地で芽吹く。覇と純の旗を離れ、
-            生の尊厳を守る者らが、影において手を結ぶという。 -->
-          </p>
-          <div class="tags">
-            <span class="tag">予兆</span><span class="tag">影の合意</span>
-          </div>
+          <ul class="events">
+            <li>
+              <time>AK880</time>
+              <div>
+                <div class="title">差別法の強化</div>
+                <div class="desc">検問と登録が暮らしに食い込み、地下の自治区が広がる。口承の抵抗歌が密やかに伝わった。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK910</time>
+              <div>
+                <div class="title">権利の言葉の胎動</div>
+                <div class="desc">聖と血を掲げる主張に対し、共に生きる権利を説く声が芽吹く。市場は夜明け前に立つようになった。</div>
+              </div>
+            </li>
+            <li>
+              <time>AK940</time>
+              <div>
+                <div class="title">非公式停戦の点在</div>
+                <div class="desc">前線は冷え、影においてのみ合意が交わされる。公の協定は形骸化した。</div>
+              </div>
+            </li>
+          </ul>
+          <p class="note">※ この先の出来事は本年表の範囲外（同時代人が把握し得た過去のみを収録）。</p>
         </article>
       </li>
     </ol>
@@ -185,7 +286,7 @@
   </div>
 
   <script>
-    // スクロール位置に応じて Back-to-Top を出し分け（任意）
+    // Back-to-Top の出し分け（任意）
     const btn = document.querySelector('.backtop');
     const onScroll = ()=>{
       if (window.scrollY > 320) { btn.style.opacity = '1'; btn.style.transform = 'translateY(0)'; }
@@ -194,20 +295,6 @@
     btn.style.transition = 'opacity .25s ease, transform .25s ease';
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
-
-    // アンカー位置のスムーススクロール
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const id = a.getAttribute('href').slice(1);
-        const el = id ? document.getElementById(id) : null;
-        if(!el) return;
-        e.preventDefault();
-        el.scrollIntoView({behavior:'smooth',block:'start'});
-      });
-    });
-
-    // 置換メモ：将来 JSON 化する場合、<ol> 内を生成するだけで対応可。
-    // GA4 フック例：タイムライン各 li のクリックを計測する場合はここに addEventListener を追加。
   </script>
 </body>
 </html>
