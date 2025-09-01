@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>運命の銀竜暦｜マイページ（最小デモ）</title>
+  <style>
+    :root{
+      --bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--accent:#8dd0ff;--ring:0 0 0 2px rgba(141,208,255,.25),0 8px 24px rgba(0,0,0,.25);--r:16px
+    }
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+    .wrap{max-width:720px;margin:auto;padding:16px}
+    h1{font-size:1.2rem;margin:10px 0 16px}
+    .card{background:var(--panel);border:1px solid rgba(141,208,255,.18);border-radius:var(--r);box-shadow:var(--ring);margin-bottom:12px}
+    .card-h{padding:12px 14px;border-bottom:1px dashed rgba(141,208,255,.2);font-weight:700}
+    .card-c{padding:12px 14px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:rgba(141,208,255,.12);border:1px solid rgba(141,208,255,.28);font-weight:700}
+    .btn{appearance:none;border:none;background:rgba(141,208,255,.18);border:1px solid rgba(141,208,255,.35);color:var(--ink);padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .muted{color:var(--muted)}
+    .list{display:grid;gap:8px}
+    .item{display:flex;justify-content:space-between;gap:8px;padding:10px;border-radius:12px;background:rgba(141,208,255,.07);border:1px solid rgba(141,208,255,.14)}
+    label{display:block;margin:.4rem 0 .15rem;font-size:.9rem;color:var(--muted)}
+    input,select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(141,208,255,.25);background:#0f141c;color:var(--ink)}
+    .grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+    @media(max-width:480px){.grid{grid-template-columns:1fr}}
+    .links{display:grid;gap:8px}
+    a.link{display:block;padding:12px;border-radius:12px;background:rgba(141,208,255,.07);border:1px solid rgba(141,208,255,.14);text-decoration:none;color:var(--ink)}
+  </style>
+</head>
+<body>
+  <main class="wrap" id="app" role="main">
+    <h1>マイページ</h1>
+
+    <!-- ステータス -->
+    <section class="card">
+      <div class="card-h">会員情報</div>
+      <div class="card-c">
+        <div class="row" aria-live="polite">
+          <div class="pill" id="memberPill">🔓 非会員</div>
+          <div class="pill">ポイント：<span id="points">0</span> pt</div>
+          <button class="btn" id="btnCharge">チャージ（デモ）</button>
+          <button class="btn" id="btnToggle">会員にする/やめる（デモ）</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 占い履歴 -->
+    <section class="card">
+      <div class="card-h">占い履歴</div>
+      <div class="card-c">
+        <div class="list" id="history"></div>
+        <div class="muted" id="histEmpty" style="display:none">履歴はまだありません</div>
+        <div class="row" style="margin-top:8px">
+          <button class="btn" id="btnMock">履歴を1件追加（デモ）</button>
+          <button class="btn" id="btnClear">履歴を消去（デモ）</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- プロフィール編集（月日＋性別） -->
+    <section class="card">
+      <div class="card-h">プロフィール編集</div>
+      <div class="card-c">
+        <div class="grid">
+          <div>
+            <label for="month">誕生月</label>
+            <select id="month" aria-label="誕生月"></select>
+          </div>
+          <div>
+            <label for="day">誕生日</label>
+            <select id="day" aria-label="誕生日"></select>
+          </div>
+          <div>
+            <label for="gender">性別</label>
+            <select id="gender" aria-label="性別">
+              <option value="">未設定</option>
+              <option value="male">男性</option>
+              <option value="female">女性</option>
+              <option value="other">その他</option>
+              <option value="secret">回答しない</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="btnSave">保存</button>
+          <span class="muted" id="saveMsg"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 各種リンク -->
+    <section class="card">
+      <div class="card-h">リンク</div>
+      <div class="card-c">
+        <div class="links">
+          <a class="link" href="./notice.html">お知らせ</a>
+          <a class="link" href="./contact.html">お問い合わせ</a>
+          <a class="link" href="./unsubscribe.html" id="linkUnsub" style="display:none">退会する（会員のみ）</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ====== 最小ローカルストレージ（デモ） ======
+    const S = {get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)), del:(k)=>localStorage.removeItem(k)};
+
+    function seed(){
+      if(S.get('gl_member')==null) S.set('gl_member', false);
+      if(S.get('gl_points')==null) S.set('gl_points', 0);
+      if(!S.get('gl_history')) S.set('gl_history', []);
+      if(!S.get('gl_profile')) S.set('gl_profile', {month:"", day:"", gender:""});
+    }
+
+    // ====== 描画 ======
+    function renderStatus(){
+      const m = !!S.get('gl_member');
+      const pill = document.getElementById('memberPill');
+      pill.textContent = m ? '🛡️ 会員' : '🔓 非会員';
+      document.getElementById('points').textContent = S.get('gl_points',0);
+      document.getElementById('linkUnsub').style.display = m ? '' : 'none';
+    }
+
+    function renderHistory(){
+      const list = S.get('gl_history', []);
+      const box = document.getElementById('history'); box.innerHTML='';
+      document.getElementById('histEmpty').style.display = list.length? 'none':'block';
+      list.slice().reverse().forEach((h)=>{
+        const el = document.createElement('div'); el.className='item';
+        el.innerHTML = `<span>${h.date}</span><span class="muted">${h.title||'総合占い'}</span>`;
+        box.appendChild(el);
+      });
+    }
+
+    function renderProfile(){
+      const mSel = document.getElementById('month');
+      const dSel = document.getElementById('day');
+      mSel.innerHTML = '<option value="">--</option>' + Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+      dSel.innerHTML = '<option value="">--</option>' + Array.from({length:31},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+      const p = S.get('gl_profile',{month:"",day:"",gender:""});
+      if(p.month) mSel.value = p.month;
+      if(p.day) dSel.value = p.day;
+      document.getElementById('gender').value = p.gender||'';
+    }
+
+    // ====== イベント ======
+    function wire(){
+      document.getElementById('btnCharge').addEventListener('click',()=>{
+        const v = parseInt(prompt('チャージするポイント（例：100）','100')||'0',10);
+        if(v>0){ S.set('gl_points', S.get('gl_points',0)+v); renderStatus(); }
+      });
+      document.getElementById('btnToggle').addEventListener('click',()=>{
+        const cur = !!S.get('gl_member'); S.set('gl_member', !cur); renderStatus();
+      });
+      document.getElementById('btnMock').addEventListener('click',()=>{
+        const list = S.get('gl_history', []);
+        const today = new Date().toISOString().slice(0,10);
+        list.push({date:today, title:'総合占い'}); S.set('gl_history', list); renderHistory();
+      });
+      document.getElementById('btnClear').addEventListener('click',()=>{ if(confirm('履歴を削除しますか？')){ S.set('gl_history', []); renderHistory(); }});
+
+      document.getElementById('btnSave').addEventListener('click',()=>{
+        const month = document.getElementById('month').value;
+        const day = document.getElementById('day').value;
+        const gender = document.getElementById('gender').value;
+        S.set('gl_profile',{month,day,gender});
+        const msg = document.getElementById('saveMsg'); msg.textContent='保存しました'; setTimeout(()=>msg.textContent='',1500);
+      });
+    }
+
+    function start(){ seed(); renderStatus(); renderHistory(); renderProfile(); wire(); }
+    start();
+  </script>
+</body>
+</html>
