@@ -59,7 +59,7 @@
 
     /* Bottom nav (unchanged pattern) */
     .bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9); backdrop-filter:blur(8px); border-top:1px solid var(--line) }
-    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr) }
+    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
     .bn-btn{ appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.375rem 0; min-height:3.25rem; font-size:.75rem }
     .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; border-radius:4px; border:1px solid var(--line); background:#16213c; display:flex; align-items:center; justify-content:center; font-size:.75rem }
     .bn-accent{ color:#fff }
@@ -169,14 +169,12 @@
 
   <!-- Bottom Nav -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
-    <div class="bn-grid">
-      <a class="bn-btn bn-accent" href="./index.html" aria-current="page"><span class="bn-icon">占</span><span>占い</span></a>
-      <a class="bn-btn" href="./list.html"><span class="bn-icon">お</span><span>おまけ</span></a>
-      <a class="bn-btn" href="./serial.html"><span class="bn-icon">巻</span><span>語り巻</span></a>
-      <a class="bn-btn" href="./food.html"><span class="bn-icon">食</span><span>食卓</span></a>
-      <a class="bn-btn" href="./signup.html"><span class="bn-icon">会</span><span>会員</span></a>
-    </div>
-  </nav>
+  <div class="bn-grid">
+    <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+    <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+    <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
+  </div>
+</nav>
 
 <script>
 // ===== Config / Constants =====
@@ -352,6 +350,20 @@ $('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest(
     const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0;
     if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ if(dx<0) current.setDate(current.getDate()+1); else current.setDate(current.getDate()-1); render(); }
     x0=y0=null;
+  });
+})();
+  (function(){
+  // 現在のファイル名（ルートアクセス時は index.html とみなす）
+  var path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.bottom-nav a').forEach(function(a){
+    var href = a.getAttribute('href') || '';
+    if (href.endsWith(path)) {
+      a.classList.add('bn-accent');              // 既存の強調クラスを再利用
+      a.setAttribute('aria-current','page');     // アクセシビリティ対応
+    } else {
+      a.classList.remove('bn-accent');
+      a.removeAttribute('aria-current');
+    }
   });
 })();
 </script>
