@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>「銀竜の言葉を継ぐもの」紹介｜運命の銀竜暦</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--accent:#8dd0ff;--r:14px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+    .wrap{max-width:760px;margin:auto;padding:16px 16px 84px}
+    h1{font-size:1.35rem;margin:6px 0 14px}
+    p.lead{margin:.25rem 0 1rem;color:var(--muted);line-height:1.7}
+    .card{background:var(--panel);border:1px solid rgba(141,208,255,.22);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+    .card-h{padding:12px 14px;font-weight:700;border-bottom:1px dashed rgba(141,208,255,.22)}
+    .card-c{padding:12px 14px}
+    .muted{color:var(--muted)}
+    details{background:rgba(141,208,255,.06);border:1px solid rgba(141,208,255,.18);border-radius:12px;padding:10px 12px}
+    details+details{margin-top:8px}
+    summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:.5rem}
+    summary::marker{color:var(--muted)}
+    ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+    .char{display:grid;gap:2px}
+    .name{font-weight:700}
+    .role{color:var(--muted);font-size:.95rem}
+    .grid2{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+    .kvs{display:grid;gap:6px}
+    .kv{display:flex;gap:8px;align-items:flex-start}
+    .kv dt{min-width:5.5rem;color:var(--muted)}
+    .kv dd{margin:0}
+    /* bottom nav minimal (3 tabs) */
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
+    .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
+    .bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none}
+    .bn-accent{background:rgba(141,208,255,.15)}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>「銀竜の言葉を継ぐもの」紹介</h1>
+    <p class="lead">短編小説の要約版。登場人物・あらすじ・補足を1ページに集約しました。</p>
+
+    <!-- 概要 -->
+    <section class="card" aria-labelledby="sec-overview">
+      <div class="card-h" id="sec-overview">世界観の概要</div>
+      <div class="card-c">
+        <div class="kvs">
+          <div class="kv"><dt>時代</dt><dd>アストラル紀100年前後（ドラゴン時代の終焉期）</dd></div>
+          <div class="kv"><dt>舞台</dt><dd>シルバーミスト地域／人間の町ネクサート周辺</dd></div>
+          <div class="kv"><dt>魔法観</dt><dd>ドラゴンは自然と調和した精緻な魔法を単独で扱い、人間の魔法は多数の術者による儀式的行使が主流</dd></div>
+          <div class="kv"><dt>種族</dt><dd>人間／エルフ／鳥人／獣人などが点在して共存</dd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 登場人物 -->
+    <section class="card" aria-labelledby="sec-chars">
+      <div class="card-h" id="sec-chars">主な登場人物</div>
+      <div class="card-c">
+        <ul class="clean">
+          <li class="char"><div class="name">ルナル</div><div class="role">銀色の古代ドラゴン。最後の世代とされる</div></li>
+          <li class="char"><div class="name">アラン</div><div class="role">ルナルに拾われ育てられた人間の少年</div></li>
+          <li class="char"><div class="name">リリア</div><div class="role">銀色の光を放つ妖精。人間の知恵にも通じる相棒</div></li>
+          <li class="char"><div class="name">ライラ</div><div class="role">エルフの古老。「古き語り部」</div></li>
+          <li class="char"><div class="name">ドレイク・ストームブレイド</div><div class="role">ルミノア地方の勇者。のちにアランの師に</div></li>
+          <li class="char"><div class="name">ミレイア</div><div class="role">ドレイクの病に伏す妻</div></li>
+          <li class="char"><div class="name">ネスター・ルナ・ラテス</div><div class="role">アルバトロス型鳥人の求道者。「風の導き手」</div></li>
+          <li class="char"><div class="name">ネクサート王</div><div class="role">人間王国の支配者。不老不死を希求</div></li>
+          <li class="char"><div class="name">マグナス・ヴェイン</div><div class="role">王室魔法使い長。龍骨の杖の使い手</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- あらすじ（要約） -->
+    <section class="card" aria-labelledby="sec-synopsis">
+      <div class="card-h" id="sec-synopsis">あらすじ（要約）</div>
+      <div class="card-c">
+        <details open>
+          <summary>第1部：雪の中の約束</summary>
+          <p>冬の山中、銀竜ルナルは捨てられた赤子を巣へと連れ帰り、妖精リリアの助けで「アラン」と名付けて育て始める。異種族の家族としての絆が芽生える。</p>
+        </details>
+        <details>
+          <summary>第2部：異なる空の下で</summary>
+          <p>成長したアランは人間社会を知るため旅に出て、町ネクサートで勇者ドレイクや鳥人ネスターと出会う。人間の魔法とドラゴンの魔法の差異、価値観の違いに直面し、師ドレイクのもとで剣と心を学ぶ。</p>
+        </details>
+        <details>
+          <summary>第3部：崩れゆく境界線</summary>
+          <p>不老不死を望む王と王室魔法使いマグナスがシルバーミスト遠征を敢行。アランは家族（ルナル）と人間社会の板挟みに苦悩する。</p>
+        </details>
+        <details>
+          <summary>第4部：二つの魂の共鳴</summary>
+          <p>儀式の暴走の中、ルナルは最後の力でアランを守り、自ら「大地帰還」を選ぶ。喪失は新たな始まりとなり、遺された地は聖域として変容する。</p>
+        </details>
+        <details>
+          <summary>結末：継承</summary>
+          <p>アランはルナルの鱗のお守りを胸に、両世界をつなぐ教師となる決意を固める。恐怖ではなく愛と有限の価値を基盤に、新しい学びの循環を広げていく。</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- 補足（読解の手がかり） -->
+    <section class="card" aria-labelledby="sec-notes">
+      <div class="card-h" id="sec-notes">補足（読解の手がかり）</div>
+      <div class="card-c">
+        <div class="grid2">
+          <div>
+            <h3 style="margin:.25rem 0 .5rem;font-size:1.05rem">テーマ</h3>
+            <ul>
+              <li>種を超えた家族の絆／継承と変容</li>
+              <li>恐怖と愛、有限の中の無限</li>
+              <li>観察と調和（ネスターの視座）</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin:.25rem 0 .5rem;font-size:1.05rem">象徴アイテム</h3>
+            <ul>
+              <li>ルナルの鱗のお守り（絆の記憶）</li>
+              <li>ドラクトング／リリアの光（関係性の象徴）</li>
+              <li>大地帰還／銀色に輝く植物（循環と再生）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Nav (3 tabs) -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html"><span>🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" href="./notice.html"><span>📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" href="./mypage.html"><span>👤</span><span>マイページ</span></a>
+    </div>
+  </nav>
+
+  <script>
+    // 現在ページを自動ハイライト
+    (function(){
+      var path = location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.bottom-nav a').forEach(function(a){
+        var href = a.getAttribute('href')||'';
+        a.classList.toggle('bn-accent', href.endsWith(path));
+        if(href.endsWith(path)) a.setAttribute('aria-current','page');
+      });
+    })();
+  </script>
+</body>
+</html>
