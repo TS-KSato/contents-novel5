@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>運命の銀竜暦｜魂の羅針盤（元型診断＋今日の役割）</title>
+  <meta name="description" content="初回の元型（アーキタイプ）診断であなたの魂の性質を確立し、毎日の10問で今日の『役割（パス）』を授けます。">
+  <style>
+    :root{--bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--line:#2a344d;--accent:#8dd0ff;--r:16px;--tap:48px}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;line-height:1.7}
+    .wrap{max-width:760px;margin:auto;padding:16px 16px 92px}
+    h1{font-size:clamp(22px,5vw,28px);margin:6px 0 8px}
+    .lead{color:var(--muted);margin:0 0 12px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin:12px 0;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card-h{padding:12px 14px;font-weight:800;border-bottom:1px dashed rgba(141,208,255,.25)}
+    .card-c{padding:12px 14px}
+    .btn{appearance:none;border:none;cursor:pointer;width:100%;min-height:var(--tap);padding:12px;border-radius:12px;background:#17325a;border:1px solid #2e4c79;color:#fff;font-weight:800}
+    .btn:hover{filter:brightness(1.05)}
+    .btn.ghost{background:#121829}
+    .grid2{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+    .q{margin:8px 0}
+    .q .t{font-weight:700}
+    .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+    .scale input{display:none}
+    .scale label{display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1626;color:#cfe1ff;cursor:pointer;user-select:none}
+    .scale input:checked + label{background:#2b446d;color:#fff;box-shadow:0 0 0 2px rgba(141,208,255,.35) inset}
+    .pill{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(141,208,255,.12);border:1px solid rgba(141,208,255,.25)}
+
+    .result{animation:fade .6s ease both}
+    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
+    .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
+    .bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none;font-size:14px}
+    .bn-accent{background:rgba(141,208,255,.15)}
+    .note{font-size:13px;color:var(--muted)}
+    .kvs{display:grid;gap:6px}
+    .kv{display:flex;gap:8px;align-items:flex-start}
+    .kv dt{min-width:6rem;color:var(--muted)}
+    .kv dd{margin:0}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>魂の羅針盤</h1>
+      <p class="lead">「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は元型（アーキタイプ）</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割（パス）を授かります。</p>
+    </header>
+
+    <!-- Phase 1: 元型診断（初回のみ表示） -->
+    <section id="phase1" class="card" aria-labelledby="p1h" hidden>
+      <div id="p1h" class="card-h">Phase 1：魂の共鳴診断（初回）</div>
+      <div class="card-c">
+        <p class="note">直感でお選びください（5段階）。結果は「アラン／ドレイク／ネスター／リリア／ライラ」のいずれかの元型になります。</p>
+
+        <div class="q">
+          <div class="t">Q1. 二つの価値が対立するとき、あなたは何を優先しますか？（調和 ↔ 正しさ）</div>
+          <div class="scale" data-axis="logic"> 
+            <input id="q1-1" type="radio" name="q1" value="1"><label for="q1-1">1</label>
+            <input id="q1-2" type="radio" name="q1" value="2"><label for="q1-2">2</label>
+            <input id="q1-3" type="radio" name="q1" value="3"><label for="q1-3">3</label>
+            <input id="q1-4" type="radio" name="q1" value="4"><label for="q1-4">4</label>
+            <input id="q1-5" type="radio" name="q1" value="5"><label for="q1-5">5</label>
+          </div>
+        </div>
+        <div class="q">
+          <div class="t">Q2. 進むべき道を決めるとき、あなたは？（風の囁き ↔ 古地図）</div>
+          <div class="scale" data-axis="spirit">
+            <input id="q2-1" type="radio" name="q2" value="1"><label for="q2-1">1</label>
+            <input id="q2-2" type="radio" name="q2" value="2"><label for="q2-2">2</label>
+            <input id="q2-3" type="radio" name="q2" value="3"><label for="q2-3">3</label>
+            <input id="q2-4" type="radio" name="q2" value="4"><label for="q2-4">4</label>
+            <input id="q2-5" type="radio" name="q2" value="5"><label for="q2-5">5</label>
+          </div>
+        </div>
+        <div class="q">
+          <div class="t">Q3. 選びやすい行動は？（内省 ↔ 行動）</div>
+          <div class="scale" data-axis="vector">
+            <input id="q3-1" type="radio" name="q3" value="1"><label for="q3-1">1</label>
+            <input id="q3-2" type="radio" name="q3" value="2"><label for="q3-2">2</label>
+            <input id="q3-3" type="radio" name="q3" value="3"><label for="q3-3">3</label>
+            <input id="q3-4" type="radio" name="q3" value="4"><label for="q3-4">4</label>
+            <input id="q3-5" type="radio" name="q3" value="5"><label for="q3-5">5</label>
+          </div>
+        </div>
+        <div class="q">
+          <div class="t">Q4. 人との距離感は？（独りで整える ↔ 仲間と動く）</div>
+          <div class="scale" data-axis="social">
+            <input id="q4-1" type="radio" name="q4" value="1"><label for="q4-1">1</label>
+            <input id="q4-2" type="radio" name="q4" value="2"><label for="q4-2">2</label>
+            <input id="q4-3" type="radio" name="q4" value="3"><label for="q4-3">3</label>
+            <input id="q4-4" type="radio" name="q4" value="4"><label for="q4-4">4</label>
+            <input id="q4-5" type="radio" name="q4" value="5"><label for="q4-5">5</label>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <button id="btnP1" class="btn">元型を確定する</button>
+          <button id="btnP1Reset" class="btn ghost" type="button">入力をクリア</button>
+        </div>
+        <p class="note">※ 元型は <code>localStorage.userArchetype</code> に保存されます（端末ローカル）。</p>
+      </div>
+    </section>
+
+    <!-- Phase 1 結果（確定後常に表示） -->
+    <section id="archetypeBox" class="card result" aria-live="polite" hidden>
+      <div class="card-h">あなたの元型（アーキタイプ）</div>
+      <div class="card-c" id="archText"></div>
+    </section>
+
+    <!-- Phase 2: 毎日の10問 → 役割決定 -->
+    <section id="phase2" class="card" aria-labelledby="p2h" hidden>
+      <div id="p2h" class="card-h">Phase 2：魂への十の質問（今日の役割を決める）</div>
+      <div class="card-c" id="qList">
+        <!-- 質問は JS で自動生成（10問） -->
+      </div>
+      <div class="card-c">
+        <div class="grid2">
+          <button id="btnEval" class="btn">今日の役割（パス）を授かる</button>
+          <button id="btnClearQ" class="btn ghost" type="button">回答クリア</button>
+        </div>
+        <p class="note" style="margin-top:6px">※ 毎日の回答は保存しません。結果カードのみが表示されます。</p>
+      </div>
+    </section>
+
+    <!-- Phase 3+4: 役割＋神託 -->
+    <section id="resultBox" class="card result" hidden>
+      <div class="card-h">今日の授与：役割（パス）と銀竜の言葉</div>
+      <div class="card-c" id="roleText"></div>
+    </section>
+
+    <!-- 情報 -->
+    <section class="card">
+      <div class="card-h">このページについて</div>
+      <div class="card-c">
+        <dl class="kvs">
+          <div class="kv"><dt>保存</dt><dd>元型のみ端末ローカルに保存（削除はブラウザのサイトデータから可能）</dd></div>
+          <div class="kv"><dt>目的</dt><dd>単なるジョブ診断ではなく、「あなたはいかに生きるべきか」を日々翻訳する羅針盤です。</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Nav (3 tabs) -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html">🏠 ホーム</a>
+      <a class="bn-btn" href="./notice.html">📣 お知らせ</a>
+      <a class="bn-btn" href="./mypage.html">👤 マイページ</a>
+    </div>
+  </nav>
+
+<script>
+// ========== データ ==========
+const ARCHETYPES = [
+  {id:'alan',   name:'アランの魂（架け橋）', desc:'二つの世界の間に立ち、調和と理解を求める者。'},
+  {id:'drake',  name:'ドレイクの魂（守護者）', desc:'愛する者を守るために、困難に立ち向かう強さと脆さを持つ者。'},
+  {id:'nester', name:'ネスターの魂（観察者）', desc:'高き視点から本質を見抜き、流れに身を任せる知恵を持つ者。'},
+  {id:'lilia',  name:'リリアの魂（自由なる風）', desc:'好奇心に満ち、自然と共鳴し、形に縛られず真実を伝える者。'},
+  {id:'laila',  name:'ライラの魂（語り部）', desc:'古き知恵を尊び、過去から学び、未来へ物語を繋ぐ者。'}
+];
+
+// 役割（パス）定義：4軸ベクトルで表現（vector/basis/mood/social）各 -1..+1
+//  内向(-1)/外向(+1), 調和(-1)/論理(+1), 静寂(-1)/激情(+1), 孤独(-1)/共同(+1)
+const ROLES = [
+  {id:'disciple', name:'銀竜の徒 (Disciple)', v:[-1,-1,-1,-1], desc:'聖域に留まり、教えを内省して力を蓄えるべき日。'},
+  {id:'stormblade', name:'ストームブレイド (Stormblade)', v:[+1,+1,+1,+1], desc:'仲間を守り、正面から困難に挑むべき日。'},
+  {id:'wind_guide', name:'風の導き手 (Wind Guide)', v:[-1,-1,-1,+0], desc:'高き視点で観察し、流れに逆らわず本質を見抜く日。'},
+  {id:'lorekeeper', name:'古き語り部 (Lorekeeper)', v:[-1,+1,-1,-1], desc:'書を開き、知の継承から未来を見出す日。'},
+  {id:'knight', name:'王国の騎士 (Knight)', v:[+1,+1,+1,+1], desc:'組織の中で役目を果たし、秩序を守る日。'},
+  {id:'healer', name:'聖域の癒し手 (Healer)', v:[-1,-1,-1,+1], desc:'他者の痛みに寄り添い、自然の力で和らげる日。'}
+];
+
+// Phase2 質問：軸マッピング
+const QUESTIONS = [
+  { id:1, text:'今日のあなたは、ルナルの巣に留まるか、ネクサートの町へ向かうか？', axis:'vector', left:'巣に留まる', right:'町へ向かう' },
+  { id:2, text:'道を選ぶなら、風の囁きに耳を澄ますか、ライラの古地図を頼るか？', axis:'basis', left:'風の囁き', right:'古地図' },
+  { id:3, text:'あなたの心は、静かな聖域の泉か、荒れ狂う嵐の剣か？', axis:'mood', left:'静かな泉', right:'嵐の剣' },
+  { id:4, text:'力を得るなら、一人で瞑想するか、仲間と共に儀式を行うか？', axis:'social', left:'一人で瞑想', right:'仲間と儀式' },
+  { id:5, text:'今、向き合うべきは、自らの恐怖か、王の野望か？', axis:'vector', left:'自らの恐怖', right:'王の野望' },
+  { id:6, text:'魔法を紡ぐなら、リリアのように舞うか、マグナスのように詠唱するか？', axis:'basis', left:'リリアのように', right:'マグナスのように' },
+  { id:7, text:'ルナルの「大地帰還」を前にした時、あなたは何を感じるか？', axis:'mood', left:'静かな受容', right:'運命への抵抗' },
+  { id:8, text:'知恵を求めるなら、ネスターとの対話か、学院での議論か？', axis:'social', left:'ネスターとの対話', right:'学院での議論' },
+  { id:9, text:'今日のあなたの手は、何を求めているか？', axis:'vector', left:'鱗のお守りを握る', right:'剣の柄を握る' },
+  { id:10, text:'有限の命を前にして、何を思うか？', axis:'basis', left:'無限の価値を見出す', right:'永遠を渇望する' }
+];
+
+// ==========
+const $ = (s, r=document)=>r.querySelector(s);
+const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+function getArchetype(){ try{ return JSON.parse(localStorage.getItem('userArchetype')); }catch{return null} }
+function setArchetype(obj){ localStorage.setItem('userArchetype', JSON.stringify(obj)); }
+
+function renderArchetypeBox(){
+  const a = getArchetype();
+  if(!a){ $('#archetypeBox').hidden = true; return; }
+  $('#archetypeBox').hidden = false;
+  $('#archText').innerHTML = `<div class="pill">確定済みの元型</div>
+    <h3 style="margin:.5rem 0 0">${a.name}</h3>
+    <p class="note" style="margin:.35rem 0 0">${a.desc}</p>
+    <div class="grid2" style="margin-top:10px">
+      <button class="btn ghost" id="btnChange">元型をやり直す（この端末のみ）</button>
+      <a class="btn" href="#p2h">十の質問へ進む</a>
+    </div>`;
+  $('#btnChange').addEventListener('click', ()=>{
+    if(confirm('元型を未設定に戻しますか？（この端末のみ）')){ localStorage.removeItem('userArchetype'); apply(); }
+  });
+}
+
+function showPhase1IfNeeded(){
+  const has = !!getArchetype();
+  $('#phase1').hidden = has; // 初回のみ表示
+  $('#phase2').hidden = !has; // 元型があれば質問を表示
+}
+
+function normalize5(v){ // 1..5 → -1..+1
+  return (Number(v)-3)/2; // 1:-1, 3:0, 5:+1
+}
+
+function pickArchetypeFromAnswers(ans){
+  // ざっくり重み付け：
+  // 調和(≤0) → アラン/ネスター/リリア、 論理(>0) → ドレイク/ライラ
+  // 外向(>0) → ドレイク寄り、 内向(≤0) → ライラ/ネスター寄り
+  // 簡易スコアで最大のキャラを採用
+  const s = {alan:0, drake:0, nester:0, lilia:0, laila:0};
+  const logic = ans.logic; const spirit = ans.spirit; const vector = ans.vector; const social = ans.social;
+  if(logic>0){ s.drake+=1; s.laila+=1; } else { s.alan+=1; s.nester+=1; s.lilia+=1; }
+  if(vector>0){ s.drake+=1; } else { s.laila+=0.5; s.nester+=0.5; s.alan+=0.5; }
+  if(spirit<0){ s.lilia+=1; s.nester+=0.5; } else { s.laila+=0.7; }
+  if(social>0){ s.alan+=0.4; s.drake+=0.4; } else { s.nester+=0.4; s.laila+=0.4; }
+  const bestId = Object.entries(s).sort((a,b)=>b[1]-a[1])[0][0];
+  return ARCHETYPES.find(a=>a.id===bestId);
+}
+
+function buildP1(){
+  // nothing (静的HTMLで用意済み)
+  $('#btnP1').addEventListener('click', ()=>{
+    // 集計
+    const vals = {logic:null, spirit:null, vector:null, social:null};
+    $$('.scale').forEach(el=>{
+      const name = el.previousElementSibling?.previousElementSibling ? null : null; // unused
+      const axis = el.getAttribute('data-axis');
+      const v = (el.querySelector('input:checked')||{}).value;
+      vals[axis] = normalize5(v||3);
+    });
+    if(Object.values(vals).some(v=>v===null)){
+      alert('全ての設問にお答えください'); return;
+    }
+    const a = pickArchetypeFromAnswers(vals);
+    setArchetype(a); apply();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  $('#btnP1Reset').addEventListener('click', ()=>{
+    $$('.scale input:checked').forEach(i=>i.checked=false);
+  });
+}
+
+function buildPhase2(){
+  const box = $('#qList'); box.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const row = document.createElement('div'); row.className='q';
+    row.innerHTML = `<div class="t">${q.id}. ${q.text}</div>`;
+    const scale = document.createElement('div'); scale.className='scale'; scale.setAttribute('data-axis', q.axis);
+    for(let i=1;i<=5;i++){
+      const id = `q${q.id}-${i}`;
+      const inp = document.createElement('input'); inp.id=id; inp.type='radio'; inp.name=`qq${q.id}`; inp.value=String(i);
+      const lab = document.createElement('label'); lab.setAttribute('for', id); lab.textContent = i===1?q.left:(i===5?q.right:String(i));
+      scale.appendChild(inp); scale.appendChild(lab);
+    }
+    row.appendChild(scale); box.appendChild(row);
+  });
+
+  $('#btnEval').addEventListener('click', ()=>{
+    const axes = { vector:0, basis:0, mood:0, social:0 };
+    let answered = true;
+    $$('#qList .scale').forEach(sc=>{
+      const v = (sc.querySelector('input:checked')||{}).value;
+      if(!v){ answered=false; }
+      const axis = sc.getAttribute('data-axis');
+      axes[axis]+= normalize5(v||3);
+    });
+    if(!answered){ alert('まだ未回答の設問があります'); return; }
+    // 正規化（平均）
+    axes.vector/=3; axes.basis/=3; axes.mood/=3; axes.social/=2;
+
+    // 近い役割を選ぶ（ユークリッド距離）
+    const vec = [axes.vector, axes.basis, axes.mood, axes.social];
+    let best=ROLES[0], bestDist=1e9;
+    for(const r of ROLES){
+      const d = Math.hypot(r.v[0]-vec[0], r.v[1]-vec[1], r.v[2]-vec[2], r.v[3]-vec[3]);
+      if(d<bestDist){ best=r; bestDist=d; }
+    }
+
+    // 神託テキスト
+    const arch = getArchetype() || ARCHETYPES[0];
+    const oracle = buildOracle(arch.id, best.id);
+
+    $('#resultBox').hidden=false;
+    $('#roleText').innerHTML = `
+      <div class="pill">今日の役割（パス）</div>
+      <h3 style="margin:.5rem 0 0">${best.name}</h3>
+      <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
+      <div class="pill">あなたの元型</div>
+      <p style="margin:.35rem 0 8px"><strong>${arch.name}</strong></p>
+      <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
+      <h3 style="margin:.25rem 0 .5rem">銀竜の言葉（神託）</h3>
+      <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">${oracle}</blockquote>
+    `;
+
+    // スクロール誘導
+    $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
+    window.dataLayer = window.dataLayer || []; window.dataLayer.push({event:'eval_path', role:best.id});
+  });
+
+  $('#btnClearQ').addEventListener('click', ()=>{
+    $$('#qList input:checked').forEach(i=>i.checked=false);
+  });
+}
+
+function buildOracle(archId, roleId){
+  const samples = {
+    'alan|stormblade': '架け橋となる者よ。今日は師の剣を取れ。調和を語るよりも、守るために一歩を踏み出す時だ。嵐は傷を与えるが、その痛みが明日を繋ぐ。',
+    'drake|disciple': '守護者よ。剣を置き、聖域の静けさに耳を澄ませ。受け入れることもまた強さだ。有限のうちに無限の価値を見よ。',
+    'nester|knight': '観察者よ。今日は雲を降り、人の営みに身を置け。鎧の重みは、理解の重み。恐れも希望も、肌で知れ。'
+  };
+  const k = `${archId}|${roleId}`;
+  if(samples[k]) return `「${samples[k]}」`;
+
+  const archName = (ARCHETYPES.find(a=>a.id===archId)||ARCHETYPES[0]).name.split('（')[0];
+  const roleName = (ROLES.find(r=>r.id===roleId)||ROLES[0]).name.split(' ')[0];
+  return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。有限の時にこそ、力は正しく輝く。」`;
+}
+
+function apply(){
+  renderArchetypeBox();
+  showPhase1IfNeeded();
+}
+
+function start(){
+  // Phase1 ビルド
+  buildP1();
+  // Phase2（10問）
+  buildPhase2();
+  // 初期表示
+  apply();
+  // Bottom Nav 現在地
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.bottom-nav a').forEach(a=>{
+    const href = a.getAttribute('href')||''; if(href.endsWith(path)){ a.classList.add('bn-accent'); a.setAttribute('aria-current','page'); }
+  });
+}
+start();
+</script>
+</body>
+</html>
