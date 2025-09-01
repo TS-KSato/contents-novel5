@@ -240,7 +240,7 @@ function buildP1(){
   $('#btnP1').addEventListener('click', ()=>{
     // 集計
     const vals = {logic:null, spirit:null, vector:null, social:null};
-    $$('.scale').forEach(el=>{
+    $$('#phase1 .scale').forEach(el=>{
       const name = el.previousElementSibling?.previousElementSibling ? null : null; // unused
       const axis = el.getAttribute('data-axis');
       const v = (el.querySelector('input:checked')||{}).value;
@@ -265,7 +265,7 @@ function buildPhase2(){
     row.innerHTML = `<div class="t">${q.id}. ${q.text}</div>`;
     const scale = document.createElement('div'); scale.className='scale'; scale.setAttribute('data-axis', q.axis);
     for(let i=1;i<=5;i++){
-      const id = `q${q.id}-${i}`;
+      const id = `p2q${q.id}-${i}`;
       const inp = document.createElement('input'); inp.id=id; inp.type='radio'; inp.name=`qq${q.id}`; inp.value=String(i);
       const lab = document.createElement('label'); lab.setAttribute('for', id); lab.textContent = i===1?q.left:(i===5?q.right:String(i));
       scale.appendChild(inp); scale.appendChild(lab);
