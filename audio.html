@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,7 +7,7 @@
   <title>竜歌の視聴｜運命の銀竜暦</title>
   <meta name="description" content="銀竜世界の竜歌を再生" />
   <style>
-    :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; }
+    :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
     header{display:flex;align-items:center;gap:10px;padding:14px}
     .back{color:#cfe1ff;text-decoration:none;font-weight:700}
@@ -30,8 +31,8 @@
   </header>
   <main class="wrap">
     <div class="art" id="art" aria-hidden="true">♪</div>
-    <div class="title" id="title">竜歌：星海を渡る翼</div>
-    <div class="sub" id="meta">Wind Guide ／ 96 BPM ／ 3:00</div>
+    <div class="title" id="title">竜歌</div>
+    <div class="sub" id="meta">—</div>
 
     <section class="player">
       <audio id="audio" preload="metadata"></audio>
@@ -43,7 +44,7 @@
       <input class="range" type="range" id="seek" min="0" max="100" value="0" />
     </section>
 
-    <p class="note">銀竜の記憶から紡がれた旋律の断片です。完全な形ではありませんが、瞑想や休息の補助としてお使いください。</p>
+    <p class="note" id="note">この竜歌は、風域が静まり鱗紋が淡く灯る刻に奏でられる調べ。呼吸を深く整え、意識を足裏に戻しながらお聴きください。</p>
   </main>
 
   <nav class="bottom">
@@ -53,14 +54,14 @@
   </nav>
 
 <script>
-// 最小実装：クエリ ?id=t01..t06 に応じて1曲選択（無指定は t01）
+// ダミー：music.html と同一IDを参照（本番は tracks.json で共有）
 const TRACKS = {
-  t01:{ name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, role:"Wind Guide", url:"https://www.w3schools.com/html/horse.mp3" },
-  t02:{ name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, role:"Healer", url:"https://www.w3schools.com/html/horse.mp3" },
-  t03:{ name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, role:"Knight", url:"https://www.w3schools.com/html/horse.mp3" },
-  t04:{ name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, role:"Lorekeeper", url:"https://www.w3schools.com/html/horse.mp3" },
-  t05:{ name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, role:"Disciple", url:"https://www.w3schools.com/html/horse.mp3" },
-  t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, role:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
+  t01:{ name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, archetype:"Wind Guide", url:"https://www.w3schools.com/html/horse.mp3" },
+  t02:{ name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, archetype:"Healer", url:"https://www.w3schools.com/html/horse.mp3" },
+  t03:{ name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, archetype:"Knight", url:"https://www.w3schools.com/html/horse.mp3" },
+  t04:{ name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, archetype:"Lorekeeper", url:"https://www.w3schools.com/html/horse.mp3" },
+  t05:{ name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, archetype:"Disciple", url:"https://www.w3schools.com/html/horse.mp3" },
+  t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
 };
 
 const qs = new URLSearchParams(location.search);
@@ -68,17 +69,21 @@ const id = qs.get('id') || 't01';
 const from = qs.get('from');
 if(from) document.getElementById('back').href = from+".html";
 
-const data = TRACKS[id] || TRACKS.t01;
-document.getElementById('title').textContent = data.name;
-document.getElementById('meta').textContent = `${data.role} ／ ${data.bpm} BPM`;
-
+const data = TRACKS[id] || Object.values(TRACKS)[0];
 const audio = document.getElementById('audio');
+const title = document.getElementById('title');
+const meta = document.getElementById('meta');
 const seek = document.getElementById('seek');
-audio.src = data.url;
-
 const playBtn = document.getElementById('play');
 const loopBtn = document.getElementById('loop');
 const sleepBtn = document.getElementById('sleep');
+
+function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
+function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
+
+title.textContent = data.name;
+meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
+audio.src = data.url;
 
 let timer = null;
 playBtn.addEventListener('click', ()=>{
