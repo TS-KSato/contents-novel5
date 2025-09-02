@@ -56,12 +56,12 @@
 <script>
 // ダミー：music.html と同一IDを参照（本番は tracks.json で共有）
 const TRACKS = {
-  t01:{ name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, archetype:"Wind Guide", url:"https://www.w3schools.com/html/horse.mp3" },
-  t02:{ name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, archetype:"Healer", url:"https://www.w3schools.com/html/horse.mp3" },
-  t03:{ name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, archetype:"Knight", url:"https://www.w3schools.com/html/horse.mp3" },
-  t04:{ name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, archetype:"Lorekeeper", url:"https://www.w3schools.com/html/horse.mp3" },
-  t05:{ name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, archetype:"Disciple", url:"https://www.w3schools.com/html/horse.mp3" },
-  t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
+  {id:"m01", name:"麦穂の歌", origin:"人間・農村", mood:"work", bpm:96, duration:180, archetype:"Disciple"},
+  {id:"m02", name:"月夜の狩歌", origin:"獣人・狼族", mood:"work", bpm:120, duration:200, archetype:"Knight"},
+  {id:"m03", name:"星降る古謡", origin:"エルフ・森人", mood:"prayer", bpm:72, duration:220, archetype:"Healer"},
+  {id:"m04", name:"炉端の調べ", origin:"ドワーフ・鍛冶", mood:"peace", bpm:88, duration:160, archetype:"Lorekeeper"},
+  {id:"m05", name:"風の子守歌", origin:"吟遊詩人", mood:"sleep", bpm:60, duration:600, archetype:"Wind Guide"},
+  {id:"m06", name:"潮風の記憶", origin:"人間・漁村", mood:"peace", bpm:78, duration:190, archetype:"Stormblade"}
 };
 
 const qs = new URLSearchParams(location.search);
