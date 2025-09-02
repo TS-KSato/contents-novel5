@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
+};
+
+
+const qs = new URLSearchParams(location.search);
+const id = qs.get('id') || 't01';
+const from = qs.get('from');
+if(from) document.getElementById('back').href = from+".html";
+
+
+const data = TRACKS[id] || Object.values(TRACKS)[0];
+const audio = document.getElementById('audio');
+const title = document.getElementById('title');
+const meta = document.getElementById('meta');
+const note = document.getElementById('note');
+const seek = document.getElementById('seek');
+const playBtn = document.getElementById('play');
+const loopBtn = document.getElementById('loop');
+const sleepBtn = document.getElementById('sleep');
+
+
+// 表示反映
+function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
+function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
+
+
+title.textContent = data.name;
+meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
+audio.src = data.url;
+
+
+// 再生制御
+let timer = null;
+playBtn.addEventListener('click', ()=>{
+if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; } else { audio.pause(); playBtn.textContent='再生'; }
+});
+loopBtn.addEventListener('click', ()=>{
+audio.loop = !audio.loop; loopBtn.textContent = audio.loop ? 'ループON' : 'ループOFF';
+});
+
+
+// 就寝タイマー（15分→停止）
+sleepBtn.addEventListener('click', ()=>{
+if(timer){ clearTimeout(timer); timer=null; sleepBtn.textContent='就寝タイマー'; return; }
+timer = setTimeout(()=>{ audio.pause(); playBtn.textContent='再生'; timer=null; }, 15*60*1000);
+sleepBtn.textContent='15分後に停止';
+});
+
+
+// シーク
+audio.addEventListener('timeupdate',()=>{
+if(!isFinite(audio.duration)) return;
+seek.value = Math.floor(100 * (audio.currentTime / audio.duration));
+});
+seek.addEventListener('input',()=>{
+if(!isFinite(audio.duration)) return;
+audio.currentTime = (seek.value/100) * audio.duration;
+});
+
+
+// TODO: GA4 例）gtag('event','track_play',{id});
+</script>
+</body>
+</html>
