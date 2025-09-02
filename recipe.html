@@ -85,7 +85,7 @@ function q(name){return new URL(location.href).searchParams.get(name)}
     if(r.avatar){ av.style.backgroundImage = `url('${esc(r.avatar)}')`; } else { av.textContent = initials; }
 
     // キャラ別トップ導線
-    const linkMap = {"アラン":"./food_alan.html","ドレイク":"./food_drake.html","ライラ":"./food_laila.html","ネスター":"./food_nester.html"};
+    const linkMap = {"アラン":"./dragon-table-alan.html","ドレイク":"./dragon-table-drake.html","ライラ":"./dragon-table-laila.html","ネスター":"./dragon-table-nester.html"};
     const charLink = document.getElementById("charLink");
     charLink.textContent = r.character ? `${r.character}の食卓へ` : "キャラ別トップへ";
     charLink.href = linkMap[r.character] || "./dragon-table.html";
