@@ -1,68 +1,77 @@
 <!DOCTYPE html>
-];
-
-
-const list = document.getElementById('list');
-const filters = document.getElementById('filters');
-let current = 'all';
-
-
-// 季節自動判定（現在の月で初期フィルタ）
-(function initSeason(){
-const m = new Date().getMonth()+1;
-const s = m<=2? 'winter' : m<=5? 'spring' : m<=8? 'summer' : m<=11? 'autumn' : 'winter';
-current = s; // 初期は今の季節を優先表示
-})();
-
-
-function draw(){
-list.innerHTML = '';
-// 今季節のものを先頭に、それ以外→フィルタ適用
-const sorted = [...WALLS].sort((a,b)=> (a.season===current? -1:1) - (b.season===current? -1:1));
-sorted.filter(w=>{
-if(current==='all') return true;
-if(['spring','summer','autumn','winter'].includes(current)) return w.season===current;
-if(current==='wind') return w.archetype==='Wind';
-if(current==='knight') return w.archetype==='Knight';
-return true;
-}).forEach(w=>{
-const card = document.createElement('article');
-card.className = 'card';
-card.innerHTML = `
-<div class="hero" role="img" aria-label="${w.name}"></div>
-<div class="wrap">
-<div class="name">${w.name}</div>
-<div class="cap">${w.caption}</div>
-<div class="row">
-<span class="pill">${labelSeason(w.season)}</span>
-<span class="pill">${w.archetype}</span>
-<button class="btn" data-id="${w.id}" type="button">ダウンロード</button>
+<button class="btn ghost" id="sleep" type="button">就寝タイマー</button>
 </div>
-</div>`;
-list.appendChild(card);
+<input class="range" type="range" id="seek" min="0" max="100" value="0" />
+</section>
+
+
+<p class="note" id="note">銀竜の記憶から紡がれた旋律の断片です。完全な形ではありませんが、瞑想や休息の補助としてお使いください。</p>
+</main>
+
+
+<nav class="bottom">
+<a href="index.html">ホーム</a>
+<a href="notice.html">お知らせ</a>
+<a href="mypage.html">マイページ</a>
+</nav>
+
+
+<script>
+const TRACKS = {
+t01:{ name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, role:"Wind Guide", url:"https://www.w3schools.com/html/horse.mp3" },
+t02:{ name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, role:"Healer", url:"https://www.w3schools.com/html/horse.mp3" },
+t03:{ name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, role:"Knight", url:"https://www.w3schools.com/html/horse.mp3" },
+t04:{ name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, role:"Lorekeeper", url:"https://www.w3schools.com/html/horse.mp3" },
+t05:{ name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, role:"Disciple", url:"https://www.w3schools.com/html/horse.mp3" },
+t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, role:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
+};
+
+
+const qs = new URLSearchParams(location.search);
+const id = qs.get('id') || 't01';
+const from = qs.get('from');
+if(from) document.getElementById('back').href = from+".html";
+
+
+const data = TRACKS[id] || Object.values(TRACKS)[0];
+const audio = document.getElementById('audio');
+const title = document.getElementById('title');
+const meta = document.getElementById('meta');
+const seek = document.getElementById('seek');
+const playBtn = document.getElementById('play');
+const loopBtn = document.getElementById('loop');
+const sleepBtn = document.getElementById('sleep');
+
+
+function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
+function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
+
+
+title.textContent = data.name;
+meta.textContent = `${data.role} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
+audio.src = data.url;
+
+
+let timer = null;
+playBtn.addEventListener('click', ()=>{
+if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; } else { audio.pause(); playBtn.textContent='再生'; }
 });
-// チップのアクティブ表示合わせ
-document.querySelectorAll('.chip').forEach(x=> x.classList.toggle('active', x.dataset.t===current || (current==='all'&&x.dataset.t==='all')));
-}
-
-
-function labelSeason(s){return ({spring:'春',summer:'夏',autumn:'秋',winter:'冬'})[s]||s}
-
-
-filters.addEventListener('click',(e)=>{
-const b = e.target.closest('.chip'); if(!b) return;
-current = b.dataset.t;
-draw();
+loopBtn.addEventListener('click', ()=>{
+audio.loop = !audio.loop; loopBtn.textContent = audio.loop ? 'ループON' : 'ループOFF';
 });
-
-
-addEventListener('click',(e)=>{
-const btn = e.target.closest('button.btn'); if(!btn) return;
-alert('デモ：'+btn.dataset.id+' の高解像度DLは本番で有効化されます');
+sleepBtn.addEventListener('click', ()=>{
+if(timer){ clearTimeout(timer); timer=null; sleepBtn.textContent='就寝タイマー'; return; }
+timer = setTimeout(()=>{ audio.pause(); playBtn.textContent='再生'; timer=null; }, 15*60*1000);
+sleepBtn.textContent='15分後に停止';
 });
-
-
-draw();
+audio.addEventListener('timeupdate',()=>{
+if(!isFinite(audio.duration)) return;
+seek.value = Math.floor(100 * (audio.currentTime / audio.duration));
+});
+seek.addEventListener('input',()=>{
+if(!isFinite(audio.duration)) return;
+audio.currentTime = (seek.value/100) * audio.duration;
+});
 </script>
 </body>
 </html>
