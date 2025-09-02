@@ -54,7 +54,7 @@
       background:rgba(10,14,22,.9); backdrop-filter:blur(8px);
       border-top:1px solid var(--line);
     }
-    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); }
+    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
     .bn-btn{
       appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -96,21 +96,15 @@
   <!-- 下部固定ナビ：コンパクト5分割（アイコン風） -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html" aria-label="占いトップ">
-        <span class="bn-icon">占</span><span>占い</span>
+      <a class="bn-btn" href="./index.html" aria-label="ホーム">
+        <span class="bn-icon">🏠</span><span>ホーム</span>
       </a>
-      <a class="bn-btn" href="./list.html" aria-label="おまけページ">
-        <span class="bn-icon">お</span><span>おまけ</span>
+      <a class="bn-btn" href="./notice.html" aria-label="お知らせ">
+        <span class="bn-icon">📣</span><span>お知らせ</span>
       </a>
-      <a class="bn-btn bn-accent" href="./serial.html" aria-current="page" aria-label="連載">
-        <span class="bn-icon">語</span><span>語り巻</span>
+      <a class="bn-btn" href="./mypage.html" aria-label="マイページ">
+        <span class="bn-icon">👤</span><span>マイページ</span>
       </a>
-      <a class="bn-btn" href="./signup.html" aria-label="会員登録">
-        <span class="bn-icon">会</span><span>会員</span>
-      </a>
-      <button id="toggleDemo" class="bn-btn" aria-pressed="false" aria-label="有料無料デモ切替">
-        <span class="bn-icon">切</span><span>体験</span>
-      </button>
     </div>
   </nav>
 
