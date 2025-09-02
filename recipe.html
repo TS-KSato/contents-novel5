@@ -36,8 +36,8 @@
       <h1 id="title">レシピ</h1>
       <p class="muted" id="subtitle">材料と作り方、語り手の言葉。</p>
       <div class="navlinks">
-        <a class="pill" href="./food.html">食卓トップへ</a>
-        <a class="pill" id="charLink" href="./food.html">キャラ別トップへ</a>
+        <a class="pill" href="./dragon-table.html">食卓トップへ</a>
+        <a class="pill" id="charLink" href="./dragon-table.html">キャラ別トップへ</a>
       </div>
     </header>
 
@@ -88,7 +88,7 @@ function q(name){return new URL(location.href).searchParams.get(name)}
     const linkMap = {"アラン":"./food_alan.html","ドレイク":"./food_drake.html","ライラ":"./food_laila.html","ネスター":"./food_nester.html"};
     const charLink = document.getElementById("charLink");
     charLink.textContent = r.character ? `${r.character}の食卓へ` : "キャラ別トップへ";
-    charLink.href = linkMap[r.character] || "./food.html";
+    charLink.href = linkMap[r.character] || "./dragon-table.html";
 
     // 本文
     content.innerHTML = `
