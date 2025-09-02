@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+const filters = document.getElementById('filters');
+let current = 'all';
+
+
+function draw(){
+list.innerHTML = '';
+WALLS.filter(w=>{
+if(current==='all') return true;
+if(['spring','summer','autumn','winter'].includes(current)) return w.season===current;
+if(current==='wind') return w.archetype==='Wind';
+if(current==='knight') return w.archetype==='Knight';
+return true;
+}).forEach(w=>{
+const card = document.createElement('article');
+card.className = 'card';
+card.innerHTML = `
+<div class="hero" role="img" aria-label="${w.name}"></div>
+<div class="wrap">
+<div class="name">${w.name}</div>
+<div class="cap">${w.caption}</div>
+<div class="row">
+<span class="pill">${labelSeason(w.season)}</span>
+<span class="pill">${w.archetype}</span>
+<button class="btn" data-id="${w.id}">ダウンロード</button>
+</div>
+</div>`;
+list.appendChild(card);
+});
+}
+
+
+function labelSeason(s){return ({spring:'春',summer:'夏',autumn:'秋',winter:'冬'})[s]||s}
+
+
+filters.addEventListener('click',(e)=>{
+const b = e.target.closest('.chip'); if(!b) return;
+current = b.dataset.t;
+document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+b.classList.add('active');
+draw();
+});
+
+
+// 簡易DL（デモ）：実ファイルは本番で署名付きURLに差し替え
+addEventListener('click',(e)=>{
+const btn = e.target.closest('button.btn'); if(!btn) return;
+const id = btn.dataset.id;
+alert('デモ：'+id+' の高解像度DLは本番で有効化されます');
+// TODO: GA4 例）gtag('event','wall_download_request',{id});
+});
+
+
+draw();
+</script>
+</body>
+</html>
