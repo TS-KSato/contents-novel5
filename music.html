@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>竜歌一覧｜運命の銀竜暦</title>
-  <meta name="description" content="銀竜世界の竜歌を気分で探す" />
+  <title>エテルナリア音楽館｜運命の銀竜暦</title>
+  <meta name="description" content="エテルナリア大陸の音楽を気分で探す" />
   <style>
     :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
@@ -30,13 +29,13 @@
 </head>
 <body>
   <header>
-    <div class="title">竜歌一覧</div>
+    <div class="title">エテルナリア音楽館</div>
     <div class="tabs" id="tabs">
       <button class="tab active" data-filter="all">すべて</button>
-      <button class="tab" data-filter="focus">集中</button>
-      <button class="tab" data-filter="rest">休息</button>
-      <button class="tab" data-filter="ritual">祈り</button>
-      <button class="tab" data-filter="sleep">睡眠</button>
+      <button class="tab" data-filter="work">作業</button>
+      <button class="tab" data-filter="peace">安らぎ</button>
+      <button class="tab" data-filter="prayer">祈り</button>
+      <button class="tab" data-filter="sleep">眠り</button>
     </div>
   </header>
 
@@ -51,12 +50,12 @@
 <script>
 // ダミーデータ（本番は tracks.json へ分離）
 const TRACKS = [
-  {id:"t01", name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, archetype:"Wind Guide"},
-  {id:"t02", name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, archetype:"Healer"},
-  {id:"t03", name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, archetype:"Knight"},
-  {id:"t04", name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, archetype:"Lorekeeper"},
-  {id:"t05", name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, archetype:"Disciple"},
-  {id:"t06", name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade"}
+  {id:"m01", name:"麦穂の歌", origin:"人間・農村", mood:"work", bpm:96, duration:180, archetype:"Disciple"},
+  {id:"m02", name:"月夜の狩歌", origin:"獣人・狼族", mood:"work", bpm:120, duration:200, archetype:"Knight"},
+  {id:"m03", name:"星降る古謡", origin:"エルフ・森人", mood:"prayer", bpm:72, duration:220, archetype:"Healer"},
+  {id:"m04", name:"炉端の調べ", origin:"ドワーフ・鍛冶", mood:"peace", bpm:88, duration:160, archetype:"Lorekeeper"},
+  {id:"m05", name:"風の子守歌", origin:"吟遊詩人", mood:"sleep", bpm:60, duration:600, archetype:"Wind Guide"},
+  {id:"m06", name:"潮風の記憶", origin:"人間・漁村", mood:"peace", bpm:78, duration:190, archetype:"Stormblade"}
 ];
 const list = document.getElementById('list');
 const tabs = document.getElementById('tabs');
@@ -73,14 +72,14 @@ function draw(){
       <div class="art" aria-hidden="true">♪</div>
       <div class="meta">
         <div class="name">${t.name}</div>
-        <div class="sub">${t.archetype} ／ ${t.bpm} BPM ／ ${sec(t.duration)}</div>
+        <div class="sub">${t.origin} ／ ${t.bpm} BPM ／ ${sec(t.duration)}</div>
         <span class="pill">${label(t.mood)}</span>
       </div>
       <div class="go"><button class="btn" type="button">聴く</button></div>`;
     list.appendChild(a);
   })
 }
-function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
+function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
 
 tabs.addEventListener('click', (e)=>{
   const b = e.target.closest('.tab');
