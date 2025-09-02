@@ -1,110 +1,68 @@
-
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>竜歌の視聴｜運命の銀竜暦</title>
-  <meta name="description" content="銀竜世界の竜歌を再生" />
-  <style>
-    :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
-    header{display:flex;align-items:center;gap:10px;padding:14px}
-    .back{color:#cfe1ff;text-decoration:none;font-weight:700}
-    .wrap{padding:12px}
-    .art{width:100%;aspect-ratio:1/1;border-radius:16px;background:linear-gradient(135deg,#2b3446,#3c5076);display:grid;place-items:center;font-size:28px}
-    .title{font-weight:800;font-size:20px;margin-top:14px}
-    .sub{color:var(--muted);font-size:13px;margin-top:4px}
-    .player{margin-top:14px;background:var(--card);border:1px solid #212836;border-radius:16px;padding:12px}
-    .row{display:flex;gap:10px;align-items:center}
-    .btn{appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
-    .ghost{background:#1f2937;color:#cfe1ff;border:1px solid #2a3446}
-    .range{accent-color:#6aa8ff;width:100%}
-    .note{margin-top:14px;color:#c8d4e8;font-size:14px;line-height:1.6}
-    nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
-    nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
-  </style>
-</head>
-<body>
-  <header>
-    <a class="back" id="back" href="music.html">← 一覧へ</a>
-  </header>
-  <main class="wrap">
-    <div class="art" id="art" aria-hidden="true">♪</div>
-    <div class="title" id="title">竜歌</div>
-    <div class="sub" id="meta">—</div>
+];
 
-    <section class="player">
-      <audio id="audio" preload="metadata"></audio>
-      <div class="row" style="justify-content:space-between; margin-bottom:8px;">
-        <button class="btn" id="play" type="button">再生</button>
-        <button class="btn ghost" id="loop" type="button">ループOFF</button>
-        <button class="btn ghost" id="sleep" type="button">就寝タイマー</button>
-      </div>
-      <input class="range" type="range" id="seek" min="0" max="100" value="0" />
-    </section>
 
-    <p class="note" id="note">この竜歌は、風域が静まり鱗紋が淡く灯る刻に奏でられる調べ。呼吸を深く整え、意識を足裏に戻しながらお聴きください。</p>
-  </main>
+const list = document.getElementById('list');
+const filters = document.getElementById('filters');
+let current = 'all';
 
-  <nav class="bottom">
-    <a href="index.html">ホーム</a>
-    <a href="notice.html">お知らせ</a>
-    <a href="mypage.html">マイページ</a>
-  </nav>
 
-<script>
-// ダミー：music.html と同一IDを参照（本番は tracks.json で共有）
-const TRACKS = {
-  t01:{ name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, archetype:"Wind Guide", url:"https://www.w3schools.com/html/horse.mp3" },
-  t02:{ name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, archetype:"Healer", url:"https://www.w3schools.com/html/horse.mp3" },
-  t03:{ name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, archetype:"Knight", url:"https://www.w3schools.com/html/horse.mp3" },
-  t04:{ name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, archetype:"Lorekeeper", url:"https://www.w3schools.com/html/horse.mp3" },
-  t05:{ name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, archetype:"Disciple", url:"https://www.w3schools.com/html/horse.mp3" },
-  t06:{ name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade", url:"https://www.w3schools.com/html/horse.mp3" }
-};
+// 季節自動判定（現在の月で初期フィルタ）
+(function initSeason(){
+const m = new Date().getMonth()+1;
+const s = m<=2? 'winter' : m<=5? 'spring' : m<=8? 'summer' : m<=11? 'autumn' : 'winter';
+current = s; // 初期は今の季節を優先表示
+})();
 
-const qs = new URLSearchParams(location.search);
-const id = qs.get('id') || 't01';
-const from = qs.get('from');
-if(from) document.getElementById('back').href = from+".html";
 
-const data = TRACKS[id] || Object.values(TRACKS)[0];
-const audio = document.getElementById('audio');
-const title = document.getElementById('title');
-const meta = document.getElementById('meta');
-const seek = document.getElementById('seek');
-const playBtn = document.getElementById('play');
-const loopBtn = document.getElementById('loop');
-const sleepBtn = document.getElementById('sleep');
-
-function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
-function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
-
-title.textContent = data.name;
-meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
-audio.src = data.url;
-
-let timer = null;
-playBtn.addEventListener('click', ()=>{
-  if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; } else { audio.pause(); playBtn.textContent='再生'; }
+function draw(){
+list.innerHTML = '';
+// 今季節のものを先頭に、それ以外→フィルタ適用
+const sorted = [...WALLS].sort((a,b)=> (a.season===current? -1:1) - (b.season===current? -1:1));
+sorted.filter(w=>{
+if(current==='all') return true;
+if(['spring','summer','autumn','winter'].includes(current)) return w.season===current;
+if(current==='wind') return w.archetype==='Wind';
+if(current==='knight') return w.archetype==='Knight';
+return true;
+}).forEach(w=>{
+const card = document.createElement('article');
+card.className = 'card';
+card.innerHTML = `
+<div class="hero" role="img" aria-label="${w.name}"></div>
+<div class="wrap">
+<div class="name">${w.name}</div>
+<div class="cap">${w.caption}</div>
+<div class="row">
+<span class="pill">${labelSeason(w.season)}</span>
+<span class="pill">${w.archetype}</span>
+<button class="btn" data-id="${w.id}" type="button">ダウンロード</button>
+</div>
+</div>`;
+list.appendChild(card);
 });
-loopBtn.addEventListener('click', ()=>{
-  audio.loop = !audio.loop; loopBtn.textContent = audio.loop ? 'ループON' : 'ループOFF';
+// チップのアクティブ表示合わせ
+document.querySelectorAll('.chip').forEach(x=> x.classList.toggle('active', x.dataset.t===current || (current==='all'&&x.dataset.t==='all')));
+}
+
+
+function labelSeason(s){return ({spring:'春',summer:'夏',autumn:'秋',winter:'冬'})[s]||s}
+
+
+filters.addEventListener('click',(e)=>{
+const b = e.target.closest('.chip'); if(!b) return;
+current = b.dataset.t;
+draw();
 });
-sleepBtn.addEventListener('click', ()=>{
-  if(timer){ clearTimeout(timer); timer=null; sleepBtn.textContent='就寝タイマー'; return; }
-  timer = setTimeout(()=>{ audio.pause(); playBtn.textContent='再生'; timer=null; }, 15*60*1000);
-  sleepBtn.textContent='15分後に停止';
+
+
+addEventListener('click',(e)=>{
+const btn = e.target.closest('button.btn'); if(!btn) return;
+alert('デモ：'+btn.dataset.id+' の高解像度DLは本番で有効化されます');
 });
-audio.addEventListener('timeupdate',()=>{
-  if(!isFinite(audio.duration)) return;
-  seek.value = Math.floor(100 * (audio.currentTime / audio.duration));
-});
-seek.addEventListener('input',()=>{
-  if(!isFinite(audio.duration)) return;
-  audio.currentTime = (seek.value/100) * audio.duration;
-});
+
+
+draw();
 </script>
 </body>
 </html>
