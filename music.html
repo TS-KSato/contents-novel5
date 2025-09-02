@@ -1,53 +1,95 @@
+
 <!DOCTYPE html>
-{id:"t03", name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, role:"Knight"},
-{id:"t04", name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, role:"Lorekeeper"},
-{id:"t05", name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, role:"Disciple"},
-{id:"t06", name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, role:"Stormblade"}
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>竜歌一覧｜運命の銀竜暦</title>
+  <meta name="description" content="銀竜世界の竜歌を気分で探す" />
+  <style>
+    :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
+    .title{font-weight:700;font-size:18px}
+    .tabs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
+    .tab{padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
+    .tab.active{background:#23304a;color:white;border-color:#38507a}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px 12px 80px}
+    .card{display:flex;gap:12px;background:var(--card);border:1px solid #212836;border-radius:16px;padding:12px;align-items:center;text-decoration:none;color:inherit}
+    .art{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#2b3446,#3c5076);display:grid;place-items:center;color:#cfe1ff;font-weight:700}
+    .meta{flex:1;min-width:0}
+    .name{font-weight:700;font-size:15px;letter-spacing:.2px}
+    .sub{color:var(--muted);font-size:12px;margin-top:2px}
+    .pill{display:inline-block;font-size:11px;color:#cfe1ff;background:#213256;border:1px solid #34518a;padding:2px 8px;border-radius:999px;margin-top:6px}
+    .go{margin-left:auto}
+    .btn{appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
+    nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
+    nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
+    nav.bottom a.active{color:white;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">竜歌一覧</div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-filter="all">すべて</button>
+      <button class="tab" data-filter="focus">集中</button>
+      <button class="tab" data-filter="rest">休息</button>
+      <button class="tab" data-filter="ritual">祈り</button>
+      <button class="tab" data-filter="sleep">睡眠</button>
+    </div>
+  </header>
+
+  <main class="grid" id="list"></main>
+
+  <nav class="bottom">
+    <a href="index.html">ホーム</a>
+    <a href="notice.html">お知らせ</a>
+    <a class="active" href="music.html">音楽</a>
+  </nav>
+
+<script>
+// ダミーデータ（本番は tracks.json へ分離）
+const TRACKS = [
+  {id:"t01", name:"竜歌：星海を渡る翼", mood:"focus", bpm:96, duration:180, archetype:"Wind Guide"},
+  {id:"t02", name:"竜歌：灰青の祈雨", mood:"ritual", bpm:72, duration:220, archetype:"Healer"},
+  {id:"t03", name:"竜歌：山影の火床", mood:"focus", bpm:120, duration:200, archetype:"Knight"},
+  {id:"t04", name:"竜歌：灯る鱗紋", mood:"rest", bpm:88, duration:160, archetype:"Lorekeeper"},
+  {id:"t05", name:"竜歌：眠りの風域", mood:"sleep", bpm:60, duration:600, archetype:"Disciple"},
+  {id:"t06", name:"竜歌：潮鳴りの記憶", mood:"rest", bpm:78, duration:190, archetype:"Stormblade"}
 ];
 const list = document.getElementById('list');
 const tabs = document.getElementById('tabs');
 let current = 'all';
 
-
-const todayRole = localStorage.getItem('todayRole'); // 例: "Wind Guide"
-const badge = document.getElementById('todayBadge');
-if(todayRole){ badge.hidden = false; badge.textContent = `今日の役割：${todayRole}`; }
-
-
 function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
+function draw(){
+  list.innerHTML = '';
+  TRACKS.filter(t=> current==='all' || t.mood===current).forEach(t=>{
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = `audio.html?id=${encodeURIComponent(t.id)}&from=music`;
+    a.innerHTML = `
+      <div class="art" aria-hidden="true">♪</div>
+      <div class="meta">
+        <div class="name">${t.name}</div>
+        <div class="sub">${t.archetype} ／ ${t.bpm} BPM ／ ${sec(t.duration)}</div>
+        <span class="pill">${label(t.mood)}</span>
+      </div>
+      <div class="go"><button class="btn" type="button">聴く</button></div>`;
+    list.appendChild(a);
+  })
+}
 function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
 
-
-function draw(){
-list.innerHTML = '';
-TRACKS.filter(t=> current==='all' || t.mood===current).forEach(t=>{
-const a = document.createElement('a');
-a.className = 'card';
-a.href = `audio.html?id=${encodeURIComponent(t.id)}&from=music`;
-a.dataset.role = t.role;
-if(todayRole && t.role===todayRole){ a.classList.add('recommended'); }
-a.innerHTML = `
-<div class="art" aria-hidden="true">♪</div>
-<div class="meta">
-<div class="name">${t.name}</div>
-<div class="sub">${t.role} ／ ${t.bpm} BPM ／ ${sec(t.duration)}</div>
-<span class="pill">${label(t.mood)}</span>
-</div>
-<div class="go"><button class="btn" type="button">聴く</button></div>`;
-list.appendChild(a);
-})
-}
-
-
 tabs.addEventListener('click', (e)=>{
-const b = e.target.closest('.tab');
-if(!b) return;
-current = b.dataset.filter;
-document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-b.classList.add('active');
-draw();
+  const b = e.target.closest('.tab');
+  if(!b) return;
+  current = b.dataset.filter;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  draw();
 });
-
 
 draw();
 </script>
