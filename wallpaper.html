@@ -1,111 +1,63 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>壁紙一覧｜運命の銀竜暦</title>
-  <meta name="description" content="銀竜世界の壁紙をダウンロード" />
-  <style>
-    :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
-    header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
-    .title{font-weight:800;font-size:18px}
-    .filters{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-    .chip{padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
-    .chip.active{background:#23304a;color:white;border-color:#38507a}
-    main{padding:12px 12px 84px}
-    .card{background:var(--card);border:1px solid #212836;border-radius:16px;margin-bottom:12px;overflow:hidden}
-    .hero{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,#263145,#3f5c8a)}
-    .wrap{padding:12px}
-    .name{font-weight:800}
-    .cap{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.6}
-    .row{display:flex;gap:10px;align-items:center;margin-top:10px}
-    .pill{font-size:11px;color:#cfe1ff;background:#213256;border:1px solid #34518a;padding:2px 8px;border-radius:999px}
-    .btn{margin-left:auto;appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
-    nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
-    nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>壁紙一覧｜運命の銀竜暦</title>
+<meta name="description" content="銀竜世界の壁紙をダウンロード" />
+<style>
+:root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
+header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
+.title{font-weight:800;font-size:18px}
+.filters{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
+.chip{padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
+.chip.active{background:#23304a;color:white;border-color:#38507a}
+main{padding:12px 12px 84px}
+.card{background:var(--card);border:1px solid #212836;border-radius:16px;margin-bottom:12px;overflow:hidden}
+.hero{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,#263145,#3f5c8a)}
+.wrap{padding:12px}
+.name{font-weight:800}
+.cap{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.6}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.pill{font-size:11px;color:#cfe1ff;background:#213256;border:1px solid #34518a;padding:2px 8px;border-radius:999px}
+.btn{margin-left:auto;appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
+nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
+.note{color:#c8d4e8;font-size:12px;margin:6px 12px 0}
+</style>
 </head>
 <body>
-  <header>
-    <div class="title">壁紙</div>
-    <div class="filters" id="filters">
-      <button class="chip active" data-t="all">すべて</button>
-      <button class="chip" data-t="spring">春</button>
-      <button class="chip" data-t="summer">夏</button>
-      <button class="chip" data-t="autumn">秋</button>
-      <button class="chip" data-t="winter">冬</button>
-      <button class="chip" data-t="wind">元型：Wind</button>
-      <button class="chip" data-t="knight">元型：Knight</button>
-    </div>
-  </header>
+<header>
+<div class="title">壁紙</div>
+<div class="filters" id="filters">
+<button class="chip" data-t="spring">春</button>
+<button class="chip" data-t="summer">夏</button>
+<button class="chip" data-t="autumn">秋</button>
+<button class="chip" data-t="winter">冬</button>
+<button class="chip" data-t="wind">元型：Wind</button>
+<button class="chip" data-t="knight">元型：Knight</button>
+<button class="chip active" data-t="all">すべて</button>
+</div>
+<p class="note">※ 端末の壁紙として使いやすい構図を選んでいます（ノッチ安全域考慮）。</p>
+</header>
 
-  <main id="list"></main>
 
-  <nav class="bottom">
-    <a href="index.html">ホーム</a>
-    <a href="notice.html">お知らせ</a>
-    <a href="mypage.html">マイページ</a>
-  </nav>
+<main id="list"></main>
+
+
+<nav class="bottom">
+<a href="index.html">ホーム</a>
+<a href="notice.html">お知らせ</a>
+<a href="mypage.html">マイページ</a>
+</nav>
+
 
 <script>
-// ダミーデータ（本番は wallpapers.json へ分離）
+// 4枚に固定（季節ごと1枚想定）
 const WALLS = [
-  {id:'w01', name:'竜紋：黎明の風紋', season:'spring', archetype:'Wind', caption:'風域が薄桃に染まる黎明。鱗紋は旅立ちの兆しを示す。', color:'cool'},
-  {id:'w02', name:'竜紋：群青の澪標', season:'summer', archetype:'Knight', caption:'波間に立つ澪標。迷いを断ち切る刃は静かに冷たい。', color:'blue'},
-  {id:'w03', name:'竜紋：燈火の回廊', season:'autumn', archetype:'Lore', caption:'収束する光路は記憶の棚。今夜の一歩は軽くてよい。', color:'amber'},
-  {id:'w04', name:'竜紋：雪音の誓い', season:'winter', archetype:'Wind', caption:'雪が吸う音に心を合わせ、短く深く息をする。', color:'ice'}
-];
-
-const list = document.getElementById('list');
-const filters = document.getElementById('filters');
-let current = 'all';
-
-function draw(){
-  list.innerHTML = '';
-  WALLS.filter(w=>{
-    if(current==='all') return true;
-    if(['spring','summer','autumn','winter'].includes(current)) return w.season===current;
-    if(current==='wind') return w.archetype==='Wind';
-    if(current==='knight') return w.archetype==='Knight';
-    return true;
-  }).forEach(w=>{
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="hero" role="img" aria-label="${w.name}"></div>
-      <div class="wrap">
-        <div class="name">${w.name}</div>
-        <div class="cap">${w.caption}</div>
-        <div class="row">
-          <span class="pill">${labelSeason(w.season)}</span>
-          <span class="pill">${w.archetype}</span>
-          <button class="btn" data-id="${w.id}" type="button">ダウンロード</button>
-        </div>
-      </div>`;
-    list.appendChild(card);
-  });
-}
-
-function labelSeason(s){return ({spring:'春',summer:'夏',autumn:'秋',winter:'冬'})[s]||s}
-
-filters.addEventListener('click',(e)=>{
-  const b = e.target.closest('.chip'); if(!b) return;
-  current = b.dataset.t;
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  draw();
-});
-
-// 簡易DL（デモ）：実ファイルは本番で署名付きURLに差し替え
-addEventListener('click',(e)=>{
-  const btn = e.target.closest('button.btn'); if(!btn) return;
-  const id = btn.dataset.id;
-  alert('デモ：'+id+' の高解像度DLは本番で有効化されます');
-});
-
-draw();
-</script>
-</body>
+{id:'w01', name:'竜紋：黎明の風紋', season:'spring', archetype:'Wind', caption:'風域が薄桃に染まる黎明。鱗紋は旅立ちの兆しを示す。'},
+{id:'w02', name:'竜紋：群青の澪標', season:'summer', archetype:'Knight', caption:'波間に立つ澪標。迷いを断ち切る刃は静かに冷たい。'},
+{id:'w03', name:'竜紋：燈火の回廊', season:'autumn', archetype:'Lore', caption:'収束する光路は記憶の棚。今夜の一歩は軽くてよい。'},
+{id:'w04', name:'竜紋：雪音の誓い', season:'winter', archetype:'Wind', caption:'雪が吸う音に心を合わせ、短く深く息をする。'}
 </html>
