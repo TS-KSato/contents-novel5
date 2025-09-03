@@ -20,7 +20,7 @@
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
       line-height:1.7; font-size:1rem; -webkit-text-size-adjust:100%;
     }
-    .wrap{ max-width:40rem; margin:0 auto; padding:1.25rem 1rem 5.5rem; }
+    .wrap{ max-width:40rem; margin:0 auto; padding: 1.25rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
 
     /* ===== ヘッダー（最小限） ===== */
     header{ text-align:center; padding:.25rem .5rem 1rem; }
@@ -126,23 +126,27 @@
       .card{ border-color:#999 }
     }
   
-    /* Bottom nav (common) */
+    /* === Bottom nav (common) === */
     .bottom-nav{
       position:fixed; left:0; right:0; bottom:0; z-index:999;
       background: color-mix(in srgb, var(--card) 88%, transparent);
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
       border-top:1px solid var(--line);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
     .bn-btn{
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       appearance:none; background:none; border:0; color:var(--muted); text-decoration:none;
       padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
+      -webkit-tap-highlight-color: transparent;
     }
     .bn-btn:active{ transform: translateY(1px); }
     .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; }
     .bn-accent{ color:#fff; }
+    @media (prefers-reduced-motion: reduce){ .bn-btn:active{ transform:none } }
+    @media print{ .bottom-nav{ display:none !important } }
     
   </style>
 </head>
@@ -301,17 +305,7 @@
 
     function render(){
       const items = ZODIACS.filter(matchFilter).map(cardHTML).join('');
-      grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>
-
-  <!-- Bottom Nav -->
-  <nav class="bottom-nav" aria-label="主要ナビゲーション">
-    <div class="bn-grid">
-      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
-      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
-    </div>
-  </nav>
-`;
+      grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>`;
     }
 
     // イベント
@@ -334,19 +328,37 @@
     onScroll(); // 初期の可視状態更新
   </script>
 
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
+    <div class="bn-grid">
+      <a class="bn-btn" data-evt="nav_bottom_home" href="./index.html" aria-label="ホーム">
+        <span class="bn-icon" aria-hidden="true">🏠</span><span>ホーム</span>
+      </a>
+      <a class="bn-btn" data-evt="nav_bottom_notice" href="./notice.html" aria-label="お知らせ">
+        <span class="bn-icon" aria-hidden="true">📣</span><span>お知らせ</span>
+      </a>
+      <a class="bn-btn" data-evt="nav_bottom_mypage" href="./mypage.html" aria-label="マイページ">
+        <span class="bn-icon" aria-hidden="true">👤</span><span>マイページ</span>
+      </a>
+    </div>
+  </nav>
+
+
 <script>
 (function(){
-  // 現在のファイル名（ルートアクセス時は index.html とみなす）
-  var path = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.bottom-nav a').forEach(function(a){
-    var href = a.getAttribute('href') || '';
-    if (href.endsWith(path)) {
+  // 現在のファイル名（空/ディレクトリの場合は index.html 扱い）
+  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  document.querySelectorAll('.bottom-nav a.bn-btn').forEach(function(a){
+    var href = (a.getAttribute('href') || '').toLowerCase();
+    if (href && (href === file || (file === '' && href.indexOf('index.html') !== -1))) {
       a.classList.add('bn-accent');
       a.setAttribute('aria-current','page');
     } else {
       a.classList.remove('bn-accent');
       a.removeAttribute('aria-current');
     }
+    // 簡易イベントフック（必要に応じて差し替え）
+    a.addEventListener('click', function(){ try { window.gtag && gtag('event','nav_click',{ name: a.dataset.evt }); } catch(e){} });
   });
 })();
 </script>
