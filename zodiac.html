@@ -13,7 +13,7 @@
       --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
       --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
       --fab-shadow: 0 12px 24px rgba(0,0,0,.35);
-    }
+     --bn-h: 56px; }
     *{ box-sizing:border-box }
     body{
       margin:0; background:var(--bg); color:var(--ink);
@@ -127,7 +127,7 @@
     }
   
     /* === Bottom nav (common) === */
-    .bottom-nav{
+    .bottom-nav{ min-height: var(--bn-h); 
       position:fixed; left:0; right:0; bottom:0; z-index:999;
       background: color-mix(in srgb, var(--card) 88%, transparent);
       -webkit-backdrop-filter: blur(8px);
@@ -148,6 +148,13 @@
     @media (prefers-reduced-motion: reduce){ .bn-btn:active{ transform:none } }
     @media print{ .bottom-nav{ display:none !important } }
     
+  
+  #toTop{
+    position: fixed;
+    right: 1rem;
+    bottom: calc(var(--bn-h, 56px) + env(safe-area-inset-bottom, 0px) + 16px);
+    z-index: 1001;
+  }
   </style>
 </head>
 <body>
@@ -360,6 +367,26 @@
     // 簡易イベントフック（必要に応じて差し替え）
     a.addEventListener('click', function(){ try { window.gtag && gtag('event','nav_click',{ name: a.dataset.evt }); } catch(e){} });
   });
+})();
+</script>
+
+
+<script>
+(function(){
+  function setBottomNavHeight(){
+    var nav = document.querySelector('.bottom-nav');
+    if(!nav) return;
+    var h = nav.offsetHeight || 56;
+    document.documentElement.style.setProperty('--bn-h', h + 'px');
+  }
+  window.addEventListener('load', setBottomNavHeight, { once: true });
+  window.addEventListener('resize', setBottomNavHeight);
+  window.addEventListener('orientationchange', setBottomNavHeight);
+  // MutationObserver in case nav content changes
+  var nav = document.querySelector('.bottom-nav');
+  if(nav && 'MutationObserver' in window){
+    new MutationObserver(setBottomNavHeight).observe(nav, { childList: true, subtree: true });
+  }
 })();
 </script>
 
