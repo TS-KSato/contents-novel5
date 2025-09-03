@@ -140,11 +140,15 @@ function shuffleDet(arr, seedStr){
 
 /* ========== UI ========== */
 const statusPill = document.getElementById("statusPill");
-document.getElementById("toggleDemo").addEventListener("click", ()=>{
-  isPremium = !isPremium;
-  statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員";
-  renderArticles(cachedArticles);
-});
+const toggleBtn  = document.getElementById("toggleDemo");
+if (toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    isPremium = !isPremium;
+    statusPill.textContent = isPremium ? "有料会員（デモ）" : "無料会員";
+    renderArticles(cachedArticles);
+  });
+}
+
 
 /* ========== 連番ファイルの探索 ========== */
 async function fetchJson(path){
