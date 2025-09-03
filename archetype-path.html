@@ -156,7 +156,7 @@
   </nav>
 
 <script>
-  // ========== グローバル変数 ==========
+// ========== グローバル変数 ==========
 let FORTUNE_DATA = null; // 占いメッセージデータ
 let LOADING_ERROR = false; // 読み込みエラーフラグ
 
@@ -174,6 +174,7 @@ async function loadFortuneMessages() {
     return null;
   }
 }
+
 // ========== データ ==========
 const ARCHETYPES = [
   {id:'alan',   name:'アランの魂（架け橋）', desc:'二つの世界の間に立ち、調和と理解を求める者。', av:'av-alan', initials:'アラ'},
@@ -207,15 +208,75 @@ const QUESTIONS = [
   { id:10, text:'有限の命を前にして、何を思うか？', axis:'basis', left:'無限の価値を見出す', right:'永遠を渇望する' }
 ];
 
+// ========== ユーティリティ関数 ==========
 const $ = (s, r=document)=>r.querySelector(s);
 const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 
-function getArchetype(){ try{ return JSON.parse(localStorage.getItem('userArchetype')); }catch{return null} }
-function setArchetype(obj){ localStorage.setItem('userArchetype', JSON.stringify(obj)); }
+function getArchetype(){ 
+  try{ 
+    return JSON.parse(localStorage.getItem('userArchetype')); 
+  }catch{
+    return null;
+  } 
+}
 
+function setArchetype(obj){ 
+  localStorage.setItem('userArchetype', JSON.stringify(obj)); 
+}
+
+function normalize2(checked){ 
+  // 左: -1, 右: +1
+  return checked ? +1 : -1;
+}
+
+// ========== 補助関数 ==========
+// 詳細メッセージ取得
+function getDetailMessage(archId, roleId) {
+  if (!FORTUNE_DATA) return null;
+  const key = `${archId}_${roleId}`;
+  return FORTUNE_DATA.base_patterns?.find(p => p.id === key);
+}
+
+// 曜日別メッセージ取得
+function getDailyMessage(archId) {
+  if (!FORTUNE_DATA) return null;
+  const dayOfWeek = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][new Date().getDay()];
+  const key = `${archId}_${dayOfWeek}`;
+  return FORTUNE_DATA.daily_patterns?.find(p => p.id === key);
+}
+
+// 特別な日のメッセージ取得
+function getSpecialMessage(archId) {
+  if (!FORTUNE_DATA) return null;
+  
+  const today = new Date();
+  const date = today.getDate();
+  
+  // 月初（1-3日）
+  if (date <= 3) {
+    return FORTUNE_DATA.special_patterns?.month_start?.find(p => p.archetype === archId);
+  }
+  // 月半ば（14-16日）
+  if (date >= 14 && date <= 16) {
+    return FORTUNE_DATA.special_patterns?.month_middle?.find(p => p.archetype === archId);
+  }
+  // 月末（月の最終3日）
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  if (date >= lastDay - 2) {
+    return FORTUNE_DATA.special_patterns?.month_end?.find(p => p.archetype === archId);
+  }
+  
+  // 他の特別な日の判定も追加可能
+  return null;
+}
+
+// ========== UI構築関数 ==========
 function renderArchetypeBox(){
   const a = getArchetype();
-  if(!a){ $('#archetypeBox').hidden = true; return; }
+  if(!a){ 
+    $('#archetypeBox').hidden = true; 
+    return; 
+  }
   $('#archetypeBox').hidden = false;
   $('#archText').innerHTML = `<div class="pill">確定済みの元型</div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
@@ -230,7 +291,10 @@ function renderArchetypeBox(){
       <a class="btn" href="#p2h">十の質問へ進む</a>
     </div>`;
   $('#btnChange').addEventListener('click', ()=>{
-    if(confirm('元型を未設定に戻しますか？（この端末のみ）')){ localStorage.removeItem('userArchetype'); apply(); }
+    if(confirm('元型を未設定に戻しますか？（この端末のみ）')){ 
+      localStorage.removeItem('userArchetype'); 
+      apply(); 
+    }
   });
 }
 
@@ -240,17 +304,29 @@ function showPhase1IfNeeded(){
   $('#phase2').hidden = !has; // 元型があれば質問を表示
 }
 
-function normalize2(checked){ // 左: -1, 右: +1
-  return checked ? +1 : -1;
-}
-
 function pickArchetypeFromAnswers(ans){
   const s = {alan:0, drake:0, nester:0, lilia:0, laila:0};
   const {logic, spirit, vector, social} = ans;
-  if(logic>0){ s.drake+=1; s.laila+=1; } else { s.alan+=1; s.nester+=1; s.lilia+=1; }
-  if(vector>0){ s.drake+=1; } else { s.laila+=0.5; s.nester+=0.5; s.alan+=0.5; }
-  if(spirit<0){ s.lilia+=1; s.nester+=0.5; } else { s.laila+=0.7; }
-  if(social>0){ s.alan+=0.4; s.drake+=0.4; } else { s.nester+=0.4; s.laila+=0.4; }
+  if(logic>0){ 
+    s.drake+=1; s.laila+=1; 
+  } else { 
+    s.alan+=1; s.nester+=1; s.lilia+=1; 
+  }
+  if(vector>0){ 
+    s.drake+=1; 
+  } else { 
+    s.laila+=0.5; s.nester+=0.5; s.alan+=0.5; 
+  }
+  if(spirit<0){ 
+    s.lilia+=1; s.nester+=0.5; 
+  } else { 
+    s.laila+=0.7; 
+  }
+  if(social>0){ 
+    s.alan+=0.4; s.drake+=0.4; 
+  } else { 
+    s.nester+=0.4; s.laila+=0.4; 
+  }
   const bestId = Object.entries(s).sort((a,b)=>b[1]-a[1])[0][0];
   return ARCHETYPES.find(a=>a.id===bestId);
 }
@@ -264,10 +340,12 @@ function buildP1(){
       vals[axis] = normalize2(checked);
     });
     if(Object.values(vals).some(v=>v===null)){
-      alert('全ての設問にお答えください'); return;
+      alert('全ての設問にお答えください'); 
+      return;
     }
     const a = pickArchetypeFromAnswers(vals);
-    setArchetype(a); apply();
+    setArchetype(a); 
+    apply();
     window.scrollTo({top:0, behavior:'smooth'});
   });
   $('#btnP1Reset').addEventListener('click', ()=>{
@@ -276,16 +354,21 @@ function buildP1(){
 }
 
 function buildPhase2(){
-  const box = $('#qList'); box.innerHTML='';
+  const box = $('#qList'); 
+  box.innerHTML='';
   QUESTIONS.forEach(q=>{
-    const row = document.createElement('div'); row.className='q';
+    const row = document.createElement('div'); 
+    row.className='q';
     row.innerHTML = `<div class="t">${q.id}. ${q.text}</div>`;
-    const tog = document.createElement('div'); tog.className='toggle'; tog.setAttribute('data-axis', q.axis);
+    const tog = document.createElement('div'); 
+    tog.className='toggle'; 
+    tog.setAttribute('data-axis', q.axis);
     tog.innerHTML = `
       <span class="opt">${q.left}</span>
       <label class="switch"><input type="checkbox" id="p2q${q.id}"><span class="knob"></span></label>
       <span class="opt">${q.right}</span>`;
-    row.appendChild(tog); box.appendChild(row);
+    row.appendChild(tog); 
+    box.appendChild(row);
   });
 
   $('#btnEval').addEventListener('click', ()=>{
@@ -293,80 +376,96 @@ function buildPhase2(){
     let answered = true;
     $$('#qList .toggle').forEach(sc=>{
       const ch = sc.querySelector('input');
-      if(!ch){ answered=false; return; }
+      if(!ch){ 
+        answered=false; 
+        return; 
+      }
       const axis = sc.getAttribute('data-axis');
       axes[axis]+= normalize2(ch.checked);
     });
-    if(!answered){ alert('まだ未回答の設問があります'); return; }
+    if(!answered){ 
+      alert('まだ未回答の設問があります'); 
+      return; 
+    }
     // 正規化（平均）
-    axes.vector/=3; axes.basis/=3; axes.mood/=2; axes.social/=2;
+    axes.vector/=3; 
+    axes.basis/=3; 
+    axes.mood/=2; 
+    axes.social/=2;
 
     // 近い役割を選ぶ（ユークリッド距離）
     const vec = [axes.vector, axes.basis, axes.mood, axes.social];
     let best=ROLES[0], bestDist=1e9;
     for(const r of ROLES){
       const d = Math.hypot(r.v[0]-vec[0], r.v[1]-vec[1], r.v[2]-vec[2], r.v[3]-vec[3]);
-      if(d<bestDist){ best=r; bestDist=d; }
+      if(d<bestDist){ 
+        best=r; 
+        bestDist=d; 
+      }
     }
 
     // 神託テキスト生成
-  const arch = getArchetype() || ARCHETYPES[0];
-  const oracle = buildOracle(arch.id, best.id);
-  
-  // 詳細メッセージの取得（JSONから）
-  const detailMessage = getDetailMessage(arch.id, best.id);
-  const dailyMessage = getDailyMessage(arch.id);
-  const specialMessage = getSpecialMessage(arch.id);
+    const arch = getArchetype() || ARCHETYPES[0];
+    const oracle = buildOracle(arch.id, best.id);
+    
+    // 詳細メッセージの取得（JSONから）
+    const detailMessage = getDetailMessage(arch.id, best.id);
+    const dailyMessage = getDailyMessage(arch.id);
+    const specialMessage = getSpecialMessage(arch.id);
 
-  $('#resultBox').hidden=false;
-  $('#roleText').innerHTML = `
-    <div class="pill">今日の役割（パス）</div>
-    <h3 style="margin:.5rem 0 0">${best.name}</h3>
-    <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
-    
-    <div class="pill">あなたの元型</div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-      <span class="avatar ${arch.av}" aria-hidden="true">${arch.initials}</span>
-      <strong>${arch.name}</strong>
-    </div>
-    
-    <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
-    
-    <h3 style="margin:.25rem 0 .5rem">銀竜の神託</h3>
-    <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">
-      ${oracle}
-    </blockquote>
-    
-    ${detailMessage ? `
-    <div style="margin-top:12px">
-      <h4 style="margin:.25rem 0 .5rem;color:var(--accent)">詳細なメッセージ</h4>
-      <p style="margin:.5rem 0">${detailMessage.message}</p>
-      <p class="note"><strong>今日の導き：</strong>${detailMessage.guidance}</p>
-      <div style="margin-top:8px">
-        ${detailMessage.power_words?.map(w => `<span class="pill" style="margin-right:4px">${w}</span>`).join('') || ''}
+    $('#resultBox').hidden=false;
+    $('#roleText').innerHTML = `
+      <div class="pill">今日の役割（パス）</div>
+      <h3 style="margin:.5rem 0 0">${best.name}</h3>
+      <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
+      
+      <div class="pill">あなたの元型</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+        <span class="avatar ${arch.av}" aria-hidden="true">${arch.initials}</span>
+        <strong>${arch.name}</strong>
       </div>
-    </div>
-    ` : ''}
-    
-    ${dailyMessage ? `
-    <div style="margin-top:12px;padding:8px;background:rgba(141,208,255,.06);border-radius:8px">
-      <h5 style="margin:0 0 4px;color:var(--accent)">${dailyMessage.title}</h5>
-      <p class="note" style="margin:0">${dailyMessage.message}</p>
-    </div>
-    ` : ''}
-    
-    ${specialMessage ? `
-    <div style="margin-top:12px;padding:8px;background:rgba(255,208,141,.08);border-radius:8px">
-      <h5 style="margin:0 0 4px;color:#ffd08d">✨ ${specialMessage.title}</h5>
-      <p class="note" style="margin:0">${specialMessage.message}</p>
-    </div>
-    ` : ''}
-  `;
+      
+      <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
+      
+      <h3 style="margin:.25rem 0 .5rem">銀竜の神託</h3>
+      <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">
+        ${oracle}
+      </blockquote>
+      
+      ${detailMessage ? `
+      <div style="margin-top:12px">
+        <h4 style="margin:.25rem 0 .5rem;color:var(--accent)">詳細なメッセージ</h4>
+        <p style="margin:.5rem 0">${detailMessage.message}</p>
+        <p class="note"><strong>今日の導き：</strong>${detailMessage.guidance}</p>
+        <div style="margin-top:8px">
+          ${detailMessage.power_words?.map(w => `<span class="pill" style="margin-right:4px">${w}</span>`).join('') || ''}
+        </div>
+      </div>
+      ` : ''}
+      
+      ${dailyMessage ? `
+      <div style="margin-top:12px;padding:8px;background:rgba(141,208,255,.06);border-radius:8px">
+        <h5 style="margin:0 0 4px;color:var(--accent)">${dailyMessage.title}</h5>
+        <p class="note" style="margin:0">${dailyMessage.message}</p>
+      </div>
+      ` : ''}
+      
+      ${specialMessage ? `
+      <div style="margin-top:12px;padding:8px;background:rgba(255,208,141,.08);border-radius:8px">
+        <h5 style="margin:0 0 4px;color:#ffd08d">✨ ${specialMessage.title}</h5>
+        <p class="note" style="margin:0">${specialMessage.message}</p>
+      </div>
+      ` : ''}
+    `;
 
-  $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
-  window.dataLayer = window.dataLayer || []; 
-  window.dataLayer.push({event:'eval_path', role:best.id});
-});
+    $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
+    window.dataLayer = window.dataLayer || []; 
+    window.dataLayer.push({event:'eval_path', role:best.id});
+  });
+
+  $('#btnClearQ').addEventListener('click', ()=>{
+    $$('#qList input').forEach(i=>i.checked=false);
+  });
 }
 
 function buildOracle(archId, roleId) {
@@ -406,56 +505,9 @@ function apply(){
   showPhase1IfNeeded();
 }
 
-function start(){
-  buildP1();
-  buildPhase2();
-  apply();
-  // Bottom Nav 現在地
-  const path = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.bottom-nav a').forEach(a=>{
-    const href = a.getAttribute('href')||''; if(href.endsWith(path)){ a.classList.add('bn-accent'); a.setAttribute('aria-current','page'); }
-  });
-  // 詳細メッセージ取得
-function getDetailMessage(archId, roleId) {
-  if (!FORTUNE_DATA) return null;
-  const key = `${archId}_${roleId}`;
-  return FORTUNE_DATA.base_patterns?.find(p => p.id === key);
-}
-
-// 曜日別メッセージ取得
-function getDailyMessage(archId) {
-  if (!FORTUNE_DATA) return null;
-  const dayOfWeek = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][new Date().getDay()];
-  const key = `${archId}_${dayOfWeek}`;
-  return FORTUNE_DATA.daily_patterns?.find(p => p.id === key);
-}
-
-// 特別な日のメッセージ取得
-function getSpecialMessage(archId) {
-  if (!FORTUNE_DATA) return null;
-  
-  const today = new Date();
-  const date = today.getDate();
-  
-  // 月初（1-3日）
-  if (date <= 3) {
-    return FORTUNE_DATA.special_patterns?.month_start?.find(p => p.archetype === archId);
-  }
-  // 月半ば（14-16日）
-  if (date >= 14 && date <= 16) {
-    return FORTUNE_DATA.special_patterns?.month_middle?.find(p => p.archetype === archId);
-  }
-  // 月末（月の最終3日）
-  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-  if (date >= lastDay - 2) {
-    return FORTUNE_DATA.special_patterns?.month_end?.find(p => p.archetype === archId);
-  }
-  
-  // 他の特別な日の判定も追加可能
-  return null;
-}
+// ========== 起動関数 ==========
 async function start(){
-  // ローディング表示（オプション）
+  // ローディング表示
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loadingMsg';
   loadingDiv.innerHTML = '<div class="card"><div class="card-c">占いデータを読み込み中...</div></div>';
@@ -467,7 +519,7 @@ async function start(){
   // ローディング表示を削除
   loadingDiv.remove();
   
-  // エラー時の警告表示（オプション）
+  // エラー時の警告表示
   if (LOADING_ERROR) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'card';
@@ -492,7 +544,7 @@ async function start(){
   });
 }
 
-// start関数を非同期に変更して呼び出し
+// start関数を呼び出し
 start();
 </script>
 </body>
