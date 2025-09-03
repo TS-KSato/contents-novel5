@@ -125,6 +125,25 @@
       body{ background:#fff; color:#000 }
       .card{ border-color:#999 }
     }
+  
+    /* Bottom nav (common) */
+    .bottom-nav{
+      position:fixed; left:0; right:0; bottom:0; z-index:999;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border-top:1px solid var(--line);
+    }
+    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
+    .bn-btn{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      appearance:none; background:none; border:0; color:var(--muted); text-decoration:none;
+      padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
+    }
+    .bn-btn:active{ transform: translateY(1px); }
+    .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; }
+    .bn-accent{ color:#fff; }
+    
   </style>
 </head>
 <body>
@@ -183,14 +202,7 @@
       </details>
     </section>
 
-    <footer>
-      <div class="footnav" aria-label="ページ下部ナビ">
-        <a href="./index.html" class="pill">← 占いトップ</a>
-        <a href="./list.html" class="pill">おまけページ</a>
-        <a href="./novel.html" class="pill">小説ページ</a>
-      </div>
-      <p>© 運命の銀竜暦</p>
-    </footer>
+    <footer>© 運命の銀竜暦</footer>
   </div>
 
   <!-- 先頭へ戻る（フローティング） -->
@@ -289,7 +301,17 @@
 
     function render(){
       const items = ZODIACS.filter(matchFilter).map(cardHTML).join('');
-      grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>`;
+      grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
+    </div>
+  </nav>
+`;
     }
 
     // イベント
@@ -311,6 +333,24 @@
     render();
     onScroll(); // 初期の可視状態更新
   </script>
+
+<script>
+(function(){
+  // 現在のファイル名（ルートアクセス時は index.html とみなす）
+  var path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.bottom-nav a').forEach(function(a){
+    var href = a.getAttribute('href') || '';
+    if (href.endsWith(path)) {
+      a.classList.add('bn-accent');
+      a.setAttribute('aria-current','page');
+    } else {
+      a.classList.remove('bn-accent');
+      a.removeAttribute('aria-current');
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
 
