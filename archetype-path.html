@@ -156,6 +156,24 @@
   </nav>
 
 <script>
+  // ========== グローバル変数 ==========
+let FORTUNE_DATA = null; // 占いメッセージデータ
+let LOADING_ERROR = false; // 読み込みエラーフラグ
+
+// ========== データ読み込み ==========
+async function loadFortuneMessages() {
+  try {
+    const response = await fetch('./archetype_fortune.json', {
+      cache: 'no-cache' // 開発中はキャッシュ無効
+    });
+    if (!response.ok) throw new Error('データ読み込み失敗');
+    return await response.json();
+  } catch (error) {
+    console.error('占いデータの読み込みエラー:', error);
+    LOADING_ERROR = true;
+    return null;
+  }
+}
 // ========== データ ==========
 const ARCHETYPES = [
   {id:'alan',   name:'アランの魂（架け橋）', desc:'二つの世界の間に立ち、調和と理解を求める者。', av:'av-alan', initials:'アラ'},
@@ -291,45 +309,96 @@ function buildPhase2(){
       if(d<bestDist){ best=r; bestDist=d; }
     }
 
-    // 神託テキスト
-    const arch = getArchetype() || ARCHETYPES[0];
-    const oracle = buildOracle(arch.id, best.id);
+    // 神託テキスト生成
+  const arch = getArchetype() || ARCHETYPES[0];
+  const oracle = buildOracle(arch.id, best.id);
+  
+  // 詳細メッセージの取得（JSONから）
+  const detailMessage = getDetailMessage(arch.id, best.id);
+  const dailyMessage = getDailyMessage(arch.id);
+  const specialMessage = getSpecialMessage(arch.id);
 
-    $('#resultBox').hidden=false;
-    $('#roleText').innerHTML = `
-      <div class="pill">今日の役割（パス）</div>
-      <h3 style="margin:.5rem 0 0">${best.name}</h3>
-      <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
-      <div class="pill">あなたの元型</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-        <span class="avatar ${arch.av}" aria-hidden="true">${arch.initials}</span>
-        <strong>${arch.name}</strong>
+  $('#resultBox').hidden=false;
+  $('#roleText').innerHTML = `
+    <div class="pill">今日の役割（パス）</div>
+    <h3 style="margin:.5rem 0 0">${best.name}</h3>
+    <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
+    
+    <div class="pill">あなたの元型</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+      <span class="avatar ${arch.av}" aria-hidden="true">${arch.initials}</span>
+      <strong>${arch.name}</strong>
+    </div>
+    
+    <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
+    
+    <h3 style="margin:.25rem 0 .5rem">銀竜の神託</h3>
+    <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">
+      ${oracle}
+    </blockquote>
+    
+    ${detailMessage ? `
+    <div style="margin-top:12px">
+      <h4 style="margin:.25rem 0 .5rem;color:var(--accent)">詳細なメッセージ</h4>
+      <p style="margin:.5rem 0">${detailMessage.message}</p>
+      <p class="note"><strong>今日の導き：</strong>${detailMessage.guidance}</p>
+      <div style="margin-top:8px">
+        ${detailMessage.power_words?.map(w => `<span class="pill" style="margin-right:4px">${w}</span>`).join('') || ''}
       </div>
-      <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
-      <h3 style="margin:.25rem 0 .5rem">銀竜の言葉（神託）</h3>
-      <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">${oracle}</blockquote>
-    `;
+    </div>
+    ` : ''}
+    
+    ${dailyMessage ? `
+    <div style="margin-top:12px;padding:8px;background:rgba(141,208,255,.06);border-radius:8px">
+      <h5 style="margin:0 0 4px;color:var(--accent)">${dailyMessage.title}</h5>
+      <p class="note" style="margin:0">${dailyMessage.message}</p>
+    </div>
+    ` : ''}
+    
+    ${specialMessage ? `
+    <div style="margin-top:12px;padding:8px;background:rgba(255,208,141,.08);border-radius:8px">
+      <h5 style="margin:0 0 4px;color:#ffd08d">✨ ${specialMessage.title}</h5>
+      <p class="note" style="margin:0">${specialMessage.message}</p>
+    </div>
+    ` : ''}
+  `;
 
-    $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
-    window.dataLayer = window.dataLayer || []; window.dataLayer.push({event:'eval_path', role:best.id});
-  });
-
-  $('#btnClearQ').addEventListener('click', ()=>{
-    $$('#qList input').forEach(i=>i.checked=false);
-  });
+  $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
+  window.dataLayer = window.dataLayer || []; 
+  window.dataLayer.push({event:'eval_path', role:best.id});
+});
 }
 
-function buildOracle(archId, roleId){
-  const samples = {
-    'alan|stormblade': '架け橋となる者よ。今日は師の剣を取れ。調和を語るよりも、守るために一歩を踏み出す時だ。嵐は傷を与えるが、その痛みが明日を繋ぐ。',
-    'drake|disciple': '守護者よ。剣を置き、聖域の静けさに耳を澄ませ。受け入れることもまた強さだ。有限のうちに無限の価値を見よ。',
-    'nester|knight': '観察者よ。今日は雲を降り、人の営みに身を置け。鎧の重みは、理解の重み。恐れも希望も、肌で知れ。'
-  };
-  const k = `${archId}|${roleId}`;
-  if(samples[k]) return `「${samples[k]}」`;
-  const archName = (ARCHETYPES.find(a=>a.id===archId)||ARCHETYPES[0]).name.split('（')[0];
-  const roleName = (ROLES.find(r=>r.id===roleId)||ROLES[0]).name.split(' ')[0];
-  return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。有限の時にこそ、力は正しく輝く。」`;
+function buildOracle(archId, roleId) {
+  // データ未読み込み時のフォールバック
+  if (!FORTUNE_DATA || LOADING_ERROR) {
+    const archName = (ARCHETYPES.find(a=>a.id===archId)||ARCHETYPES[0]).name.split('（')[0];
+    const roleName = (ROLES.find(r=>r.id===roleId)||ROLES[0]).name.split(' ')[0];
+    return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。有限の時にこそ、力は正しく輝く。」`;
+  }
+
+  // 基本パターンの取得
+  const baseKey = `${archId}_${roleId}`;
+  const basePattern = FORTUNE_DATA.base_patterns?.find(p => p.id === baseKey);
+  
+  if (!basePattern) {
+    // 基本パターンが見つからない場合のフォールバック
+    return buildGenericOracle(archId, roleId);
+  }
+
+  // 神託テキストの組み立て
+  let oracleText = `「${basePattern.oracle}」`;
+  
+  return oracleText;
+}
+
+// 汎用神託生成（フォールバック用）
+function buildGenericOracle(archId, roleId) {
+  const archData = ARCHETYPES.find(a=>a.id===archId) || ARCHETYPES[0];
+  const roleData = ROLES.find(r=>r.id===roleId) || ROLES[0];
+  const archName = archData.name.split('（')[0];
+  const roleName = roleData.name.split(' ')[0];
+  return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。」`;
 }
 
 function apply(){
@@ -346,7 +415,84 @@ function start(){
   document.querySelectorAll('.bottom-nav a').forEach(a=>{
     const href = a.getAttribute('href')||''; if(href.endsWith(path)){ a.classList.add('bn-accent'); a.setAttribute('aria-current','page'); }
   });
+  // 詳細メッセージ取得
+function getDetailMessage(archId, roleId) {
+  if (!FORTUNE_DATA) return null;
+  const key = `${archId}_${roleId}`;
+  return FORTUNE_DATA.base_patterns?.find(p => p.id === key);
 }
+
+// 曜日別メッセージ取得
+function getDailyMessage(archId) {
+  if (!FORTUNE_DATA) return null;
+  const dayOfWeek = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][new Date().getDay()];
+  const key = `${archId}_${dayOfWeek}`;
+  return FORTUNE_DATA.daily_patterns?.find(p => p.id === key);
+}
+
+// 特別な日のメッセージ取得
+function getSpecialMessage(archId) {
+  if (!FORTUNE_DATA) return null;
+  
+  const today = new Date();
+  const date = today.getDate();
+  
+  // 月初（1-3日）
+  if (date <= 3) {
+    return FORTUNE_DATA.special_patterns?.month_start?.find(p => p.archetype === archId);
+  }
+  // 月半ば（14-16日）
+  if (date >= 14 && date <= 16) {
+    return FORTUNE_DATA.special_patterns?.month_middle?.find(p => p.archetype === archId);
+  }
+  // 月末（月の最終3日）
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  if (date >= lastDay - 2) {
+    return FORTUNE_DATA.special_patterns?.month_end?.find(p => p.archetype === archId);
+  }
+  
+  // 他の特別な日の判定も追加可能
+  return null;
+}
+async function start(){
+  // ローディング表示（オプション）
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'loadingMsg';
+  loadingDiv.innerHTML = '<div class="card"><div class="card-c">占いデータを読み込み中...</div></div>';
+  $('.wrap').prepend(loadingDiv);
+  
+  // データ読み込み
+  FORTUNE_DATA = await loadFortuneMessages();
+  
+  // ローディング表示を削除
+  loadingDiv.remove();
+  
+  // エラー時の警告表示（オプション）
+  if (LOADING_ERROR) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'card';
+    errorDiv.style.background = 'rgba(255,100,100,0.1)';
+    errorDiv.innerHTML = '<div class="card-c note">⚠️ 占いデータの読み込みに失敗しました。基本機能のみ利用可能です。</div>';
+    $('.wrap').prepend(errorDiv);
+  }
+  
+  // 既存の初期化処理
+  buildP1();
+  buildPhase2();
+  apply();
+  
+  // Bottom Nav 現在地
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.bottom-nav a').forEach(a=>{
+    const href = a.getAttribute('href')||'';
+    if(href.endsWith(path)){ 
+      a.classList.add('bn-accent'); 
+      a.setAttribute('aria-current','page');
+    }
+  });
+}
+
+// start関数を非同期に変更して呼び出し
 start();
 </script>
 </body>
