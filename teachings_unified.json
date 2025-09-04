@@ -1,0 +1,1599 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "g001",
+      "name": "トオル",
+      "role": "一般信者",
+      "summary": "教義",
+      "page": "teachings-001",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "聖竜教って、何を信じてるんすか？",
+          "ts": "2025-09-04T21:01:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜はすでに大地へ還った古の竜。",
+          "ts": "2025-09-04T21:01:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "世界に秩序の型を刻んだ存在だと説かれる。",
+          "ts": "2025-09-04T21:01:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "信徒は、その型—すなわち節度・約束・循環—を日々になぞることで、世界と調和しようとする。",
+          "ts": "2025-09-04T21:01:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "私は信徒ではないが、型を意識する生き方は多くの族が実用としてきた。",
+          "ts": "2025-09-04T21:01:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g002",
+      "name": "ミラ",
+      "role": "一般信者",
+      "summary": "儀礼",
+      "page": "teachings-002",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "毎日の祈り、仔たちにも教えたいんだけど…何をすれば良いかしら？",
+          "ts": "2025-09-04T21:02:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教の朝は『三つの息』で始める。",
+          "ts": "2025-09-04T21:02:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "昨日を送る息、今日を迎える息、誰かのために割く息。",
+          "ts": "2025-09-04T21:02:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "長くなくてよい。",
+          "ts": "2025-09-04T21:02:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "形が同じであれば、心は自ずと整う。",
+          "ts": "2025-09-04T21:02:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "祈りは言葉よりも反復の作法に力が宿る。",
+          "ts": "2025-09-04T21:02:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g003",
+      "name": "レオン",
+      "role": "一般信者",
+      "summary": "象徴",
+      "page": "teachings-003",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "よく見る銀色の輪は何を表しているのでしょうか？",
+          "ts": "2025-09-04T21:03:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "『還り輪』だ。",
+          "ts": "2025-09-04T21:03:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜が残した循環の印。",
+          "ts": "2025-09-04T21:03:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "始まりと終わりが同じ門であることを示す。",
+          "ts": "2025-09-04T21:03:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "別れは終わりではなく、形を変えた帰還だという教えの略図でもある。",
+          "ts": "2025-09-04T21:03:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g004",
+      "name": "ジグ",
+      "role": "一般信者",
+      "summary": "歴史",
+      "page": "teachings-004",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "ワシらの爺さまの代から聞いとるが、聖竜は本当におったんかのう？",
+          "ts": "2025-09-04T21:04:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "文献は一致して『一柱の竜が時代を分けた』と記す。",
+          "ts": "2025-09-04T21:04:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "だが記述は比喩にも富む。",
+          "ts": "2025-09-04T21:04:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "私は『存在の真偽』より、『物語が何世代にも選ばれ続けた事実』に重みを見る。",
+          "ts": "2025-09-04T21:04:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "信仰は史実だけでは動かず、必要とされる型に根を張る。",
+          "ts": "2025-09-04T21:04:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g005",
+      "name": "グラフ",
+      "role": "一般信者",
+      "summary": "倫理",
+      "page": "teachings-005",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "怒りが…岩のように固まって動かん。どう扱えばよいか。",
+          "ts": "2025-09-04T21:05:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教では怒りを『火の息』と呼ぶ。",
+          "ts": "2025-09-04T21:05:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "火は否定しない。",
+          "ts": "2025-09-04T21:05:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "器を決めて燃やすのだ。",
+          "ts": "2025-09-04T21:05:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "歩く、冷水で手を洗う、短い労を置く。",
+          "ts": "2025-09-04T21:05:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "器のない火は巣を焦がす。",
+          "ts": "2025-09-04T21:05:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "器のある火は鍛冶になる。",
+          "ts": "2025-09-04T21:05:35+09:00",
+          "type": "text",
+          "part": 6,
+          "parts": 6
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g006",
+      "name": "サイモン",
+      "role": "一般信者",
+      "summary": "共同体",
+      "page": "teachings-006",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "家族と共同体、どちらを優先すべきか迷っています。",
+          "ts": "2025-09-04T21:06:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教の序は『巣→隣→野』の順。",
+          "ts": "2025-09-04T21:06:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "巣（家）を守れぬ者は隣を荒らし、隣を荒らす者は野（社会）を貧しくする。",
+          "ts": "2025-09-04T21:06:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "まず巣の合図を整えよ。",
+          "ts": "2025-09-04T21:06:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "朝の一言、夕餉、灯を落とす時刻。",
+          "ts": "2025-09-04T21:06:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "合図は共同体に通じる最小の礼だ。",
+          "ts": "2025-09-04T21:06:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g007",
+      "name": "ナギ",
+      "role": "一般信者",
+      "summary": "祝祭",
+      "page": "teachings-007",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "潮の民の葬儀…陸の民とは違うのですかね？",
+          "ts": "2025-09-04T21:07:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "『還り輪』の儀を行う。",
+          "ts": "2025-09-04T21:07:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "故人の名を三日に分けて呼ぶ。",
+          "ts": "2025-09-04T21:07:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "初日は別れ、二日目は感謝、三日目は継承。",
+          "ts": "2025-09-04T21:07:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "海の民なら潮に、山の民なら風に委ねる所作を添える。",
+          "ts": "2025-09-04T21:07:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜は帰還を恐れぬことを学ばせる。",
+          "ts": "2025-09-04T21:07:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g008",
+      "name": "リュミ",
+      "role": "一般信者",
+      "summary": "誓い",
+      "page": "teachings-008",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "大きな目標があるっぴ！誓いはどう立てればいいっぴか？",
+          "ts": "2025-09-04T21:08:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "誓いは高く叫ぶものではなく、日に刻むもの。",
+          "ts": "2025-09-04T21:08:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "『七日の印』を用い、毎日同じ時刻に小さな証を立てる。",
+          "ts": "2025-09-04T21:08:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "印は食事前の一呼吸でもよい。",
+          "ts": "2025-09-04T21:08:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "七つ積めたら、師か友に見せる。",
+          "ts": "2025-09-04T21:08:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "誓いは人に見せて強くなる。",
+          "ts": "2025-09-04T21:08:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g009",
+      "name": "ハル",
+      "role": "一般信者",
+      "summary": "死生観",
+      "page": "teachings-009",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "もう長くはない…死が怖い。教えは何と言いますか？",
+          "ts": "2025-09-04T21:09:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜は世界の外へ去ったのではなく、世界の『骨組み』になったと説く。",
+          "ts": "2025-09-04T21:09:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "だから死は消滅でなく、骨組みへ還ること。",
+          "ts": "2025-09-04T21:09:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "生者は、その骨組みに沿って歩幅を合わせよ—そうすれば別れは孤独ではなく、合奏の一部になる。",
+          "ts": "2025-09-04T21:09:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 3
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g010",
+      "name": "ルーク",
+      "role": "一般信者",
+      "summary": "聖職",
+      "page": "teachings-010",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "司祭になるには何を学ぶべきでしょうか、ライラ様？",
+          "ts": "2025-09-04T21:10:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "三つ。",
+          "ts": "2025-09-04T21:10:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "『記録の術』（出来事を型で記す）、『和解の術』（二者の合図を合わせる）、『沈黙の術』（答えを急がぬ）。",
+          "ts": "2025-09-04T21:10:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "儀式よりも、間（ま）を整える作法が重んじられる。",
+          "ts": "2025-09-04T21:10:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 3
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g011",
+      "name": "ピム",
+      "role": "一般信者",
+      "summary": "祈り",
+      "page": "teachings-011",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "ねーねー、祈りって本当に聞こえてるの？",
+          "ts": "2025-09-04T21:11:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜は耳ではなく『型』で応えると教える。",
+          "ts": "2025-09-04T21:11:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "祈った後のあなたの所作が整えば、それが応答だ。",
+          "ts": "2025-09-04T21:11:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "外から声が返るより、内に秩序が宿るのが先。",
+          "ts": "2025-09-04T21:11:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "だから祈りは短く、行いは長く。",
+          "ts": "2025-09-04T21:11:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g012",
+      "name": "カディス",
+      "role": "一般信者",
+      "summary": "禁忌",
+      "page": "teachings-012",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "ほほう…聖竜教で避けるべき行いとは何かな？",
+          "ts": "2025-09-04T21:12:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "三つの禁。",
+          "ts": "2025-09-04T21:12:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "『名の乱用』（権威を私利に使うな）、『約束の空洞化』（形だけの儀式を量産するな）、『輪の断絶』（孤立を誇るな）。",
+          "ts": "2025-09-04T21:12:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "禁は罰のためでなく、型を守るためにある。",
+          "ts": "2025-09-04T21:12:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 3
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g013",
+      "name": "ガル",
+      "role": "一般信者",
+      "summary": "結婚",
+      "page": "teachings-013",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "番（つがい）になる儀式…人間の結婚とは違うのか？",
+          "ts": "2025-09-04T21:13:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教の『結い儀』は、二つの糸を一本に撚る所作から始まる。",
+          "ts": "2025-09-04T21:13:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "誓いは互いにではなく、『共に歩む道』に対して立てる。",
+          "ts": "2025-09-04T21:13:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "人間も獣人も、形は異なれど、約束を型として残すことに変わりはない。",
+          "ts": "2025-09-04T21:13:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 3
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g014",
+      "name": "ジェス",
+      "role": "一般信者",
+      "summary": "病気",
+      "page": "teachings-014",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "商売仲間が病で倒れちまった。聖竜教じゃ、どう励ます？",
+          "ts": "2025-09-04T21:14:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "病を『体の問い』と捉える。",
+          "ts": "2025-09-04T21:14:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "問いには答えを急がず、まず聞く。",
+          "ts": "2025-09-04T21:14:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "病者の側に座り、呼吸を合わせ、必要なら沈黙を共にする。",
+          "ts": "2025-09-04T21:14:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "励ましより、存在を示すことが癒しの始まりだ。",
+          "ts": "2025-09-04T21:14:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g015",
+      "name": "バサルト",
+      "role": "一般信者",
+      "summary": "戦争",
+      "page": "teachings-015",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "戦は…避けられぬ時もある。聖竜教は戦をどう見る？",
+          "ts": "2025-09-04T21:15:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "戦を『嵐』になぞらえる。",
+          "ts": "2025-09-04T21:15:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "嵐は来るが、永遠ではない。",
+          "ts": "2025-09-04T21:15:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "戦の最中も『還り輪』を忘れるな—敵も味方も、いずれ同じ大地に還る。",
+          "ts": "2025-09-04T21:15:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "だから殺めるときも、最小の痛みで済ませよと説く。",
+          "ts": "2025-09-04T21:15:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g016",
+      "name": "チリン",
+      "role": "一般信者",
+      "summary": "商売",
+      "page": "teachings-016",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "もうけ話には目がないんじゃが、聖竜教は富をどう考えとる？",
+          "ts": "2025-09-04T21:16:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "富は『預かりもの』。",
+          "ts": "2025-09-04T21:16:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "水と同じで、溜めれば腐り、流せば清める。",
+          "ts": "2025-09-04T21:16:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "商いは循環の一部。",
+          "ts": "2025-09-04T21:16:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "利を独占するより、次の商いを生む種を撒く方が、長い目で豊かになると教える。",
+          "ts": "2025-09-04T21:16:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g017",
+      "name": "メロル",
+      "role": "一般信者",
+      "summary": "季節",
+      "page": "teachings-017",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "季節の歌を作りたいっぴ！聖竜教の季節観を教えてっぴ！",
+          "ts": "2025-09-04T21:17:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "春は『問い』、夏は『試み』、秋は『収穫』、冬は『沈黙』。",
+          "ts": "2025-09-04T21:17:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "四つで一つの呼吸となる。",
+          "ts": "2025-09-04T21:17:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "歌にするなら、各季節の終わりに同じ節を置くといい。",
+          "ts": "2025-09-04T21:17:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "循環の型が、聴く者の心に宿る。",
+          "ts": "2025-09-04T21:17:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g018",
+      "name": "ミオ",
+      "role": "一般信者",
+      "summary": "夢",
+      "page": "teachings-018",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "同じ夢を何度も見ます…潮が逆流する夢。意味はありますか？",
+          "ts": "2025-09-04T21:18:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教では夢を『昼の型の裏返し』と見る。",
+          "ts": "2025-09-04T21:18:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "潮の逆流は、日常で何かを押し流そうとしている証かもしれない。",
+          "ts": "2025-09-04T21:18:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 3
+        },
+        {
+          "speaker": "laila",
+          "text": "夢を恐れず、むしろ『何を押し返したいのか』を昼に問うてみよ。",
+          "ts": "2025-09-04T21:18:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 3
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g019",
+      "name": "クロウ",
+      "role": "一般信者",
+      "summary": "罪",
+      "page": "teachings-019",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "俺は…盗みで生きてきた。今更、赦されるもんか？",
+          "ts": "2025-09-04T21:19:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教に『永遠の罪』はない。",
+          "ts": "2025-09-04T21:19:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "過去は石ではなく水。",
+          "ts": "2025-09-04T21:19:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "形を変えられる。",
+          "ts": "2025-09-04T21:19:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "盗んだ手で、今度は与える。",
+          "ts": "2025-09-04T21:19:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "奪った分、守る。",
+          "ts": "2025-09-04T21:19:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "行いの向きを変えることを『転輪』と呼ぶ。",
+          "ts": "2025-09-04T21:19:35+09:00",
+          "type": "text",
+          "part": 6,
+          "parts": 7
+        },
+        {
+          "speaker": "laila",
+          "text": "転輪に遅すぎることはない。",
+          "ts": "2025-09-04T21:19:40+09:00",
+          "type": "text",
+          "part": 7,
+          "parts": 7
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g020",
+      "name": "ププ",
+      "role": "一般信者",
+      "summary": "奇跡",
+      "page": "teachings-020",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "奇跡って本当にあるの？ママは信じてるけど…",
+          "ts": "2025-09-04T21:20:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "奇跡を『型の完成』と教える。",
+          "ts": "2025-09-04T21:20:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "毎日同じ祈りを続けた者が、ある日違う景色を見る—それが奇跡だ。",
+          "ts": "2025-09-04T21:20:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "特別な力ではなく、積み重ねが臨界を超えた瞬間。",
+          "ts": "2025-09-04T21:20:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "だから奇跡は誰にでも起こせる。",
+          "ts": "2025-09-04T21:20:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g021",
+      "name": "タロウ",
+      "role": "一般信者",
+      "summary": "巡礼",
+      "page": "teachings-021",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "聖地巡礼に行きてぇんだが、どこに行きゃいいんだ？",
+          "ts": "2025-09-04T21:21:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教の巡礼は『七つの台座』を巡る。",
+          "ts": "2025-09-04T21:21:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "山、海、森、街、橋、井戸、空き地。",
+          "ts": "2025-09-04T21:21:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "各地で『その土地の最も静かな音』を聞く。",
+          "ts": "2025-09-04T21:21:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "巡礼は歩くことより、聞くことに意味がある。",
+          "ts": "2025-09-04T21:21:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g022",
+      "name": "エリス",
+      "role": "一般信者",
+      "summary": "聖遺物",
+      "page": "teachings-022",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "聖竜の鱗があるという噂を聞きましたが、真偽のほどは？",
+          "ts": "2025-09-04T21:22:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "各地に『聖竜の痕跡』と呼ばれるものはある。",
+          "ts": "2025-09-04T21:22:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "鱗、爪、息の結晶。",
+          "ts": "2025-09-04T21:22:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "だが聖竜教は物より型を尊ぶ。",
+          "ts": "2025-09-04T21:22:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "遺物に触れることより、遺物が示す教え—堅固さ、鋭さ、透明さ—を日常に写すことが肝要だ。",
+          "ts": "2025-09-04T21:22:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g023",
+      "name": "ザック",
+      "role": "一般信者",
+      "summary": "異端",
+      "page": "teachings-023",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "ワシは聖竜なんぞ信じとらん！それでも話を聞いてくれるか？",
+          "ts": "2025-09-04T21:23:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教は『信じない者』も輪の一部と見る。",
+          "ts": "2025-09-04T21:23:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "疑いは問いの始まり、問いは理解への道。",
+          "ts": "2025-09-04T21:23:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "むしろ盲信より健全だ。",
+          "ts": "2025-09-04T21:23:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "あなたの疑いを聞かせてほしい。",
+          "ts": "2025-09-04T21:23:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "それも対話の型のひとつだから。",
+          "ts": "2025-09-04T21:23:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g024",
+      "name": "ダイト",
+      "role": "一般信者",
+      "summary": "改宗",
+      "page": "teachings-024",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "山の神から聖竜へ…改宗は裏切りか？",
+          "ts": "2025-09-04T21:24:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教は他の信仰を否定しない。",
+          "ts": "2025-09-04T21:24:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "山の神も聖竜も、同じ大いなる型の異なる見方と捉える。",
+          "ts": "2025-09-04T21:24:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "改宗ではなく『重ね合わせ』と考えてはどうか。",
+          "ts": "2025-09-04T21:24:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "山の堅固さと竜の循環は、矛盾しない。",
+          "ts": "2025-09-04T21:24:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g025",
+      "name": "カイト",
+      "role": "一般信者",
+      "summary": "子育て",
+      "page": "teachings-025",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "稚魚たちが言うことを聞かない…聖竜教の教育法は？",
+          "ts": "2025-09-04T21:25:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "子は親の言葉より所作を真似る。",
+          "ts": "2025-09-04T21:25:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "まず親が『三つの型』を示せ。",
+          "ts": "2025-09-04T21:25:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "時を守る型、物を整える型、人に応じる型。",
+          "ts": "2025-09-04T21:25:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "説教は水に溶ける。",
+          "ts": "2025-09-04T21:25:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 5
+        },
+        {
+          "speaker": "laila",
+          "text": "所作は骨に染みる。",
+          "ts": "2025-09-04T21:25:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 5
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g026",
+      "name": "ツル",
+      "role": "一般信者",
+      "summary": "老い",
+      "page": "teachings-026",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "歳を取るのが怖くてねぇ…若い頃が恋しいよ。",
+          "ts": "2025-09-04T21:26:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教では老いを『煮詰め』と呼ぶ。",
+          "ts": "2025-09-04T21:26:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "若い日の水分が飛び、本質が濃くなる過程だ。",
+          "ts": "2025-09-04T21:26:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "失うものは多いが、残るものは純度を増す。",
+          "ts": "2025-09-04T21:26:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "老いは劣化ではなく、蒸留だと思えば、恐れも和らぐ。",
+          "ts": "2025-09-04T21:26:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g027",
+      "name": "パレット",
+      "role": "一般信者",
+      "summary": "芸術",
+      "page": "teachings-027",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "絵に聖竜を描きたいっぴ！でも姿を見た者はいないっぴね？",
+          "ts": "2025-09-04T21:27:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜の姿は『描かない美』にある。",
+          "ts": "2025-09-04T21:27:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "輪郭ではなく、残された空白に宿る。",
+          "ts": "2025-09-04T21:27:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "風の通り道、光の筋、影の形—不在を描くことで、かえって存在が際立つ。",
+          "ts": "2025-09-04T21:27:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "これも聖竜教の型のひとつだ。",
+          "ts": "2025-09-04T21:27:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g028",
+      "name": "ハンマ",
+      "role": "一般信者",
+      "summary": "労働",
+      "page": "teachings-028",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "毎日同じ仕事の繰り返し…意味を見失いそうだ。",
+          "ts": "2025-09-04T21:28:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教は労働を『日々の儀式』と見る。",
+          "ts": "2025-09-04T21:28:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "槌を振るうたび、世界に小さな秩序が生まれる。",
+          "ts": "2025-09-04T21:28:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "同じに見える一打も、昨日とは違う。",
+          "ts": "2025-09-04T21:28:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "その差異に気づく目を養えば、労働は瞑想になる。",
+          "ts": "2025-09-04T21:28:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g029",
+      "name": "ゴロ",
+      "role": "一般信者",
+      "summary": "友情",
+      "page": "teachings-029",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "親友と喧嘩しちまった…仲直りしたいけど、どうすりゃいい？",
+          "ts": "2025-09-04T21:29:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教の『和解の型』を教えよう。",
+          "ts": "2025-09-04T21:29:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "まず三日待つ。",
+          "ts": "2025-09-04T21:29:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "怒りの火を鎮めるため。",
+          "ts": "2025-09-04T21:29:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "次に共通の思い出を一つ思い出す。",
+          "ts": "2025-09-04T21:29:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "最後に、謝罪より先に感謝を伝える。",
+          "ts": "2025-09-04T21:29:30+09:00",
+          "type": "text",
+          "part": 5,
+          "parts": 6
+        },
+        {
+          "speaker": "laila",
+          "text": "感謝は扉を開く鍵となる。",
+          "ts": "2025-09-04T21:29:35+09:00",
+          "type": "text",
+          "part": 6,
+          "parts": 6
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g030",
+      "name": "シリウス",
+      "role": "一般信者",
+      "summary": "孤独",
+      "page": "teachings-030",
+      "messages": [
+        {
+          "speaker": "npc",
+          "text": "私は一人を好む…だが時に、この孤独が重い。",
+          "ts": "2025-09-04T21:30:05+09:00",
+          "type": "text"
+        },
+        {
+          "speaker": "laila",
+          "text": "聖竜教は孤独を『内なる対話』の時と捉える。",
+          "ts": "2025-09-04T21:30:10+09:00",
+          "type": "text",
+          "part": 1,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "一人でいても、過去の自分、未来の自分と話せる。",
+          "ts": "2025-09-04T21:30:15+09:00",
+          "type": "text",
+          "part": 2,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "孤独は空洞ではなく、充満。",
+          "ts": "2025-09-04T21:30:20+09:00",
+          "type": "text",
+          "part": 3,
+          "parts": 4
+        },
+        {
+          "speaker": "laila",
+          "text": "その充満に耐えられるようになると、孤独は友になる。",
+          "ts": "2025-09-04T21:30:25+09:00",
+          "type": "text",
+          "part": 4,
+          "parts": 4
+        }
+      ],
+      "meta": {
+        "lang": "ja",
+        "timezone": "Asia/Tokyo"
+      }
+    }
+  ]
+}
