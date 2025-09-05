@@ -1,213 +1,434 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>エルフのライラの教え｜相談ルーム</title>
-<style>
-:root{
-  --bg:#0b0e12; --ink:#e6eaef; --muted:#a5b1bd; --line:#243243; --card:#131a22; --accent:#6ea8fe;
-  --bubble-left:#1b2530; --bubble-right:#29415f; --date:#9fb0c3;
-  --radius:18px; --shadow:0 8px 30px rgba(0,0,0,.25);
-  --bn-h:56px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;
-  background:linear-gradient(180deg,#0b0e12 0%, #0f141b 100%); color:var(--ink);
-}
-a{color:inherit; text-decoration:none; -webkit-tap-highlight-color: transparent;}
-.container{max-width:680px;margin:0 auto;}
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>聖竜教の教え</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #1f2937;        /* slate-800 */
+      --muted: #6b7280;     /* gray-500 */
+      --border: #e5e7eb;    /* gray-200 */
+      --primary: #334155;   /* slate-700 */
+      --primary-fg: #ffffff;
+      --chip: #f3f4f6;      /* gray-100 */
+      --bubble-user: #f8fafc; /* slate-50 */
+      --bubble-sys: #eef2ff;  /* indigo-50 */
+      --shadow: 0 4px 16px rgba(0,0,0,.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0b0f14;
+        --fg: #e5e7eb;
+        --muted: #9ca3af;
+        --border: #1f2937;
+        --primary: #94a3b8;
+        --primary-fg: #0b0f14;
+        --chip: #111827;
+        --bubble-user: #0f172a;
+        --bubble-sys: #111827;
+        --shadow: 0 10px 25px rgba(0,0,0,.25);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "游ゴシック体", "ヒラギノ角ゴ ProN", Meiryo, sans-serif;
+    }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: saturate(180%) blur(6px);
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    .head {
+      display: flex; align-items: center; gap: 12px;
+      height: 56px;
+    }
+    .title { font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+    .subtle { color: var(--muted); font-size: 12px; }
 
-header.appbar{
-  position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
-  background: color-mix(in srgb, var(--card) 84%, transparent);
-  border-bottom:1px solid var(--line);
-}
-.appbar .inner{display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem;}
-.appbar .avatar{width:36px; height:36px; border-radius:50%; background:#2a384a; display:inline-grid; place-items:center; font-weight:700; color:#cfe1ff;}
-.appbar h1{font-size:1rem; margin:0;}
-.appbar .sub{display:block; font-size:.75rem; color:var(--muted);}
+    .layout {
+      display: grid; grid-template-columns: 280px 1fr; gap: 16px;
+      padding: 16px; max-width: 1200px; margin: 0 auto;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; padding: 8px; gap: 8px; }
+    }
 
-main{min-height:calc(100dvh - 56px);}
-.wrap{padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));}
+    /* 左サイド（ルーム一覧） */
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: clip;
+      background: var(--bg);
+      box-shadow: var(--shadow);
+    }
+    .panel .panel-head {
+      padding: 12px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .search {
+      width: 100%;
+      display: flex; gap: 8px; align-items: center;
+      border: 1px solid var(--border); background: var(--chip);
+      padding: 8px 10px; border-radius: 10px;
+    }
+    .search input {
+      flex: 1; border: none; outline: none; background: transparent; color: var(--fg);
+      font-size: 14px;
+    }
+    .rooms {
+      max-height: 60vh; overflow: auto;
+    }
+    .room-item {
+      width: 100%; display: flex; gap: 10px; padding: 12px 14px;
+      border: 0; outline: 0; background: transparent; text-align: left;
+      cursor: pointer; border-bottom: 1px solid var(--border);
+    }
+    .room-item:last-child { border-bottom: none; }
+    .room-item:hover { background: var(--chip); }
+    .room-item.active { background: var(--bubble-sys); }
+    .avatar {
+      flex: 0 0 36px; height: 36px; width: 36px; border-radius: 50%;
+      background: var(--primary); color: var(--primary-fg);
+      display: grid; place-items: center; font-weight: 700;
+    }
+    .room-main { flex: 1; min-width: 0; }
+    .room-name { font-weight: 700; font-size: 14px; }
+    .room-meta { color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .chip {
+      display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px;
+      background: var(--chip); color: var(--muted); border: 1px solid var(--border);
+    }
 
-.date-sep{display:flex; justify-content:center; margin:1rem 0; color:var(--date); font-size:.78rem;}
-.chat{display:grid; gap:.5rem;}
-.msg{max-width:72%; padding:.5rem .75rem; border-radius: var(--radius); position:relative; word-wrap:break-word; white-space:pre-wrap;}
-.msg .time{display:block; text-align:right; font-size:.72rem; color:var(--muted); margin-top:.25rem;}
-.msg.npc{background:var(--bubble-left); border-top-left-radius:8px;}
-.msg.laila{background:var(--bubble-right); margin-left:auto; border-top-right-radius:8px;}
+    /* メッセージ領域 */
+    .thread {
+      display: grid; grid-template-rows: auto 1fr; height: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: clip; background: var(--bg); box-shadow: var(--shadow);
+    }
+    .thread-head {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .room-title { font-weight: 800; font-size: 16px; }
+    .thread-body {
+      padding: 10px 12px; overflow: auto; max-height: calc(100vh - 160px);
+    }
+    @media (max-width: 860px) {
+      .thread-body { max-height: none; }
+    }
+    .section-date {
+      text-align: center; margin: 18px 0 12px; position: relative;
+    }
+    .section-date span {
+      display: inline-block; background: var(--bg); padding: 2px 10px; color: var(--muted);
+      font-size: 12px; border: 1px solid var(--border); border-radius: 999px;
+    }
 
-#toTop{
-  position:fixed; right:1rem;
-  bottom: calc(var(--bn-h, 56px) + env(safe-area-inset-bottom, 0px) + 16px);
-  z-index:1001;
-  background:#182432; color:#cfe1ff; border:1px solid #2c3b50; border-radius:999px; padding:.5rem .75rem;
-  box-shadow: var(--shadow); font-size:.85rem;
-}
+    .msg {
+      display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: flex-start;
+      padding: 8px 4px;
+    }
+    .msg .avatar { height: 32px; width: 32px; font-size: 12px; }
+    .bubble {
+      padding: 10px 12px; border-radius: 12px; line-height: 1.7;
+      background: var(--bubble-user); border: 1px solid var(--border);
+      word-wrap: break-word; white-space: pre-wrap;
+    }
+    .bubble.system { background: var(--bubble-sys); }
+    .meta-line {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px;
+      color: var(--muted); font-size: 12px;
+    }
+    .speaker { font-weight: 700; color: var(--fg); }
+    .ts { font-variant-numeric: tabular-nums; letter-spacing: .02em; }
 
-.bottom-nav{
-  position:fixed; left:0; right:0; bottom:0; z-index:999;
-  background: color-mix(in srgb, var(--card) 88%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-top:1px solid var(--line);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  min-height:var(--bn-h);
-}
-.bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-.bn-btn{
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  appearance:none; background:none; border:0; color:var(--muted); text-decoration:none;
-  padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
-  -webkit-tap-highlight-color: transparent;
-}
-.bn-btn:active{ transform: translateY(1px); }
-.bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; }
-.bn-accent{ color:#fff; }
-@media (prefers-reduced-motion: reduce){ .bn-btn:active{ transform:none } }
-@media print{ .bottom-nav{ display:none !important } }
-</style>
+    .empty {
+      padding: 32px; text-align: center; color: var(--muted);
+    }
+
+    /* 下部ナビ（モバイル優先のプロジェクト指針に沿い、簡易実装） */
+    nav.bottom {
+      position: sticky; bottom: 0; z-index: 15;
+      border-top: 1px solid var(--border); background: var(--bg);
+    }
+    .bottom .navwrap {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      max-width: 640px; margin: 0 auto;
+    }
+    .navbtn {
+      padding: 10px 8px; border: 0; background: transparent; color: var(--muted);
+      font-size: 12px;
+    }
+    .navbtn strong { display: block; color: var(--fg); font-size: 12px; }
+  </style>
 </head>
 <body>
-<header class="appbar">
-  <div class="inner container">
-    <a href="./teachings-list.html" class="avatar" aria-label="一覧へ戻る">←</a>
-    <div>
-      <h1 id="roomTitle">エルフのライラの教え</h1>
-      <span class="sub" id="roomSub">古き語り部の称号を持つ古老の相談ルーム</span>
+  <header>
+    <div class="wrap head">
+      <div class="title">聖竜教の教え</div>
+      <div class="subtle">（teachings_unified.json をそのまま表示）</div>
     </div>
-  </div>
-</header>
-<main>
-  <div class="wrap container">
-    <div id="chat" class="chat"></div>
-  </div>
-</main>
-<button id="toTop" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲ トップ</button>
+  </header>
 
-<!-- Bottom Nav -->
-<nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
-  <div class="bn-grid">
-    <a class="bn-btn" href="./index.html" aria-label="ホーム"><span class="bn-icon" aria-hidden="true">🏠</span><span>ホーム</span></a>
-    <a class="bn-btn" href="./notice.html" aria-label="お知らせ"><span class="bn-icon" aria-hidden="true">📣</span><span>お知らせ</span></a>
-    <a class="bn-btn" href="./mypage.html" aria-label="マイページ"><span class="bn-icon" aria-hidden="true">👤</span><span>マイページ</span></a>
-  </div>
-</nav>
+  <main class="layout" id="app">
+    <!-- 左：ルーム一覧 -->
+    <aside class="panel">
+      <div class="panel-head">
+        <div class="search" style="width:100%">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 15a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l5 5l1.5-1.5l-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"/></svg>
+          <input id="q" type="search" placeholder="キャラ・要約で絞り込み" aria-label="検索" />
+        </div>
+      </div>
+      <div class="rooms" id="rooms"></div>
+    </aside>
 
-<script>
-(function(){
-  // ===== Utilities =====
-  function hash32(str){
-    let h = 2166136261 >>> 0; // FNV-1a
-    for (let i=0; i<str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
-    return h >>> 0;
-  }
-  function todayJST0(){
-    const now = new Date();
-    const jstNow = new Date(now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
-    return new Date(jstNow.getFullYear(), jstNow.getMonth(), jstNow.getDate());
-  }
-  // 決定論的に、キャラごとに「日付・時間帯・分/秒のブレ」を割り当て
-  function jitterAnchorByIdentity(id, name){
-    const key = String(id||'') + '|' + String(name||'');
-    const h = hash32(key);
-    const daysBackPool = 35; // 過去35日でより分散
-    const dayBack = 1 + (h % daysBackPool); // 1..35日前
-    // 8つの時間帯（より細かく分散）：05/08/11/13/15/18/21/23時
-    const slot = Math.floor(h / 131) % 8; // 0..7
-    const slots = [5,8,11,13,15,18,21,23];
-    const baseHour = slots[slot];
-    // 分・秒・追加分オフセット（各キャラ固有のドリフト）
-    const baseMin = (Math.floor(h / 7) % 60);   // 0..59
-    const baseSec = (Math.floor(h / 97) % 60);  // 0..59
-    const minuteDrift = ((Math.floor(h / 577) % 21) - 10); // -10..+10分
-    const anchor0 = todayJST0();
-    const anchor = new Date(anchor0.getTime() - dayBack*86400000);
-    anchor.setHours(baseHour, Math.max(0, Math.min(59, baseMin + minuteDrift)), baseSec, 0);
-    return anchor;
-  }
-  // メッセージ間隔にスケール＆マイクロジッターを付与（単調増加を保証）
-  function shiftedDateForMessage(idx0TsISO, msgTsISO, anchorDate, seed, i){
-    const t0 = new Date(idx0TsISO).getTime();
-    const t  = new Date(msgTsISO).getTime();
-    const rawDelta = Math.max(0, t - t0);
-    // スケーリング係数：0.7〜1.8（キャラごとに固定）
-    const scale = 0.7 + ((seed % 1100) / 1100) * 1.1;
-    let delta = Math.floor(rawDelta * scale);
-    // マイクロジッター：-45〜+180秒を三角分布風に
-    const jh = hash32(seed + ':' + i);
-    const jitter = ( (jh % 181) - 45 ) * 1000;  // -45..+135sec（*1000ms）
-    delta = Math.max(0, delta + jitter);
-    return new Date(anchorDate.getTime() + delta);
-  }
-  function fmtDate(d){
-    const w=['日','月','火','水','木','金','土'];
-    return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'（'+w[d.getDay()]+'）';
-  }
-  function fmtTime(d){ return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
-  function qs(name){ const m=location.search.match(new RegExp('[?&]'+name+'=(\d{1,3})')); return m?m[1]:null; }
+    <!-- 右：スレッド -->
+    <section class="thread">
+      <div class="thread-head">
+        <div>
+          <div class="room-title" id="roomTitle">ルームを選択</div>
+          <div class="subtle" id="roomSummary"></div>
+        </div>
+        <div class="subtle"><span id="count"></span></div>
+      </div>
+      <div class="thread-body" id="threadBody">
+        <div class="empty">左の一覧からルームを選んでください。</div>
+      </div>
+    </section>
+  </main>
 
-  // ===== Render =====
-  async function run(){
-    // set bottom nav height
-    (function setBottomNavHeight(){
-      const nav=document.querySelector('.bottom-nav'); if(!nav) return;
-      const h = nav.offsetHeight || 56; document.documentElement.style.setProperty('--bn-h', h + 'px');
-    })();
+  <nav class="bottom" aria-label="主要ナビ">
+    <div class="navwrap">
+      <button class="navbtn" type="button" onclick="location.href='index.html'"><strong>ホーム</strong>Top</button>
+      <button class="navbtn" type="button" onclick="location.href='notice.html'"><strong>お知らせ</strong>Notice</button>
+      <button class="navbtn" type="button" onclick="location.href='mypage.html'"><strong>マイページ</strong>My</button>
+    </div>
+  </nav>
 
-    const id = qs('id') || '001';
-    const res = await fetch('./teachings_unified.json');
-    const data = await res.json();
-    const idx = Math.max(1, Math.min(parseInt(id,10), data.items.length)) - 1;
-    const it = data.items[idx];
+  <script>
+    // 方針：
+    // - teachings_unified.json の ts を「エテルナリア歴の ISO 風文字列」としてそのまま表示
+    // - 並びは JSON 配列順で固定
+    // - 変換やジッター、曜日生成等は一切行わない
 
-    document.getElementById('roomTitle').textContent = it.name || 'エルフのライラの教え';
+    const state = {
+      items: [],
+      filtered: [],
+      activeIndex: -1,
+    };
 
-    const root = document.getElementById('chat');
-    const frag = document.createDocumentFragment();
-    let prevDate = '';
+    const els = {
+      rooms: document.getElementById('rooms'),
+      q: document.getElementById('q'),
+      roomTitle: document.getElementById('roomTitle'),
+      roomSummary: document.getElementById('roomSummary'),
+      threadBody: document.getElementById('threadBody'),
+      count: document.getElementById('count'),
+    };
 
-    const useRaw = /(?:^|[?&])nojitter=1(?:&|$)/.test(location.search);
-    const msgs = it.messages || [];
+    // 安全にテキストノードを生成
+    function textNode(str) { return document.createTextNode(str ?? ''); }
 
-    // 決定論的アンカー：ID+名前ベースで十分に分散
-    const seed = hash32(String(it.id||('g'+id)) + '|' + String(it.name||''));
-    const anchor = useRaw ? null : jitterAnchorByIdentity(it.id||('g'+id), it.name||'');
-    let firstTs = msgs.length ? msgs[0].ts : null;
-    let lastOutput = null;
+    function initials(name) {
+      if (!name) return '—';
+      // 日本語名・英名どちらでも、最初の2文字程度を丸アイコンに
+      return [...name].slice(0,2).join('');
+    }
 
-    msgs.forEach((m, i) => {
-      const d = useRaw
-        ? new Date(m.ts)
-        : shiftedDateForMessage(firstTs, m.ts, anchor, seed, i);
+    function createRoomItem(item, idx) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'room-item';
+      btn.setAttribute('data-index', idx);
 
-      // 単調増加の最終ガード（万一の同時刻衝突を回避）
-      if(!useRaw && lastOutput && d.getTime() <= lastOutput.getTime()){
-        d.setTime(lastOutput.getTime() + 1000); // +1sec
+      const av = document.createElement('div');
+      av.className = 'avatar';
+      av.appendChild(textNode(initials(item.name)));
+
+      const main = document.createElement('div');
+      main.className = 'room-main';
+
+      const name = document.createElement('div');
+      name.className = 'room-name';
+      name.appendChild(textNode(item.name ?? '（無題）'));
+
+      const meta = document.createElement('div');
+      meta.className = 'room-meta';
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.appendChild(textNode(item.role ?? ''));
+      meta.appendChild(chip);
+      if (item.summary) {
+        meta.appendChild(textNode('　'));
+        meta.appendChild(textNode(item.summary));
       }
-      lastOutput = d;
 
-      const ds = fmtDate(d);
-      if(ds !== prevDate){
-        const sep = document.createElement('div'); sep.className='date-sep'; sep.setAttribute('aria-label', ds);
-        sep.textContent = ds; frag.appendChild(sep); prevDate = ds;
+      main.appendChild(name);
+      main.appendChild(meta);
+
+      btn.appendChild(av);
+      btn.appendChild(main);
+
+      btn.addEventListener('click', () => {
+        setActive(idx);
+      });
+
+      return btn;
+    }
+
+    function renderRooms() {
+      els.rooms.innerHTML = '';
+      state.filtered.forEach((item, i) => {
+        const realIndex = state.items.indexOf(item);
+        const node = createRoomItem(item, realIndex);
+        if (realIndex === state.activeIndex) node.classList.add('active');
+        els.rooms.appendChild(node);
+      });
+    }
+
+    function renderThread(item) {
+      els.threadBody.innerHTML = '';
+      if (!item) {
+        const div = document.createElement('div');
+        div.className = 'empty';
+        div.appendChild(textNode('左の一覧からルームを選んでください。'));
+        els.threadBody.appendChild(div);
+        els.roomTitle.textContent = 'ルームを選択';
+        els.roomSummary.textContent = '';
+        els.count.textContent = '';
+        return;
       }
-      const b = document.createElement('div'); b.className = 'msg ' + (m.speaker==='laila' ? 'laila' : 'npc');
-      b.textContent = m.text || '';
-      const tm = document.createElement('span'); tm.className='time'; tm.textContent = fmtTime(d);
-      b.appendChild(tm);
-      frag.appendChild(b);
-    });
+      els.roomTitle.textContent = item.name ?? '（無題）';
+      els.roomSummary.textContent = item.summary ?? '';
+      els.count.textContent = `${item.messages?.length ?? 0} 件`;
 
-    root.appendChild(frag);
-    requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'instant'}));
-  }
+      // ルーム内メッセージは JSON 配列順のまま
+      let lastDate = '';
+      for (const m of (item.messages ?? [])) {
+        // ts は文字列のまま扱う（Date 変換しない）
+        const ts = m.ts ?? '';
+        const datePart = (ts.split('T')[0] || '').trim(); // YYYY-MM-DD（エテルナリア歴の文字列）
+        if (datePart && datePart !== lastDate) {
+          const sec = document.createElement('div');
+          sec.className = 'section-date';
+          const span = document.createElement('span');
+          span.appendChild(textNode(datePart));
+          sec.appendChild(span);
+          els.threadBody.appendChild(sec);
+          lastDate = datePart;
+        }
 
-  run();
-})();
-</script>
+        const row = document.createElement('div');
+        row.className = 'msg';
+
+        const av = document.createElement('div');
+        av.className = 'avatar';
+        av.appendChild(textNode(initials(m.speaker || '—')));
+
+        const right = document.createElement('div');
+
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble' + ((m.speaker || '').match(/^(ライラ|Laila)/) ? ' system' : '');
+        // テキストは安全に挿入（改行維持）
+        // すでに CSS の white-space: pre-wrap を指定しているため、そのまま textContent でOK
+        bubble.textContent = m.text ?? '';
+
+        const meta = document.createElement('div');
+        meta.className = 'meta-line';
+        const sp = document.createElement('span');
+        sp.className = 'speaker';
+        sp.appendChild(textNode(m.speaker ?? '—'));
+        const tsSpan = document.createElement('span');
+        tsSpan.className = 'ts';
+        tsSpan.appendChild(textNode(ts));
+        meta.appendChild(sp);
+        meta.appendChild(textNode('・'));
+        meta.appendChild(tsSpan);
+
+        right.appendChild(bubble);
+        right.appendChild(meta);
+
+        row.appendChild(av);
+        row.appendChild(right);
+
+        els.threadBody.appendChild(row);
+      }
+
+      if (!item.messages || item.messages.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'empty';
+        div.appendChild(textNode('このルームにはメッセージがありません。'));
+        els.threadBody.appendChild(div);
+      }
+    }
+
+    function setActive(index) {
+      state.activeIndex = index;
+      renderRooms();
+      renderThread(state.items[index]);
+    }
+
+    function applyFilter() {
+      const q = (els.q.value || '').trim();
+      if (!q) {
+        state.filtered = [...state.items];
+      } else {
+        state.filtered = state.items.filter(it => {
+          const hay = `${it.name ?? ''} ${it.role ?? ''} ${it.summary ?? ''}`.toLowerCase();
+          return hay.includes(q.toLowerCase());
+        });
+      }
+      // アクティブがフィルタで消えた場合は解除
+      if (state.activeIndex >= 0 && !state.filtered.includes(state.items[state.activeIndex])) {
+        state.activeIndex = -1;
+      }
+      renderRooms();
+      renderThread(state.items[state.activeIndex]);
+    }
+
+    async function boot() {
+      try {
+        const res = await fetch('./teachings_unified.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('teachings_unified.json の取得に失敗しました');
+        const json = await res.json();
+
+        // 期待構造：{ version, items: [ { id, name, role, summary, page, messages:[{speaker,text,ts}], meta }, ... ] }
+        state.items = Array.isArray(json.items) ? json.items : [];
+        state.filtered = [...state.items];
+
+        renderRooms();
+
+        // 初期選択：最初の要素
+        if (state.items.length > 0) {
+          setActive(0);
+        } else {
+          renderThread(null);
+        }
+
+        els.q.addEventListener('input', applyFilter);
+      } catch (err) {
+        console.error(err);
+        els.threadBody.innerHTML = '';
+        const div = document.createElement('div');
+        div.className = 'empty';
+        div.appendChild(textNode('データの読み込みに失敗しました。teachings_unified.json を確認してください。'));
+        els.threadBody.appendChild(div);
+      }
+    }
+
+    boot();
+  </script>
 </body>
 </html>
