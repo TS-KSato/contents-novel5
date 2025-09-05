@@ -110,31 +110,37 @@ main{min-height:calc(100dvh - 56px);}
     const jstNow = new Date(now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
     return new Date(jstNow.getFullYear(), jstNow.getMonth(), jstNow.getDate());
   }
-  function jitterAnchorById(id){
-    const h = hash32(String(id));
-    const daysBackPool = 28;
-    const dayBack = 1 + (h % daysBackPool); // 1..28日前（未来回避）
-    const slot = Math.floor(h / daysBackPool) % 6; // 0..5
-    const slots = [
-      {base:  6, spreadMin: 30},
-      {base: 10, spreadMin: 45},
-      {base: 13, spreadMin: 30},
-      {base: 16, spreadMin: 30},
-      {base: 19, spreadMin: 45},
-      {base: 22, spreadMin: 30}
-    ];
-    const s = slots[slot];
-    const minutes = (Math.floor(h / 7) % s.spreadMin);
-    const seconds = (Math.floor(h / 97) % 50);
+  // 決定論的に、キャラごとに「日付・時間帯・分/秒のブレ」を割り当て
+  function jitterAnchorByIdentity(id, name){
+    const key = String(id||'') + '|' + String(name||'');
+    const h = hash32(key);
+    const daysBackPool = 35; // 過去35日でより分散
+    const dayBack = 1 + (h % daysBackPool); // 1..35日前
+    // 8つの時間帯（より細かく分散）：05/08/11/13/15/18/21/23時
+    const slot = Math.floor(h / 131) % 8; // 0..7
+    const slots = [5,8,11,13,15,18,21,23];
+    const baseHour = slots[slot];
+    // 分・秒・追加分オフセット（各キャラ固有のドリフト）
+    const baseMin = (Math.floor(h / 7) % 60);   // 0..59
+    const baseSec = (Math.floor(h / 97) % 60);  // 0..59
+    const minuteDrift = ((Math.floor(h / 577) % 21) - 10); // -10..+10分
     const anchor0 = todayJST0();
     const anchor = new Date(anchor0.getTime() - dayBack*86400000);
-    anchor.setHours(s.base, minutes, seconds, 0);
+    anchor.setHours(baseHour, Math.max(0, Math.min(59, baseMin + minuteDrift)), baseSec, 0);
     return anchor;
   }
-  function shiftedDateForMessage(idx0TsISO, msgTsISO, anchorDate){
+  // メッセージ間隔にスケール＆マイクロジッターを付与（単調増加を保証）
+  function shiftedDateForMessage(idx0TsISO, msgTsISO, anchorDate, seed, i){
     const t0 = new Date(idx0TsISO).getTime();
     const t  = new Date(msgTsISO).getTime();
-    const delta = Math.max(0, t - t0);
+    const rawDelta = Math.max(0, t - t0);
+    // スケーリング係数：0.7〜1.8（キャラごとに固定）
+    const scale = 0.7 + ((seed % 1100) / 1100) * 1.1;
+    let delta = Math.floor(rawDelta * scale);
+    // マイクロジッター：-45〜+180秒を三角分布風に
+    const jh = hash32(seed + ':' + i);
+    const jitter = ( (jh % 181) - 45 ) * 1000;  // -45..+135sec（*1000ms）
+    delta = Math.max(0, delta + jitter);
     return new Date(anchorDate.getTime() + delta);
   }
   function fmtDate(d){
@@ -166,15 +172,24 @@ main{min-height:calc(100dvh - 56px);}
 
     const useRaw = /(?:^|[?&])nojitter=1(?:&|$)/.test(location.search);
     const msgs = it.messages || [];
-    let anchor = null;
-    let firstTs = null;
+
+    // 決定論的アンカー：ID+名前ベースで十分に分散
+    const seed = hash32(String(it.id||('g'+id)) + '|' + String(it.name||''));
+    const anchor = useRaw ? null : jitterAnchorByIdentity(it.id||('g'+id), it.name||'');
+    let firstTs = msgs.length ? msgs[0].ts : null;
+    let lastOutput = null;
 
     msgs.forEach((m, i) => {
-      if(i===0){
-        firstTs = m.ts;
-        if(!useRaw) anchor = jitterAnchorById(it.id || ('g'+id));
+      const d = useRaw
+        ? new Date(m.ts)
+        : shiftedDateForMessage(firstTs, m.ts, anchor, seed, i);
+
+      // 単調増加の最終ガード（万一の同時刻衝突を回避）
+      if(!useRaw && lastOutput && d.getTime() <= lastOutput.getTime()){
+        d.setTime(lastOutput.getTime() + 1000); // +1sec
       }
-      const d = useRaw ? new Date(m.ts) : shiftedDateForMessage(firstTs, m.ts, anchor);
+      lastOutput = d;
+
       const ds = fmtDate(d);
       if(ds !== prevDate){
         const sep = document.createElement('div'); sep.className='date-sep'; sep.setAttribute('aria-label', ds);
