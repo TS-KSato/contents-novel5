@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>教え｜チャット</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>エルフのライラの教え｜相談ルーム</title>
 <style>
 :root{
   --bg:#0b0e12; --ink:#e6eaef; --muted:#a5b1bd; --line:#243243; --card:#131a22; --accent:#6ea8fe;
@@ -11,24 +12,26 @@
   --bn-h:56px;
 }
 *{box-sizing:border-box}
-body{margin:0; font:16px/1.6 -apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif; color:var(--ink);
-  background:linear-gradient(180deg,#0b0e12 0%, #0f141b 100%);
+html,body{height:100%}
+body{
+  margin:0; font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;
+  background:linear-gradient(180deg,#0b0e12 0%, #0f141b 100%); color:var(--ink);
 }
-.container{max-width:680px; margin:0 auto;}
-header.appbar{position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
-  background: color-mix(in srgb, var(--card) 84%, transparent); border-bottom:1px solid var(--line);}
+a{color:inherit; text-decoration:none; -webkit-tap-highlight-color: transparent;}
+.container{max-width:680px;margin:0 auto;}
+
+header.appbar{
+  position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--card) 84%, transparent);
+  border-bottom:1px solid var(--line);
+}
 .appbar .inner{display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem;}
 .appbar .avatar{width:36px; height:36px; border-radius:50%; background:#2a384a; display:inline-grid; place-items:center; font-weight:700; color:#cfe1ff;}
 .appbar h1{font-size:1rem; margin:0;}
 .appbar .sub{display:block; font-size:.75rem; color:var(--muted);}
-.wrap{padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));}
 
-.card{background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow: var(--shadow);}
-.list{display:grid; gap:.75rem; padding:1rem 0;}
-.item{ display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem; border-radius:14px; border:1px solid transparent; }
-.item:hover{ border-color:#2b3a4b; background: rgba(255,255,255,.02); }
-.item .avatar{width:44px; height:44px; border-radius:50%; background:#233347; display:inline-grid; place-items:center; font-weight:700; color:#cfe1ff;}
-.item .name{font-weight:600;} .item .sum{font-size:.85rem; color:var(--muted);}
+main{min-height:calc(100dvh - 56px);}
+.wrap{padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));}
 
 .date-sep{display:flex; justify-content:center; margin:1rem 0; color:var(--date); font-size:.78rem;}
 .chat{display:grid; gap:.5rem;}
@@ -37,71 +40,157 @@ header.appbar{position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
 .msg.npc{background:var(--bubble-left); border-top-left-radius:8px;}
 .msg.laila{background:var(--bubble-right); margin-left:auto; border-top-right-radius:8px;}
 
-#toTop{ position:fixed; right:1rem; bottom: calc(var(--bn-h, 56px) + env(safe-area-inset-bottom, 0px) + 16px); z-index:1001;
-  background:#182432; color:#cfe1ff; border:1px solid #2c3b50; border-radius:999px; padding:.5rem .75rem; box-shadow: var(--shadow); font-size:.85rem; }
+#toTop{
+  position:fixed; right:1rem;
+  bottom: calc(var(--bn-h, 56px) + env(safe-area-inset-bottom, 0px) + 16px);
+  z-index:1001;
+  background:#182432; color:#cfe1ff; border:1px solid #2c3b50; border-radius:999px; padding:.5rem .75rem;
+  box-shadow: var(--shadow); font-size:.85rem;
+}
 
-.bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:999; background: color-mix(in srgb, var(--card) 88%, transparent);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top:1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); min-height:var(--bn-h);}
+.bottom-nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:999;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-top:1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  min-height:var(--bn-h);
+}
 .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-.bn-btn{ display:flex; flex-direction:column; align-items:center; justify-content:center; appearance:none; background:none; border:0; color:var(--muted); text-decoration:none; padding:.375rem 0; min-height:3.25rem; font-size:.75rem;}
-.bn-btn:active{ transform: translateY(1px); } .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; } .bn-accent{ color:#fff; }
+.bn-btn{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  appearance:none; background:none; border:0; color:var(--muted); text-decoration:none;
+  padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.bn-btn:active{ transform: translateY(1px); }
+.bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; }
+.bn-accent{ color:#fff; }
+@media (prefers-reduced-motion: reduce){ .bn-btn:active{ transform:none } }
+@media print{ .bottom-nav{ display:none !important } }
 </style>
 </head>
 <body>
 <header class="appbar">
   <div class="inner container">
     <a href="./teachings-list.html" class="avatar" aria-label="一覧へ戻る">←</a>
-    <div><h1 id="roomTitle">---</h1><span class="sub" id="roomSub">一般信者・オンライン</span></div>
+    <div>
+      <h1 id="roomTitle">エルフのライラの教え</h1>
+      <span class="sub" id="roomSub">古き語り部の称号を持つ古老の相談ルーム</span>
+    </div>
   </div>
 </header>
 <main>
-  <div class="wrap container"><div id="chat" class="chat"></div></div>
+  <div class="wrap container">
+    <div id="chat" class="chat"></div>
+  </div>
 </main>
 <button id="toTop" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲ トップ</button>
 
-  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
-    <div class="bn-grid">
-      <a class="bn-btn" href="./index.html" aria-label="ホーム"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-      <a class="bn-btn" href="./notice.html" aria-label="お知らせ"><span class="bn-icon">📣</span><span>お知らせ</span></a>
-      <a class="bn-btn" href="./mypage.html" aria-label="マイページ"><span class="bn-icon">👤</span><span>マイページ</span></a>
-    </div>
-  </nav>
+<!-- Bottom Nav -->
+<nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
+  <div class="bn-grid">
+    <a class="bn-btn" href="./index.html" aria-label="ホーム"><span class="bn-icon" aria-hidden="true">🏠</span><span>ホーム</span></a>
+    <a class="bn-btn" href="./notice.html" aria-label="お知らせ"><span class="bn-icon" aria-hidden="true">📣</span><span>お知らせ</span></a>
+    <a class="bn-btn" href="./mypage.html" aria-label="マイページ"><span class="bn-icon" aria-hidden="true">👤</span><span>マイページ</span></a>
+  </div>
+</nav>
 
 <script>
 (function(){
-  function setBottomNavHeight(){
-    var nav = document.querySelector('.bottom-nav'); if(!nav) return;
-    var h = nav.offsetHeight || 56; document.documentElement.style.setProperty('--bn-h', h + 'px');
+  // ===== Utilities =====
+  function hash32(str){
+    let h = 2166136261 >>> 0; // FNV-1a
+    for (let i=0; i<str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
   }
-  window.addEventListener('load', setBottomNavHeight, { once:true });
-  window.addEventListener('resize', setBottomNavHeight);
-  window.addEventListener('orientationchange', setBottomNavHeight);
-})();
-</script>
-
-<script>
-(function(){
+  function todayJST0(){
+    const now = new Date();
+    const jstNow = new Date(now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
+    return new Date(jstNow.getFullYear(), jstNow.getMonth(), jstNow.getDate());
+  }
+  function jitterAnchorById(id){
+    const h = hash32(String(id));
+    const daysBackPool = 28;
+    const dayBack = 1 + (h % daysBackPool); // 1..28日前（未来回避）
+    const slot = Math.floor(h / daysBackPool) % 6; // 0..5
+    const slots = [
+      {base:  6, spreadMin: 30},
+      {base: 10, spreadMin: 45},
+      {base: 13, spreadMin: 30},
+      {base: 16, spreadMin: 30},
+      {base: 19, spreadMin: 45},
+      {base: 22, spreadMin: 30}
+    ];
+    const s = slots[slot];
+    const minutes = (Math.floor(h / 7) % s.spreadMin);
+    const seconds = (Math.floor(h / 97) % 50);
+    const anchor0 = todayJST0();
+    const anchor = new Date(anchor0.getTime() - dayBack*86400000);
+    anchor.setHours(s.base, minutes, seconds, 0);
+    return anchor;
+  }
+  function shiftedDateForMessage(idx0TsISO, msgTsISO, anchorDate){
+    const t0 = new Date(idx0TsISO).getTime();
+    const t  = new Date(msgTsISO).getTime();
+    const delta = Math.max(0, t - t0);
+    return new Date(anchorDate.getTime() + delta);
+  }
+  function fmtDate(d){
+    const w=['日','月','火','水','木','金','土'];
+    return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'（'+w[d.getDay()]+'）';
+  }
+  function fmtTime(d){ return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
   function qs(name){ const m=location.search.match(new RegExp('[?&]'+name+'=(\d{1,3})')); return m?m[1]:null; }
-  function fmtDate(d){const w=['日','月','火','水','木','金','土']; return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'（'+w[d.getDay()]+'）';}
-  function fmtTime(d){return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+
+  // ===== Render =====
   async function run(){
+    // set bottom nav height
+    (function setBottomNavHeight(){
+      const nav=document.querySelector('.bottom-nav'); if(!nav) return;
+      const h = nav.offsetHeight || 56; document.documentElement.style.setProperty('--bn-h', h + 'px');
+    })();
+
     const id = qs('id') || '001';
     const res = await fetch('./teachings_unified.json');
     const data = await res.json();
     const idx = Math.max(1, Math.min(parseInt(id,10), data.items.length)) - 1;
     const it = data.items[idx];
-    document.getElementById('roomTitle').textContent = it.name || '---';
-    const root = document.getElementById('chat'); const frag = document.createDocumentFragment();
-    let prevDate='';
-    (it.messages||[]).forEach(m=>{
-      const d = new Date(m.ts); const ds = fmtDate(d);
-      if(ds!==prevDate){ const sep=document.createElement('div'); sep.className='date-sep'; sep.setAttribute('aria-label', ds); sep.textContent=ds; frag.appendChild(sep); prevDate=ds; }
-      const b=document.createElement('div'); b.className='msg '+(m.speaker==='laila'?'laila':'npc'); b.textContent=m.text||'';
-      const tm=document.createElement('span'); tm.className='time'; tm.textContent=fmtTime(d); b.appendChild(tm); frag.appendChild(b);
+
+    document.getElementById('roomTitle').textContent = it.name || 'エルフのライラの教え';
+
+    const root = document.getElementById('chat');
+    const frag = document.createDocumentFragment();
+    let prevDate = '';
+
+    const useRaw = /(?:^|[?&])nojitter=1(?:&|$)/.test(location.search);
+    const msgs = it.messages || [];
+    let anchor = null;
+    let firstTs = null;
+
+    msgs.forEach((m, i) => {
+      if(i===0){
+        firstTs = m.ts;
+        if(!useRaw) anchor = jitterAnchorById(it.id || ('g'+id));
+      }
+      const d = useRaw ? new Date(m.ts) : shiftedDateForMessage(firstTs, m.ts, anchor);
+      const ds = fmtDate(d);
+      if(ds !== prevDate){
+        const sep = document.createElement('div'); sep.className='date-sep'; sep.setAttribute('aria-label', ds);
+        sep.textContent = ds; frag.appendChild(sep); prevDate = ds;
+      }
+      const b = document.createElement('div'); b.className = 'msg ' + (m.speaker==='laila' ? 'laila' : 'npc');
+      b.textContent = m.text || '';
+      const tm = document.createElement('span'); tm.className='time'; tm.textContent = fmtTime(d);
+      b.appendChild(tm);
+      frag.appendChild(b);
     });
+
     root.appendChild(frag);
     requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'instant'}));
   }
+
   run();
 })();
 </script>
