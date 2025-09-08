@@ -1,22 +1,102 @@
 [
   {
     "id": "m01",
-    "name": "麦穂の歌",
-    "origin": "人間・農村",
-    "mood": "work",
-    "bpm": 96,
-    "duration": 180,
-    "archetype": "Disciple",
+    "name": "銀翼の遺産",
+    "origin": "シルバーミスト・聖域",
+    "mood": "epic",
+    "bpm": 70,
+    "duration": 210,
+    "archetype": "Guardian",
     "url": "assets/bgm001.mp3"
   },
   {
     "id": "m02",
-    "name": "月夜の狩歌",
-    "origin": "獣人・狼族",
-    "mood": "work",
-    "bpm": 120,
-    "duration": 200,
-    "archetype": "Knight",
+    "name": "最後の守護者",
+    "origin": "ドラゴン・古代",
+    "mood": "majestic",
+    "bpm": 60,
+    "duration": 240,
+    "archetype": "Sage",
     "url": "assets/bgm002.mp3"
+  },
+  {
+    "id": "m03",
+    "name": "二つの世界を歩む者",
+    "origin": "人間・山育ち",
+    "mood": "playful",
+    "bpm": 95,
+    "duration": 180,
+    "archetype": "Innocent",
+    "url": "assets/bgm003.mp3"
+  },
+  {
+    "id": "m04",
+    "name": "銀光の舞",
+    "origin": "妖精・魔法の森",
+    "mood": "playful",
+    "bpm": 120,
+    "duration": 150,
+    "archetype": "Spirit",
+    "url": "assets/bgm004.mp3"
+  },
+  {
+    "id": "m05",
+    "name": "凍てつく夜の約束",
+    "origin": "シルバーミスト・雪山",
+    "mood": "tender",
+    "bpm": 65,
+    "duration": 195,
+    "archetype": "Innocent",
+    "url": "assets/bgm005.mp3"
+  },
+  {
+    "id": "m06",
+    "name": "永遠なる帰還",
+    "origin": "ドラゴン・大地",
+    "mood": "transcendent",
+    "bpm": 75,
+    "duration": 300,
+    "archetype": "Sage",
+    "url": "assets/bgm006.mp3"
+  },
+  {
+    "id": "m07",
+    "name": "聖域の囁き",
+    "origin": "シルバーミスト・聖域",
+    "mood": "meditative",
+    "bpm": 55,
+    "duration": 240,
+    "archetype": "Healer",
+    "url": "assets/bgm007.mp3"
+  },
+  {
+    "id": "m08",
+    "name": "新たな学びの朝",
+    "origin": "シルバーミスト・学院",
+    "mood": "studious",
+    "bpm": 85,
+    "duration": 165,
+    "archetype": "Scholar",
+    "url": "assets/bgm008.mp3"
+  },
+  {
+    "id": "m09",
+    "name": "銀霧の山々",
+    "origin": "シルバーミスト・山脈",
+    "mood": "mystical",
+    "bpm": 72,
+    "duration": 190,
+    "archetype": "Explorer",
+    "url": "assets/bgm009.mp3"
+  },
+  {
+    "id": "m10",
+    "name": "継ぐ者たちへ",
+    "origin": "人間・未来",
+    "mood": "hopeful",
+    "bpm": 80,
+    "duration": 220,
+    "archetype": "Leader",
+    "url": "assets/bgm010.mp3"
   }
 ]

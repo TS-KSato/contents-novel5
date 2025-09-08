@@ -54,10 +54,85 @@ nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text
 
 
 <script>
-// 4枚に固定（季節ごと1枚想定）
-const WALLS = [
-{id:'w01', name:'竜紋：黎明の風紋', season:'spring', archetype:'Wind', caption:'風域が薄桃に染まる黎明。鱗紋は旅立ちの兆しを示す。'},
-{id:'w02', name:'竜紋：群青の澪標', season:'summer', archetype:'Knight', caption:'波間に立つ澪標。迷いを断ち切る刃は静かに冷たい。'},
-{id:'w03', name:'竜紋：燈火の回廊', season:'autumn', archetype:'Lore', caption:'収束する光路は記憶の棚。今夜の一歩は軽くてよい。'},
-{id:'w04', name:'竜紋：雪音の誓い', season:'winter', archetype:'Wind', caption:'雪が吸う音に心を合わせ、短く深く息をする。'}
+const $list = document.getElementById('list');
+const $filters = document.getElementById('filters');
+
+let ALL = [];          // wallpapers.json の内容
+let active = 'all';    // 現在のフィルタ
+
+// 動的にタグチップを生成（世界内タグのみ）
+function buildChips(tags){
+  $filters.innerHTML = '';
+  const make = (label, val, activeNow=false) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (activeNow ? ' active' : '');
+    b.dataset.t = val;
+    b.textContent = label;
+    $filters.appendChild(b);
+  };
+  make('すべて', 'all', true);
+  // アーキタイプを上位に（任意）
+  Array.from(new Set(ALL.map(w=>w.archetype))).filter(Boolean).forEach(a=>{
+    make(`元型：${a}`, `arch:${a}`);
+  });
+  // 世界内タグ
+  tags.forEach(t=> make(t, `tag:${t}`));
+}
+
+function draw(){
+  $list.innerHTML = '';
+  const rows = ALL.filter(w=>{
+    if(active==='all') return true;
+    if(active.startsWith('arch:')) return w.archetype === active.slice(5);
+    if(active.startsWith('tag:'))  return (w.tags||[]).includes(active.slice(4));
+    return true;
+  });
+
+  rows.forEach(w=>{
+    const a = document.createElement('article');
+    a.className = 'card';
+    a.innerHTML = `
+      <img class="hero" src="${w.url}" alt="${w.name}" loading="lazy" decoding="async" />
+      <div class="wrap">
+        <div class="name">${w.name}</div>
+        <p class="cap">${w.caption ?? ''}</p>
+        <div class="row">
+          ${w.archetype ? `<span class="pill">${w.archetype}</span>`:''}
+          ${(w.tags||[]).slice(0,2).map(t=>`<span class="pill">${t}</span>`).join('')}
+          <a class="btn" href="${w.url}" download>
+            ${w.paid ? '購入後ダウンロード' : 'ダウンロード'}
+          </a>
+        </div>
+      </div>`;
+    $list.appendChild(a);
+  });
+  if (typeof gtagEvent === 'function' && rows.length) {
+    gtagEvent('view_wallpaper', {count: rows.length}); // 同意後のみ発火される想定
+  }
+}
+
+// フィルタ切替
+$filters.addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  active = b.dataset.t;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  draw();
+});
+
+// データ読込（唯一のソース）
+fetch('wallpapers.json')
+  .then(r=>r.json())
+  .then(json=>{
+    ALL = json;
+    const tagSet = new Set();
+    ALL.forEach(w => (w.tags||[]).forEach(t => tagSet.add(t)));
+    buildChips(Array.from(tagSet));
+    draw();
+  })
+  .catch(()=>{
+    $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>';
+  });
+</script>
+
 </html>

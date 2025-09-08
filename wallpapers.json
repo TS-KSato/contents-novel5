@@ -1,0 +1,22 @@
+[
+  {
+    "id": "wp01",
+    "name": "竜紋：黎明の風紋",
+    "caption": "風域が薄桃に染まる黎明。鱗紋は旅立ちの兆しを示す。",
+    "archetype": "Wind",
+    "tags": ["wind-realm", "sigil", "mobile-1080x2400"],
+    "aspect": "1080x2400",
+    "url": "assets/wp001.jpg",
+    "paid": false
+  },
+  {
+    "id": "wp02",
+    "name": "竜紋：群青の澪標",
+    "caption": "波間に立つ澪標。迷いを断ち切る刃は静かに冷たい。",
+    "archetype": "Knight",
+    "tags": ["tide-path", "sigil", "mobile-1080x2400"],
+    "aspect": "1080x2400",
+    "url": "assets/wp002.jpg",
+    "paid": true
+  }
+]

@@ -48,20 +48,14 @@
   </nav>
 
 <script>
-// ダミーデータ（本番は tracks.json へ分離）
-const TRACKS = [
-  {id:"m01", name:"麦穂の歌", origin:"人間・農村", mood:"work", bpm:96, duration:180, archetype:"Disciple"},
-  {id:"m02", name:"月夜の狩歌", origin:"獣人・狼族", mood:"work", bpm:120, duration:200, archetype:"Knight"},
-  {id:"m03", name:"星降る古謡", origin:"エルフ・森人", mood:"prayer", bpm:72, duration:220, archetype:"Healer"},
-  {id:"m04", name:"炉端の調べ", origin:"ドワーフ・鍛冶", mood:"peace", bpm:88, duration:160, archetype:"Lorekeeper"},
-  {id:"m05", name:"風の子守歌", origin:"吟遊詩人", mood:"sleep", bpm:60, duration:600, archetype:"Wind Guide"},
-  {id:"m06", name:"潮風の記憶", origin:"人間・漁村", mood:"peace", bpm:78, duration:190, archetype:"Stormblade"}
-];
 const list = document.getElementById('list');
 const tabs = document.getElementById('tabs');
 let current = 'all';
+let TRACKS = [];
 
 function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
+function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
+
 function draw(){
   list.innerHTML = '';
   TRACKS.filter(t=> current==='all' || t.mood===current).forEach(t=>{
@@ -77,20 +71,23 @@ function draw(){
       </div>
       <div class="go"><button class="btn" type="button">聴く</button></div>`;
     list.appendChild(a);
-  })
+  });
 }
-function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
 
 tabs.addEventListener('click', (e)=>{
-  const b = e.target.closest('.tab');
-  if(!b) return;
+  const b = e.target.closest('.tab'); if(!b) return;
   current = b.dataset.filter;
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
   draw();
 });
 
-draw();
+// ここで唯一のデータ源を読み込む
+fetch('tracks.json')
+  .then(r=>r.json())
+  .then(json => { TRACKS = json; draw(); })
+  .catch(()=>{ list.innerHTML = '<p>わかりません／情報が不足しています</p>'; });
 </script>
+
 </body>
 </html>

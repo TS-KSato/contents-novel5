@@ -54,22 +54,11 @@
   </nav>
 
 <script>
-// ダミー：music.html と同一IDを参照（本番は tracks.json で共有）
-const TRACKS = {
-  {id:"m01", name:"麦穂の歌", origin:"人間・農村", mood:"work", bpm:96, duration:180, archetype:"Disciple"},
-  {id:"m02", name:"月夜の狩歌", origin:"獣人・狼族", mood:"work", bpm:120, duration:200, archetype:"Knight"},
-  {id:"m03", name:"星降る古謡", origin:"エルフ・森人", mood:"prayer", bpm:72, duration:220, archetype:"Healer"},
-  {id:"m04", name:"炉端の調べ", origin:"ドワーフ・鍛冶", mood:"peace", bpm:88, duration:160, archetype:"Lorekeeper"},
-  {id:"m05", name:"風の子守歌", origin:"吟遊詩人", mood:"sleep", bpm:60, duration:600, archetype:"Wind Guide"},
-  {id:"m06", name:"潮風の記憶", origin:"人間・漁村", mood:"peace", bpm:78, duration:190, archetype:"Stormblade"}
-};
-
 const qs = new URLSearchParams(location.search);
-const id = qs.get('id') || 't01';
+const id = qs.get('id') || 'm01';
 const from = qs.get('from');
-if(from) document.getElementById('back').href = from+".html";
+if(from) document.getElementById('back').href = from + ".html";
 
-const data = TRACKS[id] || Object.values(TRACKS)[0];
 const audio = document.getElementById('audio');
 const title = document.getElementById('title');
 const meta = document.getElementById('meta');
@@ -79,15 +68,31 @@ const loopBtn = document.getElementById('loop');
 const sleepBtn = document.getElementById('sleep');
 
 function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
-function label(k){return ({focus:'集中',rest:'休息',ritual:'祈り',sleep:'睡眠'})[k]||k}
-
-title.textContent = data.name;
-meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
-audio.src = data.url;
+function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
 
 let timer = null;
+
+// tracks.json を読み込んで該当IDの曲だけ適用
+fetch('tracks.json')
+  .then(r=>r.json())
+  .then(list=>{
+    const data = list.find(t=>t.id===id) || list[0];
+    if(!data || !data.url){ throw new Error('track not found'); }
+
+    title.textContent = data.name;
+    meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
+    audio.src = data.url; // ← ここで assets/bgm001.mp3 をセット
+    audio.preload = 'metadata';
+  })
+  .catch(()=>{
+    title.textContent = 'わかりません／情報が不足しています';
+    meta.textContent = '';
+  });
+
+// プレイヤー操作
 playBtn.addEventListener('click', ()=>{
-  if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; } else { audio.pause(); playBtn.textContent='再生'; }
+  if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; }
+  else { audio.pause(); playBtn.textContent='再生'; }
 });
 loopBtn.addEventListener('click', ()=>{
   audio.loop = !audio.loop; loopBtn.textContent = audio.loop ? 'ループON' : 'ループOFF';
@@ -106,5 +111,6 @@ seek.addEventListener('input',()=>{
   audio.currentTime = (seek.value/100) * audio.duration;
 });
 </script>
+
 </body>
 </html>
