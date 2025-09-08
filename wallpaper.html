@@ -31,12 +31,10 @@ nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text
 <header>
 <div class="title">壁紙</div>
 <div class="filters" id="filters">
-<button class="chip" data-t="spring">春</button>
-<button class="chip" data-t="summer">夏</button>
-<button class="chip" data-t="autumn">秋</button>
-<button class="chip" data-t="winter">冬</button>
-<button class="chip" data-t="wind">元型：Wind</button>
-<button class="chip" data-t="knight">元型：Knight</button>
+<button class="chip" data-t="human">人</button>
+<button class="chip" data-t="elf">エルフ</button>
+<button class="chip" data-t="dragon">竜</button>
+<button class="chip" data-t="fairy">妖精</button>
 <button class="chip active" data-t="all">すべて</button>
 </div>
 <p class="note">※ 端末の壁紙として使いやすい構図を選んでいます（ノッチ安全域考慮）。</p>
@@ -54,85 +52,47 @@ nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text
 
 
 <script>
-const $list = document.getElementById('list');
-const $filters = document.getElementById('filters');
+// 追加：許可語彙
+const ALLOWED_ARCH = new Set(["nature","life"]);
+const ALLOWED_TAGS  = new Set(["dragon","human","elf","fairy"]);
 
-let ALL = [];          // wallpapers.json の内容
-let active = 'all';    // 現在のフィルタ
-
-// 動的にタグチップを生成（世界内タグのみ）
-function buildChips(tags){
-  $filters.innerHTML = '';
-  const make = (label, val, activeNow=false) => {
-    const b = document.createElement('button');
-    b.className = 'chip' + (activeNow ? ' active' : '');
-    b.dataset.t = val;
-    b.textContent = label;
-    $filters.appendChild(b);
-  };
-  make('すべて', 'all', true);
-  // アーキタイプを上位に（任意）
-  Array.from(new Set(ALL.map(w=>w.archetype))).filter(Boolean).forEach(a=>{
-    make(`元型：${a}`, `arch:${a}`);
-  });
-  // 世界内タグ
-  tags.forEach(t=> make(t, `tag:${t}`));
-}
-
-function draw(){
-  $list.innerHTML = '';
-  const rows = ALL.filter(w=>{
-    if(active==='all') return true;
-    if(active.startsWith('arch:')) return w.archetype === active.slice(5);
-    if(active.startsWith('tag:'))  return (w.tags||[]).includes(active.slice(4));
-    return true;
-  });
-
-  rows.forEach(w=>{
-    const a = document.createElement('article');
-    a.className = 'card';
-    a.innerHTML = `
-      <img class="hero" src="${w.url}" alt="${w.name}" loading="lazy" decoding="async" />
-      <div class="wrap">
-        <div class="name">${w.name}</div>
-        <p class="cap">${w.caption ?? ''}</p>
-        <div class="row">
-          ${w.archetype ? `<span class="pill">${w.archetype}</span>`:''}
-          ${(w.tags||[]).slice(0,2).map(t=>`<span class="pill">${t}</span>`).join('')}
-          <a class="btn" href="${w.url}" download>
-            ${w.paid ? '購入後ダウンロード' : 'ダウンロード'}
-          </a>
-        </div>
-      </div>`;
-    $list.appendChild(a);
-  });
-  if (typeof gtagEvent === 'function' && rows.length) {
-    gtagEvent('view_wallpaper', {count: rows.length}); // 同意後のみ発火される想定
+// 追加：取込時に正規化
+function normalize(w){
+  // archetype 正規化（既存の Wind/Knight を暫定マップ。最終的には手で直す）
+  const a = (w.archetype||"").toLowerCase();
+  if (!ALLOWED_ARCH.has(a)) {
+    w.archetype = (a==="nature") ? 
+                 : (a==="life") ? 
+                 : ""; // 不明は空（フィルタ対象外）
   }
+  // tags 正規化：許可以外は落とす
+  w.tags = (w.tags||[]).map(t=>String(t).toLowerCase()).filter(t=>ALLOWED_TAGS.has(t));
+  return w;
 }
 
-// フィルタ切替
-$filters.addEventListener('click', e=>{
-  const b = e.target.closest('.chip'); if(!b) return;
-  active = b.dataset.t;
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  draw();
-});
-
-// データ読込（唯一のソース）
+// ... 既存の fetch 部分内で：
 fetch('wallpapers.json')
   .then(r=>r.json())
   .then(json=>{
-    ALL = json;
-    const tagSet = new Set();
-    ALL.forEach(w => (w.tags||[]).forEach(t => tagSet.add(t)));
-    buildChips(Array.from(tagSet));
+    ALL = json.map(normalize);  // ★ここで正規化
+    // 固定順でフィルタチップを描画（順番を恣意的にしない・揺れない）
+    const fixedTags = ["dragon","human","elf","fairy"].filter(t => ALL.some(w => (w.tags||[]).includes(t)));
+    // buildChips を固定順で呼ぶ
+    (function buildFixedChips(){
+      const filters = document.getElementById('filters');
+      filters.innerHTML = `
+        <button class="chip" data-t="arch:nature">自然</button>
+        <button class="chip" data-t="arch:life">生物</button>
+        ${fixedTags.map(t=>`<button class="chip" data-t="tag:${t}">${({"dragon":"竜","human":"人","elf":"エルフ","fairy":"妖精"})[t]}</button>`).join("")}
+        <button class="chip active" data-t="all">すべて</button>
+      `;
+    })();
     draw();
   })
   .catch(()=>{
     $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>';
   });
 </script>
+
 
 </html>
