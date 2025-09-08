@@ -1,0 +1,22 @@
+[
+  {
+    "id": "m01",
+    "name": "麦穂の歌",
+    "origin": "人間・農村",
+    "mood": "work",
+    "bpm": 96,
+    "duration": 180,
+    "archetype": "Disciple",
+    "url": "assets/bgm001.mp3"
+  },
+  {
+    "id": "m02",
+    "name": "月夜の狩歌",
+    "origin": "獣人・狼族",
+    "mood": "work",
+    "bpm": 120,
+    "duration": 200,
+    "archetype": "Knight",
+    "url": "assets/bgm002.mp3"
+  }
+]
