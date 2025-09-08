@@ -33,10 +33,10 @@
     "id": "m04",
     "name": "銀光の舞",
     "origin": "妖精・魔法の森",
-    "mood": "playful",
-    "bpm": 120,
+    "mood": "gentle",
+    "bpm": 72,
     "duration": 150,
-    "archetype": "Spirit",
+    "archetype": "Healer",
     "url": "assets/bgm004.mp3"
   },
   {
