@@ -7,7 +7,8 @@
     "bpm": 70,
     "duration": 210,
     "archetype": "Guardian",
-    "url": "assets/bgm001.mp3"
+    "url": "assets/bgm001.mp3",
+    "art": "assets/bgm001.jpg"
   },
   {
     "id": "m02",
@@ -17,7 +18,8 @@
     "bpm": 60,
     "duration": 240,
     "archetype": "Sage",
-    "url": "assets/bgm002.mp3"
+    "url": "assets/bgm002.mp3",
+    "art": "assets/bgm002.jpg"
   },
   {
     "id": "m03",
@@ -27,7 +29,8 @@
     "bpm": 95,
     "duration": 180,
     "archetype": "Innocent",
-    "url": "assets/bgm003.mp3"
+    "url": "assets/bgm003.mp3",
+    "art": "assets/bgm003.jpg"
   },
   {
     "id": "m04",
@@ -37,7 +40,8 @@
     "bpm": 72,
     "duration": 150,
     "archetype": "Healer",
-    "url": "assets/bgm004.mp3"
+    "url": "assets/bgm004.mp3",
+    "art": "assets/bgm004.jpg"
   },
   {
     "id": "m05",
@@ -47,7 +51,8 @@
     "bpm": 65,
     "duration": 195,
     "archetype": "Innocent",
-    "url": "assets/bgm005.mp3"
+    "url": "assets/bgm005.mp3",
+    "art": "assets/bgm005.jpg"
   },
   {
     "id": "m06",
@@ -57,7 +62,8 @@
     "bpm": 75,
     "duration": 300,
     "archetype": "Sage",
-    "url": "assets/bgm006.mp3"
+    "url": "assets/bgm006.mp3",
+    "art": "assets/bgm006.jpg"
   },
   {
     "id": "m07",
@@ -67,7 +73,8 @@
     "bpm": 55,
     "duration": 240,
     "archetype": "Healer",
-    "url": "assets/bgm007.mp3"
+    "url": "assets/bgm007.mp3",
+    "art": "assets/bgm007.jpg"
   },
   {
     "id": "m08",
@@ -77,7 +84,8 @@
     "bpm": 85,
     "duration": 165,
     "archetype": "Scholar",
-    "url": "assets/bgm008.mp3"
+    "url": "assets/bgm008.mp3",
+    "art": "assets/bgm008.jpg"
   },
   {
     "id": "m09",
@@ -87,7 +95,8 @@
     "bpm": 72,
     "duration": 190,
     "archetype": "Explorer",
-    "url": "assets/bgm009.mp3"
+    "url": "assets/bgm009.mp3",
+    "art": "assets/bgm009.jpg"
   },
   {
     "id": "m10",
@@ -97,6 +106,7 @@
     "bpm": 80,
     "duration": 220,
     "archetype": "Leader",
-    "url": "assets/bgm010.mp3"
+    "url": "assets/bgm010.mp3",
+    "art": "assets/bgm010.jpg"
   }
 ]

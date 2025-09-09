@@ -7,86 +7,126 @@
   <meta name="description" content="エテルナリア大陸の音楽を気分で探す" />
   <style>
     :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
     header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
     .title{font-weight:700;font-size:18px}
     .tabs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-    .tab{padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
-    .tab.active{background:#23304a;color:white;border-color:#38507a}
+    .tab{padding:8px 12px;border-radius:999px;background:#1b2230;color:#c7d2e4;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
+    .tab.active{background:#23304a;color:#fff;border-color:#38507a}
     .grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px 12px 80px}
-    .card{display:flex;gap:12px;background:var(--card);border:1px solid #212836;border-radius:16px;padding:12px;align-items:center;text-decoration:none;color:inherit}
-    .art{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#2b3446,#3c5076);display:grid;place-items:center;color:#cfe1ff;font-weight:700}
-    .meta{flex:1;min-width:0}
-    .name{font-weight:700;font-size:15px;letter-spacing:.2px}
-    .sub{color:var(--muted);font-size:12px;margin-top:2px}
-    .pill{display:inline-block;font-size:11px;color:#cfe1ff;background:#213256;border:1px solid #34518a;padding:2px 8px;border-radius:999px;margin-top:6px}
-    .go{margin-left:auto}
-    .btn{appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
-    nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
-    nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
-    nav.bottom a.active{color:white;font-weight:700}
+    @media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:880px){.grid{grid-template-columns:1fr 1fr 1fr}}
+
+    .card{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;background:var(--card);text-decoration:none;color:inherit;border:1px solid #212838}
+    .card:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+    .art{
+      width:72px;height:72px;border-radius:12px;
+      background:linear-gradient(135deg,#2b3446,#3c5076);
+      background-size:cover;background-position:center;
+      display:grid;place-items:center;color:#cfe1ff;font-weight:800;font-size:22px;
+      overflow:hidden;user-select:none;
+    }
+    .art.fallback::after{content:"♪"}
+    .meta{display:grid;gap:3px;min-width:0}
+    .name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .sub{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pill{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:999px;background:#22324d;color:#bcd3ff;font-size:11px}
+    .go .btn{border:0;border-radius:10px;padding:10px 12px;background:#22324d;color:#cfe1ff;font-weight:700}
+    .go .btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+    nav.gnav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;justify-content:space-around;
+      padding:10px 8px;background:#111;color:#fff;z-index:1000}
+    nav.gnav a{flex:1;text-align:center;text-decoration:none;color:#fff;font-weight:700;line-height:44px;
+      border-radius:10px;background:#222;outline-offset:2px}
+    nav.gnav a[aria-current="page"]{background:#444}
+    @media(hover:hover){nav.gnav a:hover{background:#333}}
+    body{padding-bottom:72px}
   </style>
 </head>
 <body>
+
   <header>
     <div class="title">エテルナリア音楽館</div>
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-filter="all">すべて</button>
-      <button class="tab" data-filter="work">作業</button>
-      <button class="tab" data-filter="peace">安らぎ</button>
-      <button class="tab" data-filter="prayer">祈り</button>
-      <button class="tab" data-filter="sleep">眠り</button>
+    <div class="tabs" id="tabs" role="tablist" aria-label="ムードで絞り込み">
+      <button class="tab active" role="tab" aria-selected="true" data-key="all">すべて</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="epic">epic</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="work">work</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="calm">calm</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="mystic">mystic</button>
     </div>
   </header>
 
-  <main class="grid" id="list"></main>
+  <main class="grid" id="list" aria-live="polite"></main>
 
-  <nav class="bottom">
+  <nav class="gnav" role="navigation" aria-label="下部ナビ">
     <a href="index.html">ホーム</a>
     <a href="notice.html">お知らせ</a>
     <a href="mypage.html">マイページ</a>
   </nav>
 
 <script>
-const list = document.getElementById('list');
-const tabs = document.getElementById('tabs');
-let current = 'all';
-let TRACKS = [];
+  // 状態
+  let TRACKS = [];
+  let current = 'all';
+  const list = document.getElementById('list');
 
-function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
-function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
+  // ユーティリティ
+  const sec = n => !Number.isFinite(n) ? "—" : `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`;
+  const label = m => (m || "—");
+  function artOf(t){
+    // 優先: 明示フィールド t.art
+    if (t.art) return t.art;
+    // 代替: 音源URL .mp3 → .jpg へ推定（例: assets/bgm001.mp3 → assets/bgm001.jpg）
+    if (t.url && /\.mp3(?:\?.*)?$/i.test(t.url)) return t.url.replace(/\.mp3(?:\?.*)?$/i, ".jpg");
+    // フォールバック（グラデ＋♪）
+    return null;
+  }
 
-function draw(){
-  list.innerHTML = '';
-  TRACKS.filter(t=> current==='all' || t.mood===current).forEach(t=>{
-    const a = document.createElement('a');
-    a.className = 'card';
-    a.href = `audio.html?id=${encodeURIComponent(t.id)}&from=music`;
-    a.innerHTML = `
-      <div class="art" aria-hidden="true">♪</div>
-      <div class="meta">
-        <div class="name">${t.name}</div>
-        <div class="sub">${t.origin} ／ ${t.bpm} BPM ／ ${sec(t.duration)}</div>
-        <span class="pill">${label(t.mood)}</span>
-      </div>
-      <div class="go"><button class="btn" type="button">聴く</button></div>`;
-    list.appendChild(a);
+  // 描画
+  function draw(){
+    list.innerHTML = '';
+    const rows = TRACKS.filter(t => current === 'all' ? true : t.mood === current);
+    rows.forEach(t => {
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = `audio.html?id=${encodeURIComponent(t.id)}&from=music`;
+
+      const art = artOf(t);
+      const artDiv = document.createElement('div');
+      artDiv.className = 'art' + (art ? '' : ' fallback');
+      if (art){ artDiv.style.backgroundImage = `url('${art}')`; }
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `
+        <div class="name">${t.name ?? '—'}</div>
+        <div class="sub">${[t.origin, (t.bpm?`${t.bpm} BPM`:null), sec(t.duration)].filter(Boolean).join(' ／ ')}</div>
+        <span class="pill">${label(t.mood)}</span>`;
+
+      const go = document.createElement('div');
+      go.className = 'go';
+      go.innerHTML = `<button class="btn" type="button" aria-label="詳細へ">聴く</button>`;
+
+      a.append(artDiv, meta, go);
+      list.appendChild(a);
+    });
+  }
+
+  // タブ切替
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', () => {
+      current = btn.dataset.key;
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      draw();
+    });
   });
-}
 
-tabs.addEventListener('click', (e)=>{
-  const b = e.target.closest('.tab'); if(!b) return;
-  current = b.dataset.filter;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  draw();
-});
-
-// ここで唯一のデータ源を読み込む
-fetch('tracks.json')
-  .then(r=>r.json())
-  .then(json => { TRACKS = json; draw(); })
-  .catch(()=>{ list.innerHTML = '<p>わかりません／情報が不足しています</p>'; });
+  // 単一データ源の読込
+  fetch('tracks.json')
+    .then(r => r.json())
+    .then(json => { TRACKS = json || []; draw(); })
+    .catch(() => { list.innerHTML = '<p>わかりません／情報が不足しています</p>'; });
 </script>
 
 </body>
