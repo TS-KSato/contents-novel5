@@ -1,116 +1,125 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>竜歌の視聴｜運命の銀竜暦</title>
-  <meta name="description" content="銀竜世界の竜歌を再生" />
+  <title>再生｜運命の銀竜暦</title>
+  <meta name="description" content="楽曲の詳細と再生" />
   <style>
     :root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
-    header{display:flex;align-items:center;gap:10px;padding:14px}
-    .back{color:#cfe1ff;text-decoration:none;font-weight:700}
-    .wrap{padding:12px}
-    .art{width:100%;aspect-ratio:1/1;border-radius:16px;background:linear-gradient(135deg,#2b3446,#3c5076);display:grid;place-items:center;font-size:28px}
-    .title{font-weight:800;font-size:20px;margin-top:14px}
-    .sub{color:var(--muted);font-size:13px;margin-top:4px}
-    .player{margin-top:14px;background:var(--card);border:1px solid #212836;border-radius:16px;padding:12px}
-    .row{display:flex;gap:10px;align-items:center}
-    .btn{appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
-    .ghost{background:#1f2937;color:#cfe1ff;border:1px solid #2a3446}
-    .range{accent-color:#6aa8ff;width:100%}
-    .note{margin-top:14px;color:#c8d4e8;font-size:14px;line-height:1.6}
-    nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
-    nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
+    header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:12px 12px 0;z-index:10}
+    .back{display:inline-block;padding:8px 10px;border-radius:10px;background:#1b2230;text-decoration:none;color:#cfe1ff;border:1px solid #273144}
+    main.wrap{padding:14px;display:grid;gap:14px;max-width:760px;margin:0 auto 80px}
+    .art{
+      width:100%;aspect-ratio:1/1;border-radius:16px;
+      background:linear-gradient(135deg,#2b3446,#3c5076);
+      background-size:cover;background-position:center;
+      display:grid;place-items:center;font-size:28px;color:#cfe1ff;overflow:hidden;user-select:none;
+    }
+    .art.fallback::after{content:"♪";font-weight:800}
+    .title{font-weight:800;font-size:22px}
+    .sub{color:var(--muted);font-size:13px}
+    .player{display:grid;gap:10px;padding:12px;border-radius:14px;background:var(--card);border:1px solid #212838}
+    .btns{display:flex;gap:8px}
+    .btn{border:0;border-radius:10px;padding:10px 12px;background:#22324d;color:#cfe1ff;font-weight:700}
+    .meta2{color:var(--muted);font-size:12px}
+    nav.gnav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;justify-content:space-around;
+      padding:10px 8px;background:#111;color:#fff;z-index:1000}
+    nav.gnav a{flex:1;text-align:center;text-decoration:none;color:#fff;font-weight:700;line-height:44px;
+      border-radius:10px;background:#222;outline-offset:2px}
+    nav.gnav a[aria-current="page"]{background:#444}
+    @media(hover:hover){nav.gnav a:hover{background:#333}}
+    body{padding-bottom:72px}
   </style>
 </head>
 <body>
   <header>
-    <a class="back" id="back" href="music.html">← 一覧へ</a>
+    <a class="back" id="back" href="music.html" aria-label="一覧へ戻る">← 一覧へ</a>
   </header>
+
   <main class="wrap">
-    <div class="art" id="art" aria-hidden="true">♪</div>
-    <div class="title" id="title">麦穂の歌</div>
+    <div class="art" id="art" aria-hidden="true"></div>
+    <div class="title" id="title">—</div>
     <div class="sub" id="meta">—</div>
 
-    <section class="player">
-      <audio id="audio" preload="metadata"></audio>
-      <div class="row" style="justify-content:space-between; margin-bottom:8px;">
-        <button class="btn" id="play" type="button">再生</button>
-        <button class="btn ghost" id="loop" type="button">ループOFF</button>
-        <button class="btn ghost" id="sleep" type="button">就寝タイマー</button>
+    <section class="player" aria-label="プレイヤー">
+      <audio id="audio" preload="metadata" controls style="width:100%"></audio>
+      <div class="btns">
+        <button class="btn" type="button" id="play">再生/一時停止</button>
+        <button class="btn" type="button" id="back15">⟲ 15s</button>
+        <button class="btn" type="button" id="fwd15">15s ⟳</button>
       </div>
-      <input class="range" type="range" id="seek" min="0" max="100" value="0" />
+      <div class="meta2" id="extra">—</div>
     </section>
-
-    <p class="note" id="note">この竜歌は、風域が静まり鱗紋が淡く灯る刻に奏でられる調べ。呼吸を深く整え、意識を足裏に戻しながらお聴きください。</p>
   </main>
 
-  <nav class="bottom">
+  <nav class="gnav" role="navigation" aria-label="下部ナビ">
     <a href="index.html">ホーム</a>
     <a href="notice.html">お知らせ</a>
     <a href="mypage.html">マイページ</a>
   </nav>
 
 <script>
-const qs = new URLSearchParams(location.search);
-const id = qs.get('id') || 'm01';
-const from = qs.get('from');
-if(from) document.getElementById('back').href = from + ".html";
+  // クエリ取得
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
 
-const audio = document.getElementById('audio');
-const title = document.getElementById('title');
-const meta = document.getElementById('meta');
-const seek = document.getElementById('seek');
-const playBtn = document.getElementById('play');
-const loopBtn = document.getElementById('loop');
-const sleepBtn = document.getElementById('sleep');
+  // util
+  const sec = n => !Number.isFinite(n) ? "—" : `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`;
+  const label = m => (m || "—");
+  function artOf(t){
+    if (t.art) return t.art;
+    if (t.url && /\.mp3(?:\?.*)?$/i.test(t.url)) return t.url.replace(/\.mp3(?:\?.*)?$/i, ".jpg");
+    return null;
+  }
 
-function sec(s){const m=Math.floor(s/60);const r=('0'+Math.floor(s%60)).slice(-2);return `${m}:${r}`}
-function label(k){return ({work:'作業',peace:'安らぎ',prayer:'祈り',sleep:'眠り'})[k]||k}
+  // 要素
+  const artEl   = document.getElementById('art');
+  const titleEl = document.getElementById('title');
+  const metaEl  = document.getElementById('meta');
+  const extraEl = document.getElementById('extra');
+  const audioEl = document.getElementById('audio');
 
-let timer = null;
+  // 読み込み
+  fetch('tracks.json')
+    .then(r=>r.json())
+    .then(list=>{
+      const data = (id && list.find(t=>t.id===id)) || list[0];
+      if(!data || !data.url){ throw new Error('track not found'); }
 
-// tracks.json を読み込んで該当IDの曲だけ適用
-fetch('tracks.json')
-  .then(r=>r.json())
-  .then(list=>{
-    const data = list.find(t=>t.id===id) || list[0];
-    if(!data || !data.url){ throw new Error('track not found'); }
+      titleEl.textContent = data.name ?? '—';
+      metaEl.textContent  = [data.archetype, label(data.mood), (data.bpm?`${data.bpm} BPM`:null), sec(data.duration)]
+                              .filter(Boolean).join(' ／ ');
+      extraEl.textContent = data.origin ? `出自：${data.origin}` : '—';
 
-    title.textContent = data.name;
-    meta.textContent = `${data.archetype} ／ ${label(data.mood)} ／ ${data.bpm} BPM ／ ${sec(data.duration)}`;
-    audio.src = data.url; // ← ここで assets/bgm001.mp3 をセット
-    audio.preload = 'metadata';
-  })
-  .catch(()=>{
-    title.textContent = 'わかりません／情報が不足しています';
-    meta.textContent = '';
+      audioEl.src = data.url;
+      audioEl.preload = 'metadata';
+
+      const art = artOf(data);
+      if (art){
+        artEl.style.backgroundImage = `url('${art}')`;
+        artEl.classList.remove('fallback');
+        artEl.setAttribute('aria-label','アートワーク');
+      } else {
+        artEl.style.backgroundImage = '';
+        artEl.classList.add('fallback');
+        artEl.removeAttribute('aria-label');
+      }
+    })
+    .catch(()=>{
+      titleEl.textContent = 'わかりません／情報が不足しています';
+      metaEl.textContent  = '';
+      extraEl.textContent = '';
+    });
+
+  // コントロール
+  document.getElementById('play').addEventListener('click', ()=>{
+    if (audioEl.paused) audioEl.play(); else audioEl.pause();
   });
-
-// プレイヤー操作
-playBtn.addEventListener('click', ()=>{
-  if(audio.paused){ audio.play(); playBtn.textContent='一時停止'; }
-  else { audio.pause(); playBtn.textContent='再生'; }
-});
-loopBtn.addEventListener('click', ()=>{
-  audio.loop = !audio.loop; loopBtn.textContent = audio.loop ? 'ループON' : 'ループOFF';
-});
-sleepBtn.addEventListener('click', ()=>{
-  if(timer){ clearTimeout(timer); timer=null; sleepBtn.textContent='就寝タイマー'; return; }
-  timer = setTimeout(()=>{ audio.pause(); playBtn.textContent='再生'; timer=null; }, 15*60*1000);
-  sleepBtn.textContent='15分後に停止';
-});
-audio.addEventListener('timeupdate',()=>{
-  if(!isFinite(audio.duration)) return;
-  seek.value = Math.floor(100 * (audio.currentTime / audio.duration));
-});
-seek.addEventListener('input',()=>{
-  if(!isFinite(audio.duration)) return;
-  audio.currentTime = (seek.value/100) * audio.duration;
-});
+  document.getElementById('back15').addEventListener('click', ()=>{ audioEl.currentTime = Math.max(0, audioEl.currentTime - 15); });
+  document.getElementById('fwd15').addEventListener('click',  ()=>{ audioEl.currentTime = Math.min((audioEl.duration||1e9), audioEl.currentTime + 15); });
 </script>
-
 </body>
 </html>
