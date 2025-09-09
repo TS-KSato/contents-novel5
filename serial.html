@@ -205,15 +205,15 @@ function normalizeArticle(raw, parent){
 function guessAvatar(author){
   if(!author) return "";
   const map = {
-    "ルナル":"assets/author-lunal.png",
-    "アラン":"assets/author-alan.png",
-    "リリア":"assets/author-lilia.png",
-    "ライラ":"assets/author-laila.png",
-    "ドレイク":"assets/author-drake.png",
-    "ネクサート":"assets/author-king.png",
-    "マグナス":"assets/author-magnus.png",
-    "ネスター":"assets/author-nester.png",
-    "ミレイア":"assets/author-mireia.png"
+    "ルナル":"assets/char-lunal.jpg",
+    "アラン":"assets/char-alan.jpg",
+    "リリア":"assets/char-lilia.jpg",
+    "ライラ":"assets/char-laila.jpg",
+    "ドレイク":"assets/char-drake.jpg",
+    "ネクサート":"assets/char-king.jpg",
+    "マグナス":"assets/char-magnus.jpg",
+    "ネスター":"assets/char-nester.jpg",
+    "ミレイア":"assets/char-mireia.jpg"
   };
   // 前方一致でゆるく判定
   for(const key of Object.keys(map)){
