@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>運命の銀竜暦｜魂の羅針盤（元型診断＋今日の役割）</title>
-  <meta name="description" content="初回の元型（アーキタイプ）診断であなたの魂の性質を確立し、毎日の10問で今日の『役割（パス）』を授けます。">
+  <title>運命の銀竜暦｜日々の指針</title>
+  <meta name="description" content="初回の気質診断であなたの魂の性質を確立し、毎日の10問で今日の『役割』を授けます。">
   <style>
     :root {
       --bg: #0b0f14;
@@ -284,12 +284,12 @@
 <body>
   <main class="wrap">
     <header>
-      <h1>魂の羅針盤</h1>
+      <h1>日々の指針</h1>
       <p class="lead">
-        「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は元型（アーキタイプ）</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割（パス）を授かります。</p>
+        「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は気質</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割を授かります。</p>
       <details class="help">
         <summary>世界観がわからない方へ</summary>
-        <p class="note">この作品では、銀色の古代竜「ルナル」の教えを人々が受け継ぐ時代が舞台です。<br>元型＝あなたの“物語上の性質”、役割（パス）＝“今日の歩き方”。難しく考えず、直感で選んでください。</p>
+        <p class="note">この作品では、銀色の古代竜「ルナル」の教えを人々が受け継ぐ時代が舞台です。<br>気質＝あなたの“物語上の性質”、役割＝“今日の歩き方”。難しく考えず、直感で選んでください。</p>
         <ul class="note" style="margin:.25rem 0 0 1rem">
           <li><strong>アラン</strong>：二つの世界の架け橋</li>
           <li><strong>ドレイク</strong>：仲間を守る勇者</li>
@@ -300,9 +300,9 @@
       </details>
     </header>
 
-    <!-- Phase 1: 元型診断（初回のみ表示） -->
+    <!-- Phase 1: 気質診断（初回のみ表示） -->
     <section id="phase1" class="card" aria-labelledby="p1h" hidden>
-      <div id="p1h" class="card-h">Phase 1：魂の共鳴診断（初回）</div>
+      <div id="p1h" class="card-h">Phase 1：傾向診断（初回）</div>
       <div class="card-c">
         <p class="note">直感で4問にお答えください。結果は「アラン／ドレイク／ネスター／リリア／ライラ」のいずれかになります。</p>
 
@@ -340,16 +340,16 @@
         </div>
 
         <div class="grid2" style="margin-top:10px">
-          <button id="btnP1" class="btn">元型を確定する</button>
+          <button id="btnP1" class="btn">気質を確定する</button>
           <button id="btnP1Reset" class="btn ghost" type="button">入力をクリア</button>
         </div>
-        <p class="note">※ 元型は <code>localStorage.userArchetype</code> に保存されます（端末ローカル）。</p>
+        <p class="note">※ 気質は <code>localStorage.userArchetype</code> に保存されます（端末ローカル）。</p>
       </div>
     </section>
 
     <!-- Phase 1 結果（確定後常に表示） -->
     <section id="archetypeBox" class="card result" aria-live="polite" hidden>
-      <div class="card-h">あなたの元型（アーキタイプ）</div>
+      <div class="card-h">あなたの気質</div>
       <div class="card-c" id="archText"></div>
     </section>
 
@@ -359,16 +359,16 @@
       <div class="card-c" id="qList"></div>
       <div class="card-c">
         <div class="grid2">
-          <button id="btnEval" class="btn">今日の役割（パス）を授かる</button>
+          <button id="btnEval" class="btn">今日の役割を授かる</button>
           <button id="btnClearQ" class="btn ghost" type="button">回答クリア</button>
         </div>
         <p class="note" style="margin-top:6px">※ 2択で迷ったら「直感」を優先してください。日々の回答は保存しません。</p>
       </div>
     </section>
 
-    <!-- Phase 3+4: 役割＋神託 -->
+    <!-- Phase 3+4: 役割＋結果 -->
     <section id="resultBox" class="card result" hidden>
-      <div class="card-h">今日の授与：役割（パス）と銀竜の言葉</div>
+      <div class="card-h">今日の授与：役割と銀竜の言葉</div>
       <div class="card-c" id="roleText"></div>
     </section>
   </main>
@@ -501,7 +501,7 @@
 
       // 内容をクリアしてDOMで組み立て（XSS対策：textContentで埋める）
       text.innerHTML = `
-    <div class="pill">確定済みの元型</div>
+    <div class="pill">確定済みの気質</div>
     <div class="arch-line" style="display:flex;align-items:center;gap:10px;margin-top:6px">
       <span class="arch-avatar-slot"></span>
       <div>
@@ -510,7 +510,7 @@
       </div>
     </div>
     <div class="grid2" style="margin-top:10px">
-      <button class="btn ghost" id="btnChange">元型をやり直す（この端末のみ）</button>
+      <button class="btn ghost" id="btnChange">気質をやり直す（この端末のみ）</button>
       <a class="btn" href="#p2h">十の質問へ進む</a>
     </div>`;
 
@@ -519,7 +519,7 @@
       $(".arch-desc", text).textContent = archetype.desc || "";
 
       $("#btnChange", text)?.addEventListener("click", () => {
-        if (confirm("元型を未設定に戻しますか？（この端末のみ）")) {
+        if (confirm("気質を未設定に戻しますか？（この端末のみ）")) {
           ArchetypeStore.clear();
           // 呼び出し側の apply()/再描画を想定
           (window.apply?.call ? window.apply() : location.reload());
@@ -541,7 +541,7 @@
   laila: { id:'laila', name:'ライラ',  desc:'', av:'av-laila', initials:'LA' }
 });
 
-// ===== 追加: 現在の元型を取得（localStorage の archetype_id を解決） =====
+// ===== 追加: 現在の気質を取得（localStorage の archetype_id を解決） =====
 function getArchetype(){
   const id = ArchetypePath.ArchetypeStore.get();
   return (id && ARCHETYPES[id]) ? ARCHETYPES[id] : null;
