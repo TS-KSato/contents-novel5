@@ -1,4 +1,4 @@
-// wallpaper.js — wallpapers.json を読み込んで表示（外部化）
+// wallpaper.js — wallpapers.json を読み込んで表示（外部化 / data 配下に移行）
 const ALLOWED_ARCH = new Set(["nature", "life"]);
 const TAG_ORDER    = ["dragon", "human", "elf", "fairy"];
 const ALLOWED_TAGS = new Set(TAG_ORDER);
@@ -73,7 +73,8 @@ $filters.addEventListener("click", (e) => {
   draw();
 });
 
-fetch("./wallpapers.json")
+// ↓↓↓ 参照先を data/ 配下に変更
+fetch("./assets/data/wallpapers.json?v=20250910")
   .then(r => r.json())
   .then(json => { if(!Array.isArray(json)) throw 0; ALL = json.map(normalize); buildChips(); draw(); })
   .catch(() => { $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>'; });
