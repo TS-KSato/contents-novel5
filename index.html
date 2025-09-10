@@ -5,83 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の占いを受け取る</title>
   <meta name="description" content="銀竜の言葉を継ぐ者へワンタップで今日の占い、物語、竜の食卓">
-  <style>
-    html { font-size: 16px; }
-    :root{
-      --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
-      --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
-      --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
-      --success:#6bd8a6; --warning:#ffd27e;
-    }
-    *{ box-sizing:border-box }
-    body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif; line-height:1.75; -webkit-text-size-adjust:100%; text-rendering:optimizeLegibility; }
-    .wrap{ max-width:40rem; margin:0 auto; padding:1rem; }
-
-    /* ===== Hero ===== */
-    .hero{ position:relative; overflow:hidden; border-radius:calc(var(--radius) * 1.2); border:1px solid var(--line); background: radial-gradient(120% 120% at 100% 0%, #1d2a4a 0%, #0c1220 55%, #0b0d12 100%); padding:1.25rem; margin-top:.5rem; }
-    .hero h1{ margin:0 0 .25rem; font-size:clamp(1.35rem,6vw,1.75rem); line-height:1.25; letter-spacing:.02em; }
-    .hero .lead{ color:#cfe1ff; margin:.25rem 0 .75rem; font-size:1rem }
-    .cta{ display:flex; gap:.5rem; flex-wrap:wrap }
-    .btn{ appearance:none; border:1px solid var(--accent-2-b); background:var(--accent-2); color:#fff; border-radius:.75rem; padding:.625rem .9rem; min-height:var(--tap); font-size:1rem; cursor:pointer }
-    .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
-    .btn.secondary{ background:#11172a; border-color:#2f3b63; color:#d7e6ff }
-    .meta{ color:var(--muted); font-size:.85rem }
-
-    /* Pills / tags */
-    .pills{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
-    .pill{ display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line); background:#11172a; color:#cfe1ff; border-radius:999px; padding:.25rem .6rem; font-size:.8rem }
-
-    /* ===== Cards ===== */
-    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin:.75rem 0 }
-    .label{ font-size:.95rem; color:#cfe1ff; margin-bottom:.5rem }
-
-    /* Character row */
-    .row{ display:flex; gap:.75rem; flex-wrap:wrap; }
-    .char-btn{ appearance:none; background:none; border:1px solid var(--line); border-radius:.75rem; padding:.5rem; min-width:6rem; text-align:center; cursor:pointer }
-    .char-btn img{ width:4.75rem; height:4.75rem; border-radius:50%; border:1px solid #2b3559; object-fit:cover }
-    .char-btn div{ margin-top:.375rem; font-size:.875rem }
-
-    /* Result box */
-    .result{ border:1px dashed #32426b; border-radius:.75rem; padding:.75rem; background:#0f1526 }
-    .stars{ letter-spacing:.12rem }
-    .lock{ opacity:.65 }
-
-    /* Feature grid */
-    .grid{ display:grid; gap:.75rem; grid-template-columns:1fr 1fr; }
-    @media (max-width:480px){ .grid{ grid-template-columns:1fr } }
-    .tile{ text-decoration:none; color:inherit; border:1px solid var(--line); background:#10162a; border-radius:.75rem; padding:.75rem }
-    .tile:hover{ background:#15203a }
-    .tile .t1{ font-weight:700 }
-    .tile .t2{ font-size:.86rem; color:#aeb7d0 }
-
-
-    footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1.25rem 0 .5rem }
-
-    /* Bottom nav (unchanged pattern) */
-    .bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9); backdrop-filter:blur(8px); border-top:1px solid var(--line) }
-    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-    .bn-btn{ appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.375rem 0; min-height:3.25rem; font-size:.75rem }
-    .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; border-radius:4px; border:1px solid var(--line); background:#16213c; display:flex; align-items:center; justify-content:center; font-size:.75rem }
-    .bn-accent{ color:#fff }
-  
-  /* Calendar & Quote (dark theme tokens) */
-  #calendarQuote .pill{background:var(--accent-2);color:var(--accent);border:1px solid var(--accent-2-b)}
-  #calendarQuote .pill:active{transform:translateY(1px)}
-
-  /* Skeleton shimmer for first-paint */
-  #calendarQuote .skeleton{
-    background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));
-    background-size:200% 100%;
-    animation:sheen 1.6s infinite;
-  }
-  @keyframes sheen{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-  /* First-view optimization: don't let HERO fully monopolize the viewport */
-  .hero{ display:flex; flex-direction:column; justify-content:center; min-height:42vh; max-height:56vh; }
-  @media (max-height:740px){ .hero{ min-height:38vh; max-height:50vh; } }
-  .scroll-hint{ position:absolute; left:50%; bottom:.35rem; transform:translateX(-50%); font-size:1rem; color:var(--muted); text-decoration:none; animation:hint-bounce 1.8s infinite; opacity:.9; }
-  @keyframes hint-bounce{ 0%,100%{ transform:translate(-50%,0) } 50%{ transform:translate(-50%,.25rem) } }
-</style>
+  <!-- CSS -->
+  <link rel="preload" href="/assets/css/app.css" as="style">
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
   <div class="wrap">
@@ -94,7 +21,7 @@
         <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録</a>
       </div>
       <a href="#calendarQuote" class="scroll-hint" aria-label="下へ">▼</a>
-</section>
+    </section>
 
     <!-- ===== Quick character choose ===== -->
     <section class="card" aria-labelledby="chooseCharacter">
@@ -110,35 +37,30 @@
     <!-- ===== Result ===== -->
     <section id="result" class="card" aria-live="polite" style="display:none">
       <div class="label">今日の結果</div>
-      <div class="result" id="resultBox">
-        <!-- JS inject -->
-      </div>
+      <div class="result" id="resultBox"><!-- JS inject --></div>
     </section>
 
-
-<section id="calendarQuote" class="card" aria-live="polite">
-  <div class="label">銀竜暦カレンダー</div>
-  <div class="cal-head" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between;">
-    <button class="pill" id="btnPrevDay" aria-label="前日へ">← 前日</button>
-    <div class="cal-date" id="calDate" role="heading" aria-level="2" style="font-weight:700;letter-spacing:.02em;"></div>
-    <button class="pill" id="btnNextDay" aria-label="翌日へ">翌日 →</button>
-  </div>
-  <div class="cal-sub" id="calHoliday" style="margin-top:.25rem;color:var(--muted)"></div>
-  <div class="cal-quote" id="calQuote" style="margin-top:.75rem">
-    <blockquote style="margin:0;font-size:1.05rem;line-height:1.6">
-      <span id="quoteText" class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:60%;min-height:1.2em"> </span>
-    </blockquote>
-    <div id="quoteAuthor" class="meta" style="margin-top:.375rem">
-      <span class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:8rem;min-height:1em"> </span>
-    </div>
-  </div>
-  <div class="pills" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
-    <button class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
-  </div>
-</section>
-
-
-
+    <!-- ===== Calendar & Quote ===== -->
+    <section id="calendarQuote" class="card" aria-live="polite">
+      <div class="label">銀竜暦カレンダー</div>
+      <div class="cal-head" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between;">
+        <button class="pill" id="btnPrevDay" aria-label="前日へ">← 前日</button>
+        <div class="cal-date" id="calDate" role="heading" aria-level="2" style="font-weight:700;letter-spacing:.02em;"></div>
+        <button class="pill" id="btnNextDay" aria-label="翌日へ">翌日 →</button>
+      </div>
+      <div class="cal-sub" id="calHoliday" style="margin-top:.25rem;color:var(--muted)"></div>
+      <div class="cal-quote" id="calQuote" style="margin-top:.75rem">
+        <blockquote style="margin:0;font-size:1.05rem;line-height:1.6">
+          <span id="quoteText" class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:60%;min-height:1.2em"> </span>
+        </blockquote>
+        <div id="quoteAuthor" class="meta" style="margin-top:.375rem">
+          <span class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:8rem;min-height:1em"> </span>
+        </div>
+      </div>
+      <div class="pills" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
+      </div>
+    </section>
 
     <!-- ===== Teasers / Content hubs ===== -->
     <section class="grid" aria-label="物語と食卓">
@@ -189,204 +111,17 @@
 
   <!-- Bottom Nav -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
-  <div class="bn-grid">
-    <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-    <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
-    <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
-  </div>
-</nav>
-
-<script>
-// ===== Config / Constants =====
-const JSON_PATH = "./fortune_messages.json";
-const FALLBACK = {
-  meta:{version:2, characters:["ルナル","アラン","リリア"], free_categories:["総合"]},
-  weights:{"5":18,"4":32,"3":30,"2":15,"1":5},
-  categories:[
-    {key:"総合",paid:false},{key:"健康",paid:true},{key:"平穏",paid:true},{key:"生活",paid:true},
-    {key:"対人",paid:true},{key:"成長",paid:true},{key:"目的",paid:true},{key:"自由",paid:true},
-    {key:"娯楽",paid:true},{key:"評価",paid:true}
-  ],
-  messages:{
-    "総合":{
-      "5":{ "ルナル":"今日は追い風だ遠慮なく行こう","アラン":"思った以上に進む日素直に踏み出そう","リリア":"光があなたを包む日小さな奇跡を拾って" },
-      "4":{ "ルナル":"整っているいつもより一歩深く","アラン":"流れは良好段取りを意識すると吉","リリア":"澄んだ空気迷ったら軽い方を" },
-      "3":{ "ルナル":"平常運足場を固めておけ","アラン":"可もなく不可もなく基本を丁寧に","リリア":"静かな日無理せず整えて" },
-      "2":{ "ルナル":"焦りは不要今日は守りを優先","アラン":"無理は禁物小目標で十分","リリア":"休む勇気を心に余白を" },
-      "1":{ "ルナル":"退くも勇明日に力を残せ","アラン":"今日は小休止最低限でOK","リリア":"やさしく過ごして自分を責めないで" }
-    }
-  }
-};
-
-let META=null, MESSAGES=null, WEIGHTS=null, CATEGORIES=null, CHARACTERS=null, FREE_KEYS=new Set(["総合"]), isPremium=false;
-
-// ===== Utils =====
-function $(sel, el=document){ return el.querySelector(sel); }
-function esc(s){ return String(s||"").replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
-function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; } }
-function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
-function starText(n){ return "★★★★★☆☆☆☆☆".slice(5-n,10-n); }
-function pickByWeights(weights, seed){ const rng=mulberry32(hashStr(seed)); const entries=Object.entries(weights); const total=entries.reduce((s,[,w])=>s+Number(w),0); let r=rng()*total; for(const [star,w] of entries){ if(r<w) return Number(star); r-=w; } return 3; }
-
-// Tiny analytics hooks (GA4連携の置き換え想定)
-function track(name, detail){ document.dispatchEvent(new CustomEvent('track', {detail:{name, ...detail}})); }
-
-// ===== Render Result =====
-function renderResult(char){
-  const res = $('#result');
-  const box = $('#resultBox');
-  res.style.display = 'block';
-
-  const seed = `${todayKey()}|${char}|総合`;
-  const stars = pickByWeights(WEIGHTS, seed);
-  const msg = (MESSAGES?.["総合"]?.[String(stars)]?.[char]) || '今日の言葉は準備中です';
-
-  const premiumList = CATEGORIES.filter(c=>c.paid);
-  const paidHtml = premiumList.map(c=>`<li class="lock">${esc(c.key)}：<span aria-hidden="true">🔒</span> 有料で開放</li>`).join('');
-
-  box.innerHTML = `
-    <div style="display:flex; gap:.75rem; align-items:center; margin-bottom:.25rem">
-      <div style="width:2.75rem; height:2.75rem; border-radius:50%; border:1px solid #2b3559; background:#10162a; display:flex; align-items:center; justify-content:center">${esc(char.slice(0,2))}</div>
-      <div>
-        <div class="stars" aria-label="運勢">${starText(stars)}</div>
-        <div style="color:#e8eeff; font-size:1rem; margin-top:.125rem">${esc(msg)}</div>
-      </div>
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
     </div>
-    <hr style="border:none; border-top:1px solid var(--line); margin:.75rem 0" />
-    <div class="meta">無料会員：総合のみ表示 / 有料会員：9カテゴリが毎日開放</div>
-    <ul style="margin:.25rem 0 0 .9rem; padding:0">${paidHtml}</ul>
-    <div style="margin-top:.75rem; display:flex; gap:.5rem; flex-wrap:wrap">
-      <a href="./signup.html" class="btn" data-evt="upsell">有料プランを見る</a>
-    </div>
-  `;
-}
+  </nav>
 
-// ===== Init JSON =====
-function initWithJson(json){
-  META=json.meta||{}; WEIGHTS=json.weights||FALLBACK.weights; MESSAGES=json.messages||FALLBACK.messages; CATEGORIES=json.categories||FALLBACK.categories; CHARACTERS= (json.meta?.characters)||FALLBACK.meta.characters; if(Array.isArray(json.meta?.free_categories)) FREE_KEYS=new Set(json.meta.free_categories);
-}
-
-fetch(JSON_PATH).then(r=>r.ok?r.json():Promise.reject('fetch not ok')).then(initWithJson).catch(()=>initWithJson(FALLBACK));
-
-// ===== Events =====
-$('#ctaGet').addEventListener('click', ()=>{ track('cta_primary',{}); const first = CHARACTERS?.[0]||'ルナル'; renderResult(first); window.scrollTo({top:$('#result').offsetTop - 12, behavior:'smooth'}); });
-$('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest('[data-char]'); if(!btn) return; const c = btn.getAttribute('data-char'); track('char_pick',{char:c}); renderResult(c); window.scrollTo({top:$('#result').offsetTop - 12, behavior:'smooth'}); });
-
-</script>
-
-<script>
-(function(){
-  // ===== Date helpers =====
-  const pad = n => String(n).padStart(2,'0');
-  const fmtJP = d => {
-    const y=d.getFullYear(), m=d.getMonth()+1, da=d.getDate();
-    const w = ['日','月','火','水','木','金','土'][d.getDay()];
-    return `${y}年${m}月${da}日（${w}）`;
-  };
-  const keyMMDD = d => `${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-
-  // ===== Japanese Holidays (basic + substitute) =====
-  function vernalEquinoxDay(year){
-    return Math.floor(20.8431 + 0.242194*(year-1980)) - Math.floor((year-1980)/4);
-  }
-  function autumnalEquinoxDay(year){
-    return Math.floor(23.2488 + 0.242194*(year-1980)) - Math.floor((year-1980)/4);
-  }
-  function nthWeekdayOfMonth(year, month, weekday, nth){
-    const first = new Date(year, month-1, 1);
-    const add = (weekday - first.getDay() + 7) % 7;
-    return 1 + add + 7*(nth-1);
-  }
-  function japaneseHolidayCore(y,m,d){
-    if (m===1 && d===1) return '元日';
-    if (m===2 && d===11) return '建国記念の日';
-    if (m===2 && d===23) return '天皇誕生日';
-    if (m===4 && d===29) return '昭和の日';
-    if (m===5 && d===3) return '憲法記念日';
-    if (m===5 && d===4) return 'みどりの日';
-    if (m===5 && d===5) return 'こどもの日';
-    if (m===8 && d===11) return '山の日';
-    if (m===11 && d===3) return '文化の日';
-    if (m===11 && d===23) return '勤労感謝の日';
-    if (m===1 && d===nthWeekdayOfMonth(y,1,1,2)) return '成人の日';
-    if (m===7 && d===nthWeekdayOfMonth(y,7,1,3)) return '海の日';
-    if (m===9 && d===nthWeekdayOfMonth(y,9,1,3)) return '敬老の日';
-    if (m===10 && d===nthWeekdayOfMonth(y,10,1,2)) return 'スポーツの日';
-    if (m===3 && d===vernalEquinoxDay(y)) return '春分の日';
-    if (m===9 && d===autumnalEquinoxDay(y)) return '秋分の日';
-    return null;
-  }
-  function japaneseHoliday(date){
-    const y=date.getFullYear(), m=date.getMonth()+1, d=date.getDate();
-    const core = japaneseHolidayCore(y,m,d);
-    if (core) return core;
-    const yd = new Date(date); yd.setDate(d-1);
-    if (yd.getDay()===0 && japaneseHolidayCore(yd.getFullYear(), yd.getMonth()+1, yd.getDate())) return '振替休日';
-    return null;
-  }
-
-  // ===== DOM refs =====
-  const elDate = document.getElementById('calDate');
-  const elHoliday = document.getElementById('calHoliday');
-  const elQuoteText = document.getElementById('quoteText');
-  const elQuoteAuthor = document.getElementById('quoteAuthor');
-  const $section = document.getElementById('calendarQuote');
-  const btnPrev = document.getElementById('btnPrevDay');
-  const btnNext = document.getElementById('btnNextDay');
-  const btnToday = document.getElementById('btnToday');
-
-  let quotes = null;
-  let current = new Date();
-
-  // Paint immediately (date + holiday), hydrate quote later
-  render();
-  fetch('./quotes.json', {cache:'no-store'})
-    .then(r=>r.json()).then(data=>{ quotes = data; render(); })
-    .catch(()=>{ quotes = {"01-01":[{"text":"（名言データが見つかりません）","author":"銀竜録"}]}; render(); });
-
-  function render(){
-    const key = keyMMDD(current);
-    const list = (quotes && (quotes[key] || quotes[key.toLowerCase()] || quotes[key.replace(/^0/,'').replace('-0','-')])) || [];
-    const item = list[0] || {text:"この日は静穏竜はただ翼を休める", author:"銀竜録"};
-    elDate.textContent = fmtJP(current);
-    const holi = japaneseHoliday(current);
-    elHoliday.textContent = holi ? `祝日：${holi}` : '';
-    elQuoteText.classList.remove('skeleton');
-    elQuoteText.textContent = item.text;
-    elQuoteAuthor.innerHTML = `— ${item.author}`;
-  }
-
-  // Nav
-  btnPrev.addEventListener('click', ()=>{ current.setDate(current.getDate()-1); render(); });
-  btnNext.addEventListener('click', ()=>{ current.setDate(current.getDate()+1); render(); });
-  btnToday.addEventListener('click', ()=>{ current = new Date(); render(); });
-
-  // Swipe
-  let x0=null,y0=null;
-  $section.addEventListener('touchstart', e=>{ const t=e.touches[0]; x0=t.clientX; y0=t.clientY; }, {passive:true});
-  $section.addEventListener('touchend', e=>{
-    if(x0===null) return;
-    const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0;
-    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ if(dx<0) current.setDate(current.getDate()+1); else current.setDate(current.getDate()-1); render(); }
-    x0=y0=null;
-  });
-})();
-  (function(){
-  // 現在のファイル名（ルートアクセス時は index.html とみなす）
-  var path = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.bottom-nav a').forEach(function(a){
-    var href = a.getAttribute('href') || '';
-    if (href.endsWith(path)) {
-      a.classList.add('bn-accent');              // 既存の強調クラスを再利用
-      a.setAttribute('aria-current','page');     // アクセシビリティ対応
-    } else {
-      a.classList.remove('bn-accent');
-      a.removeAttribute('aria-current');
-    }
-  });
-})();
-</script>
-
+  <!-- JS -->
+  <script type="module" src="/assets/js/core.js" defer></script>
+  <script type="module" src="/assets/js/ga4.js" defer></script>
+  <script type="module" src="/assets/js/nav.js" defer></script>
+  <script type="module" src="/assets/js/index.js" defer></script>
 </body>
 </html>
