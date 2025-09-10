@@ -74,7 +74,7 @@ $filters.addEventListener("click", (e) => {
 });
 
 // ↓↓↓ 参照先を data/ 配下に変更
-fetch("./assets/data/wallpapers.json?v=20250910")
+fetch("./assets/data/wallpapers.json")
   .then(r => r.json())
   .then(json => { if(!Array.isArray(json)) throw 0; ALL = json.map(normalize); buildChips(); draw(); })
   .catch(() => { $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>'; });
