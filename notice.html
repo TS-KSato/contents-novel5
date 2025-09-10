@@ -4,44 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>お知らせ｜運命の銀竜暦</title>
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:#0b0f14;color:#e9f1ff}
-    .wrap{max-width:720px;margin:auto;padding:16px}
-    h1{font-size:1.3rem;margin:0 0 16px}
-    .notice{border:1px solid rgba(141,208,255,.25);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#121821}
-    .title{padding:12px 14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-    .title:hover{background:rgba(141,208,255,.15)}
-    .body{display:none;padding:12px 14px;border-top:1px dashed rgba(141,208,255,.25);line-height:1.6}
-    .open .body{display:block}
-    .open .title::after{content:"▲"}
-    .title::after{content:"▼";font-size:.8rem;color:#97a7c2}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
-    .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
-    .bn-btn{display:flex;flex-direction:column;align-items:center;padding:10px 0;color:#e9f1ff;text-decoration:none}
-    .bn-btn.bn-accent{background:rgba(141,208,255,.15)}
-  </style>
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <link rel="stylesheet" href="./assets/css/notice.css">
 </head>
 <body>
   <main class="wrap">
     <h1>お知らせ</h1>
 
     <section class="notice">
-      <div class="title">サイト公開のお知らせ</div>
+      <button class="title" type="button">サイト公開のお知らせ</button>
       <div class="body">「運命の銀竜暦」へようこそ。正式に公開を開始しました。</div>
     </section>
 
     <section class="notice">
-      <div class="title">メンテナンス予定</div>
+      <button class="title" type="button">メンテナンス予定</button>
       <div class="body">9月10日 0:00〜6:00 に定期メンテナンスを実施します。</div>
     </section>
 
     <section class="notice">
-      <div class="title">新コンテンツ追加</div>
+      <button class="title" type="button">新コンテンツ追加</button>
       <div class="body">「竜の食卓」に新しいレシピが追加されました。ぜひご覧ください。</div>
     </section>
   </main>
 
-  <!-- Bottom Nav -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
       <a class="bn-btn" href="./index.html">🏠 ホーム</a>
@@ -50,19 +35,7 @@
     </div>
   </nav>
 
-  <script>
-    // タイトルクリックで開閉
-    document.querySelectorAll('.notice .title').forEach(t=>{
-      t.addEventListener('click',()=>t.parentElement.classList.toggle('open'))
-    });
-    // 現在ページをハイライト
-    (function(){
-      var path = location.pathname.split('/').pop() || 'index.html';
-      document.querySelectorAll('.bottom-nav a').forEach(function(a){
-        var href = a.getAttribute('href')||'';
-        if(href.endsWith(path)) a.classList.add('bn-accent');
-      });
-    })();
-  </script>
+  <script type="module" src="./assets/js/nav.js" defer></script>
+  <script type="module" src="./assets/js/notice.js" defer></script>
 </body>
 </html>
