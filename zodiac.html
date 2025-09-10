@@ -4,175 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜星座別診断表</title>
-  <meta name="description" content="12星座の性質をエテルナリア世界観で読み解く固定ページ。ロア（短い伝承）と現代文の診断を掲載。必要に応じて詳細属性を参照できます。">
-  <style>
-    /* ===== ベース（スマホ前提） ===== */
-    html { font-size: 16px; }
-    :root{
-      --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
-      --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
-      --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
-      --fab-shadow: 0 12px 24px rgba(0,0,0,.35);
-     --bn-h: 56px; }
-    *{ box-sizing:border-box }
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-      line-height:1.7; font-size:1rem; -webkit-text-size-adjust:100%;
-    }
-    .wrap{ max-width:40rem; margin:0 auto; padding: 1.25rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
-
-    /* ===== ヘッダー（最小限） ===== */
-    header{ text-align:center; padding:.25rem .5rem 1rem; }
-    header h1{ margin:.25rem 0 .25rem; font-size:clamp(1.25rem,6vw,1.6rem); letter-spacing:.02em; }
-    .lead{
-      color:var(--muted); font-size:.9375rem; margin:.25rem auto 0;
-      max-width:34rem;
-    }
-
-    /* ===== カード（1カラム固定） ===== */
-    .grid{ display:grid; gap:.75rem; grid-template-columns:1fr; }
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:var(--pad);
-    }
-    .z-head{ display:flex; align-items:center; gap:.5rem; margin-bottom:.25rem }
-    .z-rune{ font-size:1.25rem } /* 装飾記号 */
-    .z-name{ font-weight:800; font-size:1.1rem; letter-spacing:.02em }
-    .spacer{ flex:1 }
-    .element-badge{
-      display:inline-flex; align-items:center; gap:.25rem;
-      padding:.125rem .5rem; border-radius:999px; border:1px solid var(--line);
-      font-size:.75rem; color:#cfe1ff; background:#11172a;
-    }
-    .lore{ margin-top:.35rem; color:#e0e7ff; font-size:.975rem }
-    .diagnosis{
-      margin-top:.45rem;
-      font-size:.92rem;
-      line-height:1.65;
-      color:#cfe1ff;
-    }
-
-    /* 詳細属性は折りたたみで二次情報化（視認負荷を軽減） */
-    details.meta{
-      margin-top:.45rem; background:#101423; border:1px solid var(--line);
-      border-radius:.6rem; padding:.45rem .6rem;
-    }
-    details.meta summary{
-      cursor:pointer; list-style:none; font-weight:700; font-size:.9rem;
-    }
-    details.meta summary::-webkit-details-marker{ display:none }
-    .pairs{ display:flex; gap:.375rem; flex-wrap:wrap; margin:.5rem 0 .2rem }
-    .badge{
-      display:inline-flex; align-items:center; gap:.25rem;
-      padding:.125rem .5rem; border-radius:999px; border:1px solid var(--line);
-      font-size:.75rem; color:#cfe1ff; background:#0f1424;
-    }
-
-    /* ===== 下部ツール（ガイド＆フィルター） ===== */
-    .tools{
-      margin-top:1.25rem;
-      background:#0e1322; border:1px solid var(--line);
-      border-radius:var(--radius); padding:.75rem .75rem;
-    }
-    .tools details{ margin:.25rem 0 }
-    .tools summary{ cursor:pointer; font-weight:800 }
-    .guide-body{ padding:.35rem 0 0; color:#d9e2ff; font-size:.9375rem }
-    .controls{
-      display:grid; grid-template-columns:1fr; gap:.5rem; margin-top:.5rem;
-    }
-    select, button{
-      font-size:1rem; min-height:var(--tap); border-radius:.625rem; border:1px solid var(--line);
-      background:#1a2034; color:#fff; padding:.5rem .75rem;
-    }
-    button{ cursor:pointer }
-    button:focus-visible, select:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
-    .note{ margin-top:.65rem; font-size:.85rem; color:var(--muted); }
-
-    /* ===== フッター ===== */
-    footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .5rem }
-    .footnav{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin:.5rem 0 0 }
-    .pill{
-      display:inline-flex; align-items:center; justify-content:center;
-      color:var(--accent); text-decoration:none; background:#11172a; border:1px solid var(--line);
-      padding:.5rem .75rem; border-radius:999px; font-size:.85rem; min-height:2.25rem;
-    }
-    .pill:hover{ background:#18213a }
-
-    /* ===== フローティング：先頭へ戻る ===== */
-    .fab{
-      position:fixed; right:1rem; bottom:1.25rem; z-index:10;
-      display:none; /* 初期は非表示、一定量スクロールで表示 */
-      min-width:3rem; min-height:3rem; border-radius:999px;
-      background:var(--accent-2); color:#fff; border:1px solid var(--accent-2-b);
-      box-shadow:var(--fab-shadow);
-      align-items:center; justify-content:center;
-    }
-    .fab[aria-hidden="false"]{ display:flex }
-    .fab svg{ width:1.25rem; height:1.25rem }
-
-    @media (prefers-reduced-motion:no-preference){
-      .fab{ transition:transform .2s ease, opacity .2s ease }
-      .fab[aria-hidden="true"]{ opacity:0; transform:translateY(6px) }
-      .fab[aria-hidden="false"]{ opacity:1; transform:translateY(0) }
-    }
-
-    /* 印刷時は余計なUIを除去 */
-    @media print{
-      .tools, .fab, .footnav { display:none !important }
-      body{ background:#fff; color:#000 }
-      .card{ border-color:#999 }
-    }
-  
-    /* === Bottom nav (common) === */
-    .bottom-nav{ min-height: var(--bn-h); 
-      position:fixed; left:0; right:0; bottom:0; z-index:999;
-      background: color-mix(in srgb, var(--card) 88%, transparent);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      border-top:1px solid var(--line);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-    .bn-btn{
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      appearance:none; background:none; border:0; color:var(--muted); text-decoration:none;
-      padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .bn-btn:active{ transform: translateY(1px); }
-    .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; display:inline-flex; align-items:center; justify-content:center; }
-    .bn-accent{ color:#fff; }
-    @media (prefers-reduced-motion: reduce){ .bn-btn:active{ transform:none } }
-    @media print{ .bottom-nav{ display:none !important } }
-    
-  
-  #toTop{
-    position: fixed;
-    right: 1rem;
-    bottom: calc(var(--bn-h, 56px) + env(safe-area-inset-bottom, 0px) + 16px);
-    z-index: 1001;
-  }
-  </style>
+  <meta name="description" content="12星座の性質をエテルナリア世界観で読み解く固定ページ。">
+  <link rel="stylesheet" href="./assets/css/zodiac.css">
 </head>
 <body>
   <div class="wrap">
     <header id="top">
       <h1>星座別診断表</h1>
-      <p class="lead">
-        ここはエテルナリアの星占術師による星座診断です。<br>
-        星座から導いたあなたの属性をロア（短い伝承）から知ることができます。
-      </p>
+      <p class="lead">ここはエテルナリアの星占術師による星座診断です。<br>星座から導いたあなたの属性をロア（短い伝承）から知ることができます。</p>
     </header>
 
-    <!-- 一覧：常に1カラム。主要情報のみ先に見せる -->
     <main id="content" aria-live="polite">
       <div id="grid" class="grid"></div>
     </main>
 
-    <!-- 下部：用語ガイド＋フィルター（折りたたみ）＋注意書き（1回だけ） -->
     <section class="tools" aria-label="用語ガイドと絞り込み">
       <details id="filterPanel">
         <summary>🔎 星座を絞り込む</summary>
@@ -193,203 +38,41 @@
             <option value="">守護存在：すべて</option>
             <option>銀竜</option><option>人間</option><option>妖精</option>
           </select>
-          <button id="reset">リセット</button>
+          <button id="reset" type="button">リセット</button>
         </div>
       </details>
 
       <details class="guide">
         <summary>📘 用語ガイド</summary>
         <div class="guide-body">
-          <p><strong>性質</strong>：行いを選ぶ中核。<em>挑戦型</em>（自力で切り拓く）／<em>秩序型</em>（秩序で積み上げる）／<em>共感型</em>（心の波に従う）／<em>洞察型</em>（理解と洞察で導く）。</p>
-          <p><strong>領域</strong>：価値を見出す領域。<em>人の世界</em>（人と働き）／<em>自然の世界</em>（自然と循環）／<em>知の世界</em>（理と術の探究）／<em>心の世界</em>（祈りと超越）。</p>
-          <p><strong>役割</strong>：場で現れやすい役回り。<em>開拓者</em>（潮を作る）／<em>守り手</em>（流れを保つ）。</p>
-          <p><strong>親和元素</strong>：性質が調和しやすい基調（炎／土／風／水）。</p>
-          <p><strong>守護存在</strong>：<em>銀竜・人間・妖精</em>のいずれに近い響きを持つか。</p>
+          <p><strong>性質</strong>：行いを選ぶ中核。挑戦型／秩序型／共感型／洞察型。</p>
+          <p><strong>領域</strong>：価値を見出す領域。人／自然／知／心の世界。</p>
+          <p><strong>役割</strong>：場で現れやすい役回り。開拓者／守り手。</p>
+          <p><strong>親和元素</strong>：炎／土／風／水。</p>
+          <p><strong>守護存在</strong>：銀竜・人間・妖精のいずれに近い響きか。</p>
         </div>
-        <p class="note">
-          ※ このページはエテルナリア世界の設定をもとにした「世界観を紹介する参考資料」です。<br>
-          日替わり占いや有料の占い結果とは別に用意されています。
-        </p>
+        <p class="note">※ このページは世界観の参考資料です。日替わり占いや有料結果とは別です。</p>
       </details>
     </section>
 
     <footer>© 運命の銀竜暦</footer>
   </div>
 
-  <!-- 先頭へ戻る（フローティング） -->
-  <button id="toTop" class="fab" type="button" aria-label="ページ先頭へ" aria-hidden="true" onclick="scrollToTop()">
+  <button id="toTop" class="fab" type="button" aria-label="ページ先頭へ" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
 
-  <script>
-    // ===== データ（固定記述＋現代文診断） =====
-    const ZODIACS = [
-      { id:"aries", 記号:"⟡", 星座:"牡羊座", 性質:"挑戦型", 領域:"人の世界", 役割:"開拓者", 親和元素:"炎", 守護存在:"銀竜",
-        ロア:"額角の尖光のごとく始まりを告げる。ためらいを裂き、停滞を切り開く。",
-        診断:"属性は火。性格は先駆的で一直線、思い立ったら素早く動ける行動派です。周囲を鼓舞する熱量が強みですが、拙速や衝動が雑さを生むことも。使命は「最初の一歩を示すこと」。小さくても成果の実感をこまめに積み、勢いを制御しながらチームの起点をつくると成功が加速します。" },
-      { id:"taurus", 記号:"⟐", 星座:"牡牛座", 性質:"秩序型", 領域:"自然の世界", 役割:"守り手", 親和元素:"土", 守護存在:"人間",
-        ロア:"踏み固めた轍は道となる。蓄えを耕し、実りの季を揺るがせない。",
-        診断:"属性は土。性格は安定志向で粘り強く、五感に根ざした現実感覚が武器。暮らしや資源を豊かに整える力に長けます。一方、慣れが頑固さや停滞の原因に。使命は「価値を耕し守ること」。自分のペースを尊重しつつ、節目の柔軟な舵切りを覚えるほど、蓄積が資産へと育ちます。" },
-      { id:"gemini", 記号:"⋇", 星座:"双子座", 性質:"洞察型", 領域:"人の世界", 役割:"開拓者", 親和元素:"風", 守護存在:"妖精",
-        ロア:"二つの声は風に乗る。離れても呼応し、遠きをひとつに結ぶ。",
-        診断:"属性は風。性格は好奇心旺盛で軽やか、情報を結び直すのが得意です。発想の切り替えが速く、言葉とネットワークで流れをつくれる人。散漫や浅読みになりやすい点に注意。使命は「知を循環させること」。要点を束ね共有し、役割を俊敏にシフトするほど、影響力が自然に増えます。" },
-      { id:"cancer", 記号:"☽", 星座:"蟹座", 性質:"共感型", 領域:"心の世界", 役割:"守り手", 親和元素:"水", 守護存在:"妖精",
-        ロア:"潮が抱く揺籃。傷を覆い、静かな祈りで夜を渡らせる。",
-        診断:"属性は水。性格は包容力があり、内側を整える守り手者。感情の機微に敏感で、安心して戻れる“基地”をつくれます。守りに偏ると殻に籠りがち。使命は「人と場を育むこと」。健やかな境界線を学び、必要なときに外へ一歩出る勇気を持つほど、あなたの優しさが循環を生みます。" },
-      { id:"leo", 記号:"✹", 星座:"獅子座", 性質:"挑戦型", 領域:"人の世界", 役割:"開拓者", 親和元素:"炎", 守護存在:"銀竜",
-        ロア:"焔は冠、誇りは旗。中心に立ち、光を分かつ。",
-        診断:"属性は火。性格は堂々とした創造者で、自己表現で周囲を照らす中心軸。称賛より自分の掲げる旗が原動力です。独善や過剰演出には注意。使命は「物語の主役を生き、光を分け合うこと」。観客ではなく仲間を増やし、役割を委ねるほど作品と影響力が大きく育っていきます。" },
-      { id:"virgo", 記号:"✶", 星座:"乙女座", 性質:"秩序型", 領域:"知の世界", 役割:"守り手", 親和元素:"土", 守護存在:"人間",
-        ロア:"穂は数えられ、頁は整う。細部の調律が全体を静かに正す。",
-        診断:"属性は土。性格は精緻で実務的、秩序立てて最適化する調律者。弱点の補修や品質向上が得意です。完璧主義は疲労と停滞のもと。使命は「小さな改善で全体を正すこと」。基準を“現実的な最善”に置き、区切りを設けて成果を外に渡すほど、信頼と評価が着実に育ちます。" },
-      { id:"libra", 記号:"⚖", 星座:"天秤座", 性質:"洞察型", 領域:"人の世界", 役割:"守り手", 親和元素:"風", 守護存在:"人間",
-        ロア:"片羽が沈めば、もう片羽が上がる。均衡の中点に留まる術を知る。",
-        診断:"属性は風。性格は対話的で調和志向、異なる立場の中点を見つける調停者。美意識と公正感覚が場の質を支えます。迎合や優柔不断には注意。使命は「良い関係の設計」。原則を明文化し、合意形成のプロセスを整えるほど、争点は澄み、信頼のネットワークが広がります。" },
-      { id:"scorpio", 記号:"⟀", 星座:"蠍座", 性質:"共感型", 領域:"心の世界", 役割:"開拓者", 親和元素:"水", 守護存在:"銀竜",
-        ロア:"深針は誓いを貫く。静かな熱が運命の布を結び替える。",
-        診断:"属性は水。性格は深く静かで、一点へ潜る集中力が武器。信義を重んじ、長い時間軸で変容を起こします。執着や秘密主義は孤立の種に。使命は「本質を貫き再生を導くこと」。信頼できる少数と深く連携し、節目で“手放す”選択を持つほど、飛躍の余白が生まれます。" },
-      { id:"sagittarius", 記号:"➹", 星座:"射手座", 性質:"洞察型", 領域:"自然の世界", 役割:"開拓者", 親和元素:"炎", 守護存在:"人間",
-        ロア:"遠矢は地平を越える。答えは遠く、歩は軽い。",
-        診断:"属性は火。性格は自由で楽観的、遠い可能性へと矢を放つ探求者。枠を越える旅が知恵を運びます。粗さや飽きっぽさには注意。使命は「意味を見つけ共有すること」。仮説→検証→物語化の循環を回し、経験を学びへ翻訳するほど、人を動かす力に変わります。" },
-      { id:"capricorn", 記号:"⟑", 星座:"山羊座", 性質:"秩序型", 領域:"人の世界", 役割:"開拓者", 親和元素:"土", 守護存在:"人間",
-        ロア:"古塔の段を一歩ずつ。責務を背に、頂へ至る蹄音は確か。",
-        診断:"属性は土。性格は責任感が強く、目標へ粘り強く登る実務派リーダー。制度・構造を作り、持続可能性を確立します。過重や硬直に注意。使命は「仕組みで成果を残すこと」。任せ方と休み方を設計し、長期視点のロードマップで着実に峰へ。信頼はあなたの最大資本です。" },
-      { id:"aquarius", 記号:"⌇", 星座:"水瓶座", 性質:"洞察型", 領域:"知の世界", 役割:"守り手", 親和元素:"風", 守護存在:"妖精",
-        ロア:"星水を分かち合う器。常の形を替え、新しき流れを注ぐ。",
-        診断:"属性は風。性格は独創的でフラット、常識を再設計する改革者。テクノロジーと共同体への感度が高い。孤高や理屈先行に注意。使命は「次の当たり前を作ること」。オープンな仕組みと参加のルールを整えるほど、変化が広がり、個の発明が社会の基盤へ繋がります。" },
-      { id:"pisces", 記号:"Ͽ", 星座:"魚座", 性質:"共感型", 領域:"自然の世界", 役割:"守り手", 親和元素:"水", 守護存在:"妖精",
-        ロア:"夢と現の境を泳ぐ歌い手。やわらかな共鳴が固きをほどく。",
-        診断:"属性は水。性格は共感的で境界が柔らかく、芸術的・霊的領域に強み。癒やしと受容で固さをほどきます。曖昧さや依存には注意。使命は「つながりを癒やし、想像力で橋を架けること」。休息と自己境界を意識するほど、優しさが持続し、創造性も澄んでいきます。" }
-    ];
-
-    // ===== 要素参照 =====
-    const grid = document.getElementById('grid');
-    const fP = document.getElementById('fPillar');
-    const fR = document.getElementById('fRealm');
-    const fO = document.getElementById('fRole');
-    const fK = document.getElementById('fKin');
-    const btnReset = document.getElementById('reset');
-    const fab = document.getElementById('toTop');
-
-    // ===== カードHTML（ロア＋現代文診断＋詳細属性） =====
-    function cardHTML(z){
-      return `
-        <article id="${z.id}" class="card" tabindex="0" aria-label="${z.星座}の記述">
-          <div class="z-head">
-            <div class="z-rune" aria-hidden="true">${z.記号}</div>
-            <div class="z-name">${z.星座}</div>
-            <span class="spacer"></span>
-            <span class="element-badge" title="親和元素">${z.親和元素}</span>
-          </div>
-
-          <div class="lore">${z.ロア}</div>
-          <p class="diagnosis">${z.診断}</p>
-
-          <details class="meta">
-            <summary>詳しい属性を見る</summary>
-            <div class="pairs">
-              <span class="badge" title="性質">性質：${z.性質}</span>
-              <span class="badge" title="領域">領域：${z.領域}</span>
-              <span class="badge" title="役割">役割：${z.役割}</span>
-              <span class="badge" title="守護存在">守護存在：${z.守護存在}</span>
-            </div>
-          </details>
-        </article>
-      `;
-    }
-
-    // ===== フィルター =====
-    function matchFilter(z){
-      if (fP?.value && z.性質 !== fP.value) return false;
-      if (fR?.value && z.領域 !== fR.value) return false;
-      if (fO?.value && z.役割   !== fO.value) return false;
-      if (fK?.value && z.守護存在   !== fK.value) return false;
-      return true;
-    }
-
-    function render(){
-      const items = ZODIACS.filter(matchFilter).map(cardHTML).join('');
-      grid.innerHTML = items || `<div class="lead" style="text-align:center">該当する星座がありません。</div>`;
-    }
-
-    // イベント
-    [fP,fR,fO,fK].forEach(el=> el?.addEventListener('change', render));
-    btnReset?.addEventListener('click', ()=>{ if(!fP) return; fP.value=""; fR.value=""; fO.value=""; fK.value=""; render(); });
-
-    // ===== 先頭へ戻る（スクロールに応じて表示） =====
-    const showFabAt = 360; // px
-    function onScroll(){
-      const show = window.scrollY > showFabAt;
-      fab.setAttribute('aria-hidden', show ? 'false' : 'true');
-    }
-    function scrollToTop(){
-      window.scrollTo({ top:0, behavior:'smooth' });
-    }
-    window.addEventListener('scroll', onScroll, { passive:true });
-
-    // 初期化
-    render();
-    onScroll(); // 初期の可視状態更新
-  </script>
-
-  <!-- Bottom Nav -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
     <div class="bn-grid">
-      <a class="bn-btn" data-evt="nav_bottom_home" href="./index.html" aria-label="ホーム">
-        <span class="bn-icon" aria-hidden="true">🏠</span><span>ホーム</span>
-      </a>
-      <a class="bn-btn" data-evt="nav_bottom_notice" href="./notice.html" aria-label="お知らせ">
-        <span class="bn-icon" aria-hidden="true">📣</span><span>お知らせ</span>
-      </a>
-      <a class="bn-btn" data-evt="nav_bottom_mypage" href="./mypage.html" aria-label="マイページ">
-        <span class="bn-icon" aria-hidden="true">👤</span><span>マイページ</span>
-      </a>
+      <a class="bn-btn" data-evt="nav_bottom_home" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" data-evt="nav_bottom_notice" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" data-evt="nav_bottom_mypage" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
     </div>
   </nav>
 
-
-<script>
-(function(){
-  // 現在のファイル名（空/ディレクトリの場合は index.html 扱い）
-  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  document.querySelectorAll('.bottom-nav a.bn-btn').forEach(function(a){
-    var href = (a.getAttribute('href') || '').toLowerCase();
-    if (href && (href === file || (file === '' && href.indexOf('index.html') !== -1))) {
-      a.classList.add('bn-accent');
-      a.setAttribute('aria-current','page');
-    } else {
-      a.classList.remove('bn-accent');
-      a.removeAttribute('aria-current');
-    }
-    // 簡易イベントフック（必要に応じて差し替え）
-    a.addEventListener('click', function(){ try { window.gtag && gtag('event','nav_click',{ name: a.dataset.evt }); } catch(e){} });
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  function setBottomNavHeight(){
-    var nav = document.querySelector('.bottom-nav');
-    if(!nav) return;
-    var h = nav.offsetHeight || 56;
-    document.documentElement.style.setProperty('--bn-h', h + 'px');
-  }
-  window.addEventListener('load', setBottomNavHeight, { once: true });
-  window.addEventListener('resize', setBottomNavHeight);
-  window.addEventListener('orientationchange', setBottomNavHeight);
-  // MutationObserver in case nav content changes
-  var nav = document.querySelector('.bottom-nav');
-  if(nav && 'MutationObserver' in window){
-    new MutationObserver(setBottomNavHeight).observe(nav, { childList: true, subtree: true });
-  }
-})();
-</script>
-
+  <script type="module" src="./assets/js/zodiac.js" defer></script>
 </body>
 </html>
-

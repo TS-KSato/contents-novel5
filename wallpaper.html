@@ -5,148 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>壁紙一覧｜運命の銀竜暦</title>
 <meta name="description" content="銀竜世界の壁紙をダウンロード" />
-<style>
-:root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto}
-header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
-.title{font-weight:800;font-size:18px}
-.filters{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-.chip{padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
-.chip.active{background:#23304a;color:white;border-color:#38507a}
-main{padding:12px 12px 84px}
-.card{background:var(--card);border:1px solid #212836;border-radius:16px;margin-bottom:12px;overflow:hidden}
-.hero{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,#263145,#3f5c8a)}
-.wrap{padding:12px}
-.name{font-weight:800}
-.cap{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.6}
-.row{display:flex;gap:10px;align-items:center;margin-top:10px}
-.pill{font-size:11px;color:#cfe1ff;background:#213256;border:1px solid #34518a;padding:2px 8px;border-radius:999px}
-.btn{margin-left:auto;appearance:none;border:0;background:#3b6bd9;color:white;padding:10px 12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer}
-nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#0f131b;border-top:1px solid #232a39;display:grid;grid-template-columns:repeat(3,1fr)}
-nav.bottom a{display:grid;place-items:center;padding:12px 6px;color:#b9c4d6;text-decoration:none;font-size:12px}
-.note{color:#c8d4e8;font-size:12px;margin:6px 12px 0}
-</style>
+<link rel="stylesheet" href="./assets/css/wallpaper.css">
 </head>
 <body>
 <header>
-<div class="title">壁紙</div>
-<div class="filters" id="filters">
-<button class="chip" data-t="human">人</button>
-<button class="chip" data-t="elf">エルフ</button>
-<button class="chip" data-t="dragon">竜</button>
-<button class="chip" data-t="fairy">妖精</button>
-<button class="chip active" data-t="all">すべて</button>
-</div>
+  <div class="title">壁紙</div>
+  <div class="filters" id="filters"></div>
 </header>
 
-
-<main id="list"></main>
-
+<main id="list" aria-live="polite"></main>
 
 <nav class="bottom">
-<a href="index.html">ホーム</a>
-<a href="notice.html">お知らせ</a>
-<a href="mypage.html">マイページ</a>
+  <a href="./index.html">ホーム</a>
+  <a href="./notice.html">お知らせ</a>
+  <a href="./mypage.html">マイページ</a>
 </nav>
 
-
-<script>
-const ALLOWED_ARCH = new Set(["nature", "life"]);
-const TAG_ORDER    = ["dragon", "human", "elf", "fairy"];
-const ALLOWED_TAGS = new Set(TAG_ORDER);
-const $list    = document.getElementById("list");
-const $filters = document.getElementById("filters");
-let ALL = [];
-let active = "all";
-const jpTag = (t) => ({ dragon: "竜", human: "人", elf: "エルフ", fairy: "妖精" }[t] || t);
-const has   = (arr, v) => Array.isArray(arr) && arr.includes(v);
-function escapeHTML(s){
-  return String(s).replace(/[&<>"']/g, (m) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]));
-}
-
-function normalize(w){
-  const out = { ...w };
-
-  out.id      = String(out.id || "");
-  out.name    = String(out.name || "");
-  out.caption = String(out.caption || "");
-  out.url     = String(out.url || "");
-  out.aspect  = String(out.aspect || "");
-  out.paid    = Boolean(out.paid);
-
-  const a = String(out.archetype || "").toLowerCase();
-  out.archetype = ALLOWED_ARCH.has(a) ? a : "";
-
-  const tset = new Set(
-    (out.tags || [])
-      .map((t) => String(t).toLowerCase())
-      .filter((t) => ALLOWED_TAGS.has(t))
-  );
-  out.tags = TAG_ORDER.filter((t) => tset.has(t));
-
-  return out;
-}
-
-function buildChips(){
-  const presentTags = TAG_ORDER.filter((t) => ALL.some((w) => has(w.tags, t)));
-  const btn = (label, val) => `<button class="chip${active===val?" active":""}" data-t="${val}">${label}</button>`;
-  $filters.innerHTML =
-    btn("すべて", "all") +
-    btn("自然", "arch:nature") +
-    btn("生物", "arch:life") +
-    presentTags.map((t) => btn(jpTag(t), `tag:${t}`)).join("");
-}
-
-function draw(){
-  const rows = ALL.filter((w) => {
-    if (active === "all") return true;
-    if (active.startsWith("arch:")) return w.archetype === active.slice(5);
-    if (active.startsWith("tag:"))  return has(w.tags, active.slice(4));
-    return true;
-  });
-
-  $list.innerHTML = rows.map((w) => `
-<article class="card">
-  <img class="hero" src="${w.url}" alt="${escapeHTML(w.name)}" loading="lazy" decoding="async" />
-  <div class="wrap">
-    <div class="name">${escapeHTML(w.name)}</div>
-    <p class="cap">${escapeHTML(w.caption)}</p>
-    <div class="row">
-      ${w.archetype ? `<span class="pill">${w.archetype === "nature" ? "自然" : "生物"}</span>` : ""}
-      ${w.tags.slice(0,2).map((t) => `<span class="pill">${jpTag(t)}</span>`).join("")}
-      <a class="btn" href="${w.url}" download>${w.paid ? "購入後ダウンロード" : "ダウンロード"}</a>
-    </div>
-  </div>
-</article>`).join("");
-
-  // GA4（同意後のみ発火想定／存在チェック）
-  if (typeof window.gtagEvent === "function" && rows.length) {
-    window.gtagEvent("view_wallpaper", { count: rows.length });
-  }
-}
-
-// --- イベント：フィルタ切替 ---
-$filters.addEventListener("click", (e) => {
-  const b = e.target.closest(".chip");
-  if (!b) return;
-  active = b.dataset.t || "all";
-  // activeスタイル更新
-  $filters.querySelectorAll(".chip").forEach((x) => x.classList.toggle("active", x === b));
-  draw();
-});
-
-// --- データロード ---
-fetch("wallpapers.json")
-  .then((r) => r.json())
-  .then((json) => {
-    if (!Array.isArray(json)) throw new Error("invalid json");
-    ALL = json.map(normalize);
-    buildChips();
-    draw();
-  })
-  .catch(() => {
-    $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>';
-  });
-
-</script>
+<script type="module" src="./assets/js/wallpaper.js" defer></script>
+</body>
 </html>
