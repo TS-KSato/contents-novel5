@@ -533,6 +533,33 @@
       Avatar,
       renderArchetypeBox
     });
+    const ARCHETYPES = Object.freeze({
+  alan:  { id:'alan',  name:'アラン',  desc:'', av:'av-alan',  initials:'AL' },
+  drake: { id:'drake', name:'ドレイク',desc:'', av:'av-drake', initials:'DR' },
+  nester:{ id:'nester',name:'ネスター',desc:'', av:'av-nester',initials:'NE' },
+  lilia: { id:'lilia', name:'リリア',  desc:'', av:'av-lilia', initials:'LI' },
+  laila: { id:'laila', name:'ライラ',  desc:'', av:'av-laila', initials:'LA' }
+});
+
+// ===== 追加: 現在の元型を取得（localStorage の archetype_id を解決） =====
+function getArchetype(){
+  const id = ArchetypePath.ArchetypeStore.get();
+  return (id && ARCHETYPES[id]) ? ARCHETYPES[id] : null;
+}
+
+// ===== 追加: 初期化（表示の出し分け＆描画実行） =====
+function show(el, on){ if(el) el.hidden = !on; }
+
+function apply(){
+  const a = getArchetype();
+  show(document.getElementById('phase1'), !a);   // 未設定なら Phase1 を表示
+  show(document.getElementById('archetypeBox'), !!a);
+  show(document.getElementById('phase2'), !!a);  // 必要に応じて制御
+  if (a) ArchetypePath.renderArchetypeBox(a);    // ★ ここで描画
+}
+
+// DOM 準備後に実行
+document.addEventListener('DOMContentLoaded', apply);
   </script>
 
 </body>
