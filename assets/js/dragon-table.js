@@ -1,6 +1,6 @@
 // dragon-table.js — 竜の食卓（一覧 & 各キャラ）
 // 依存: core.js の esc, Avatar, nav.js(任意)
-import { esc, Avatar } from "/assets/js/core.js";
+import { esc, Avatar } from "./core.js";
 
 const JSON_PATH = "./recipe.json";
 

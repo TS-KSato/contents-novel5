@@ -1,6 +1,6 @@
 // archetype-path.js (ESM) — このページ専用の描画・イベント
-import { $, esc, ArchetypeStore, Avatar } from "/assets/js/core.js";
-import { Events } from "/assets/js/ga4.js";
+import { $, esc, ArchetypeStore, Avatar } from "./core.js";
+import { Events } from "./ga4.js";
 
 /* ====== 1) タイプ辞書（id -> 表示用） ====== */
 const ARCHETYPES = Object.freeze({
