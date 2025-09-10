@@ -110,10 +110,7 @@ function renderList(items){
     return;
   }
   const html = items.map(r => {
-    const initials = (r.character||"").slice(0,2) || "食";
-    const avatar = r.avatar
-      ? `<div class="avatar" style=\"background-image:url('${esc(r.avatar)}');\" aria-hidden=\"true\"></div>`
-      : `<div class=\"avatar fallback\" aria-hidden=\"true\">${esc(initials)}</div>`;
+    const avatar = avatarHTML(r.character, r.avatar);
 
     // パラメータ: id をクエリに付与（なければ title ハッシュを代替）
     const id = r.id != null ? String(r.id) : String(Math.abs(hashStr(r.title||"")));
