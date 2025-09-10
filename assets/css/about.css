@@ -1,0 +1,29 @@
+:root{--bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--accent:#8dd0ff;--r:14px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+.wrap{max-width:760px;margin:auto;padding:16px 16px 84px}
+h1{font-size:1.35rem;margin:6px 0 14px}
+p.lead{margin:.25rem 0 1rem;color:var(--muted);line-height:1.7}
+.card{background:var(--panel);border:1px solid rgba(141,208,255,.22);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.card-h{padding:12px 14px;font-weight:700;border-bottom:1px dashed rgba(141,208,255,.22)}
+.card-c{padding:12px 14px}
+.muted{color:var(--muted)}
+details{background:rgba(141,208,255,.06);border:1px solid rgba(141,208,255,.18);border-radius:12px;padding:10px 12px}
+details+details{margin-top:8px}
+summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:.5rem}
+summary::marker{color:var(--muted)}
+ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.char{display:grid;gap:2px}
+.name{font-weight:700}
+.role{color:var(--muted);font-size:.95rem}
+.grid2{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.kvs{display:grid;gap:6px}
+.kv{display:flex;gap:8px;align-items:flex-start}
+.kv dt{min-width:5.5rem;color:var(--muted)}
+.kv dd{margin:0}
+
+/* bottom nav */
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
+.bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
+.bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none}
+.bn-accent{background:rgba(141,208,255,.15)}
