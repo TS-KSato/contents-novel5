@@ -1,123 +1,124 @@
-// novel.js — インラインJSの外部化（novel.json を読む）
-const JSON_URL = './novel.json';
-const POS_KEY_PREFIX = 'novel_pos_';
-const GA = (...args)=>{ try{ if (window.gtag) window.gtag(...args); } catch(e){} };
+// novel.js — assets/data/novel.json を読み込み（no-cache）
+// 期待JSON: [{ id, title, author, sections[] }]
 
-let endcapShownForChapter = null;
-let chapters = [];
-let currentIdx = 0;
-let progressHit = new Set();
+(() => {
+  const FILE = "./assets/data/novel.json";
 
-const $ = (s, r=document)=>r.querySelector(s);
+  // 既存DOM（あれば活用）
+  const $list   = document.getElementById("novel-list");   // 一覧表示用 <div id="novel-list">
+  const $title  = document.getElementById("novel-title");  // 単品表示タイトル
+  const $author = document.getElementById("novel-author"); // 単品表示著者
+  const $body   = document.getElementById("novel-body");   // 単品本文の親
+  const $root   = document.getElementById("novel");        // 全体ラッパ（無ければ body に描画）
 
-const selectorEl = $('#chapterSelector');
-const contentEl  = $('#chapterContent');
-const titleEl    = $('#currentChapterTitle');
-const prevBtn    = $('#prevChapter');
-const nextBtn    = $('#nextChapter');
-const barEl      = $('#progressBar');
-const resumeBtn  = $('#resumeBtn');
-const endcapEl   = $('#endcap');
-const endcapNextBtn = $('#endcapNextBtn');
-const endcapPrevBtn = $('#endcapPrevBtn');
-const endcapTocBtn  = $('#endcapTocBtn');
-const endcapHeading = $('#endcapHeading');
-const nextPreviewEl = $('#nextPreview');
+  // 進捗UI（任意・存在すれば更新）
+  const $progressBar = document.querySelector(".progress-top .bar");
+  const $resumeBtn   = document.querySelector(".resume-btn");
 
-const stripHtml = (html)=>{ const tmp=document.createElement('div'); tmp.innerHTML=html||''; return tmp.textContent||tmp.innerText||''; };
+  let ALL = [];
 
-fetch(JSON_URL, {cache:'no-store'})
-  .then(r=>r.json())
-  .then(data=>{
-    chapters = data.chapters || [];
-    buildSelector();
-    render(0, true);
-    if (chapters[0]) GA('event','view_novel', { items:[{ chapter_id: chapters[0].id, chapter_title: chapters[0].title }] });
-  })
-  .catch(err=>{
-    contentEl.innerHTML = '<p style="color:#ffd27e">読み込みに失敗しました。novel.json を確認してください。</p>';
-    console.error(err);
-  });
+  const esc = (s) => String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
 
-function buildSelector(){
-  selectorEl.innerHTML = chapters.map((c,i)=>`<option value="${i}">${String(c.id).padStart(2,'0')}：${c.title}</option>`).join('');
-}
-function render(idx, scrollTop){
-  if (idx < 0 || idx >= chapters.length) return;
-  currentIdx = idx; progressHit.clear();
-  const c = chapters[idx];
-  titleEl.textContent = c.title;
-  selectorEl.value = String(idx);
-  contentEl.innerHTML = c.content;
-
-  if (idx < chapters.length-1){
-    const n = chapters[idx+1];
-    const preview = stripHtml(n.content).slice(0, 80);
-    nextPreviewEl.textContent = preview ? preview + '…' : '';
-    endcapHeading.textContent = '次に読む：' + n.title;
-    endcapEl.hidden = true;
-    endcapShownForChapter = null;
-  }else{
-    nextPreviewEl.textContent = '';
-    endcapHeading.textContent = '完結';
-    endcapEl.hidden = false;
-    endcapShownForChapter = chapters[idx].id;
+  function loadJSON(url){
+    return fetch(url, { cache: "no-cache" }).then(r => {
+      if(!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    });
   }
-  GA('event','pick_chapter', { chapter_id:c.id, chapter_title:c.title });
-  if (scrollTop) window.scrollTo(0, 0);
-  requestAnimationFrame(()=> updateResumeButton() );
-}
 
-function updateResumeButton(){
-  const key = POS_KEY_PREFIX + chapters[currentIdx].id;
-  const y = Number(localStorage.getItem(key) || 0);
-  if (y>80){
-    resumeBtn.style.display = 'block';
-    resumeBtn.onclick = ()=> window.scrollTo({top:y, behavior:'smooth'});
-  }else{
-    resumeBtn.style.display = 'none';
+  function getId(){
+    const p = new URLSearchParams(location.search);
+    return p.get("id");
   }
-  updateProgress();
-}
 
-function updateProgress(){
-  const h = document.documentElement;
-  const scrolled = h.scrollTop || document.body.scrollTop;
-  const height = h.scrollHeight - h.clientHeight;
-  const r = height>0 ? (scrolled/height) : 0;
-  barEl.style.width = (r*100)+'%';
-
-  if (chapters.length && currentIdx < chapters.length-1){
-    if (r >= 0.95){
-      if (endcapEl.hidden){ endcapEl.hidden = false; }
-      if (endcapShownForChapter !== chapters[currentIdx].id){
-        endcapShownForChapter = chapters[currentIdx].id;
-        GA('event','view_endcap', { chapter_id: chapters[currentIdx].id, next_chapter_id: chapters[currentIdx+1].id });
-      }
-    }else{
-      if (!endcapEl.hidden) endcapEl.hidden = true;
+  function drawList(){
+    const host = $list || $root || document.body;
+    if (!ALL.length){
+      host.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+      return;
     }
+    host.innerHTML = `
+<div class="grid">
+  ${ALL.map(n => `
+  <article class="card">
+    <div class="label">短編</div>
+    <div class="title">${esc(n.title)}</div>
+    <div class="meta">${esc(n.author || "語り部")}</div>
+    <div class="actions" style="margin-top:.5rem">
+      <a class="btn" href="?id=${encodeURIComponent(n.id)}">読む</a>
+      <a class="btn ghost" href="#list">あとで</a>
+    </div>
+  </article>`).join("")}
+</div>`;
   }
-  if (!updateProgress._t){
-    updateProgress._t = setTimeout(()=>{
-      const key = POS_KEY_PREFIX + chapters[currentIdx].id;
-      localStorage.setItem(key, String(window.scrollY));
-      updateProgress._t = null;
-    }, 250);
-  }
-  const pct = Math.floor(r*100);
-  [25,50,75,100].forEach(th=>{
-    if (pct>=th && !progressHit.has(th)){
-      progressHit.add(th);
-      GA('event','read_progress', { chapter_id:chapters[currentIdx].id, percent: th });
-    }
-  });
-}
 
-window.addEventListener('scroll', updateProgress);
-selectorEl.addEventListener('change', ()=> render(Number(selectorEl.value), true));
-prevBtn.addEventListener('click', ()=>{ if (currentIdx>0){ GA('event','prev_chapter', { from:chapters[currentIdx].id }); render(currentIdx-1, true); }});
-nextBtn.addEventListener('click', ()=>{ if (currentIdx<chapters.length-1){ GA('event','next_chapter', { from:chapters[currentIdx].id }); render(currentIdx+1, true); }});
-endcapNextBtn?.addEventListener('click', ()=>{ if (currentIdx<chapters.length-1){ GA('event','click_next_chapter', { from:chapters[currentIdx].id, to:chapters[currentIdx+1].id }); render(currentIdx+1, true); }});
-endcapPrevBtn?.addEventListener('click', ()=>{ if (currentIdx>0){ GA('event','click_prev_chapter', { from:chapters[currentIdx].id, to:chapters[currentIdx-1].id }); render(currentIdx-1, true); }});
-endcapTocBtn?.addEventListener('click', ()=>{ selectorEl.focus({preventScroll:false}); GA('event','click_toc', { from:chapters[currentIdx].id }); window.scrollTo({top:0, behavior:'smooth'}); });
+  function drawOne(novel){
+    // 既存要素があればそこに、無ければ自前で
+    if ($title)  $title.textContent  = novel.title || "";
+    if ($author) $author.textContent = novel.author || "語り部";
+
+    const paragraphs = Array.isArray(novel.sections) ? novel.sections.map(String) : [];
+
+    if ($body){
+      $body.innerHTML = paragraphs.map(p => `<p>${esc(p)}</p>`).join("");
+    } else {
+      const host = $root || document.body;
+      host.innerHTML = `
+<article class="card">
+  <div class="article-head">
+    <div class="avatar-serial" data-name="${esc(novel.author || "語り部")}"></div>
+    <div class="byline"><span class="pill">${esc(novel.author || "語り部")}</span></div>
+  </div>
+  <div class="title">${esc(novel.title || "")}</div>
+  <div class="sep"></div>
+  <div class="body">
+    ${paragraphs.map(p => `<p>${esc(p)}</p>`).join("")}
+  </div>
+</article>`;
+    }
+
+    // 進捗バー（任意）
+    if ($progressBar || $resumeBtn){
+      const onScroll = () => {
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        const h = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+        const p = Math.max(0, Math.min(1, y / h));
+        if ($progressBar) $progressBar.style.width = `${p * 100}%`;
+        if ($resumeBtn) $resumeBtn.style.display = y > 800 ? "inline-flex" : "none";
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      $resumeBtn && $resumeBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    }
+
+    // GA4（任意）
+    try{ window.gtagEvent && window.gtagEvent("view_novel", { id: novel.id || "" }); }catch(_){}
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadJSON(FILE)
+      .then(json => {
+        ALL = Array.isArray(json) ? json.map(n => ({
+          id: String(n.id || ""),
+          title: String(n.title || ""),
+          author: String(n.author || "語り部"),
+          sections: Array.isArray(n.sections) ? n.sections.map(String) : []
+        })) : [];
+
+        const id = getId();
+        if (id){
+          const novel = ALL.find(n => n.id === id);
+          if (novel) drawOne(novel);
+          else drawList();
+        } else {
+          drawList();
+        }
+      })
+      .catch(() => {
+        const host = $list || $root || document.body;
+        host.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+      });
+  });
+})();
