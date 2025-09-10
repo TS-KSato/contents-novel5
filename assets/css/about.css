@@ -1,29 +1,38 @@
-:root{--bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--accent:#8dd0ff;--r:14px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
-.wrap{max-width:760px;margin:auto;padding:16px 16px 84px}
-h1{font-size:1.35rem;margin:6px 0 14px}
-p.lead{margin:.25rem 0 1rem;color:var(--muted);line-height:1.7}
-.card{background:var(--panel);border:1px solid rgba(141,208,255,.22);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
-.card-h{padding:12px 14px;font-weight:700;border-bottom:1px dashed rgba(141,208,255,.22)}
-.card-c{padding:12px 14px}
-.muted{color:var(--muted)}
-details{background:rgba(141,208,255,.06);border:1px solid rgba(141,208,255,.18);border-radius:12px;padding:10px 12px}
-details+details{margin-top:8px}
-summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:.5rem}
-summary::marker{color:var(--muted)}
-ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-.char{display:grid;gap:2px}
-.name{font-weight:700}
-.role{color:var(--muted);font-size:.95rem}
-.grid2{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
-.kvs{display:grid;gap:6px}
-.kv{display:flex;gap:8px;align-items:flex-start}
-.kv dt{min-width:5.5rem;color:var(--muted)}
-.kv dd{margin:0}
+/* about.css — 用語集ページ固有（app.css / components.css 前提） */
 
-/* bottom nav */
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
-.bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
-.bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none}
-.bn-accent{background:rgba(141,208,255,.15)}
+/* 見出し */
+header{text-align:center;padding:.5rem 0 .25rem}
+h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
+.lead{color:var(--muted);font-size:.9rem}
+
+/* 用語検索 */
+.search{
+  display:flex;gap:.5rem;align-items:center;
+  border:1px solid var(--line);background:#10162a;border-radius:.675rem;
+  padding:.5rem .75rem;margin:.5rem 0 1rem
+}
+.search input{
+  flex:1;border:0;background:transparent;color:var(--ink);outline:none;font-size:.95rem
+}
+
+/* 用語リスト */
+.glossary{display:grid;gap:.5rem}
+.term{
+  background:#0f162b;border:1px solid var(--line);border-radius:.75rem;
+  padding:.625rem .875rem;
+}
+.term .t{
+  font-weight:800;font-size:1rem;line-height:1.35;margin:0 0 .2rem;
+}
+.term .kana{color:#9fb0d3;font-size:.8rem;margin-left:.35rem}
+.term .desc{color:#dfe7ff;line-height:1.7}
+.term .tags{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.35rem}
+.term .tags .pill{padding:.15rem .5rem;font-size:.72rem}
+
+/* セクション見出し（頭文字グループ用） */
+.alpha{
+  margin:.75rem 0 .25rem;color:#cfe1ff;font-weight:800;font-size:.9rem;
+  border-left:3px solid var(--accent-2-b);padding-left:.5rem
+}
+
+/* 下部ナビは共通 .bottom-nav を使用（追加なし） */

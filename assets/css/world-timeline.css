@@ -1,23 +1,32 @@
-:root{
-  --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826; --accent:#9fd3ff;
-  --radius:18px; --pad:18px; --gap:14px; --max:860px; --shadow:0 10px 24px rgba(0,0,0,.28);
-}
-*{box-sizing:border-box}
-html{font-size:16px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.75}
-a{color:var(--accent);text-decoration:none}
-.wrap{max-width:var(--max);margin:0 auto;padding:20px 14px 96px}
+/* world-timeline.css — 固有スタイル（app.css / components.css 前提） */
 
+:root{
+  --shadow:0 10px 24px rgba(0,0,0,.28);
+  --max:860px;
+}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:20px 14px 96px}
 header{text-align:center;margin:6px 0 18px}
 h1{margin:8px 0 8px;font-size:clamp(22px,6vw,30px);letter-spacing:.02em}
 .lead{color:var(--muted);font-size:14.5px;max-width:44rem;margin:0 auto}
 
 /* Timeline */
-.timeline{position:relative;margin:24px auto 0;padding-left:26px;max-width:740px}
-.timeline::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(var(--line),rgba(39,48,74,.3));}
+.timeline{
+  position:relative;margin:24px auto 0;padding-left:26px;max-width:740px
+}
+.timeline::before{
+  content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;
+  background:linear-gradient(var(--line),rgba(39,48,74,.3));
+}
 .tli{position:relative;list-style:none;margin:0 0 22px}
-.tli .dot{position:absolute;left:3px;top:10px;width:18px;height:18px;border-radius:50%;background:#0f1424;border:2px solid var(--accent);box-shadow:0 0 0 4px rgba(159,211,255,.1)}
-.tli .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--pad)}
+.tli .dot{
+  position:absolute;left:3px;top:10px;width:18px;height:18px;border-radius:50%;
+  background:#0f1424;border:2px solid var(--accent);box-shadow:0 0 0 4px rgba(159,211,255,.1)
+}
+.tli .card{
+  /* .card は共通を利用。影のみ特化 */
+  box-shadow:var(--shadow);
+}
 
 .era{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .era h2{margin:0;font-size:clamp(18px,4.5vw,22px)}
@@ -25,7 +34,10 @@ h1{margin:8px 0 8px;font-size:clamp(22px,6vw,30px);letter-spacing:.02em}
 
 /* Events */
 .events{margin:10px 0 0;padding:0;list-style:none}
-.events li{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:10px 0;border-top:1px dashed rgba(207,225,255,.12)}
+.events li{
+  display:grid;grid-template-columns:120px 1fr;gap:12px;padding:10px 0;
+  border-top:1px dashed rgba(207,225,255,.12)
+}
 .events li:first-child{border-top:none;padding-top:0}
 .events time{color:#cfe1ff;font-weight:800;white-space:nowrap}
 .events .title{font-weight:800}
@@ -33,11 +45,14 @@ h1{margin:8px 0 8px;font-size:clamp(22px,6vw,30px);letter-spacing:.02em}
 .note{color:var(--muted);font-size:12.5px;margin-top:8px}
 
 /* Back to top */
-.backtop{position:fixed;right:14px;bottom:18px;z-index:5;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#111a2c;color:#cfe1ff;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease}
+.backtop{
+  position:fixed;right:14px;bottom:18px;z-index:5;display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:#111a2c;color:#cfe1ff;box-shadow:var(--shadow);
+  opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease
+}
 .backtop:hover{filter:brightness(1.08)}
 .showTop{opacity:1;transform:translateY(0)}
-
-@media print{.backtop{display:none} body{background:#fff;color:#000} .timeline::before{background:#ccc} .tli .card{box-shadow:none;border-color:#999}}
 
 /* Motion */
 @media (prefers-reduced-motion:no-preference){
@@ -51,4 +66,12 @@ h1{margin:8px 0 8px;font-size:clamp(22px,6vw,30px);letter-spacing:.02em}
   .tli:nth-child(7) .card{animation-delay:.26s}
   .tli:nth-child(8) .card{animation-delay:.30s}
   @keyframes rise{to{transform:none;opacity:1}}
+}
+
+/* 印刷 */
+@media print{
+  .backtop{display:none}
+  body{background:#fff;color:#000}
+  .timeline::before{background:#ccc}
+  .tli .card{box-shadow:none;border-color:#999}
 }

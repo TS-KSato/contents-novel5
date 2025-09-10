@@ -1,37 +1,68 @@
-:root{--bg:#0b0d12;--ink:#fff;--muted:#aeb7d0;--line:#27304a;--card:#151826;--primary:#1a3358;--primary-b:#34507c;--accent:#9fd3ff;--radius:16px;--pad:18px;--gap:12px;--tap:48px;--shadow:0 12px 28px rgba(0,0,0,.28)}
-*{box-sizing:border-box}
-html{font-size:16px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7}
-.wrap{max-width:40rem;margin:0 auto;padding:20px 14px 92px}
-header{text-align:center;margin:4px 0 14px}
+/* partner.css — 固有スタイル（app.css / components.css 前提） */
+
+:root{
+  --primary:#1a3358;
+  --primary-b:#34507c;
+  --shadow:0 12px 28px rgba(0,0,0,.28);
+}
+
+/* ページ枠 */
 h1{margin:8px 0 4px;font-size:clamp(22px,6vw,28px);letter-spacing:.02em}
 .lead{color:var(--muted);font-size:15px;margin:4px auto 0;max-width:34rem}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin:14px 0}
+
+/* 入力カード */
+.card{
+  box-shadow:var(--shadow);
+  margin:14px 0;
+}
 .label{font-weight:800;color:#cfe1ff;margin:0 0 8px}
+
+/* フォーム */
 .form{display:grid;grid-template-columns:1fr;row-gap:16px}
 .field label{display:block;font-weight:700;font-size:15px;color:#d9e2ff;margin:0 0 6px}
-select,button{width:100%;min-height:var(--tap);padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#1a2034;color:#fff;font-size:16px}
+
+select,button{
+  width:100%;min-height:var(--tap);
+  padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+  background:#1a2034;color:#fff;font-size:16px
+}
 select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
 .radios{display:flex;gap:8px;flex-wrap:wrap}
-.radio{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#11172a;cursor:pointer;user-select:none;transition:.15s ease}
+.radio{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 14px;
+  border:1px solid var(--line);border-radius:999px;background:#11172a;
+  cursor:pointer;user-select:none;transition:.15s ease
+}
 .radio input{display:none}
-.radio input:checked + span{color:#fff;background:#34507c;border-radius:999px;padding:4px 10px;box-shadow:0 0 0 2px rgba(159,211,255,.25) inset}
+.radio input:checked + span{
+  color:#fff;background:#34507c;border-radius:999px;padding:4px 10px;
+  box-shadow:0 0 0 2px rgba(159,211,255,.25) inset
+}
 .radio span{color:#cfe1ff;font-size:14px}
+
 .primary{background:var(--primary);border-color:var(--primary-b);font-weight:800;letter-spacing:.02em}
 .primary:hover{filter:brightness(1.05)}
 .cta-area{margin-top:10px}
-.err{margin-top:8px;color:#ff9aa8;background:#2a1218;border:1px solid #5b2a33;padding:8px 10px;border-radius:10px;font-size:14px;display:none}
+
+.err{
+  margin-top:8px;color:#ff9aa8;background:#2a1218;border:1px solid #5b2a33;
+  padding:8px 10px;border-radius:10px;font-size:14px;display:none
+}
+
+/* 結果表示 */
 .partner{display:flex;gap:12px;align-items:center}
-.avatar{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:#10172a;display:flex;align-items:center;justify-content:center;font-weight:800}
+.avatar{
+  /* components.css の .avatar を利用。サイズだけ特化 */
+  width:56px;height:56px;
+}
 .pname{font-weight:800}
 .prole{color:#cdd5ea;font-size:14px}
 .line{margin-top:6px;color:#e0e7ff;font-size:16px}
+
 .fadein{animation:fadeIn .6s ease both}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)}}
-footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:12px}
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
-.bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
-.bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none;font-size:14px}
-.bn-accent{background:rgba(141,208,255,.15)}
-.bn-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* 下部ナビは共通の .bottom-nav を使用（ここでの追加なし） */
+
 @media print{.bottom-nav{display:none}body{background:#fff;color:#000}.card{border-color:#999;box-shadow:none}}
