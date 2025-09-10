@@ -5,69 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜ドレイクの食卓</title>
   <meta name="description" content="豪快な狩人ドレイクの食卓。火と香りを活かした力強い料理を、現実世界の食材で再現。">
-  <style>
-    html { font-size: 16px; }
-    :root{
-      --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
-      --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
-      --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
-    }
-    *{ box-sizing:border-box }
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-      line-height:1.8; font-size:1rem; -webkit-text-size-adjust:100%;
-      text-rendering: optimizeLegibility;
-      padding-bottom:4.5rem; /* 下部ナビ分の余白 */
-    }
-    .wrap{ max-width:40rem; margin:0 auto; padding:1.0rem 1.0rem 0; }
-
-    header{ text-align:center; padding:.5rem .25rem .75rem; }
-    header h1{ margin:.25rem 0 .25rem; font-size:clamp(1.15rem,5vw,1.5rem); font-weight:700; }
-    header .muted{ color:var(--muted); font-size:.875rem; margin:.25rem 0 0; }
-
-    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin:.75rem 0; }
-    .label{ font-size:.9375rem; color:#cfe1ff; margin-bottom:.5rem }
-
-    .list{ display:grid; gap:.75rem; }
-    .item{
-      display:grid; grid-template-columns:auto 1fr auto; gap:.75rem; align-items:center;
-      background:#11172a; border:1px solid var(--line); border-radius:.75rem; padding:.625rem .75rem;
-      text-decoration:none; color:inherit;
-    }
-    .item:hover{ background:#16203a }
-    .name{ font-size:1rem; font-weight:700; line-height:1.4; }
-    .sub{ font-size:.8125rem; color:var(--muted); }
-    .pill{ display:inline-flex; align-items:center; justify-content:center; color:#d7e6ff; background:#13203a; border:1px solid #2b3b61; border-radius:999px; padding:.25rem .5rem; font-size:.75rem; text-decoration:none; }
-
-    .avatar{ width:2.75rem; height:2.75rem; border-radius:50%; border:1px solid var(--line); background:#10172a center/cover no-repeat; display:flex; align-items:center; justify-content:center; font-weight:700; color:#cfe1ff; flex-shrink:0; }
-    .avatar.fallback{ background:#10172a; }
-
-    /* 上部の補助ナビ */
-    .tabs{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-top:.5rem; }
-    .tabs a{ color:#d7e6ff; border:1px solid var(--line); background:#11172a; border-radius:999px; padding:.25rem .625rem; font-size:.8125rem; text-decoration:none; }
-
-    /* 下部固定ナビ */
-    .bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9); backdrop-filter:blur(8px); border-top:1px solid var(--line); }
-    .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-    .bn-btn{ appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.375rem 0; min-height:3.25rem; font-size:.75rem; }
-    .bn-icon{ width:20px; height:20px; margin-bottom:.125rem; border-radius:4px; border:1px solid var(--line); background:#16213c; display:flex; align-items:center; justify-content:center; font-size:.75rem; }
-    .bn-accent{ color:#fff; }
-
-    footer{ text-align:center; color:var(--muted); font-size:.75rem; margin:1rem 0 .75rem }
-  </style>
+  <link rel="stylesheet" href="/assets/css/food.css">
 </head>
-<body>
+<body data-mode="char" data-character="ドレイク">
   <div class="wrap">
     <header>
       <h1>ドレイクの食卓</h1>
       <p class="muted">香ばしく、豪快に。火加減は臆せず強め。腹が鳴る方角へ進め。</p>
       <nav class="tabs" aria-label="食卓内ナビ">
-        <a href="./food.html">今日の一品</a>
-        <a href="./food_alan.html">アラン</a>
-        <a aria-current="page" href="./food_drake.html">ドレイク</a>
-        <a href="./food_laila.html">ライラ</a>
-        <a href="./food_nester.html">ネスター</a>
+        <a href="./dragon-table.html">今日の一品</a>
+        <a href="./dragon-table-alan.html">アラン</a>
+        <a aria-current="page" href="./dragon-table-drake.html">ドレイク</a>
+        <a href="./dragon-table-laila.html">ライラ</a>
+        <a href="./dragon-table-nester.html">ネスター</a>
       </nav>
     </header>
 
@@ -79,78 +29,16 @@
     <footer>© 運命の銀竜暦</footer>
   </div>
 
-  <!-- 下部固定ナビ -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html" aria-label="ホーム">
-        <span class="bn-icon">🏠</span><span>ホーム</span>
-      </a>
-      <a class="bn-btn" href="./notice.html" aria-label="お知らせ">
-        <span class="bn-icon">📣</span><span>お知らせ</span>
-      </a>
-      <a class="bn-btn" href="./mypage.html" aria-label="マイページ">
-        <span class="bn-icon">👤</span><span>マイページ</span>
-      </a>
+      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
     </div>
   </nav>
 
-<script>
-const JSON_PATH = "./recipe.json";
-
-/* ---------- ユーティリティ ---------- */
-function esc(s){ return String(s||"").replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-function clip(t, n){ if(!t) return ""; const s=String(t); return s.length>n ? s.slice(0,n-1)+"…" : s; }
-
-/* ---------- 描画 ---------- */
-const listEl = document.getElementById("list");
-
-function renderList(items){
-  if(!items.length){
-    listEl.innerHTML = '<div class="sub">ドレイクのレシピは準備中です。recipe.json をご確認ください。</div>';
-    return;
-  }
-  const html = items.map(r => {
-    const avatar = avatarHTML(r.character, r.avatar);
-
-    // パラメータ: id をクエリに付与（なければ title ハッシュを代替）
-    const id = r.id != null ? String(r.id) : String(Math.abs(hashStr(r.title||"")));
-
-    return `
-      <a class="item" role="listitem" href="./recipe.html?id=${encodeURIComponent(id)}" aria-label="${esc(r.title)}の詳細へ">
-        ${avatar}
-        <div>
-          <div class="name">${esc(r.title)}</div>
-          <div class="sub">${esc(clip(r.intro || r.comment || "", 46))}</div>
-        </div>
-        <span class="pill">詳しく →</span>
-      </a>
-    `;
-  }).join("");
-  listEl.innerHTML = html;
-}
-
-/* ---------- ハッシュ関数（id 代替用） ---------- */
-function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
-
-/* ---------- 起動 ---------- */
-(async function init(){
-  try{
-    const res = await fetch(JSON_PATH, {cache:"no-cache"});
-    if(!res.ok) throw new Error("fetch failed");
-    const data = await res.json();
-    const recipes = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
-
-    // ドレイクのみ抽出 → タイトルで安定ソート
-    const drake = recipes.filter(r => (r.character||"") === "ドレイク").sort((a,b)=>{
-      return (a.title||"").localeCompare(b.title||"", 'ja');
-    });
-
-    renderList(drake);
-  }catch(e){
-    console.warn("recipe.json読み込み失敗:", e);
-    listEl.innerHTML = '<div class="sub">レシピの読み込みに失敗しました。recipe.json をご確認ください。</div>';
-  }
-})();
-</script>
+  <script type="module" src="/assets/js/core.js" defer></script>
+  <script type="module" src="/assets/js/nav.js" defer></script>
+  <script type="module" src="/assets/js/dragon-table.js" defer></script>
 </body>
 </html>
