@@ -1,622 +1,117 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>運命の銀竜暦｜日々の指針</title>
-  <meta name="description" content="初回の気質診断であなたの魂の性質を確立し、毎日の10問で今日の『役割』を授けます。">
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --panel: #121821;
-      --ink: #e9f1ff;
-      --muted: #97a7c2;
-      --line: #2a344d;
-      --accent: #8dd0ff;
-      --r: 16px;
-      --tap: 48px
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      line-height: 1.7
-    }
-
-    .wrap {
-      max-width: 760px;
-      margin: auto;
-      padding: 16px 16px 92px
-    }
-
-    h1 {
-      font-size: clamp(22px, 5vw, 28px);
-      margin: 6px 0 8px
-    }
-
-    .lead {
-      color: var(--muted);
-      margin: 0 0 12px
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      margin: 12px 0;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .25)
-    }
-
-    .card-h {
-      padding: 12px 14px;
-      font-weight: 800;
-      border-bottom: 1px dashed rgba(141, 208, 255, .25)
-    }
-
-    .card-c {
-      padding: 12px 14px
-    }
-
-    .btn {
-      appearance: none;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      min-height: var(--tap);
-      padding: 12px;
-      border-radius: 12px;
-      background: #17325a;
-      border: 1px solid #2e4c79;
-      color: #fff;
-      font-weight: 800
-    }
-
-    .btn:hover {
-      filter: brightness(1.05)
-    }
-
-    .btn.ghost {
-      background: #121829
-    }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px
-    }
-
-    @media(min-width:640px) {
-      .grid2 {
-        grid-template-columns: 1fr 1fr
-      }
-    }
-
-    .q {
-      margin: 10px 0
-    }
-
-    .q .t {
-      font-weight: 700
-    }
-
-    /* 2択スイッチ */
-    .toggle {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px
-    }
-
-    .toggle .opt {
-      display: block;
-      text-align: center;
-      font-size: 14px;
-      color: #cfe1ff
-    }
-
-    .switch {
-      position: relative;
-      width: 66px;
-      height: 34px;
-      background: #0f1626;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      cursor: pointer
-    }
-
-    .switch input {
-      display: none
-    }
-
-    .knob {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #2b446d;
-      transition: transform .2s
-    }
-
-    .switch input:checked+.knob {
-      transform: translateX(32px)
-    }
-
-    /* アバター（キャラアイコン） */
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: inline-grid;
-      place-items: center;
-      font-weight: 800;
-      color: #0b0f14
-    }
-
-    .av-alan {
-      background: linear-gradient(135deg, #a8d8ff, #e6f3ff)
-    }
-
-    .av-drake {
-      background: linear-gradient(135deg, #ff9a9e, #fecfef)
-    }
-
-    .av-nester {
-      background: linear-gradient(135deg, #c2ffd8, #465efb)
-    }
-
-    .av-lilia {
-      background: linear-gradient(135deg, #f6d365, #fda085)
-    }
-
-    .av-laila {
-      background: linear-gradient(135deg, #d4c5ff, #8fb4ff)
-    }
-
-    .pill {
-      display: inline-flex;
-      gap: 6px;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(141, 208, 255, .12);
-      border: 1px solid rgba(141, 208, 255, .25)
-    }
-
-    .result {
-      animation: fade .6s ease both
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-        transform: translateY(8px)
-      }
-
-      to {
-        opacity: 1;
-        transform: none
-      }
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #121821;
-      border-top: 1px solid rgba(141, 208, 255, .25)
-    }
-
-    .bn-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      max-width: 40rem;
-      margin: 0 auto
-    }
-
-    .bn-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      padding: 10px 0;
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 14px
-    }
-
-    .bn-accent {
-      background: rgba(141, 208, 255, .15)
-    }
-
-    .note {
-      font-size: 13px;
-      color: var(--muted)
-    }
-
-    details.help {
-      background: rgba(141, 208, 255, .06);
-      border: 1px solid rgba(141, 208, 255, .18);
-      border-radius: 12px;
-      padding: 10px 12px
-    }
-
-    details.help summary {
-      cursor: pointer;
-      font-weight: 700
-    }
-
-    details.help+details.help {
-      margin-top: 8px
-    }
-
-    .avatar-wrap {
-      display: inline-grid;
-      place-items: center
-    }
-
-    .avatar-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      overflow: hidden
-    }
-
-    .avatar-fallback {
-      display: inline-grid;
-      place-items: center
-    }
-  </style>
+  <title>今日の指針（タイプの道筋）｜運命の銀竜暦</title>
+  <meta name="description" content="タイプを確定し、十の質問で本日のヒントを受け取るためのページです。" />
+  <!-- 外部CSS -->
+  <link rel="preload" href="/assets/css/app.css" as="style">
+  <link rel="stylesheet" href="/assets/css/app.css">
 </head>
-
 <body>
-  <main class="wrap">
-    <header>
-      <h1>日々の指針</h1>
-      <p class="lead">
-        「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は気質</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割を授かります。</p>
-      <details class="help">
-        <summary>世界観がわからない方へ</summary>
-        <p class="note">この作品では、銀色の古代竜「ルナル」の教えを人々が受け継ぐ時代が舞台です。<br>気質＝あなたの“物語上の性質”、役割＝“今日の歩き方”。難しく考えず、直感で選んでください。</p>
-        <ul class="note" style="margin:.25rem 0 0 1rem">
-          <li><strong>アラン</strong>：二つの世界の架け橋</li>
-          <li><strong>ドレイク</strong>：仲間を守る勇者</li>
-          <li><strong>ネスター</strong>：風を読む観察者</li>
-          <li><strong>リリア</strong>：自由に舞う精霊</li>
-          <li><strong>ライラ</strong>：古き知の語り部</li>
-        </ul>
-      </details>
-    </header>
+  <header class="page-header" aria-label="ページヘッダー">
+    <h1>今日の指針 <small class="flavor">（タイプの道筋）</small></h1>
+    <p class="lead">最初にタイプ（気質）を決め、その後に十の質問へ進みます。</p>
+  </header>
 
-    <!-- Phase 1: 気質診断（初回のみ表示） -->
-    <section id="phase1" class="card" aria-labelledby="p1h" hidden>
-      <div id="p1h" class="card-h">Phase 1：傾向診断（初回）</div>
-      <div class="card-c">
-        <p class="note">直感で4問にお答えください。結果は「アラン／ドレイク／ネスター／リリア／ライラ」のいずれかになります。</p>
+  <main id="main" class="wrap" aria-live="polite">
+    <!-- Phase 1: タイプ（気質）の簡易確定 -->
+    <section id="phase1" class="card" aria-label="タイプの仮決定">
+      <h2>タイプを選ぶ <small class="note">（直感で最も近い方へ）</small></h2>
 
-        <div class="q">
-          <div class="t">Q1. 二つの価値が対立するとき、あなたは何を優先しますか？</div>
+      <div class="axis-list">
+        <!-- 既定4軸：左右2択スイッチ（右=checked） -->
+        <div class="axis">
+          <div class="axis-title">調和 ↔ 正しさ</div>
           <div class="toggle" data-axis="logic">
-            <span class="opt">調和</span>
-            <label class="switch"><input type="checkbox"><span class="knob"></span></label>
-            <span class="opt">正しさ</span>
+            <span class="opt">調和を優先</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="調和/正しさ" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">正しさを貫く</span>
           </div>
         </div>
-        <div class="q">
-          <div class="t">Q2. 進むべき道を決めるとき、あなたは？</div>
+
+        <div class="axis">
+          <div class="axis-title">風の勘 ↔ 古い地図</div>
           <div class="toggle" data-axis="spirit">
-            <span class="opt">風の囁き</span>
-            <label class="switch"><input type="checkbox"><span class="knob"></span></label>
-            <span class="opt">古地図</span>
+            <span class="opt">感覚で進む</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="勘/地図" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">蓄積で進む</span>
           </div>
         </div>
-        <div class="q">
-          <div class="t">Q3. 選びやすい行動は？</div>
+
+        <div class="axis">
+          <div class="axis-title">内省 ↔ 行動</div>
           <div class="toggle" data-axis="vector">
-            <span class="opt">内省</span>
-            <label class="switch"><input type="checkbox"><span class="knob"></span></label>
-            <span class="opt">行動</span>
+            <span class="opt">じっくり考える</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="内省/行動" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">まず動いて学ぶ</span>
           </div>
         </div>
-        <div class="q">
-          <div class="t">Q4. 人との距離感は？</div>
+
+        <div class="axis">
+          <div class="axis-title">独り ↔ 仲間</div>
           <div class="toggle" data-axis="social">
-            <span class="opt">独りで整える</span>
-            <label class="switch"><input type="checkbox"><span class="knob"></span></label>
-            <span class="opt">仲間と動く</span>
+            <span class="opt">自分のペース</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="独り/仲間" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">協力して進む</span>
           </div>
         </div>
+      </div>
 
-        <div class="grid2" style="margin-top:10px">
-          <button id="btnP1" class="btn">気質を確定する</button>
-          <button id="btnP1Reset" class="btn ghost" type="button">入力をクリア</button>
-        </div>
-        <p class="note">※ 気質は <code>localStorage.userArchetype</code> に保存されます（端末ローカル）。</p>
+      <div class="actions">
+        <button id="btnP1" class="btn primary" type="button">気質を確定する</button>
+        <button id="btnP1Reset" class="btn ghost" type="button">入力をクリア</button>
+      </div>
+
+      <p class="note small">※ 気質は <code>localStorage.archetype_id</code> に保存されます（端末ローカル）。</p>
+    </section>
+
+    <!-- 確定済みタイプのボックス（JSで中身を描画） -->
+    <section id="archetypeBox" class="card" aria-label="確定済みのタイプ" hidden>
+      <div id="archText"><!-- JSがここに描画します --></div>
+    </section>
+
+    <!-- Phase 2: 十の質問（回答必須→結果ボタン活性） -->
+    <section id="phase2" class="card" aria-label="十の質問" hidden>
+      <h2>十の質問 <small class="note">（今日の傾向を静かに測ります）</small></h2>
+
+      <div id="qList" class="q-list"><!-- JSがここに10問を生成 --></div>
+
+      <div class="actions">
+        <button id="btnEval" class="btn primary" type="button" disabled>本日のヒントを見る</button>
+        <button id="btnClearQ" class="btn ghost" type="button">回答をクリア</button>
       </div>
     </section>
 
-    <!-- Phase 1 結果（確定後常に表示） -->
-    <section id="archetypeBox" class="card result" aria-live="polite" hidden>
-      <div class="card-h">あなたの気質</div>
-      <div class="card-c" id="archText"></div>
-    </section>
-
-    <!-- Phase 2: 毎日の10問（2択UI） → 役割決定 -->
-    <section id="phase2" class="card" aria-labelledby="p2h" hidden>
-      <div id="p2h" class="card-h">Phase 2：魂への十の質問（今日の役割を決める）</div>
-      <div class="card-c" id="qList"></div>
-      <div class="card-c">
-        <div class="grid2">
-          <button id="btnEval" class="btn">今日の役割を授かる</button>
-          <button id="btnClearQ" class="btn ghost" type="button">回答クリア</button>
-        </div>
-        <p class="note" style="margin-top:6px">※ 2択で迷ったら「直感」を優先してください。日々の回答は保存しません。</p>
-      </div>
-    </section>
-
-    <!-- Phase 3+4: 役割＋結果 -->
-    <section id="resultBox" class="card result" hidden>
-      <div class="card-h">今日の授与：役割と銀竜の言葉</div>
-      <div class="card-c" id="roleText"></div>
+    <!-- 評価結果（保存しない・断定しない） -->
+    <section id="resultBox" class="card" aria-label="本日のヒント" hidden>
+      <div id="roleText"><!-- JSがここに結果を描画 --></div>
     </section>
   </main>
 
-  <!-- Bottom Nav (3 tabs) -->
-  <nav class="bottom-nav" aria-label="主要ナビゲーション">
-    <div class="bn-grid">
-      <a class="bn-btn" href="./index.html">🏠 ホーム</a>
-      <a class="bn-btn" href="./notice.html">📣 お知らせ</a>
-      <a class="bn-btn" href="./mypage.html">👤 マイページ</a>
-    </div>
+  <!-- 下部ナビ（固定） -->
+  <nav class="gnav" role="navigation" aria-label="下部ナビゲーション">
+    <a href="index.html">ホーム</a>
+    <a href="notice.html">お知らせ</a>
+    <a href="mypage.html">マイページ</a>
   </nav>
 
-  <script>
-    /* =========================================================
-     * ArchetypePath Core (Refactored)
-     * - Storage: localStorage は archetype_id のみ
-     * - Avatar : 画像解決（id → name の順で検索）＋フォールバック
-     * - Render : 呼び出し側は renderArchetypeBox(archetype) だけ
-     * =======================================================*/
-
-    /* ---------- 0) 小ユーティリティ ---------- */
-    const $ = (sel, root = document) => root.querySelector(sel);
-    const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
-    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
-
-    /* ---------- 1) Storage（最小保存：archetype_id のみ） ---------- */
-    const ArchetypeStore = (() => {
-      const KEY = "archetype_id";
-
-      // 互換: 旧キーが残っていたら移行して削除
-      const legacy = localStorage.getItem("userArchetype");
-      if (legacy && !localStorage.getItem(KEY)) {
-        try {
-          const obj = JSON.parse(legacy);
-          if (obj && typeof obj.id === "string") localStorage.setItem(KEY, obj.id);
-        } catch (_) { }
-        localStorage.removeItem("userArchetype");
-      }
-      // 余計なキーは触らない（本ページ外の機能に影響させない）
-
-      return Object.freeze({
-        get() { return localStorage.getItem(KEY); },
-        set(id) { if (typeof id === "string" && id) localStorage.setItem(KEY, id); },
-        clear() { localStorage.removeItem(KEY); }
-      });
-    })();
-
-    /* ---------- 2) Avatar 解決（id → name の順でマップ） ---------- */
-    /* 必要に応じて追記してください（ファイル名規約: char-*.jpg） */
-    const AVATAR_BY_ID = Object.freeze({
-      alan: "assets/char-alan.jpg",
-      drake: "assets/char-drake.jpg",
-      nester: "assets/char-nester.jpg",
-      lilia: "assets/char-lilia.jpg",
-      laila: "assets/char-laila.jpg",
-      lunal: "assets/char-lunal.jpg",
-      magnus: "assets/char-magnus.jpg",
-      king: "assets/char-king.jpg",
-      mireia: "assets/char-mireia.jpg"
-    });
-    const AVATAR_BY_NAME = Object.freeze({
-      "アラン": "assets/char-alan.jpg",
-      "ドレイク": "assets/char-drake.jpg",
-      "ネスター": "assets/char-nester.jpg",
-      "リリア": "assets/char-lilia.jpg",
-      "ライラ": "assets/char-laila.jpg",
-      "ルナル": "assets/char-lunal.jpg",
-      "マグナス": "assets/char-magnus.jpg",
-      "ネクサート": "assets/char-king.jpg",
-      "ミレイア": "assets/char-mireia.jpg"
-    });
-
-    const Avatar = Object.freeze({
-      /**
-       * @param {Object} a - archetype-like object
-       * @param {string=} a.id   例: 'alan'
-       * @param {string=} a.name 例: 'アランの魂（…）'
-       * @param {string=} a.initials 例: 'AL'
-       * @param {string=} a.av 既存の円アイコンクラス
-       * @returns {HTMLElement} wrapper 要素（img または fallback span を内包）
-       */
-      render(a = {}) {
-        const wrap = document.createElement("span");
-        wrap.className = "avatar-wrap";
-
-        // 1) id → 2) name（後置きの修飾語を除去）→ 3) fallback
-        const byId = AVATAR_BY_ID[(a.id || "").trim()];
-        const plainName = String(a.name || "").replace(/の魂.*$/, "").trim();
-        const byName = AVATAR_BY_NAME[plainName];
-
-        const src = byId || byName || null;
-        if (src) {
-          const img = document.createElement("img");
-          img.className = "avatar-img";
-          img.src = src;
-          img.alt = "";                 // 装飾扱い（隣のテキストで識別）
-          img.decoding = "async";
-          img.loading = "lazy";
-          wrap.appendChild(img);
-        } else {
-          const span = document.createElement("span");
-          span.className = "avatar-fallback avatar " + esc(a.av || "");
-          span.setAttribute("aria-hidden", "true");
-          span.textContent = a.initials || "？";
-          wrap.appendChild(span);
-        }
-        return wrap;
-      }
-    });
-
-    /* ---------- 3) Archetype Box レンダー（呼び出しAPI） ---------- */
-    /**
-     * archetype オブジェクト例（既存想定）:
-     * { id:'alan', name:'アランの魂（…）', desc:'説明…', av:'av-alan', initials:'AL' }
-     */
-    function renderArchetypeBox(archetype) {
-      const box = $("#archetypeBox");
-      const text = $("#archText");
-      if (!box || !text) return;
-
-      if (!archetype) {
-        box.hidden = true;
-        return;
-      }
-      box.hidden = false;
-
-      // Avatarを先に生成（装飾画像 or フォールバック）
-      const avatarEl = Avatar.render(archetype);
-
-      // 内容をクリアしてDOMで組み立て（XSS対策：textContentで埋める）
-      text.innerHTML = `
-    <div class="pill">確定済みの気質</div>
-    <div class="arch-line" style="display:flex;align-items:center;gap:10px;margin-top:6px">
-      <span class="arch-avatar-slot"></span>
-      <div>
-        <h3 class="arch-name" style="margin:.25rem 0 0"></h3>
-        <p class="note arch-desc" style="margin:.25rem 0 0"></p>
-      </div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <button class="btn ghost" id="btnChange">気質をやり直す（この端末のみ）</button>
-      <a class="btn" href="#p2h">十の質問へ進む</a>
-    </div>`;
-
-      $(".arch-avatar-slot", text).appendChild(avatarEl);
-      $(".arch-name", text).textContent = archetype.name || "—";
-      $(".arch-desc", text).textContent = archetype.desc || "";
-
-      $("#btnChange", text)?.addEventListener("click", () => {
-        if (confirm("気質を未設定に戻しますか？（この端末のみ）")) {
-          ArchetypeStore.clear();
-          // 呼び出し側の apply()/再描画を想定
-          (window.apply?.call ? window.apply() : location.reload());
-        }
-      });
-    }
-
-    /* ---------- 4) 公開API（必要なら他スクリプトから利用可） ---------- */
-    window.ArchetypePath = Object.freeze({
-      ArchetypeStore,
-      Avatar,
-      renderArchetypeBox
-    });
-    const ARCHETYPES = Object.freeze({
-  alan:  { id:'alan',  name:'アラン',  desc:'', av:'av-alan',  initials:'AL' },
-  drake: { id:'drake', name:'ドレイク',desc:'', av:'av-drake', initials:'DR' },
-  nester:{ id:'nester',name:'ネスター',desc:'', av:'av-nester',initials:'NE' },
-  lilia: { id:'lilia', name:'リリア',  desc:'', av:'av-lilia', initials:'LI' },
-  laila: { id:'laila', name:'ライラ',  desc:'', av:'av-laila', initials:'LA' }
-});
-
-// ===== 追加: 現在の気質を取得（localStorage の archetype_id を解決） =====
-function getArchetype(){
-  const id = ArchetypePath.ArchetypeStore.get();
-  return (id && ARCHETYPES[id]) ? ARCHETYPES[id] : null;
-}
-
-// ===== 追加: 初期化（表示の出し分け＆描画実行） =====
-function show(el, on){ if(el) el.hidden = !on; }
-
-function apply(){
-  const a = getArchetype();
-  show(document.getElementById('phase1'), !a);   // 未設定なら Phase1 を表示
-  show(document.getElementById('archetypeBox'), !!a);
-  show(document.getElementById('phase2'), !!a);  // 必要に応じて制御
-  if (a) ArchetypePath.renderArchetypeBox(a);    // ★ ここで描画
-}
-
-// DOM 準備後に実行
-document.addEventListener('DOMContentLoaded', apply);
-function readAnswers(){
-  const axes = ["logic","spirit","vector","social"];
-  const ans = {};
-  axes.forEach(ax => {
-    const el = document.querySelector(`.toggle[data-axis="${ax}"] input[type="checkbox"]`);
-    ans[ax] = !!(el && el.checked); // 未操作は false 扱い（左側）
-  });
-  return ans; // 例: {logic:true, spirit:false, vector:true, social:false}
-}
-
-// 2) 代表パターン（右側= true / 左側= false）
-//   最も“差分の少ない”候補を採用（ハミング距離で最小）
-//   ※ 迷ったときも必ず1つ選ばれます（tieは優先順）
-const ARCH_RULES = [
-  { id:"alan",  pat:{logic:false, spirit:false, vector:true,  social:true } }, // 架け橋（調和×風×行動×仲間）
-  { id:"drake", pat:{logic:true,  spirit:true,  vector:true,  social:true } }, // 守り手（正しさ×古地図×行動×仲間）
-  { id:"nester",pat:{logic:false, spirit:false, vector:false, social:false} }, // 観察者（調和×風×内省×独り）
-  { id:"lilia", pat:{logic:false, spirit:false, vector:true,  social:false} }, // 自由型（調和×風×行動×独り）
-  { id:"laila", pat:{logic:true,  spirit:true,  vector:false, social:false} }, // 語り部（正しさ×古地図×内省×独り）
-];
-
-// 3) 差分（ハミング距離）を計算し最小の id を返す
-function pickArchetype(ans){
-  let best = ARCH_RULES[0], bestDist = Infinity;
-  for(const r of ARCH_RULES){
-    let d = 0;
-    for(const k in r.pat){ if(!!ans[k] !== !!r.pat[k]) d++; }
-    if (d < bestDist){ best = r; bestDist = d; }
-  }
-  return best.id;
-}
-
-// 4) クリックハンドラの紐付け
-function bindPhase1(){
-  const btn = document.getElementById('btnP1');
-  const btnReset = document.getElementById('btnP1Reset');
-  if (btn){
-    btn.addEventListener('click', () => {
-      const ans = readAnswers();
-      const id  = pickArchetype(ans);
-      // archetype_id を保存（既存の ArchetypeStore を使用）
-      ArchetypePath.ArchetypeStore.set(id);
-      // 画面更新
-      apply();
-    }, { once:false });
-  }
-  if (btnReset){
-    btnReset.addEventListener('click', () => {
-      document.querySelectorAll('.toggle input[type="checkbox"]').forEach(i => i.checked = false);
-    });
-  }
-}
-
-// DOM 準備後にバインド（既存の apply 登録はそのまま）
-document.addEventListener('DOMContentLoaded', bindPhase1);
-  </script>
-
+  <!-- 外部JS（ES Modules） -->
+  <script type="module" src="/assets/js/core.js" defer></script>
+  <script type="module" src="/assets/js/ga4.js" defer></script>
+  <script type="module" src="/assets/js/archetype-path.js" defer></script>
 </body>
-
 </html>
