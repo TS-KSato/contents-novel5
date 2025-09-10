@@ -1,33 +1,11 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>運命の銀竜暦｜レシピ</title>
-<meta name="description" content="エテルナリアの食卓の一皿。材料と作り方、語り手の言葉。">
-<style>
-  html{font-size:16px}
-  :root{--bg:#0b0d12;--ink:#fff;--muted:#aeb7d0;--line:#27304a;--card:#151826;--accent:#9fd3ff;--radius:.875rem;--pad:1rem}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.8;-webkit-text-size-adjust:100%;padding-bottom:4.5rem}
-  .wrap{max-width:40rem;margin:0 auto;padding:1rem 1rem 0}
-  header{text-align:center;padding:.5rem 0}
-  header h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
-  header .muted{color:var(--muted);font-size:.875rem}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--pad);margin:.75rem 0}
-  .title{font-size:1.125rem;font-weight:700;margin:.25rem 0}
-  .meta{color:var(--muted);font-size:.8125rem}
-  .lead{color:#e8eeff}
-  .sep{height:1px;background:var(--line);margin:.75rem 0}
-  .avatar{width:3.25rem;height:3.25rem;border-radius:50%;border:1px solid var(--line);background:#10172a center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:#cfe1ff;font-weight:700;margin:0 auto .5rem}
-  .pill{display:inline-flex;align-items:center;justify-content:center;background:#13203a;border:1px solid #2b3b61;border-radius:999px;padding:.25rem .5rem;font-size:.75rem;text-decoration:none;color:#d7e6ff}
-  .navlinks{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:.5rem 0}
-  .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:rgba(10,14,22,.9);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
-  .bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
-  .bn-btn{appearance:none;background:none;border:0;color:#cfe1ff;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:3.25rem;font-size:.75rem}
-  .bn-icon{width:20px;height:20px;margin-bottom:.125rem;border-radius:4px;border:1px solid var(--line);background:#16213c;display:flex;align-items:center;justify-content:center;font-size:.75rem}
-  .bn-accent{color:#fff}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>運命の銀竜暦｜レシピ</title>
+  <meta name="description" content="エテルナリアの食卓の一皿。材料と作り方、語り手の言葉。">
+  <link rel="stylesheet" href="./assets/css/recipe.css">
 </head>
 <body>
   <div class="wrap">
@@ -41,75 +19,17 @@
       </div>
     </header>
 
-    <section class="card" id="content" aria-live="polite">
-      <!-- JSで挿入 -->
-    </section>
+    <section class="card" id="content" aria-live="polite"></section>
   </div>
 
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html" aria-label="ホーム">
-        <span class="bn-icon">🏠</span><span>ホーム</span>
-      </a>
-      <a class="bn-btn" href="./notice.html" aria-label="お知らせ">
-        <span class="bn-icon">📣</span><span>お知らせ</span>
-      </a>
-      <a class="bn-btn" href="./mypage.html" aria-label="マイページ">
-        <span class="bn-icon">👤</span><span>マイページ</span>
-      </a>
+      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
     </div>
   </nav>
 
-<script>
-const JSON_PATH="./recipe.json";
-function esc(s){return String(s||"").replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
-function q(name){return new URL(location.href).searchParams.get(name)}
-
-(async function(){
-  const id = q("id");
-  const content = document.getElementById("content");
-  if(!id){ content.innerHTML = `<div class="meta">レシピIDが指定されていません。</div>`; return; }
-
-  try{
-    const res=await fetch(JSON_PATH,{cache:"no-cache"});
-    const data=await res.json();
-    const recipes=Array.isArray(data)?data:(data.items||[]);
-    const r = recipes.find(x=>String(x.id)===String(id));
-    if(!r){ content.innerHTML = `<div class="meta">レシピが見つかりませんでした。</div>`; return; }
-
-    // ヘッダー更新
-    document.getElementById("title").textContent = r.title || "レシピ";
-    document.getElementById("subtitle").textContent = r.real_name ? `現実参考：${r.real_name}` : "エテルナリアの一皿";
-    const initials = (r.character||"").slice(0,2) || "食";
-    const av = document.getElementById("avatar");
-    if(r.avatar){ av.style.backgroundImage = `url('${esc(r.avatar)}')`; } else { av.textContent = initials; }
-
-    // キャラ別トップ導線
-    const linkMap = {"アラン":"./dragon-table-alan.html","ドレイク":"./dragon-table-drake.html","ライラ":"./dragon-table-laila.html","ネスター":"./dragon-table-nester.html"};
-    const charLink = document.getElementById("charLink");
-    charLink.textContent = r.character ? `${r.character}の食卓へ` : "キャラ別トップへ";
-    charLink.href = linkMap[r.character] || "./dragon-table.html";
-
-    // 本文
-    content.innerHTML = `
-      ${ r.intro? `<p class="lead">${esc(r.intro)}</p>`:"" }
-      <div class="sep"></div>
-      <div class="body">
-        <h3 style="margin:.25rem 0;font-size:1rem;">材料</h3>
-        <ul style="margin:.25rem 0 .5rem; padding-left:1.25rem;">
-          ${(r.ingredients||[]).map(i=>`<li>${esc(i)}</li>`).join("")}
-        </ul>
-        <h3 style="margin:.25rem 0;font-size:1rem;">作り方</h3>
-        <ol style="margin:.25rem 0 .5rem; padding-left:1.25rem;">
-          ${(r.steps||[]).map(s=>`<li>${esc(s)}</li>`).join("")}
-        </ol>
-      </div>
-      ${ r.comment? `<div class="sep"></div><p class="meta">${esc(r.comment)}</p>`:"" }
-    `;
-  }catch(e){
-    content.innerHTML = `<div class="meta">読み込みに失敗しました。recipe.jsonをご確認ください。</div>`;
-  }
-})();
-</script>
+  <script type="module" src="./assets/js/recipe.js" defer></script>
 </body>
 </html>

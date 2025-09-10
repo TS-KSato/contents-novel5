@@ -4,136 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の導き手（有料）</title>
-  <meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物9名から今日あなたを導く案内役を診断します。">
-  <style>
-    :root {
-      --bg: #0b0d12;
-      --ink: #fff;
-      --muted: #aeb7d0;
-      --line: #27304a;
-      --card: #151826;
-      --primary: #1a3358;
-      --primary-b: #34507c;
-      --accent: #9fd3ff;
-      --radius: 16px;
-      --pad: 18px;
-      --gap: 12px;
-      --tap: 48px;
-      --shadow: 0 12px 28px rgba(0, 0, 0, .28);
-    }
-    *{box-sizing:border-box}
-    html{font-size:16px}
-    body{
-      margin:0;background:var(--bg);color:var(--ink);
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-      line-height:1.7;-webkit-text-size-adjust:100%;
-    }
-    .wrap{max-width:40rem;margin:0 auto;padding:20px 14px 92px} /* 下ナビ分の余白を増量 */
-
-    header{text-align:center;margin:4px 0 14px}
-    h1{margin:8px 0 4px;font-size:clamp(22px,6vw,28px);letter-spacing:.02em}
-    .lead{color:var(--muted);font-size:15px;margin:4px auto 0;max-width:34rem}
-
-    .card{
-      background:var(--card);border:1px solid var(--line);border-radius:20px;
-      padding:20px;box-shadow:var(--shadow);margin:14px 0;
-    }
-    .label{font-weight:800;color:#cfe1ff;margin:0 0 8px}
-
-    .form{display:grid;grid-template-columns:1fr;row-gap:16px}
-    .field{display:block}
-    .field label{display:block;font-weight:700;font-size:15px;color:#d9e2ff;margin:0 0 6px}
-
-    select,button{
-      width:100%;min-height:var(--tap);padding:12px 14px;border-radius:14px;
-      border:1px solid var(--line);background:#1a2034;color:#fff;font-size:16px;
-    }
-    select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-    .radios{display:flex;gap:8px;flex-wrap:wrap}
-    .radio{
-      display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line);
-      border-radius:999px;background:#11172a;cursor:pointer;user-select:none;transition:.15s ease;
-    }
-    .radio input{display:none}
-    .radio input:checked + span{
-      color:#fff;background:#34507c;border-radius:999px;padding:4px 10px;
-      box-shadow:0 0 0 2px rgba(159,211,255,.25) inset;
-    }
-    .radio span{color:#cfe1ff;font-size:14px}
-
-    .primary{background:var(--primary);border-color:var(--primary-b);font-weight:800;letter-spacing:.02em}
-    .primary:hover{filter:brightness(1.05)}
-    .cta-area{margin-top:10px}
-
-    .err{
-      margin-top:8px;color:#ff9aa8;background:#2a1218;border:1px solid #5b2a33;
-      padding:8px 10px;border-radius:10px;font-size:14px;display:none;
-    }
-
-    .partner{display:flex;gap:12px;align-items:center}
-    .avatar{
-      width:56px;height:56px;border-radius:50%;border:1px solid var(--line);
-      background:#10172a;display:flex;align-items:center;justify-content:center;font-weight:800
-    }
-    .pname{font-weight:800}
-    .prole{color:#cdd5ea;font-size:14px}
-    .line{margin-top:6px;color:#e0e7ff;font-size:16px}
-
-    /* 結果演出 */
-    .fadein{animation:fadeIn .6s ease both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)}}
-
-    footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:12px}
-
-    /* ==== Bottom Nav（3タブ統一） ==== */
-    .bottom-nav{
-      position:fixed;left:0;right:0;bottom:0;z-index:20;
-      background:#121821;border-top:1px solid rgba(141,208,255,.25);
-    }
-    .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
-    .bn-btn{
-      display:flex;flex-direction:column;align-items:center;gap:2px;
-      padding:10px 0;color:var(--ink);text-decoration:none;font-size:14px;
-    }
-    .bn-accent{background:rgba(141,208,255,.15)}
-    .bn-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-
-    @media print{
-      .bottom-nav{display:none}
-      body{background:#fff;color:#000}
-      .card{border-color:#999;box-shadow:none}
-    }
-  </style>
+  <meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物から今日の案内役を診断します。">
+  <link rel="stylesheet" href="./assets/css/partner.css">
 </head>
 <body>
   <div class="wrap">
     <header>
       <h1>今日の導き手</h1>
-      <p class="lead">
-        ここはエテルナリアの星占術師による診断。<br>
-        月・日と性別を選ぶと、今日あなたを導く案内役が現れます。
-      </p>
+      <p class="lead">ここはエテルナリアの星占術師による診断。<br>月・日と性別を選ぶと、今日あなたを導く案内役が現れます。</p>
     </header>
 
-    <!-- 入力 -->
     <section class="card" aria-labelledby="lab-input">
       <div id="lab-input" class="label">入力</div>
       <div class="form" role="group" aria-label="誕生日と性別の入力">
         <div class="field">
           <label for="month">生まれた月</label>
-          <select id="month" aria-label="月を選択">
-            <option value="" hidden>月を選ぶ</option>
-          </select>
+          <select id="month" aria-label="月を選択"><option value="" hidden>月を選ぶ</option></select>
         </div>
-
         <div class="field">
           <label for="day">生まれた日</label>
-          <select id="day" aria-label="日を選択">
-            <option value="" hidden>日を選ぶ</option>
-          </select>
+          <select id="day" aria-label="日を選択"><option value="" hidden>日を選ぶ</option></select>
         </div>
-
         <div class="field">
           <label>性別</label>
           <div class="radios" role="group" aria-label="性別">
@@ -149,18 +40,14 @@
         <button id="btnGo" class="primary">今日の導き手を見る</button>
       </div>
       <div id="formErr" class="err" role="alert" aria-live="assertive"></div>
-      <p class="lead" style="margin-top:8px;font-size:13px">
-        ※ 生年月日は<strong>月と日</strong>のみ。年の入力は不要です。
-      </p>
+      <p class="lead" style="margin-top:8px;font-size:13px">※ 生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
     </section>
 
-    <!-- 結果 -->
     <section id="result" role="region" aria-labelledby="p-lab" aria-live="polite"></section>
 
     <footer>© 運命の銀竜暦</footer>
   </div>
 
-  <!-- Bottom Nav（3タブ：ホーム／お知らせ／マイページ） -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
       <a class="bn-btn" href="./index.html">🏠 ホーム</a>
@@ -169,102 +56,6 @@
     </div>
   </nav>
 
-  <script>
-    // ====== セレクト初期化：月1–12、日1–31 ======
-    const monthSel = document.getElementById("month");
-    const daySel = document.getElementById("day");
-    const errBox = document.getElementById("formErr");
-
-    for (let m = 1; m <= 12; m++) {
-      const o = document.createElement("option");
-      o.value = String(m); o.textContent = String(m);
-      monthSel.appendChild(o);
-    }
-    function buildDayOptions(n) {
-      daySel.innerHTML = '<option value="" hidden>日を選ぶ</option>';
-      for (let d = 1; d <= n; d++) {
-        const o = document.createElement("option");
-        o.value = String(d); o.textContent = String(d);
-        daySel.appendChild(o);
-      }
-    }
-    buildDayOptions(31);
-
-    function daysIn(m, y) {
-      return [31, ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
-    }
-    function reflowDays() {
-      const y = new Date().getFullYear();
-      const m = Number(monthSel.value || 0);
-      if (!m) { buildDayOptions(31); return; }
-      const n = daysIn(m, y);
-      const prev = daySel.value;
-      buildDayOptions(n);
-      if (prev && Number(prev) <= n) { daySel.value = prev; }
-    }
-    monthSel.addEventListener("change", reflowDays);
-    window.addEventListener("pageshow", reflowDays);
-
-    // ====== 決定ロジック（ダミーデータ） ======
-    const CHARACTERS = [
-      { id: "alan",   name: "アラン",   role: "若き守り手",   lines: ["できることを三つ。終わったら胸を張ろう。", "怖いなら一緒に行こう。足は二人分で軽くなる。"] },
-      { id: "laila",  name: "ライラ",   role: "古き語り部",   lines: ["急ぐ話ほど腰を据えて聞こう。真は静けさの中にある.", "休息は物語の間（ま）。間があるから響くのだ。"] },
-      { id: "drake",  name: "ドレイク", role: "勇者の剣士",   lines: ["刃を抜く前に、心を抜け。決めるのは覚悟だ。", "仲間を信じろ。背中はそれで守られる。"] },
-      { id: "nester", name: "ネスター", role: "風の導き手",   lines: ["高く飛べば遠くが見える。視点を変えるだけで解ける謎がある。", "地図を広げよ。道は一本ではない。"] }
-      // 本番は 9 名に拡張予定（JSON外部化可）
-    ];
-    function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-    function pick(len, seed){return hashStr(seed)%len}
-    function todayKey(){const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
-
-    const resultEl = document.getElementById("result");
-
-    function showError(msg){
-      errBox.textContent = msg || "";
-      errBox.style.display = msg ? "block" : "none";
-    }
-
-    function renderResult(p, line){
-      resultEl.innerHTML = `
-        <div class="card fadein" aria-labelledby="p-lab">
-          <div id="p-lab" class="label">今日の導き手</div>
-          <div class="partner">
-            <div class="avatar" aria-hidden="true">${p.name.slice(0,2)}</div>
-            <div><div class="pname">${p.name}</div><div class="prole">${p.role}</div></div>
-          </div>
-          <p class="line">「${line}」</p>
-          <small class="lead" style="display:block;margin-top:6px;font-size:13px;color:var(--muted)">
-            ※ 本日は端末日付に基づき一意に決定されます。月・日・性別により、来訪者ごとに結果が異なる場合があります。
-          </small>
-        </div>`;
-      // GA4 例: window.dataLayer?.push({event:"view_partner_result", character:p.id});
-    }
-
-    document.getElementById("btnGo").addEventListener("click", () => {
-      showError(""); // クリア
-      const mm = monthSel.value;
-      const dd = daySel.value;
-      if (!mm || !dd) {
-        showError("月と日を選んでください。");
-        return;
-      }
-      const gender = document.querySelector('input[name="gender"]:checked')?.value || "未選択";
-      const seed = `${todayKey()}|${mm}-${dd}|${gender}`;
-      const p = CHARACTERS[pick(CHARACTERS.length, seed)];
-      const line = p.lines[pick(p.lines.length, seed + "|l")];
-      renderResult(p, line);
-      // スクロール誘導（結果を確実に視界へ）
-      resultEl.scrollIntoView({behavior:"smooth", block:"start"});
-    });
-
-    // ====== Bottom Nav 現在地ハイライト ======
-    (function(){
-      var path = location.pathname.split('/').pop() || 'index.html';
-      document.querySelectorAll('.bottom-nav a').forEach(function(a){
-        var href = a.getAttribute('href')||'';
-        if(href.endsWith(path)){ a.classList.add('bn-accent'); a.setAttribute('aria-current','page'); }
-      });
-    })();
-  </script>
+  <script type="module" src="./assets/js/partner.js" defer></script>
 </body>
 </html>
