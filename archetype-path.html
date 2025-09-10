@@ -1,67 +1,294 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>運命の銀竜暦｜魂の羅針盤（元型診断＋今日の役割）</title>
   <meta name="description" content="初回の元型（アーキタイプ）診断であなたの魂の性質を確立し、毎日の10問で今日の『役割（パス）』を授けます。">
   <style>
-    :root{--bg:#0b0f14;--panel:#121821;--ink:#e9f1ff;--muted:#97a7c2;--line:#2a344d;--accent:#8dd0ff;--r:16px;--tap:48px}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;line-height:1.7}
-    .wrap{max-width:760px;margin:auto;padding:16px 16px 92px}
-    h1{font-size:clamp(22px,5vw,28px);margin:6px 0 8px}
-    .lead{color:var(--muted);margin:0 0 12px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin:12px 0;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-    .card-h{padding:12px 14px;font-weight:800;border-bottom:1px dashed rgba(141,208,255,.25)}
-    .card-c{padding:12px 14px}
-    .btn{appearance:none;border:none;cursor:pointer;width:100%;min-height:var(--tap);padding:12px;border-radius:12px;background:#17325a;border:1px solid #2e4c79;color:#fff;font-weight:800}
-    .btn:hover{filter:brightness(1.05)}
-    .btn.ghost{background:#121829}
-    .grid2{display:grid;grid-template-columns:1fr;gap:10px}
-    @media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+    :root {
+      --bg: #0b0f14;
+      --panel: #121821;
+      --ink: #e9f1ff;
+      --muted: #97a7c2;
+      --line: #2a344d;
+      --accent: #8dd0ff;
+      --r: 16px;
+      --tap: 48px
+    }
 
-    .q{margin:10px 0}
-    .q .t{font-weight:700}
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height: 1.7
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: auto;
+      padding: 16px 16px 92px
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 28px);
+      margin: 6px 0 8px
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0 0 12px
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      margin: 12px 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25)
+    }
+
+    .card-h {
+      padding: 12px 14px;
+      font-weight: 800;
+      border-bottom: 1px dashed rgba(141, 208, 255, .25)
+    }
+
+    .card-c {
+      padding: 12px 14px
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      min-height: var(--tap);
+      padding: 12px;
+      border-radius: 12px;
+      background: #17325a;
+      border: 1px solid #2e4c79;
+      color: #fff;
+      font-weight: 800
+    }
+
+    .btn:hover {
+      filter: brightness(1.05)
+    }
+
+    .btn.ghost {
+      background: #121829
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px
+    }
+
+    @media(min-width:640px) {
+      .grid2 {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    .q {
+      margin: 10px 0
+    }
+
+    .q .t {
+      font-weight: 700
+    }
 
     /* 2択スイッチ */
-    .toggle{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:8px}
-    .toggle .opt{display:block;text-align:center;font-size:14px;color:#cfe1ff}
-    .switch{position:relative;width:66px;height:34px;background:#0f1626;border:1px solid var(--line);border-radius:999px;cursor:pointer}
-    .switch input{display:none}
-    .knob{position:absolute;top:2px;left:2px;width:28px;height:28px;border-radius:50%;background:#2b446d;transition:transform .2s}
-    .switch input:checked + .knob{transform:translateX(32px)}
+    .toggle {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    .toggle .opt {
+      display: block;
+      text-align: center;
+      font-size: 14px;
+      color: #cfe1ff
+    }
+
+    .switch {
+      position: relative;
+      width: 66px;
+      height: 34px;
+      background: #0f1626;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer
+    }
+
+    .switch input {
+      display: none
+    }
+
+    .knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #2b446d;
+      transition: transform .2s
+    }
+
+    .switch input:checked+.knob {
+      transform: translateX(32px)
+    }
 
     /* アバター（キャラアイコン） */
-    .avatar{width:48px;height:48px;border-radius:50%;display:inline-grid;place-items:center;font-weight:800;color:#0b0f14}
-    .av-alan{background:linear-gradient(135deg,#a8d8ff,#e6f3ff)}
-    .av-drake{background:linear-gradient(135deg,#ff9a9e,#fecfef)}
-    .av-nester{background:linear-gradient(135deg,#c2ffd8,#465efb)}
-    .av-lilia{background:linear-gradient(135deg,#f6d365,#fda085)}
-    .av-laila{background:linear-gradient(135deg,#d4c5ff,#8fb4ff)}
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 800;
+      color: #0b0f14
+    }
 
-    .pill{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(141,208,255,.12);border:1px solid rgba(141,208,255,.25)}
+    .av-alan {
+      background: linear-gradient(135deg, #a8d8ff, #e6f3ff)
+    }
 
-    .result{animation:fade .6s ease both}
-    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .av-drake {
+      background: linear-gradient(135deg, #ff9a9e, #fecfef)
+    }
 
-    .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
-    .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
-    .bn-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;color:var(--ink);text-decoration:none;font-size:14px}
-    .bn-accent{background:rgba(141,208,255,.15)}
+    .av-nester {
+      background: linear-gradient(135deg, #c2ffd8, #465efb)
+    }
 
-    .note{font-size:13px;color:var(--muted)}
-    details.help{background:rgba(141,208,255,.06);border:1px solid rgba(141,208,255,.18);border-radius:12px;padding:10px 12px}
-    details.help summary{cursor:pointer;font-weight:700}
-    details.help + details.help{margin-top:8px}
+    .av-lilia {
+      background: linear-gradient(135deg, #f6d365, #fda085)
+    }
+
+    .av-laila {
+      background: linear-gradient(135deg, #d4c5ff, #8fb4ff)
+    }
+
+    .pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(141, 208, 255, .12);
+      border: 1px solid rgba(141, 208, 255, .25)
+    }
+
+    .result {
+      animation: fade .6s ease both
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #121821;
+      border-top: 1px solid rgba(141, 208, 255, .25)
+    }
+
+    .bn-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 40rem;
+      margin: 0 auto
+    }
+
+    .bn-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 10px 0;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px
+    }
+
+    .bn-accent {
+      background: rgba(141, 208, 255, .15)
+    }
+
+    .note {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    details.help {
+      background: rgba(141, 208, 255, .06);
+      border: 1px solid rgba(141, 208, 255, .18);
+      border-radius: 12px;
+      padding: 10px 12px
+    }
+
+    details.help summary {
+      cursor: pointer;
+      font-weight: 700
+    }
+
+    details.help+details.help {
+      margin-top: 8px
+    }
+
+    .avatar-wrap {
+      display: inline-grid;
+      place-items: center
+    }
+
+    .avatar-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      overflow: hidden
+    }
+
+    .avatar-fallback {
+      display: inline-grid;
+      place-items: center
+    }
   </style>
 </head>
+
 <body>
   <main class="wrap">
     <header>
       <h1>魂の羅針盤</h1>
-      <p class="lead">「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は元型（アーキタイプ）</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割（パス）を授かります。</p>
-      <details class="help"><summary>世界観がわからない方へ</summary>
+      <p class="lead">
+        「ルナルの教えを受け継いだ新時代の担い手」として、<strong>初回は元型（アーキタイプ）</strong>を確立し、<strong>以後は毎日の10問</strong>で今日の役割（パス）を授かります。</p>
+      <details class="help">
+        <summary>世界観がわからない方へ</summary>
         <p class="note">この作品では、銀色の古代竜「ルナル」の教えを人々が受け継ぐ時代が舞台です。<br>元型＝あなたの“物語上の性質”、役割（パス）＝“今日の歩き方”。難しく考えず、直感で選んでください。</p>
         <ul class="note" style="margin:.25rem 0 0 1rem">
           <li><strong>アラン</strong>：二つの世界の架け橋</li>
@@ -155,397 +382,159 @@
     </div>
   </nav>
 
-<script>
-// ========== グローバル変数 ==========
-let FORTUNE_DATA = null; // 占いメッセージデータ
-let LOADING_ERROR = false; // 読み込みエラーフラグ
+  <script>
+    /* =========================================================
+     * ArchetypePath Core (Refactored)
+     * - Storage: localStorage は archetype_id のみ
+     * - Avatar : 画像解決（id → name の順で検索）＋フォールバック
+     * - Render : 呼び出し側は renderArchetypeBox(archetype) だけ
+     * =======================================================*/
 
-// ========== データ読み込み ==========
-async function loadFortuneMessages() {
-  try {
-    const response = await fetch('./archetype_fortune.json', {
-      cache: 'no-cache' // 開発中はキャッシュ無効
+    /* ---------- 0) 小ユーティリティ ---------- */
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+    /* ---------- 1) Storage（最小保存：archetype_id のみ） ---------- */
+    const ArchetypeStore = (() => {
+      const KEY = "archetype_id";
+
+      // 互換: 旧キーが残っていたら移行して削除
+      const legacy = localStorage.getItem("userArchetype");
+      if (legacy && !localStorage.getItem(KEY)) {
+        try {
+          const obj = JSON.parse(legacy);
+          if (obj && typeof obj.id === "string") localStorage.setItem(KEY, obj.id);
+        } catch (_) { }
+        localStorage.removeItem("userArchetype");
+      }
+      // 余計なキーは触らない（本ページ外の機能に影響させない）
+
+      return Object.freeze({
+        get() { return localStorage.getItem(KEY); },
+        set(id) { if (typeof id === "string" && id) localStorage.setItem(KEY, id); },
+        clear() { localStorage.removeItem(KEY); }
+      });
+    })();
+
+    /* ---------- 2) Avatar 解決（id → name の順でマップ） ---------- */
+    /* 必要に応じて追記してください（ファイル名規約: char-*.jpg） */
+    const AVATAR_BY_ID = Object.freeze({
+      alan: "assets/char-alan.jpg",
+      drake: "assets/char-drake.jpg",
+      nester: "assets/char-nester.jpg",
+      lilia: "assets/char-lilia.jpg",
+      laila: "assets/char-laila.jpg",
+      lunal: "assets/char-lunal.jpg",
+      magnus: "assets/char-magnus.jpg",
+      king: "assets/char-king.jpg",
+      mireia: "assets/char-mireia.jpg"
     });
-    if (!response.ok) throw new Error('データ読み込み失敗');
-    return await response.json();
-  } catch (error) {
-    console.error('占いデータの読み込みエラー:', error);
-    LOADING_ERROR = true;
-    return null;
-  }
-}
+    const AVATAR_BY_NAME = Object.freeze({
+      "アラン": "assets/char-alan.jpg",
+      "ドレイク": "assets/char-drake.jpg",
+      "ネスター": "assets/char-nester.jpg",
+      "リリア": "assets/char-lilia.jpg",
+      "ライラ": "assets/char-laila.jpg",
+      "ルナル": "assets/char-lunal.jpg",
+      "マグナス": "assets/char-magnus.jpg",
+      "ネクサート": "assets/char-king.jpg",
+      "ミレイア": "assets/char-mireia.jpg"
+    });
 
-// ========== データ ==========
-const ARCHETYPES = [
-  {id:'alan',   name:'アランの魂（架け橋）', desc:'二つの世界の間に立ち、調和と理解を求める者。', av:'av-alan', initials:'アラ'},
-  {id:'drake',  name:'ドレイクの魂（守護者）', desc:'愛する者を守るために、困難に立ち向かう強さと脆さを持つ者。', av:'av-drake', initials:'ドレ'},
-  {id:'nester', name:'ネスターの魂（観察者）', desc:'高き視点から本質を見抜き、流れに身を任せる知恵を持つ者。', av:'av-nester', initials:'ネス'},
-  {id:'lilia',  name:'リリアの魂（自由なる風）', desc:'好奇心に満ち、自然と共鳴し、形に縛られず真実を伝える者。', av:'av-lilia', initials:'リリ'},
-  {id:'laila',  name:'ライラの魂（語り部）', desc:'古き知恵を尊び、過去から学び、未来へ物語を繋ぐ者。', av:'av-laila', initials:'ライ'}
-];
+    const Avatar = Object.freeze({
+      /**
+       * @param {Object} a - archetype-like object
+       * @param {string=} a.id   例: 'alan'
+       * @param {string=} a.name 例: 'アランの魂（…）'
+       * @param {string=} a.initials 例: 'AL'
+       * @param {string=} a.av 既存の円アイコンクラス
+       * @returns {HTMLElement} wrapper 要素（img または fallback span を内包）
+       */
+      render(a = {}) {
+        const wrap = document.createElement("span");
+        wrap.className = "avatar-wrap";
 
-// 役割（パス）定義：4軸ベクトル（vector/basis/mood/social）各 -1..+1
-const ROLES = [
-  {id:'disciple', name:'銀竜の徒 (Disciple)', v:[-1,-1,-1,-1], desc:'聖域に留まり、教えを内省して力を蓄えるべき日。'},
-  {id:'stormblade', name:'ストームブレイド (Stormblade)', v:[+1,+1,+1,+1], desc:'仲間を守り、正面から困難に挑むべき日。'},
-  {id:'wind_guide', name:'風の導き手 (Wind Guide)', v:[-1,-1,-1,+0], desc:'高き視点で観察し、流れに逆らわず本質を見抜く日。'},
-  {id:'lorekeeper', name:'古き語り部 (Lorekeeper)', v:[-1,+1,-1,-1], desc:'書を開き、知の継承から未来を見出す日。'},
-  {id:'knight', name:'王国の騎士 (Knight)', v:[+1,+1,+1,+1], desc:'組織の中で役目を果たし、秩序を守る日。'},
-  {id:'healer', name:'聖域の癒し手 (Healer)', v:[-1,-1,-1,+1], desc:'他者の痛みに寄り添い、自然の力で和らげる日。'}
-];
+        // 1) id → 2) name（後置きの修飾語を除去）→ 3) fallback
+        const byId = AVATAR_BY_ID[(a.id || "").trim()];
+        const plainName = String(a.name || "").replace(/の魂.*$/, "").trim();
+        const byName = AVATAR_BY_NAME[plainName];
 
-// Phase2 質問（2択UI）：軸マッピング
-const QUESTIONS = [
-  { id:1, text:'今日のあなたは、ルナルの巣に留まるか、ネクサートの町へ向かうか？', axis:'vector', left:'巣に留まる', right:'町へ向かう' },
-  { id:2, text:'道を選ぶなら、風の囁きに耳を澄ますか、ライラの古地図を頼るか？', axis:'basis', left:'風の囁き', right:'古地図' },
-  { id:3, text:'あなたの心は、静かな聖域の泉か、荒れ狂う嵐の剣か？', axis:'mood', left:'静かな泉', right:'嵐の剣' },
-  { id:4, text:'力を得るなら、一人で瞑想するか、仲間と共に儀式を行うか？', axis:'social', left:'一人で瞑想', right:'仲間と儀式' },
-  { id:5, text:'今、向き合うべきは、自らの恐怖か、王の野望か？', axis:'vector', left:'自らの恐怖', right:'王の野望' },
-  { id:6, text:'魔法を紡ぐなら、リリアのように舞うか、マグナスのように詠唱するか？', axis:'basis', left:'リリアのように', right:'マグナスのように' },
-  { id:7, text:'ルナルの「大地帰還」を前にした時、あなたは何を感じるか？', axis:'mood', left:'静かな受容', right:'運命への抵抗' },
-  { id:8, text:'知恵を求めるなら、ネスターとの対話か、学院での議論か？', axis:'social', left:'ネスターとの対話', right:'学院での議論' },
-  { id:9, text:'今日のあなたの手は、何を求めているか？', axis:'vector', left:'鱗のお守りを握る', right:'剣の柄を握る' },
-  { id:10, text:'有限の命を前にして、何を思うか？', axis:'basis', left:'無限の価値を見出す', right:'永遠を渇望する' }
-];
+        const src = byId || byName || null;
+        if (src) {
+          const img = document.createElement("img");
+          img.className = "avatar-img";
+          img.src = src;
+          img.alt = "";                 // 装飾扱い（隣のテキストで識別）
+          img.decoding = "async";
+          img.loading = "lazy";
+          wrap.appendChild(img);
+        } else {
+          const span = document.createElement("span");
+          span.className = "avatar-fallback avatar " + esc(a.av || "");
+          span.setAttribute("aria-hidden", "true");
+          span.textContent = a.initials || "？";
+          wrap.appendChild(span);
+        }
+        return wrap;
+      }
+    });
 
-// ========== ユーティリティ関数 ==========
-const $ = (s, r=document)=>r.querySelector(s);
-const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+    /* ---------- 3) Archetype Box レンダー（呼び出しAPI） ---------- */
+    /**
+     * archetype オブジェクト例（既存想定）:
+     * { id:'alan', name:'アランの魂（…）', desc:'説明…', av:'av-alan', initials:'AL' }
+     */
+    function renderArchetypeBox(archetype) {
+      const box = $("#archetypeBox");
+      const text = $("#archText");
+      if (!box || !text) return;
 
-function getArchetype(){ 
-  try{ 
-    return JSON.parse(localStorage.getItem('userArchetype')); 
-  }catch{
-    return null;
-  } 
-}
+      if (!archetype) {
+        box.hidden = true;
+        return;
+      }
+      box.hidden = false;
 
-function setArchetype(obj){ 
-  localStorage.setItem('userArchetype', JSON.stringify(obj)); 
-}
+      // Avatarを先に生成（装飾画像 or フォールバック）
+      const avatarEl = Avatar.render(archetype);
 
-function normalize2(checked){ 
-  // 左: -1, 右: +1
-  return checked ? +1 : -1;
-}
-
-// ========== 補助関数 ==========
-// 詳細メッセージ取得
-function getDetailMessage(archId, roleId) {
-  if (!FORTUNE_DATA) return null;
-  const key = `${archId}_${roleId}`;
-  return FORTUNE_DATA.base_patterns?.find(p => p.id === key);
-}
-
-// 曜日別メッセージ取得
-function getDailyMessage(archId) {
-  if (!FORTUNE_DATA) return null;
-  const dayOfWeek = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][new Date().getDay()];
-  const key = `${archId}_${dayOfWeek}`;
-  return FORTUNE_DATA.daily_patterns?.find(p => p.id === key);
-}
-
-// 特別な日のメッセージ取得
-function getSpecialMessage(archId) {
-  if (!FORTUNE_DATA) return null;
-  
-  const today = new Date();
-  const date = today.getDate();
-  
-  // 月初（1-3日）
-  if (date <= 3) {
-    return FORTUNE_DATA.special_patterns?.month_start?.find(p => p.archetype === archId);
-  }
-  // 月半ば（14-16日）
-  if (date >= 14 && date <= 16) {
-    return FORTUNE_DATA.special_patterns?.month_middle?.find(p => p.archetype === archId);
-  }
-  // 月末（月の最終3日）
-  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-  if (date >= lastDay - 2) {
-    return FORTUNE_DATA.special_patterns?.month_end?.find(p => p.archetype === archId);
-  }
-  
-  // 他の特別な日の判定も追加可能
-  return null;
-}
-
-// ========== UI構築関数 ==========
-function renderArchetypeBox(){
-  const a = getArchetype();
-  if(!a){ 
-    $('#archetypeBox').hidden = true; 
-    return; 
-  }
-  $('#archetypeBox').hidden = false;
-  $('#archText').innerHTML = `<div class="pill">確定済みの元型</div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-      <span class="avatar ${a.av}" aria-hidden="true">${a.initials}</span>
+      // 内容をクリアしてDOMで組み立て（XSS対策：textContentで埋める）
+      text.innerHTML = `
+    <div class="pill">確定済みの元型</div>
+    <div class="arch-line" style="display:flex;align-items:center;gap:10px;margin-top:6px">
+      <span class="arch-avatar-slot"></span>
       <div>
-        <h3 style="margin:.25rem 0 0">${a.name}</h3>
-        <p class="note" style="margin:.25rem 0 0">${a.desc}</p>
+        <h3 class="arch-name" style="margin:.25rem 0 0"></h3>
+        <p class="note arch-desc" style="margin:.25rem 0 0"></p>
       </div>
     </div>
     <div class="grid2" style="margin-top:10px">
       <button class="btn ghost" id="btnChange">元型をやり直す（この端末のみ）</button>
       <a class="btn" href="#p2h">十の質問へ進む</a>
     </div>`;
-  $('#btnChange').addEventListener('click', ()=>{
-    if(confirm('元型を未設定に戻しますか？（この端末のみ）')){ 
-      localStorage.removeItem('userArchetype'); 
-      apply(); 
+
+      $(".arch-avatar-slot", text).appendChild(avatarEl);
+      $(".arch-name", text).textContent = archetype.name || "—";
+      $(".arch-desc", text).textContent = archetype.desc || "";
+
+      $("#btnChange", text)?.addEventListener("click", () => {
+        if (confirm("元型を未設定に戻しますか？（この端末のみ）")) {
+          ArchetypeStore.clear();
+          // 呼び出し側の apply()/再描画を想定
+          (window.apply?.call ? window.apply() : location.reload());
+        }
+      });
     }
-  });
-}
 
-function showPhase1IfNeeded(){
-  const has = !!getArchetype();
-  $('#phase1').hidden = has; // 初回のみ表示
-  $('#phase2').hidden = !has; // 元型があれば質問を表示
-}
-
-function pickArchetypeFromAnswers(ans){
-  const s = {alan:0, drake:0, nester:0, lilia:0, laila:0};
-  const {logic, spirit, vector, social} = ans;
-  if(logic>0){ 
-    s.drake+=1; s.laila+=1; 
-  } else { 
-    s.alan+=1; s.nester+=1; s.lilia+=1; 
-  }
-  if(vector>0){ 
-    s.drake+=1; 
-  } else { 
-    s.laila+=0.5; s.nester+=0.5; s.alan+=0.5; 
-  }
-  if(spirit<0){ 
-    s.lilia+=1; s.nester+=0.5; 
-  } else { 
-    s.laila+=0.7; 
-  }
-  if(social>0){ 
-    s.alan+=0.4; s.drake+=0.4; 
-  } else { 
-    s.nester+=0.4; s.laila+=0.4; 
-  }
-  const bestId = Object.entries(s).sort((a,b)=>b[1]-a[1])[0][0];
-  return ARCHETYPES.find(a=>a.id===bestId);
-}
-
-function buildP1(){
-  $('#btnP1').addEventListener('click', ()=>{
-    const vals = {logic:null, spirit:null, vector:null, social:null};
-    $$('#phase1 .toggle').forEach(el=>{
-      const axis = el.getAttribute('data-axis');
-      const checked = el.querySelector('input')?.checked || false;
-      vals[axis] = normalize2(checked);
+    /* ---------- 4) 公開API（必要なら他スクリプトから利用可） ---------- */
+    window.ArchetypePath = Object.freeze({
+      ArchetypeStore,
+      Avatar,
+      renderArchetypeBox
     });
-    if(Object.values(vals).some(v=>v===null)){
-      alert('全ての設問にお答えください'); 
-      return;
-    }
-    const a = pickArchetypeFromAnswers(vals);
-    setArchetype(a); 
-    apply();
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-  $('#btnP1Reset').addEventListener('click', ()=>{
-    $$('#phase1 .toggle input').forEach(i=>i.checked=false);
-  });
-}
+  </script>
 
-function buildPhase2(){
-  const box = $('#qList'); 
-  box.innerHTML='';
-  QUESTIONS.forEach(q=>{
-    const row = document.createElement('div'); 
-    row.className='q';
-    row.innerHTML = `<div class="t">${q.id}. ${q.text}</div>`;
-    const tog = document.createElement('div'); 
-    tog.className='toggle'; 
-    tog.setAttribute('data-axis', q.axis);
-    tog.innerHTML = `
-      <span class="opt">${q.left}</span>
-      <label class="switch"><input type="checkbox" id="p2q${q.id}"><span class="knob"></span></label>
-      <span class="opt">${q.right}</span>`;
-    row.appendChild(tog); 
-    box.appendChild(row);
-  });
-
-  $('#btnEval').addEventListener('click', ()=>{
-    const axes = { vector:0, basis:0, mood:0, social:0 };
-    let answered = true;
-    $$('#qList .toggle').forEach(sc=>{
-      const ch = sc.querySelector('input');
-      if(!ch){ 
-        answered=false; 
-        return; 
-      }
-      const axis = sc.getAttribute('data-axis');
-      axes[axis]+= normalize2(ch.checked);
-    });
-    if(!answered){ 
-      alert('まだ未回答の設問があります'); 
-      return; 
-    }
-    // 正規化（平均）
-    axes.vector/=3; 
-    axes.basis/=3; 
-    axes.mood/=2; 
-    axes.social/=2;
-
-    // 近い役割を選ぶ（ユークリッド距離）
-    const vec = [axes.vector, axes.basis, axes.mood, axes.social];
-    let best=ROLES[0], bestDist=1e9;
-    for(const r of ROLES){
-      const d = Math.hypot(r.v[0]-vec[0], r.v[1]-vec[1], r.v[2]-vec[2], r.v[3]-vec[3]);
-      if(d<bestDist){ 
-        best=r; 
-        bestDist=d; 
-      }
-    }
-
-    // 神託テキスト生成
-    const arch = getArchetype() || ARCHETYPES[0];
-    const oracle = buildOracle(arch.id, best.id);
-    
-    // 詳細メッセージの取得（JSONから）
-    const detailMessage = getDetailMessage(arch.id, best.id);
-    const dailyMessage = getDailyMessage(arch.id);
-    const specialMessage = getSpecialMessage(arch.id);
-
-    $('#resultBox').hidden=false;
-    $('#roleText').innerHTML = `
-      <div class="pill">今日の役割（パス）</div>
-      <h3 style="margin:.5rem 0 0">${best.name}</h3>
-      <p class="note" style="margin:.25rem 0 8px">${best.desc}</p>
-      
-      <div class="pill">あなたの元型</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-        <span class="avatar ${arch.av}" aria-hidden="true">${arch.initials}</span>
-        <strong>${arch.name}</strong>
-      </div>
-      
-      <hr style="border:0;border-top:1px dashed rgba(141,208,255,.25);margin:10px 0">
-      
-      <h3 style="margin:.25rem 0 .5rem">銀竜の神託</h3>
-      <blockquote style="margin:0;border-left:3px solid rgba(141,208,255,.4);padding:8px 10px;background:#0f1626">
-        ${oracle}
-      </blockquote>
-      
-      ${detailMessage ? `
-      <div style="margin-top:12px">
-        <h4 style="margin:.25rem 0 .5rem;color:var(--accent)">詳細なメッセージ</h4>
-        <p style="margin:.5rem 0">${detailMessage.message}</p>
-        <p class="note"><strong>今日の導き：</strong>${detailMessage.guidance}</p>
-        <div style="margin-top:8px">
-          ${detailMessage.power_words?.map(w => `<span class="pill" style="margin-right:4px">${w}</span>`).join('') || ''}
-        </div>
-      </div>
-      ` : ''}
-      
-      ${dailyMessage ? `
-      <div style="margin-top:12px;padding:8px;background:rgba(141,208,255,.06);border-radius:8px">
-        <h5 style="margin:0 0 4px;color:var(--accent)">${dailyMessage.title}</h5>
-        <p class="note" style="margin:0">${dailyMessage.message}</p>
-      </div>
-      ` : ''}
-      
-      ${specialMessage ? `
-      <div style="margin-top:12px;padding:8px;background:rgba(255,208,141,.08);border-radius:8px">
-        <h5 style="margin:0 0 4px;color:#ffd08d">✨ ${specialMessage.title}</h5>
-        <p class="note" style="margin:0">${specialMessage.message}</p>
-      </div>
-      ` : ''}
-    `;
-
-    $('#resultBox').scrollIntoView({behavior:'smooth', block:'start'});
-    window.dataLayer = window.dataLayer || []; 
-    window.dataLayer.push({event:'eval_path', role:best.id});
-  });
-
-  $('#btnClearQ').addEventListener('click', ()=>{
-    $$('#qList input').forEach(i=>i.checked=false);
-  });
-}
-
-function buildOracle(archId, roleId) {
-  // データ未読み込み時のフォールバック
-  if (!FORTUNE_DATA || LOADING_ERROR) {
-    const archName = (ARCHETYPES.find(a=>a.id===archId)||ARCHETYPES[0]).name.split('（')[0];
-    const roleName = (ROLES.find(r=>r.id===roleId)||ROLES[0]).name.split(' ')[0];
-    return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。有限の時にこそ、力は正しく輝く。」`;
-  }
-
-  // 基本パターンの取得
-  const baseKey = `${archId}_${roleId}`;
-  const basePattern = FORTUNE_DATA.base_patterns?.find(p => p.id === baseKey);
-  
-  if (!basePattern) {
-    // 基本パターンが見つからない場合のフォールバック
-    return buildGenericOracle(archId, roleId);
-  }
-
-  // 神託テキストの組み立て
-  let oracleText = `「${basePattern.oracle}」`;
-  
-  return oracleText;
-}
-
-// 汎用神託生成（フォールバック用）
-function buildGenericOracle(archId, roleId) {
-  const archData = ARCHETYPES.find(a=>a.id===archId) || ARCHETYPES[0];
-  const roleData = ROLES.find(r=>r.id===roleId) || ROLES[0];
-  const archName = archData.name.split('（')[0];
-  const roleName = roleData.name.split(' ')[0];
-  return `「${archName}よ。今日は『${roleName}』として歩め。恐怖ではなく愛を選び、流れと調和しながら一歩を進め。」`;
-}
-
-function apply(){
-  renderArchetypeBox();
-  showPhase1IfNeeded();
-}
-
-// ========== 起動関数 ==========
-async function start(){
-  // ローディング表示
-  const loadingDiv = document.createElement('div');
-  loadingDiv.id = 'loadingMsg';
-  loadingDiv.innerHTML = '<div class="card"><div class="card-c">占いデータを読み込み中...</div></div>';
-  $('.wrap').prepend(loadingDiv);
-  
-  // データ読み込み
-  FORTUNE_DATA = await loadFortuneMessages();
-  
-  // ローディング表示を削除
-  loadingDiv.remove();
-  
-  // エラー時の警告表示
-  if (LOADING_ERROR) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'card';
-    errorDiv.style.background = 'rgba(255,100,100,0.1)';
-    errorDiv.innerHTML = '<div class="card-c note">⚠️ 占いデータの読み込みに失敗しました。基本機能のみ利用可能です。</div>';
-    $('.wrap').prepend(errorDiv);
-  }
-  
-  // 既存の初期化処理
-  buildP1();
-  buildPhase2();
-  apply();
-  
-  // Bottom Nav 現在地
-  const path = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.bottom-nav a').forEach(a=>{
-    const href = a.getAttribute('href')||'';
-    if(href.endsWith(path)){ 
-      a.classList.add('bn-accent'); 
-      a.setAttribute('aria-current','page');
-    }
-  });
-}
-
-// start関数を呼び出し
-start();
-</script>
 </body>
+
 </html>
