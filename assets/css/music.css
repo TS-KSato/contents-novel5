@@ -1,0 +1,35 @@
+:root { --bg:#0d0f14; --card:#151922; --text:#e7ecf3; --muted:#9aa3b2; --acc:#6aa8ff; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
+header{position:sticky;top:0;background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);padding:14px 16px 8px;z-index:10}
+.title{font-weight:700;font-size:18px}
+.tabs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
+.tab{padding:8px 12px;border-radius:999px;background:#1b2230;color:#c7d2e4;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144}
+.tab.active{background:#23304a;color:#fff;border-color:#38507a}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px 12px 80px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:880px){.grid{grid-template-columns:1fr 1fr 1fr}}
+
+.card{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;background:var(--card);text-decoration:none;color:inherit;border:1px solid #212838}
+.card:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.art{
+  width:72px;height:72px;border-radius:12px;
+  background:linear-gradient(135deg,#2b3446,#3c5076);
+  background-size:cover;background-position:center;
+  display:grid;place-items:center;color:#cfe1ff;font-weight:800;font-size:22px;
+  overflow:hidden;user-select:none;
+}
+.art.fallback::after{content:"♪"}
+.meta{display:grid;gap:3px;min-width:0}
+.name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:999px;background:#22324d;color:#bcd3ff;font-size:11px}
+.go .btn{border:0;border-radius:10px;padding:10px 12px;background:#22324d;color:#cfe1ff;font-weight:700}
+.go .btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+nav.gnav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;justify-content:space-around;
+  padding:10px 8px;background:#111;color:#fff;z-index:1000}
+nav.gnav a{flex:1;text-align:center;text-decoration:none;color:#fff;font-weight:700;line-height:44px;
+  border-radius:10px;background:#222;outline-offset:2px}
+nav.gnav a[aria-current="page"]{background:#444}
+@media(hover:hover){nav.gnav a:hover{background:#333}}
+body{padding-bottom:72px}
