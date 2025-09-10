@@ -1,57 +1,117 @@
-// audio.js — 楽曲詳細/再生のロジック（外部化）
-const params = new URLSearchParams(location.search);
-const id = params.get('id');
+// audio.js — tracks.json を読み込んでリスト再生（data/ 配下参照＋no-cache）
+const $list  = document.getElementById("list") || document.body;
+let ALL = [];
+let current = null;
+let audio = document.querySelector("audio");
 
-const sec = n => !Number.isFinite(n) ? "—" : `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`;
-const label = m => (m || "—");
-function artOf(t){
-  if (t.art) return t.art;
-  if (t.url && /\.mp3(?:\?.*)?$/i.test(t.url)) return t.url.replace(/\.mp3(?:\?.*)?$/i, ".jpg");
-  return null;
+// なければ生成（ページに既存の <audio> があればそれを使用）
+if (!audio) {
+  audio = document.createElement("audio");
+  audio.preload = "metadata";
+  audio.style.display = "none";
+  document.body.appendChild(audio);
 }
 
-// 要素
-const artEl   = document.getElementById('art');
-const titleEl = document.getElementById('title');
-const metaEl  = document.getElementById('meta');
-const extraEl = document.getElementById('extra');
-const audioEl = document.getElementById('audio');
+const esc = (s) => String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]));
 
-// 読み込み
-fetch('tracks.json')
-  .then(r=>r.json())
-  .then(list=>{
-    const data = (id && list.find(t=>t.id===id)) || list[0];
-    if(!data || !data.url){ throw new Error('track not found'); }
+function normalize(t){
+  return {
+    id: String(t.id || ""),
+    name: String(t.name || ""),
+    url: String(t.url || ""),
+    art: String(t.art || ""),
+    bpm: Number.isFinite(t.bpm) ? t.bpm : null,
+    duration: Number.isFinite(t.duration) ? t.duration : null,
+    mood: String(t.mood || ""),
+    archetype: String(t.archetype || ""),
+    paid: Boolean(t.paid)
+  };
+}
 
-    titleEl.textContent = data.name ?? '—';
-    metaEl.textContent  = [data.archetype, label(data.mood), (data.bpm?`${data.bpm} BPM`:null), sec(data.duration)]
-                            .filter(Boolean).join(' ／ ');
-    extraEl.textContent = data.origin ? `出自：${data.origin}` : '—';
+function secToMMSS(n){
+  if(!Number.isFinite(n)) return "";
+  const m = Math.floor(n/60), s = Math.floor(n%60);
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
 
-    audioEl.src = data.url;
-    audioEl.preload = 'metadata';
+function itemHTML(t){
+  const art = t.art
+    ? `<div class="art" style="background-image:url('${esc(t.art)}')"></div>`
+    : `<div class="art" aria-label="アート未設定">♪</div>`;
+  const sub = `${t.bpm ? `${t.bpm} bpm` : ""}${t.duration ? `・${secToMMSS(t.duration)}` : ""}`;
+  return `
+<article class="item" data-id="${esc(t.id)}">
+  ${art}
+  <div class="meta">
+    <div class="name" title="${esc(t.name)}">${esc(t.name)}</div>
+    <div class="sub">${esc(sub.trim().replace(/^・/,""))}</div>
+  </div>
+  <div class="go">
+    <button class="btn" data-act="play" ${t.paid ? 'aria-disabled="true" tabindex="-1"' : ""}>
+      ${t.paid ? "購入後再生" : "再生"}
+    </button>
+  </div>
+</article>`;
+}
 
-    const art = artOf(data);
-    if (art){
-      artEl.style.backgroundImage = `url('${art}')`;
-      artEl.classList.remove('fallback');
-      artEl.setAttribute('aria-label','アートワーク');
+function render(){
+  if (!Array.isArray(ALL) || !ALL.length){
+    $list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+    return;
+  }
+  $list.innerHTML = ALL.map(itemHTML).join("");
+}
+
+function playTrack(t){
+  if (t.paid) return; // 有料は再生しない
+  current = t.id;
+  audio.src = t.url;
+  audio.play().catch(()=>{ /* 自動再生ブロック対策で黙認 */ });
+
+  // リスト上のボタン表記を更新
+  $list.querySelectorAll('.item').forEach(it=>{
+    const id = it.getAttribute('data-id');
+    const btn = it.querySelector('button.btn');
+    if (!btn) return;
+    if (id === current){
+      btn.textContent = "一時停止";
+      btn.dataset.act = "pause";
     } else {
-      artEl.style.backgroundImage = '';
-      artEl.classList.add('fallback');
-      artEl.removeAttribute('aria-label');
+      btn.textContent = it.querySelector('.go .btn')?.getAttribute('aria-disabled') ? "購入後再生" : "再生";
+      btn.dataset.act = "play";
     }
-  })
-  .catch(()=>{
-    titleEl.textContent = 'わかりません／情報が不足しています';
-    metaEl.textContent  = '';
-    extraEl.textContent = '';
   });
+}
 
-// コントロール
-document.getElementById('play').addEventListener('click', ()=>{
-  if (audioEl.paused) audioEl.play(); else audioEl.pause();
+$list.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button.btn');
+  if (!btn) return;
+  const item = e.target.closest('.item');
+  if (!item) return;
+  const id = item.getAttribute('data-id');
+  const t = ALL.find(x=>x.id===id);
+  if (!t) return;
+
+  const act = btn.dataset.act;
+  if (t.paid) return; // 有料は何もしない
+
+  if (act === 'play'){
+    playTrack(t);
+  } else if (act === 'pause'){
+    audio.pause();
+    btn.textContent = "再生";
+    btn.dataset.act = "play";
+  }
 });
-document.getElementById('back15').addEventListener('click', ()=>{ audioEl.currentTime = Math.max(0, audioEl.currentTime - 15); });
-document.getElementById('fwd15').addEventListener('click',  ()=>{ audioEl.currentTime = Math.min((audioEl.duration||1e9), audioEl.currentTime + 15); });
+
+audio.addEventListener('ended', ()=>{
+  // 再生終了時にボタン表記を戻す
+  const it = $list.querySelector(`.item[data-id="${CSS.escape(current||"")}"] .btn`);
+  if (it){ it.textContent = "再生"; it.dataset.act = "play"; }
+});
+
+// ↓↓↓ 参照先を data/ 配下に変更。頻繁更新に合わせて no-cache を採用。
+fetch("./assets/data/tracks.json", { cache: "no-cache" })
+  .then(r => r.json())
+  .then(json => { ALL = (Array.isArray(json)?json:[]).map(normalize); render(); })
+  .catch(()=>{ $list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`; });
