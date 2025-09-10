@@ -560,6 +560,61 @@ function apply(){
 
 // DOM 準備後に実行
 document.addEventListener('DOMContentLoaded', apply);
+function readAnswers(){
+  const axes = ["logic","spirit","vector","social"];
+  const ans = {};
+  axes.forEach(ax => {
+    const el = document.querySelector(`.toggle[data-axis="${ax}"] input[type="checkbox"]`);
+    ans[ax] = !!(el && el.checked); // 未操作は false 扱い（左側）
+  });
+  return ans; // 例: {logic:true, spirit:false, vector:true, social:false}
+}
+
+// 2) 代表パターン（右側= true / 左側= false）
+//   最も“差分の少ない”候補を採用（ハミング距離で最小）
+//   ※ 迷ったときも必ず1つ選ばれます（tieは優先順）
+const ARCH_RULES = [
+  { id:"alan",  pat:{logic:false, spirit:false, vector:true,  social:true } }, // 架け橋（調和×風×行動×仲間）
+  { id:"drake", pat:{logic:true,  spirit:true,  vector:true,  social:true } }, // 守り手（正しさ×古地図×行動×仲間）
+  { id:"nester",pat:{logic:false, spirit:false, vector:false, social:false} }, // 観察者（調和×風×内省×独り）
+  { id:"lilia", pat:{logic:false, spirit:false, vector:true,  social:false} }, // 自由型（調和×風×行動×独り）
+  { id:"laila", pat:{logic:true,  spirit:true,  vector:false, social:false} }, // 語り部（正しさ×古地図×内省×独り）
+];
+
+// 3) 差分（ハミング距離）を計算し最小の id を返す
+function pickArchetype(ans){
+  let best = ARCH_RULES[0], bestDist = Infinity;
+  for(const r of ARCH_RULES){
+    let d = 0;
+    for(const k in r.pat){ if(!!ans[k] !== !!r.pat[k]) d++; }
+    if (d < bestDist){ best = r; bestDist = d; }
+  }
+  return best.id;
+}
+
+// 4) クリックハンドラの紐付け
+function bindPhase1(){
+  const btn = document.getElementById('btnP1');
+  const btnReset = document.getElementById('btnP1Reset');
+  if (btn){
+    btn.addEventListener('click', () => {
+      const ans = readAnswers();
+      const id  = pickArchetype(ans);
+      // archetype_id を保存（既存の ArchetypeStore を使用）
+      ArchetypePath.ArchetypeStore.set(id);
+      // 画面更新
+      apply();
+    }, { once:false });
+  }
+  if (btnReset){
+    btnReset.addEventListener('click', () => {
+      document.querySelectorAll('.toggle input[type="checkbox"]').forEach(i => i.checked = false);
+    });
+  }
+}
+
+// DOM 準備後にバインド（既存の apply 登録はそのまま）
+document.addEventListener('DOMContentLoaded', bindPhase1);
   </script>
 
 </body>

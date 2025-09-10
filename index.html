@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の占いを受け取る</title>
-  <meta name="description" content="銀竜の言葉を継ぐ者へ。ワンタップで今日の占い、物語、竜の食卓。">
+  <meta name="description" content="銀竜の言葉を継ぐ者へワンタップで今日の占い、物語、竜の食卓">
   <style>
     html { font-size: 16px; }
     :root{
@@ -88,7 +88,7 @@
     <!-- ===== HERO / Primary CTA ===== -->
     <section class="hero" aria-label="今日の占い">
       <h1>銀竜からのことばを<br>ワンタップで受け取ろう</h1>
-      <p class="lead">無料で「総合運」を即表示。有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）。</p>
+      <p class="lead">無料で「総合運」を即表示有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）</p>
       <div class="cta">
         <button id="ctaGet" class="btn" data-evt="cta_primary">今日の占いを受け取る</button>
         <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録</a>
@@ -104,7 +104,7 @@
         <button data-char="アラン" class="char-btn" aria-label="アラン" data-evt="char_pick"><img src="./assets/char-alan.jpg" alt="アラン"><div>アラン</div></button>
         <button data-char="リリア" class="char-btn" aria-label="リリア" data-evt="char_pick"><img src="./assets/char-lilia.jpg" alt="リリア"><div>リリア</div></button>
       </div>
-      <p class="meta" style="text-align:center; margin-top:.5rem">選ぶたび当日の結果を表示。日付が変わると更新。</p>
+      <p class="meta" style="text-align:center; margin-top:.5rem">選ぶたび当日の結果を表示日付が変わると更新</p>
     </section>
 
     <!-- ===== Result ===== -->
@@ -144,19 +144,19 @@
     <section class="grid" aria-label="物語と食卓">
       <a href="./about.html" class="tile" data-evt="entry_about">
         <div class="t1">銀竜の言葉を継ぐものとは</div>
-        <div class="t2">物語の世界をより深く楽しんでいただけます。</div>
+        <div class="t2">物語の世界をより深く楽しんでいただけます</div>
       </a>
       <a href="./partner.html" class="tile" data-evt="entry_partner">
         <div class="t1">今日の導き手</div>
-        <div class="t2">銀竜の言葉を継ぐもの中から今日の導き手を診断します。</div>
+        <div class="t2">銀竜の言葉を継ぐもの中から今日の導き手を診断します</div>
       </a>
       <a href="./archetype-path.html" class="tile" data-evt="entry_partner">
-        <div class="t1">魂の羅針盤</div>
-        <div class="t2">あなたの今日の役割（パス）を授かります。</div>
+        <div class="t1">日々の指針</div>
+        <div class="t2">今日の行動を考えるためのヒントをまとめています</div>
       </a>
       <a href="./dragon-table.html" class="tile" data-evt="entry_food">
         <div class="t1">竜の食卓</div>
-        <div class="t2">現実に再現できる異界のレシピ。今日の一皿とキャラ別の食卓。</div>
+        <div class="t2">現実に再現できる異界のレシピ今日の一皿とキャラ別の食卓</div>
       </a>
       <a href="./serial.html" class="tile" data-evt="entry_serial2">
         <div class="t1">七夜の語り巻</div>
@@ -164,11 +164,11 @@
       </a>
       <a href="./novel.html" class="tile" data-evt="entry_novel">
         <div class="t1">短編小説</div>
-        <div class="t2">銀の竜が遺した言葉は、未来をつなぐ翼になる。</div>
+        <div class="t2">銀の竜が遺した言葉は、未来をつなぐ翼になる</div>
       </a>
       <a href="./zodiac.html" class="tile" data-evt="entry_zodiac2">
         <div class="t1">星座診断</div>
-        <div class="t2">12星座×9カテゴリの見取り図。</div>
+        <div class="t2">12星座×9カテゴリの見取り図</div>
       </a>
       <a href="./teachings.html" class="tile" data-evt="laila-teachings">
         <div class="t1">聖竜教の教え</div>
@@ -209,11 +209,11 @@ const FALLBACK = {
   ],
   messages:{
     "総合":{
-      "5":{ "ルナル":"今日は追い風だ。遠慮なく行こう。","アラン":"思った以上に進む日。素直に踏み出そう。","リリア":"光があなたを包む日。小さな奇跡を拾って。" },
-      "4":{ "ルナル":"整っている。いつもより一歩深く。","アラン":"流れは良好。段取りを意識すると吉。","リリア":"澄んだ空気。迷ったら軽い方を。" },
-      "3":{ "ルナル":"平常運。足場を固めておけ。","アラン":"可もなく不可もなく。基本を丁寧に。","リリア":"静かな日。無理せず整えて。" },
-      "2":{ "ルナル":"焦りは不要。今日は守りを優先。","アラン":"無理は禁物。小目標で十分。","リリア":"休む勇気を。心に余白を。" },
-      "1":{ "ルナル":"退くも勇。明日に力を残せ。","アラン":"今日は小休止。最低限でOK。","リリア":"やさしく過ごして。自分を責めないで。" }
+      "5":{ "ルナル":"今日は追い風だ遠慮なく行こう","アラン":"思った以上に進む日素直に踏み出そう","リリア":"光があなたを包む日小さな奇跡を拾って" },
+      "4":{ "ルナル":"整っているいつもより一歩深く","アラン":"流れは良好段取りを意識すると吉","リリア":"澄んだ空気迷ったら軽い方を" },
+      "3":{ "ルナル":"平常運足場を固めておけ","アラン":"可もなく不可もなく基本を丁寧に","リリア":"静かな日無理せず整えて" },
+      "2":{ "ルナル":"焦りは不要今日は守りを優先","アラン":"無理は禁物小目標で十分","リリア":"休む勇気を心に余白を" },
+      "1":{ "ルナル":"退くも勇明日に力を残せ","アラン":"今日は小休止最低限でOK","リリア":"やさしく過ごして自分を責めないで" }
     }
   }
 };
@@ -240,7 +240,7 @@ function renderResult(char){
 
   const seed = `${todayKey()}|${char}|総合`;
   const stars = pickByWeights(WEIGHTS, seed);
-  const msg = (MESSAGES?.["総合"]?.[String(stars)]?.[char]) || '今日の言葉は準備中です。';
+  const msg = (MESSAGES?.["総合"]?.[String(stars)]?.[char]) || '今日の言葉は準備中です';
 
   const premiumList = CATEGORIES.filter(c=>c.paid);
   const paidHtml = premiumList.map(c=>`<li class="lock">${esc(c.key)}：<span aria-hidden="true">🔒</span> 有料で開放</li>`).join('');
@@ -348,7 +348,7 @@ $('#charButtons').addEventListener('click', (e)=>{ const btn = e.target.closest(
   function render(){
     const key = keyMMDD(current);
     const list = (quotes && (quotes[key] || quotes[key.toLowerCase()] || quotes[key.replace(/^0/,'').replace('-0','-')])) || [];
-    const item = list[0] || {text:"この日は静穏。竜はただ翼を休める。", author:"銀竜録"};
+    const item = list[0] || {text:"この日は静穏竜はただ翼を休める", author:"銀竜録"};
     elDate.textContent = fmtJP(current);
     const holi = japaneseHoliday(current);
     elHoliday.textContent = holi ? `祝日：${holi}` : '';
