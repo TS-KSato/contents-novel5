@@ -1,12 +1,17 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜星座別診断表</title>
   <meta name="description" content="12星座の性質をエテルナリア世界観で読み解く固定ページ。">
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/zodiac.css">
+
 </head>
+
 <body>
   <div class="wrap">
     <header id="top">
@@ -24,19 +29,28 @@
         <div class="controls" role="group" aria-label="絞り込み">
           <select id="fPillar" aria-label="性質で絞り込み">
             <option value="">性質：すべて</option>
-            <option>挑戦型</option><option>秩序型</option><option>共感型</option><option>洞察型</option>
+            <option>挑戦型</option>
+            <option>秩序型</option>
+            <option>共感型</option>
+            <option>洞察型</option>
           </select>
           <select id="fRealm" aria-label="領域で絞り込み">
             <option value="">領域：すべて</option>
-            <option>人の世界</option><option>自然の世界</option><option>知の世界</option><option>心の世界</option>
+            <option>人の世界</option>
+            <option>自然の世界</option>
+            <option>知の世界</option>
+            <option>心の世界</option>
           </select>
           <select id="fRole" aria-label="役割で絞り込み">
             <option value="">役割：すべて</option>
-            <option>開拓者</option><option>守り手</option>
+            <option>開拓者</option>
+            <option>守り手</option>
           </select>
           <select id="fKin" aria-label="守護存在で絞り込み">
             <option value="">守護存在：すべて</option>
-            <option>銀竜</option><option>人間</option><option>妖精</option>
+            <option>銀竜</option>
+            <option>人間</option>
+            <option>妖精</option>
           </select>
           <button id="reset" type="button">リセット</button>
         </div>
@@ -59,20 +73,24 @@
   </div>
 
   <button id="toTop" class="fab" type="button" aria-label="ページ先頭へ" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
 
   <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
     <div class="bn-grid">
-      <a class="bn-btn" data-evt="nav_bottom_home" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-      <a class="bn-btn" data-evt="nav_bottom_notice" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
-      <a class="bn-btn" data-evt="nav_bottom_mypage" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
+      <a class="bn-btn" data-evt="nav_bottom_home" href="./index.html"><span
+          class="bn-icon">🏠</span><span>ホーム</span></a>
+      <a class="bn-btn" data-evt="nav_bottom_notice" href="./notice.html"><span
+          class="bn-icon">📣</span><span>お知らせ</span></a>
+      <a class="bn-btn" data-evt="nav_bottom_mypage" href="./mypage.html"><span
+          class="bn-icon">👤</span><span>マイページ</span></a>
     </div>
   </nav>
 
   <script type="module" src="./assets/js/zodiac.js" defer></script>
 </body>
+
 </html>
