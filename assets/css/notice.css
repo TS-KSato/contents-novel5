@@ -1,0 +1,17 @@
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:#0b0f14;color:#e9f1ff}
+.wrap{max-width:720px;margin:auto;padding:16px}
+h1{font-size:1.3rem;margin:0 0 16px}
+.notice{border:1px solid rgba(141,208,255,.25);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#121821}
+.title{width:100%;text-align:left;padding:12px 14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:transparent;border:0;color:#e9f1ff}
+.title:hover{background:rgba(141,208,255,.15)}
+.body{display:none;padding:12px 14px;border-top:1px dashed rgba(141,208,255,.25);line-height:1.6}
+.open .body{display:block}
+.open .title::after{content:"▲"}
+.title::after{content:"▼";font-size:.8rem;color:#97a7c2}
+
+/* bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#121821;border-top:1px solid rgba(141,208,255,.25)}
+.bn-grid{display:grid;grid-template-columns:repeat(3,1fr);max-width:40rem;margin:0 auto}
+.bn-btn{display:flex;flex-direction:column;align-items:center;padding:10px 0;color:#e9f1ff;text-decoration:none}
+.bn-btn.bn-accent{background:rgba(141,208,255,.15)}
+body{padding-bottom:4rem}
