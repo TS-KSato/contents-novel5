@@ -1,0 +1,92 @@
+/* archetype-path.css — 固有スタイル（app.css / components.css 前提） */
+
+/* ヘッダー */
+header{text-align:center;padding:.5rem 0 .25rem}
+h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
+.lead{color:var(--muted);font-size:.9rem}
+
+/* ステップナビ（フェーズ表示） */
+.steps{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:.375rem;margin:.5rem 0 .75rem
+}
+.step{
+  text-align:center;padding:.4rem .25rem;border:1px solid var(--line);border-radius:.6rem;
+  background:#0f162b;color:#cfe1ff;font-size:.8rem
+}
+.step[aria-current="step"]{background:#16233c;border-color:#3a4b78;font-weight:800}
+.step.done{background:#14203a;border-color:#34507c;color:#e7f2ff}
+
+/* セクションカード（.card は共通を利用） */
+.section{margin:.65rem 0}
+.section .label{font-weight:800;color:#cfe1ff;margin:0 0 .35rem}
+.section .desc{color:#9fb0d3;font-size:.9rem;margin:.15rem 0 .4rem}
+
+/* Phase1: 元型診断（5種） */
+.archetype-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(min-width:560px){.archetype-grid{grid-template-columns:repeat(3,1fr)}}
+.type{
+  display:flex;align-items:center;gap:.5rem;padding:.6rem;border:1px solid var(--line);
+  border-radius:.75rem;background:#10162a;cursor:pointer;transition:.15s ease
+}
+.type:hover{background:#13203a;border-color:#34507c}
+.type:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.type .avatar{
+  /* 共通 .avatar を活かしつつサイズだけ特化 */
+  width:52px;height:52px;background:#10172a center/cover no-repeat
+}
+.type .meta{min-width:0}
+.type .name{font-weight:800;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.type .sub{color:#9aa3b2;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:.15rem}
+.type[aria-checked="true"]{box-shadow:inset 0 0 0 2px rgba(159,211,255,.28); border-color:#3a4b78}
+
+/* CTA領域 */
+.cta{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+.btn.primary{background:#1a3358;border-color:#34507c;font-weight:800}
+.btn[disabled], .primary[disabled]{opacity:.55;cursor:not-allowed}
+
+/* Phase2: 十の質問（2択×複数） */
+.q-list{display:grid;gap:.5rem}
+.q-item{
+  border:1px solid var(--line);border-radius:.75rem;background:#0f162b;padding:.6rem
+}
+.q-title{font-weight:800;margin:0 0 .35rem}
+.q-choices{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.q-choices .choice{
+  display:flex;align-items:center;gap:.45rem;border:1px solid var(--line);border-radius:.65rem;
+  background:#10162a;padding:.55rem .6rem;cursor:pointer;transition:.15s ease
+}
+.q-choices .choice:hover{background:#13203a;border-color:#34507c}
+.q-choices .choice[aria-checked="true"]{box-shadow:inset 0 0 0 2px rgba(159,211,255,.28); border-color:#3a4b78}
+.q-help{color:#9fb0d3;font-size:.82rem;margin-top:.35rem}
+
+/* Phase3: 役割付与（ラジオ） */
+.role-list{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.role{
+  display:flex;align-items:center;gap:.45rem;border:1px solid var(--line);border-radius:.75rem;
+  background:#10162a;padding:.6rem;cursor:pointer
+}
+.role[aria-checked="true"]{box-shadow:inset 0 0 0 2px rgba(159,211,255,.28); border-color:#3a4b78}
+.role .badge{display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--line);background:#0f1528;color:#cfe1ff;font-size:.72rem}
+
+/* Phase4: 神託（結果表示） */
+.result{display:grid;gap:.5rem}
+.hero{
+  display:flex;gap:.75rem;align-items:center
+}
+.hero .avatar{width:64px;height:64px}
+.hero .name{font-weight:800}
+.hero .role{color:#cdd5ea;font-size:.9rem}
+.oracle{
+  background:#121829;border:1px solid var(--line);border-radius:.75rem;padding:.6rem
+}
+.oracle p{margin:.25rem 0;color:#e0e7ff;line-height:1.7}
+
+/* インジケータ（ローディング／無効化） */
+.dim{opacity:.6;pointer-events:none;filter:saturate(.7)}
+.spinner{width:20px;height:20px;border-radius:50%;border:2px solid #2f3b63;border-top-color:#9fd3ff;animation:s1 .9s linear infinite}
+@keyframes s1{to{transform:rotate(360deg)}}
+
+/* 注意文（ポリシー） */
+.note{
+  color:#c8d4e8;font-size:.82rem;margin-top:.35rem
+}
