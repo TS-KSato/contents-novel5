@@ -70,9 +70,9 @@
       this._quotesCache = null;
 
       this.elements = {
-        dateText: document.getElementById('dateText'),
-        prevBtn: document.getElementById('prevDate'),
-        nextBtn: document.getElementById('nextDate'),
+        dateText: document.getElementById('calDate'),
+        prevBtn: document.getElementById('btnPrevDay'),
+        nextBtn: document.getElementById('btnNextDay'),
 
         quoteText: document.getElementById('quoteText'),
         quoteAuthor: document.getElementById('quoteAuthor'),
