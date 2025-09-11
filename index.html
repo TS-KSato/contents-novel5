@@ -6,135 +6,189 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の占いを受け取る</title>
   <meta name="description" content="銀竜の言葉を継ぐ者へワンタップで今日の占い、物語、竜の食卓">
+  
+  <!-- セキュリティヘッダー -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/index.css">
+  
+  <!-- プリロード（パフォーマンス改善） -->
+  <link rel="preload" href="./assets/data/fortune_messages.json" as="fetch" crossorigin>
 </head>
 
 <body>
+  <!-- 同意バナー -->
+  <div id="consent" class="consent-banner" hidden role="dialog" aria-labelledby="consent-title">
+    <div class="consent-content">
+      <h2 id="consent-title">プライバシー設定</h2>
+      <p>サービス改善のためアクセス解析を行っています。同意しますか？</p>
+      <div class="consent-actions">
+        <button id="btn-accept" class="btn">同意する</button>
+        <button id="btn-decline" class="btn ghost">拒否する</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <!-- ===== HERO / Primary CTA ===== -->
     <section class="hero" aria-label="今日の占い">
       <h1>銀竜からのことばを<br>ワンタップで受け取ろう</h1>
-      <p class="lead">無料で「総合運」を即表示有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）</p>
+      <p class="lead">無料で「総合運」を即表示　有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）</p>
       <div class="cta">
-        <button id="ctaGet" class="btn" data-evt="cta_primary">今日の占いを受け取る</button>
-        <a class="btn secondary" href="./signup.html" data-evt="cta_signup">会員登録</a>
+        <button id="ctaGet" class="btn" type="button" aria-describedby="cta-description">今日の占いを受け取る</button>
+        <a class="btn secondary" href="./signup.html" aria-describedby="signup-description">会員登録</a>
       </div>
-      <a href="#calendarQuote" class="scroll-hint" aria-label="下へ">▼</a>
+      <p id="cta-description" class="visually-hidden">無料で今日の占い結果を表示します</p>
+      <p id="signup-description" class="visually-hidden">有料会員登録ページに移動します</p>
+      <a href="#calendarQuote" class="scroll-hint" aria-label="下へスクロール">▼</a>
     </section>
 
     <!-- ===== Quick character choose ===== -->
     <section class="card" aria-labelledby="chooseCharacter">
-      <div id="chooseCharacter" class="label">語り手を選ぶ</div>
-      <div class="row" id="charButtons">
-        <button data-char="ルナル" class="char-btn" aria-label="ルナル" data-evt="char_pick"><img
-            src="./assets/char-lunal.jpg" alt="ルナル">
+      <h2 id="chooseCharacter" class="label">語り手を選ぶ</h2>
+      <div class="character-grid" id="charButtons" role="group" aria-labelledby="chooseCharacter">
+        <button type="button" data-char="ルナル" data-archid="lunal" class="character-button" aria-label="ルナルを選択">
+          <img src="./assets/char-lunal.jpg" alt="" role="presentation">
           <div>ルナル</div>
         </button>
-        <button data-char="アラン" class="char-btn" aria-label="アラン" data-evt="char_pick"><img src="./assets/char-alan.jpg"
-            alt="アラン">
+        <button type="button" data-char="アラン" data-archid="alan" class="character-button" aria-label="アランを選択">
+          <img src="./assets/char-alan.jpg" alt="" role="presentation">
           <div>アラン</div>
         </button>
-        <button data-char="リリア" class="char-btn" aria-label="リリア" data-evt="char_pick"><img
-            src="./assets/char-lilia.jpg" alt="リリア">
+        <button type="button" data-char="リリア" data-archid="lilia" class="character-button" aria-label="リリアを選択">
+          <img src="./assets/char-lilia.jpg" alt="" role="presentation">
           <div>リリア</div>
         </button>
       </div>
-      <p class="meta" style="text-align:center; margin-top:.5rem">選ぶたび当日の結果を表示日付が変わると更新</p>
+      <p class="meta">選ぶたび当日の結果を表示　日付が変わると更新</p>
     </section>
 
-    <!-- ===== Result ===== -->
+    <!-- ===== Result (Hidden by default) ===== -->
     <section id="result" class="card" aria-live="polite" style="display:none">
-      <div class="label">今日の結果</div>
-      <div class="result" id="resultBox"><!-- JS inject --></div>
+      <h2 class="label">今日の結果</h2>
+      <div class="result-content" id="resultBox">
+        <!-- JavaScript will populate this -->
+      </div>
     </section>
 
     <!-- ===== Calendar & Quote ===== -->
     <section id="calendarQuote" class="card" aria-live="polite">
-      <div class="label">銀竜暦カレンダー</div>
-      <div class="cal-head" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between;">
-        <button class="pill" id="btnPrevDay" aria-label="前日へ">← 前日</button>
-        <div class="cal-date" id="calDate" role="heading" aria-level="2" style="font-weight:700;letter-spacing:.02em;">
+      <h2 class="label">銀竜暦カレンダー</h2>
+      <div class="calendar-navigation">
+        <button type="button" class="pill" id="btnPrevDay" aria-label="前日へ移動">← 前日</button>
+        <div class="calendar-date" id="calDate" role="heading" aria-level="3">
+          <!-- JavaScript will populate this -->
         </div>
-        <button class="pill" id="btnNextDay" aria-label="翌日へ">翌日 →</button>
+        <button type="button" class="pill" id="btnNextDay" aria-label="翌日へ移動">翌日 →</button>
       </div>
-      <div class="cal-sub" id="calHoliday" style="margin-top:.25rem;color:var(--muted)"></div>
-      <div class="cal-quote" id="calQuote" style="margin-top:.75rem">
-        <blockquote style="margin:0;font-size:1.05rem;line-height:1.6">
-          <span id="quoteText" class="skeleton"
-            style="display:inline-block;border-radius:.5rem;min-width:60%;min-height:1.2em"> </span>
+      <div class="calendar-holiday" id="calHoliday">
+        <!-- 祝日情報があれば表示 -->
+      </div>
+      <div class="calendar-quote" id="calQuote">
+        <blockquote>
+          <p id="quoteText">
+            <span class="skeleton" aria-label="読み込み中"></span>
+          </p>
         </blockquote>
-        <div id="quoteAuthor" class="meta" style="margin-top:.375rem">
-          <span class="skeleton" style="display:inline-block;border-radius:.5rem;min-width:8rem;min-height:1em"> </span>
-        </div>
+        <footer id="quoteAuthor" class="quote-author">
+          <span class="skeleton" aria-label="読み込み中"></span>
+        </footer>
       </div>
-      <div class="pills" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
-        <button class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
+      <div class="calendar-actions">
+        <button type="button" class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
       </div>
     </section>
 
-    <!-- ===== Teasers / Content hubs ===== -->
-    <section class="grid" aria-label="物語と食卓">
-      <a href="./about.html" class="tile" data-evt="entry_about">
-        <div class="t1">銀竜の言葉を継ぐものとは</div>
-        <div class="t2">物語の世界をより深く楽しんでいただけます</div>
+    <!-- ===== Content Hubs ===== -->
+    <section class="content-grid" aria-label="関連コンテンツ">
+      <h2 class="visually-hidden">物語と食卓</h2>
+      
+      <a href="./about.html" class="content-tile">
+        <h3>銀竜の言葉を継ぐものとは</h3>
+        <p>物語の世界をより深く楽しんでいただけます</p>
       </a>
-      <a href="./partner.html" class="tile" data-evt="entry_partner">
-        <div class="t1">今日の導き手</div>
-        <div class="t2">銀竜の言葉を継ぐもの中から今日の導き手を診断します</div>
+      
+      <a href="./partner.html" class="content-tile">
+        <h3>今日の導き手</h3>
+        <p>銀竜の言葉を継ぐもの中から今日の導き手を診断します</p>
       </a>
-      <a href="./archetype-path.html" class="tile" data-evt="entry_partner">
-        <div class="t1">日々の指針</div>
-        <div class="t2">今日の行動を考えるためのヒントをまとめています</div>
+      
+      <a href="./archetype-path.html" class="content-tile">
+        <h3>日々の指針</h3>
+        <p>今日の行動を考えるためのヒントをまとめています</p>
       </a>
-      <a href="./dragon-table.html" class="tile" data-evt="entry_food">
-        <div class="t1">竜の食卓</div>
-        <div class="t2">現実に再現できる異界のレシピ今日の一皿とキャラ別の食卓</div>
+      
+      <a href="./dragon-table.html" class="content-tile">
+        <h3>竜の食卓</h3>
+        <p>現実に再現できる異界のレシピ　今日の一皿とキャラ別の食卓</p>
       </a>
-      <a href="./serial.html" class="tile" data-evt="entry_serial2">
-        <div class="t1">七夜の語り巻</div>
-        <div class="t2">継承者たちの短編連作</div>
+      
+      <a href="./serial.html" class="content-tile">
+        <h3>七夜の語り巻</h3>
+        <p>継承者たちの短編連作</p>
       </a>
-      <a href="./novel.html" class="tile" data-evt="entry_novel">
-        <div class="t1">短編小説</div>
-        <div class="t2">銀の竜が遺した言葉は、未来をつなぐ翼になる</div>
+      
+      <a href="./novel.html" class="content-tile">
+        <h3>短編小説</h3>
+        <p>銀の竜が遺した言葉は、未来をつなぐ翼になる</p>
       </a>
-      <a href="./zodiac.html" class="tile" data-evt="entry_zodiac2">
-        <div class="t1">星座診断</div>
-        <div class="t2">12星座×9カテゴリの見取り図</div>
+      
+      <a href="./zodiac.html" class="content-tile">
+        <h3>星座診断</h3>
+        <p>12星座×9カテゴリの見取り図</p>
       </a>
-      <a href="./teachings.html" class="tile" data-evt="laila-teachings">
-        <div class="t1">聖竜教の教え</div>
-        <div class="t2">最古の賢人ライラの相談部屋</div>
+      
+      <a href="./teachings.html" class="content-tile">
+        <h3>聖竜教の教え</h3>
+        <p>最古の賢人ライラの相談部屋</p>
       </a>
-      <a href="./music.html" class="tile" data-evt="laila-teachings">
-        <div class="t1">エテルナリア音楽館</div>
-        <div class="t2">エテルナリア大陸の音楽を気分で探す</div>
+      
+      <a href="./music.html" class="content-tile">
+        <h3>エテルナリア音楽館</h3>
+        <p>エテルナリア大陸の音楽を気分で探す</p>
       </a>
-      <a href="./wallpaper.html" class="tile" data-evt="laila-teachings">
-        <div class="t1">銀竜の加護</div>
-        <div class="t2">銀竜暦の美しい世界観を壁紙で体感</div>
+      
+      <a href="./wallpaper.html" class="content-tile">
+        <h3>銀竜の加護</h3>
+        <p>銀竜暦の美しい世界観を壁紙で体感</p>
       </a>
     </section>
 
-    <footer>© 運命の銀竜暦</footer>
+    <footer role="contentinfo">
+      <p>&copy; 運命の銀竜暦</p>
+    </footer>
   </div>
 
-  <!-- Bottom Nav -->
-  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📣</span><span>お知らせ</span></a>
-      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
+      <a class="bn-btn" href="./index.html" aria-current="page">
+        <span class="bn-icon" aria-hidden="true">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="./notice.html">
+        <span class="bn-icon" aria-hidden="true">📣</span>
+        <span>お知らせ</span>
+      </a>
+      <a class="bn-btn" href="./mypage.html">
+        <span class="bn-icon" aria-hidden="true">👤</span>
+        <span>マイページ</span>
+      </a>
     </div>
   </nav>
 
-  <!-- JS -->
-<script src="./assets/js/core.js" defer></script>
-<script src="./assets/js/ga4.js"></script>
-<script src="./assets/js/nav.js"></script>
-<script src="./assets/js/index.js"></script>
+  <!-- エラー表示用 -->
+  <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
+    <p id="errorMessage"></p>
+    <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="./assets/js/core.js"></script>
+  <script src="./assets/js/index.js"></script>
 </body>
 
 </html>
