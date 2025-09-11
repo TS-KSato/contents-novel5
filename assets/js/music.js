@@ -1,7 +1,3 @@
-/**
- * music.js - エテルナリア音楽館（統合版）
- * tracks.jsonを読み込んで表示・再生機能を提供
- */
 
 (function() {
   'use strict';
@@ -15,7 +11,6 @@
       this.audio = null;
       this.elements = {};
       
-      // 初期化
       this.init();
     }
 
@@ -59,7 +54,6 @@
 
     _cacheElements() {
       this.elements = {
-        // HTMLの実際のIDに合わせて修正
         grid: document.getElementById('list'),  // music.htmlでは id="list"
         tabs: document.getElementById('tabs')
       };
@@ -100,11 +94,11 @@
         name: String(track.name || ''),
         url: String(track.url || ''),
         art: String(track.art || ''),
-        origin: String(track.origin || ''),
+        scene: String(track.scene || ''),
         bpm: Number.isFinite(track.bpm) ? track.bpm : null,
         duration: Number.isFinite(track.duration) ? track.duration : null,
         mood: String(track.mood || ''),
-        archetype: String(track.archetype || ''),
+        theme: String(track.theme || ''),
         paid: Boolean(track.paid)
       };
     }
@@ -114,11 +108,11 @@
         {
           id: 'f01',
           name: '銀翼の遺産',
-          origin: 'シルバーミスト・聖域',
-          mood: 'epic',
+          scene: '神聖な場所',
+          mood: '壮大',
+          theme: '守護',
           bpm: 70,
           duration: 210,
-          archetype: 'Guardian',
           url: '#',
           art: '',
           paid: false
@@ -126,11 +120,11 @@
         {
           id: 'f02',
           name: '最後の守護者',
-          origin: 'ドラゴン・古代',
-          mood: 'majestic',
+          scene: '古の伝承',
+          mood: '荘厳',
+          theme: '叡智',
           bpm: 60,
           duration: 240,
-          archetype: 'Sage',
           url: '#',
           art: '',
           paid: false
@@ -194,12 +188,13 @@
 
       this._updatePlayButtons();
       
-      // アナリティクス
+      // アナリティクス（日本語値に対応）
       if (this.core && this.core.Analytics) {
         this.core.Analytics.track('music_play', {
           track_id: track.id,
           track_name: track.name,
-          mood: track.mood
+          mood: track.mood,           // 日本語値
+          theme: track.theme          // theme フィールドを追加
         });
       }
     }
@@ -245,14 +240,14 @@
     _buildFilterTabs() {
       if (!this.elements.tabs) return;
 
-      // ユニークなmoodとarchetypeを抽出
+      // ユニークなmoodとthemeを抽出（変更: archetype → theme）
       const moods = [...new Set(this.tracks.map(t => t.mood).filter(Boolean))];
-      const archetypes = [...new Set(this.tracks.map(t => t.archetype).filter(Boolean))];
+      const themes = [...new Set(this.tracks.map(t => t.theme).filter(Boolean))];
 
       const tabs = [
         { label: 'すべて', value: 'all' },
-        ...moods.map(mood => ({ label: `#${mood}`, value: `mood:${mood}` })),
-        ...archetypes.map(arch => ({ label: `@${arch}`, value: `arch:${arch}` }))
+        ...moods.map(mood => ({ label: `${mood}`, value: `mood:${mood}` })),      // 変更: # を削除（日本語用）
+        ...themes.map(theme => ({ label: `◆${theme}`, value: `theme:${theme}` })) // 変更: archetype → theme, @ → ◆
       ];
 
       this.elements.tabs.innerHTML = tabs.map(tab => 
@@ -312,8 +307,8 @@
         if (this.activeFilter.startsWith('mood:')) {
           return track.mood === this.activeFilter.slice(5);
         }
-        if (this.activeFilter.startsWith('arch:')) {
-          return track.archetype === this.activeFilter.slice(5);
+        if (this.activeFilter.startsWith('theme:')) {           // 変更: arch: → theme:
+          return track.theme === this.activeFilter.slice(6);    // 変更: slice(5) → slice(6)
         }
         return true;
       });
@@ -325,7 +320,10 @@
         : `<div class="art fallback" aria-label="アート未設定">${this._escapeHtml(track.name).slice(0,1)}</div>`;
 
       const duration = this._formatDuration(track.duration);
+      
+      // サブ情報の表示改善（sceneを追加）
       const subInfo = [
+        track.scene ? `${track.scene}` : '',               // sceneを表示
         track.bpm ? `${track.bpm} bpm` : '',
         duration ? `${duration}` : ''
       ].filter(Boolean).join(' • ');
@@ -337,7 +335,7 @@
             <div class="name" title="${this._escapeHtml(track.name)}">
               ${this._escapeHtml(track.name)}
             </div>
-            <div class="sub">${this._escapeHtml(subInfo)}</div>
+            <div class="sub" title="${this._escapeHtml(subInfo)}">${this._escapeHtml(subInfo)}</div>
             <div class="pill">${this._escapeHtml(track.mood || 'mood')}</div>
           </div>
           <div class="go">
