@@ -1,50 +1,473 @@
-/* music.css — 固有スタイルのみ（app.css / components.css 前提） */
-:root { --acc:#6aa8ff; }
+/* music.css — エテルナリア音楽館スタイル */
 
-header{
-  position:sticky; top:0;
-  background:linear-gradient(180deg,#0d0f14 70%,#0d0f1400);
-  padding:14px 16px 8px; z-index:10;
+/* CSS変数 */
+:root { 
+  --acc: #6aa8ff; 
+  --music-card-hover: #1a2238;
+  --music-border-hover: #38507a;
 }
-.title{font-weight:700;font-size:18px}
-.tabs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-.tab{
-  padding:8px 12px;border-radius:999px;background:#1b2230;color:#c7d2e4;
-  font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144
+
+/* ===== ヘッダー ===== */
+header {
+  position: sticky; 
+  top: 0;
+  background: linear-gradient(180deg, #0d0f14 70%, #0d0f1400);
+  padding: 14px 16px 8px; 
+  z-index: 10;
+  border-bottom: 1px solid rgba(39, 49, 68, 0.3);
 }
-.tab.active{background:#23304a;color:#fff;border-color:#38507a}
 
-.grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px 12px 80px}
-@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
-@media(min-width:880px){.grid{grid-template-columns:1fr 1fr 1fr}}
-
-.card{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
-.art{
-  width:72px;height:72px;border-radius:12px;
-  background:linear-gradient(135deg,#2b3446,#3c5076);
-  background-size:cover;background-position:center;
-  display:grid;place-items:center;color:#cfe1ff;font-weight:800;font-size:22px;
-  overflow:hidden;user-select:none;
+.title {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0;
 }
-.art.fallback::after{content:"♪"}
 
-.meta{display:grid;gap:3px;min-width:0}
-.name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sub{color:#9aa3b2;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pill{display:inline-block;margin-top:4px}
-
-.go .btn{border:0;border-radius:10px;padding:10px 12px;background:#22324d;color:#cfe1ff;font-weight:700}
-.go .btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-
-/* 下部ナビ（HTML側は .bottom-nav を使用するページと異なり簡易ナビを想定） */
-nav.gnav{
-  position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;justify-content:space-around;
-  padding:10px 8px;background:#111;color:#fff;z-index:1000
+/* ===== タブフィルター ===== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
-nav.gnav a{
-  flex:1;text-align:center;text-decoration:none;color:#fff;font-weight:700;line-height:44px;
-  border-radius:10px;background:#222;outline-offset:2px
+
+.tabs::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
-nav.gnav a[aria-current="page"]{background:#444}
-@media(hover:hover){nav.gnav a:hover{background:#333}}
-body{padding-bottom:72px}
+
+.tab {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #1b2230;
+  color: #c7d2e4;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid #273144;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.tab:hover {
+  background: #233041;
+  border-color: #334155;
+}
+
+.tab.active {
+  background: #23304a;
+  color: #fff;
+  border-color: #38507a;
+  box-shadow: 0 0 0 1px rgba(56, 80, 122, 0.3);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+/* ===== メイングリッド ===== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 12px 12px 80px;
+  min-height: calc(100vh - 120px);
+}
+
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 880px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===== 音楽カード ===== */
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  background: var(--music-card-hover);
+  border-color: var(--music-border-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card:focus-within {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+/* ===== アートワーク ===== */
+.art {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2b3446, #3c5076);
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  color: #cfe1ff;
+  font-weight: 800;
+  font-size: 22px;
+  overflow: hidden;
+  user-select: none;
+  flex-shrink: 0;
+  border: 1px solid rgba(56, 80, 122, 0.3);
+}
+
+.art.fallback {
+  background: linear-gradient(135deg, #2b3446, #3c5076);
+}
+
+.art.fallback::after {
+  content: "♪";
+  font-size: 24px;
+}
+
+/* アートワークが背景画像の場合 */
+.art[style*="background-image"] {
+  color: transparent;
+}
+
+.art[style*="background-image"]::after {
+  display: none;
+}
+
+/* ===== メタ情報 ===== */
+.meta {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.sub {
+  color: #9aa3b2;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.pill {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  background: rgba(106, 168, 255, 0.15);
+  border: 1px solid rgba(106, 168, 255, 0.3);
+  border-radius: 999px;
+  color: #6aa8ff;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: lowercase;
+  max-width: fit-content;
+}
+
+/* ===== アクションボタン ===== */
+.go {
+  flex-shrink: 0;
+}
+
+.go .btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #22324d;
+  color: #cfe1ff;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  text-align: center;
+}
+
+.go .btn:hover:not([aria-disabled="true"]) {
+  background: #2a3a5a;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.go .btn:active:not([aria-disabled="true"]) {
+  transform: translateY(0);
+}
+
+.go .btn:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+.go .btn[aria-disabled="true"] {
+  background: #1a2530;
+  color: #6b7688;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 再生中状態 */
+.card[data-playing="true"] .go .btn {
+  background: #2d4a3d;
+  color: #4ade80;
+}
+
+.card[data-playing="true"] .go .btn:hover {
+  background: #3a5a4a;
+}
+
+/* ===== ナビゲーション ===== */
+nav.gnav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  justify-content: space-around;
+  padding: 10px 8px;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  z-index: 1000;
+  border-top: 1px solid var(--line);
+}
+
+nav.gnav a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  line-height: 44px;
+  border-radius: 10px;
+  background: #222;
+  outline-offset: 2px;
+  transition: background 0.2s ease;
+}
+
+nav.gnav a[aria-current="page"] {
+  background: #444;
+  color: var(--acc);
+}
+
+@media (hover: hover) {
+  nav.gnav a:hover {
+    background: #333;
+  }
+}
+
+nav.gnav a:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+/* ===== レイアウト調整 ===== */
+body {
+  padding-bottom: 72px;
+}
+
+/* ===== 状態表示 ===== */
+.muted {
+  color: var(--muted);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 2rem;
+  border: 1px solid #ff6b6b;
+  border-radius: 0.5rem;
+  background: rgba(255, 107, 107, 0.1);
+  margin: 1rem;
+}
+
+/* ===== ローディング状態 ===== */
+.loading-state {
+  padding: 12px;
+}
+
+.skeleton-card {
+  height: 72px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #1a2238 25%, #2a3455 50%, #1a2238 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 12px;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== レスポンシブ対応 ===== */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 12px 6px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .tabs {
+    gap: 6px;
+    margin-top: 8px;
+  }
+  
+  .tab {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .grid {
+    padding: 8px 8px 80px;
+    gap: 8px;
+  }
+  
+  .card {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .art {
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+  }
+  
+  .name {
+    font-size: 13px;
+  }
+  
+  .sub {
+    font-size: 11px;
+  }
+  
+  .go .btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    min-width: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    padding: 6px 6px 80px;
+  }
+  
+  .card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  
+  .go {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+  }
+  
+  .go .btn {
+    width: 100%;
+  }
+}
+
+/* ===== アクセシビリティ ===== */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .tab,
+  .go .btn,
+  .skeleton-card {
+    transition: none;
+    animation: none;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+  
+  .go .btn:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .tab.active {
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+  }
+  
+  .go .btn:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+  
+  .card {
+    border: 2px solid var(--line);
+  }
+}
+
+/* ===== プリント用スタイル ===== */
+@media print {
+  nav.gnav,
+  .go .btn {
+    display: none;
+  }
+  
+  .card {
+    break-inside: avoid;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .grid {
+    padding-bottom: 0;
+  }
+  
+  body {
+    padding-bottom: 0;
+  }
+  
+  .skeleton-card {
+    display: none;
+  }
+}
