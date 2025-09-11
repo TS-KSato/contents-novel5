@@ -207,43 +207,33 @@
     </section>
 
     <section id="calendarQuote" class="card" aria-live="polite">
-      <div class="calendar-container">
-        <div class="calendar-header">
-          <h2 class="calendar-title">銀竜暦カレンダー</h2>
+      <h2 class="label">銀竜暦カレンダー</h2>
+      
+      <div class="calendar-navigation">
+        <button type="button" class="calendar-nav-btn" id="btnPrevDay" aria-label="前日へ移動">
+          ◀
+        </button>
+        <div class="calendar-date" id="calDate" role="heading" aria-level="3">
+          <!-- 日付がここに表示されます -->
         </div>
-        
-        <div class="calendar-navigation">
-          <button type="button" class="calendar-nav-btn" id="btnPrevDay" aria-label="前日へ移動">
-            ← 前日
-          </button>
-          <div class="calendar-date" id="calDate" role="heading" aria-level="3">
-            <!-- 日付がここに表示されます -->
-          </div>
-          <button type="button" class="calendar-nav-btn" id="btnNextDay" aria-label="翌日へ移動">
-            翌日 →
-          </button>
-        </div>
-        
-        <div class="calendar-holiday" id="calHoliday">
-          <!-- 祝日情報がここに表示されます -->
-        </div>
-        
-        <div class="calendar-quote" id="calQuote">
-          <blockquote>
-            <p id="quoteText">
-              <span class="skeleton" aria-label="読み込み中"></span>
-            </p>
-          </blockquote>
-          <footer id="quoteAuthor" class="quote-author">
+        <button type="button" class="calendar-nav-btn" id="btnNextDay" aria-label="翌日へ移動">
+          ▶
+        </button>
+      </div>
+      
+      <div class="calendar-holiday" id="calHoliday">
+        <!-- 祝日情報がここに表示されます -->
+      </div>
+      
+      <div class="calendar-quote" id="calQuote">
+        <blockquote>
+          <p id="quoteText">
             <span class="skeleton" aria-label="読み込み中"></span>
-          </footer>
-        </div>
-        
-        <div class="calendar-actions">
-          <button type="button" class="calendar-today-btn" id="btnToday" aria-label="今日へ戻る">
-            今日
-          </button>
-        </div>
+          </p>
+        </blockquote>
+        <footer id="quoteAuthor" class="quote-author">
+          <span class="skeleton" aria-label="読み込み中"></span>
+        </footer>
       </div>
     </section>
 
