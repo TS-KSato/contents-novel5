@@ -6,21 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の占いを受け取る</title>
   <meta name="description" content="銀竜の言葉を継ぐ者へワンタップで今日の占い、物語、竜の食卓">
-  
-  <!-- セキュリティヘッダー -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
-  
-  <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/index.css">
   
-  <!-- プリロード（パフォーマンス改善） -->
   <link rel="preload" href="./assets/data/fortune_messages.json" as="fetch" crossorigin>
 </head>
 
 <body>
-  <!-- 同意バナー -->
   <div id="consent" class="consent-banner" hidden role="dialog" aria-labelledby="consent-title">
     <div class="consent-content">
       <h2 id="consent-title">プライバシー設定</h2>
@@ -33,7 +26,6 @@
   </div>
 
   <div class="wrap">
-    <!-- ===== HERO / Primary CTA ===== -->
     <section class="hero" aria-label="今日の占い">
       <h1>銀竜からのことばを<br>ワンタップで受け取ろう</h1>
       <p class="lead">無料で「総合運」を即表示　有料で <strong>9カテゴリ</strong> が毎日開放（健康・平穏・生活・対人・成長・目的・自由・娯楽・評価）</p>
@@ -46,7 +38,6 @@
       <a href="#calendarQuote" class="scroll-hint" aria-label="下へスクロール">▼</a>
     </section>
 
-    <!-- ===== Quick character choose ===== -->
     <section class="card" aria-labelledby="chooseCharacter">
       <h2 id="chooseCharacter" class="label">語り手を選ぶ</h2>
       <div class="character-grid" id="charButtons" role="group" aria-labelledby="chooseCharacter">
@@ -66,26 +57,21 @@
       <p class="meta">選ぶたび当日の結果を表示　日付が変わると更新</p>
     </section>
 
-    <!-- ===== Result (Hidden by default) ===== -->
     <section id="result" class="card" aria-live="polite" style="display:none">
       <h2 class="label">今日の結果</h2>
       <div class="result-content" id="resultBox">
-        <!-- JavaScript will populate this -->
       </div>
     </section>
 
-    <!-- ===== Calendar & Quote ===== -->
     <section id="calendarQuote" class="card" aria-live="polite">
       <h2 class="label">銀竜暦カレンダー</h2>
       <div class="calendar-navigation">
         <button type="button" class="pill" id="btnPrevDay" aria-label="前日へ移動">← 前日</button>
         <div class="calendar-date" id="calDate" role="heading" aria-level="3">
-          <!-- JavaScript will populate this -->
         </div>
         <button type="button" class="pill" id="btnNextDay" aria-label="翌日へ移動">翌日 →</button>
       </div>
       <div class="calendar-holiday" id="calHoliday">
-        <!-- 祝日情報があれば表示 -->
       </div>
       <div class="calendar-quote" id="calQuote">
         <blockquote>
@@ -180,13 +166,11 @@
     </div>
   </nav>
 
-  <!-- エラー表示用 -->
   <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
     <p id="errorMessage"></p>
     <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
   </div>
 
-  <!-- JavaScript -->
   <script src="./assets/js/core.js"></script>
   <script src="./assets/js/index.js"></script>
 </body>
