@@ -320,6 +320,47 @@
       } else {
         this.elements.calendarDate.textContent = formattedDate;
       }
+
+      // 祝日チェック（簡易版）
+      this._updateHoliday(targetDate);
+    }
+
+    _updateHoliday(date) {
+      const calendarHoliday = this.elements.calendarDate?.parentElement?.parentElement?.querySelector('#calHoliday');
+      if (!calendarHoliday) return;
+
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      
+      // 簡易的な祝日判定
+      const holidays = {
+        '1-1': '元日',
+        '2-11': '建国記念の日',
+        '3-21': '春分の日',
+        '4-29': '昭和の日',
+        '5-3': '憲法記念日',
+        '5-4': 'みどりの日',
+        '5-5': 'こどもの日',
+        '7-3': '海の日（第3月曜）',
+        '8-11': '山の日',
+        '9-3': '敬老の日（第3月曜）',
+        '9-23': '秋分の日',
+        '10-2': 'スポーツの日（第2月曜）',
+        '11-3': '文化の日',
+        '11-23': '勤労感謝の日',
+        '12-23': '天皇誕生日'
+      };
+
+      const key = `${month}-${day}`;
+      const holiday = holidays[key];
+      
+      if (holiday) {
+        calendarHoliday.textContent = `🎌 ${holiday}`;
+        calendarHoliday.style.display = 'block';
+      } else {
+        calendarHoliday.textContent = '';
+        calendarHoliday.style.display = 'none';
+      }
     }
 
     async _updateQuote() {
