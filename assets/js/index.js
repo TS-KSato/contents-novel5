@@ -53,8 +53,7 @@
         quoteText: '#quoteText',
         quoteAuthor: '#quoteAuthor',
         prevButton: '#btnPrevDay',
-        nextButton: '#btnNextDay',
-        todayButton: '#btnToday'
+        nextButton: '#btnNextDay'
       };
 
       Object.entries(queries).forEach(([key, selector]) => {
@@ -92,12 +91,6 @@
       if (this.elements.nextButton) {
         this.elements.nextButton.addEventListener('click', () => {
           this.handleCalendarNavigation('next');
-        });
-      }
-
-      if (this.elements.todayButton) {
-        this.elements.todayButton.addEventListener('click', () => {
-          this.handleCalendarNavigation('today');
         });
       }
     }
@@ -183,9 +176,6 @@
           break;
         case 'next':
           this.offsetDays += 1;
-          break;
-        case 'today':
-          this.offsetDays = 0;
           break;
       }
 
@@ -337,15 +327,6 @@
         text: '静かな観察が、次の一手を照らす。',
         author: '— 銀竜の記録より'
       };
-
-      if (this.elements.calendarQuote) {
-        const fullQuote = `${quoteData.text} ${quoteData.author}`;
-        if (this.core.Security) {
-          this.core.Security.updateContent(this.elements.calendarQuote, fullQuote);
-        } else {
-          this.elements.calendarQuote.textContent = fullQuote;
-        }
-      }
 
       if (this.elements.quoteText) {
         if (this.core.Security) {
