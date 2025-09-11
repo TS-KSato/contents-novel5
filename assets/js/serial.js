@@ -27,20 +27,62 @@
     });
   }
 
-  // アバター適用（AKがあればAKに任せる／なければ簡易）
-  function applyAvatar(el, name, icon){
-    if (!el) return;
-    if (window.AK && typeof window.AK.applyAvatar === "function" && name){
-      return window.AK.applyAvatar(el, name);
+  // キャラクター名の正規化（フルネーム → 短縮名）
+  function normalizeCharacterName(fullName) {
+    const nameMap = {
+      "マグナス・ヴェイン": "マグナス",
+      "ドレイク・ストームブレイド": "ドレイク", 
+      "ネスター・ルナ・ラテス": "ネスター",
+      "ネクサート王": "ネクサート",
+      "ルナルに育てられた人間の青年": "アラン",
+      "ルナル": "ルナル",
+      "リリア": "リリア",
+      "ライラ": "ライラ",
+      "ミレイア": "ミレイア",
+      "カリスタン": "マグナス", // 弟子なのでマグナスの画像を使用
+      "アラン": "アラン"
+    };
+    
+    // まず完全一致を試す
+    if (nameMap[fullName]) {
+      return nameMap[fullName];
     }
-    if (icon) {
-      el.style.backgroundImage = `url("${icon}")`;
-      el.textContent = "";
-      el.classList.remove("fallback");
+    
+    // 部分一致を試す
+    for (const [key, value] of Object.entries(nameMap)) {
+      if (fullName.includes(key) || key.includes(fullName)) {
+        return value;
+      }
+    }
+    
+    return fullName;
+  }
+
+  // アバター適用（SiteCore.Avatarを使用）
+  function applyAvatar(element, name) {
+    if (!element || !window.SiteCore?.Avatar) return;
+    
+    // 既存の内容をクリア
+    element.innerHTML = "";
+    element.className = "avatar-serial";
+    
+    const normalizedName = normalizeCharacterName(name);
+    
+    // SiteCore.Avatarを使ってアバターを作成
+    const avatarElement = window.SiteCore.Avatar.create({
+      name: normalizedName,
+      initials: normalizedName.slice(0, 1)
+    });
+    
+    // アバター要素のクラスを調整
+    if (avatarElement.classList.contains('avatar-image')) {
+      // 画像アバターの場合
+      avatarElement.className = "avatar-serial-img";
+      element.appendChild(avatarElement);
     } else {
-      el.style.backgroundImage = "none";
-      el.textContent = (String(name||"?").trim() || "?").slice(0,1);
-      el.classList.add("fallback");
+      // フォールバックの場合
+      avatarElement.className = "avatar-serial-fallback";
+      element.appendChild(avatarElement);
     }
   }
 
@@ -77,14 +119,13 @@
     const by = esc(e.author || e.by || "語り部");
     const role = esc(e.role || "");
     const ts = esc(e.ts || "");
-    const icon = esc(e.icon || "");
     const who = esc(e.who || by);
     const tags = Array.isArray(e.tags) ? e.tags.map(tag => `<span class="pill">${esc(tag)}</span>`).join("") : "";
 
     return `
 <article class="card">
   <div class="article-head">
-    <div class="avatar-serial" data-name="${who}" ${icon ? `style="background-image:url('${icon}')"` : ""}></div>
+    <div class="avatar-serial" data-name="${who}"></div>
     <div class="byline">
       <span class="badge">語り巻</span>
       <span class="pill">${who}</span>
@@ -108,11 +149,10 @@
     }
     $list.innerHTML = ENTRIES.map(itemHTML).join("");
 
-    // avatar適用
-    $list.querySelectorAll(".avatar-serial").forEach(el=>{
+    // avatar適用（SiteCore.Avatarを使用）
+    $list.querySelectorAll(".avatar-serial").forEach(el => {
       const name = el.getAttribute("data-name");
-      const icon = "";
-      applyAvatar(el, name, icon);
+      applyAvatar(el, name);
     });
 
     try { window.gtagEvent && window.gtagEvent("view_serial", { count: ENTRIES.length }); } catch(_){}
@@ -120,35 +160,45 @@
 
   // ====== 起動 ======
   document.addEventListener("DOMContentLoaded", () => {
-    // 複数のarticlesファイルを並行して読み込み
-    Promise.all(DATA_FILES.map(file => 
-      loadJSON(file).catch(err => {
-        console.warn(`Failed to load ${file}:`, err);
-        return null;
-      })
-    ))
-    .then(results => {
-      const allEntries = [];
-      
-      results.forEach(data => {
-        if (data) {
-          const entries = convertArticleData(data);
-          allEntries.push(...entries);
-        }
-      });
-      
-      ENTRIES = allEntries;
-      
-      // メタ表示（任意）
-      if ($head) {
-        $head.innerHTML = `<div class="meta">収録期間：第7月〜第9月（2025年第3四半期）</div>`;
+    // core.jsが読み込まれるまで少し待つ
+    const initSerial = () => {
+      if (!window.SiteCore?.Avatar) {
+        setTimeout(initSerial, 100);
+        return;
       }
       
-      render();
-    })
-    .catch(err => {
-      console.error("Failed to load articles:", err);
-      $list && ($list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`);
-    });
+      // 複数のarticlesファイルを並行して読み込み
+      Promise.all(DATA_FILES.map(file => 
+        loadJSON(file).catch(err => {
+          console.warn(`Failed to load ${file}:`, err);
+          return null;
+        })
+      ))
+      .then(results => {
+        const allEntries = [];
+        
+        results.forEach(data => {
+          if (data) {
+            const entries = convertArticleData(data);
+            allEntries.push(...entries);
+          }
+        });
+        
+        ENTRIES = allEntries;
+        
+        // メタ表示（任意）
+        if ($head) {
+          $head.innerHTML = `<div class="meta">収録期間：第7月〜第9月（2025年第3四半期）</div>`;
+        }
+        
+        render();
+      })
+      .catch(err => {
+        console.error("Failed to load articles:", err);
+        $list && ($list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`);
+      });
+    };
+    
+    initSerial();
   });
 })();
