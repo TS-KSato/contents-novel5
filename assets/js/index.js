@@ -1,518 +1,296 @@
 (function() {
   'use strict';
 
-  // SiteCoreの利用可能性確認
-  let core = null;
-  
-  // フォールバック用の基本関数
-  const fallback = {
-    $: (s) => document.querySelector(s),
-    $$: (s) => Array.from(document.querySelectorAll(s)),
-    esc: (s) => String(s || '').replace(/[&<>"']/g, m => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[m]))
-  };
+  // Optional SiteCore
+  let SiteCoreSafe = (typeof window !== 'undefined' && window.SiteCore && typeof window.SiteCore.Security === 'object')
+    ? window.SiteCore
+    : null;
 
-  class FortuneApp {
-    constructor() {
-      this.core = window.SiteCore || fallback;
+  // ---------- Utilities ----------
+  function formatDateYYYYMMDD(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  function formatMMDD(date) {
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${mm}-${dd}`;
+  }
+  // deterministic RNG helpers (date-based)
+  function seededRandom(seed) {
+    let x = seed | 0;
+    x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+    const t = (x >>> 0) / 4294967296;
+    return t < 0 ? (t + 1) : t;
+  }
+  function hashString(s) {
+    let h = 2166136261 >>> 0;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function pickByWeights(weightsObj, rnd01) {
+    const entries = Object.entries(weightsObj).sort((a,b)=>Number(b[0])-Number(a[0])); // score 5→1
+    const total = entries.reduce((s, [,w])=>s+Number(w||0), 0) || 1;
+    let acc = 0;
+    const target = rnd01 * total;
+    for (const [score, w] of entries) {
+      acc += Number(w||0);
+      if (target <= acc) return Number(score);
+    }
+    return Number(entries.at(-1)[0] || 3);
+  }
+
+  // ---------- Boot ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    const app = new SilverDragonApp({
+      preload: {
+        fortune: './assets/data/fortune_messages.json',
+        quotes: './assets/data/quotes.json'
+      }
+    });
+    app.init();
+  });
+
+  // ==============================
+  // SilverDragonApp
+  // ==============================
+  class SilverDragonApp {
+    constructor(options = {}) {
+      this.preload = options.preload || {};
+      this.core = SiteCoreSafe || { Security: null, Analytics: null };
+
       this.offsetDays = 0;
-      this.elements = {};
-      this.isInitialized = false;
-      
-      // バインディング
-      this.handleGetFortune = this.handleGetFortune.bind(this);
-      this.handleCharacterSelect = this.handleCharacterSelect.bind(this);
-      this.handleCalendarNavigation = this.handleCalendarNavigation.bind(this);
+
+      this._fortuneCache = null;
+      this._quotesCache = null;
+
+      this.elements = {
+        dateText: document.getElementById('dateText'),
+        prevBtn: document.getElementById('prevDate'),
+        nextBtn: document.getElementById('nextDate'),
+
+        quoteText: document.getElementById('quoteText'),
+        quoteAuthor: document.getElementById('quoteAuthor'),
+
+        fortuneSummary: document.getElementById('fortuneSummary'),
+        fortuneDetails: document.getElementById('fortuneDetails')
+      };
     }
 
     async init() {
-      if (this.isInitialized) return;
-      
-      try {
-        this._cacheElements();
-        this._setupEventListeners();
-        this._updateCalendar();
-        await this._updateQuote();
-        
-        this.isInitialized = true;
-        console.log('FortuneApp initialized successfully');
-      } catch (error) {
-        console.error('FortuneApp initialization failed:', error);
+      this._bindEvents();
+      this._updateCalendar();
+
+      const base = new Date();
+      const today = new Date(base.getFullYear(), base.getMonth(), base.getDate() + this.offsetDays);
+
+      await this._updateQuote(today);
+      await this._updateFortune(today);
+    }
+
+    _bindEvents() {
+      if (this.elements.prevBtn) {
+        this.elements.prevBtn.addEventListener('click', () => this.handleCalendarNavigation('prev'));
+      }
+      if (this.elements.nextBtn) {
+        this.elements.nextBtn.addEventListener('click', () => this.handleCalendarNavigation('next'));
       }
     }
 
-    _cacheElements() {
-      const queries = {
-        ctaButton: '#ctaGet',
-        resultSection: '#result',
-        resultBox: '#resultBox',
-        characterButtons: '#charButtons button, #charButtons [data-char]',
-        calendarDate: '#calDate',
-        calendarQuote: '#calQuote',
-        quoteText: '#quoteText',
-        quoteAuthor: '#quoteAuthor',
-        prevButton: '#btnPrevDay',
-        nextButton: '#btnNextDay'
-      };
+    _updateCalendar() {
+      const base = new Date();
+      const target = new Date(base.getFullYear(), base.getMonth(), base.getDate() + this.offsetDays);
+      const ymd = formatDateYYYYMMDD(target);
 
-      Object.entries(queries).forEach(([key, selector]) => {
-        if (selector.includes(',')) {
-          this.elements[key] = this.core.$$?.(selector.split(',')[0]) || 
-                               Array.from(document.querySelectorAll(selector));
+      if (this.elements.dateText) {
+        if (this.core.Security?.updateContent) {
+          this.core.Security.updateContent(this.elements.dateText, ymd);
         } else {
-          this.elements[key] = this.core.$?.(selector) || document.querySelector(selector);
+          this.elements.dateText.textContent = ymd;
         }
-      });
-    }
-
-    _setupEventListeners() {
-      // メインCTAボタン
-      if (this.elements.ctaButton) {
-        this.elements.ctaButton.addEventListener('click', this.handleGetFortune);
-      }
-
-      // キャラクター選択ボタン
-      if (this.elements.characterButtons) {
-        this.elements.characterButtons.forEach(button => {
-          button.addEventListener('click', (event) => {
-            this.handleCharacterSelect(event.currentTarget);
-          });
-        });
-      }
-
-      // カレンダーナビゲーション
-      if (this.elements.prevButton) {
-        this.elements.prevButton.addEventListener('click', () => {
-          this.handleCalendarNavigation('prev');
-        });
-      }
-
-      if (this.elements.nextButton) {
-        this.elements.nextButton.addEventListener('click', () => {
-          this.handleCalendarNavigation('next');
-        });
-      }
-    }
-
-    // ===== イベントハンドラー =====
-    async handleGetFortune() {
-      try {
-        let fortuneData;
-        
-        if (this.core.Fortune) {
-          // 新しいFortune APIを使用
-          fortuneData = await this.core.Fortune.getTodaysMessage();
-        } else {
-          // フォールバック: 旧来の方式
-          fortuneData = await this._loadFortuneDataFallback();
-        }
-        
-        this._renderResult({
-          character: null,
-          message: fortuneData.message || 'お疲れ様でした。今日も一日、お疲れ様でした。',
-          score: fortuneData.score
-        });
-
-        // アナリティクス
-        if (this.core.Analytics) {
-          this.core.Analytics.track('view_today_overall', { page: 'index' });
-        }
-      } catch (error) {
-        console.error('Fortune loading failed:', error);
-        this._renderError('占い結果の取得に失敗しました。しばらく後にお試しください。');
-      }
-    }
-
-    async handleCharacterSelect(button) {
-      if (!button) return;
-
-      try {
-        const characterName = button.getAttribute('data-char') || button.textContent.trim();
-        const archetypeId = button.getAttribute('data-archid');
-
-        // アーキタイプIDの保存
-        if (archetypeId) {
-          if (this.core.Storage) {
-            this.core.Storage.set(this.core.Storage.KEYS.ARCHETYPE_ID, archetypeId);
-          } else if (this.core.ArchetypeStore) {
-            this.core.ArchetypeStore.set(archetypeId);
-          }
-        }
-
-        let fortuneData;
-        
-        if (this.core.Fortune) {
-          // キャラクター指定で占い取得
-          fortuneData = await this.core.Fortune.getTodaysMessage(characterName);
-        } else {
-          // フォールバック
-          fortuneData = await this._loadFortuneDataFallback();
-        }
-
-        this._renderResult({
-          character: characterName,
-          message: fortuneData.message || 'お疲れ様でした。今日も一日、お疲れ様でした。',
-          score: fortuneData.score
-        });
-
-        // アナリティクス
-        if (this.core.Analytics) {
-          this.core.Analytics.track('character_select', {
-            character: characterName,
-            archetype_id: archetypeId
-          });
-        }
-      } catch (error) {
-        console.error('Character selection failed:', error);
-        this._renderError('キャラクター選択に失敗しました。');
       }
     }
 
     handleCalendarNavigation(direction) {
-      switch (direction) {
-        case 'prev':
-          this.offsetDays -= 1;
-          break;
-        case 'next':
-          this.offsetDays += 1;
-          break;
-      }
+      if (direction === 'prev') this.offsetDays -= 1;
+      if (direction === 'next') this.offsetDays += 1;
 
       this._updateCalendar();
-      
-      if (this.core.Analytics) {
-        this.core.Analytics.track('nav_calendar', { direction });
-      }
+
+      const base = new Date();
+      const target = new Date(base.getFullYear(), base.getMonth(), base.getDate() + this.offsetDays);
+
+      this._updateQuote(target);
+      this._updateFortune(target);
+
+      this.core.Analytics?.track?.('nav_calendar', { direction, offsetDays: this.offsetDays });
     }
 
-    // ===== データ取得 =====
-    async _loadFortuneDataFallback() {
+    // ---------- Quotes (quotes.json) ----------
+    async _loadQuotesIfNeeded() {
+      if (this._quotesCache) return;
+      const url = this.preload.quotes || './assets/data/quotes.json';
+      const res = await fetch(url, { cache: 'no-cache', headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(`quotes.json HTTP ${res.status}`);
+      this._quotesCache = await res.json();
+    }
+
+    async _updateQuote(date = new Date()) {
       try {
-        const response = await fetch('./assets/data/fortune_messages.json', {
-          cache: 'no-cache',
-          headers: { 'Accept': 'application/json' }
+        await this._loadQuotesIfNeeded();
+      } catch (e) {
+        console.error('quotes loading failed:', e);
+        this._applyQuoteToDOM({
+          text: '静かな観察が、次の一手を照らす。',
+          author: '— 銀竜の記録より'
         });
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        
-        // 簡単な今日のメッセージ取得（総合運の平均スコア）
-        const messages = data.messages?.["総合"]?.["3"];
-        if (messages) {
-          const messageList = Object.values(messages);
-          const randomIndex = Math.floor(Math.random() * messageList.length);
-          return {
-            message: messageList[randomIndex],
-            score: 3
-          };
-        }
-
-        return {
-          message: 'お疲れ様でした。今日も一日、お疲れ様でした。',
-          score: 3
-        };
-      } catch (error) {
-        console.error('Fortune data loading failed:', error);
-        throw error;
-      }
-    }
-
-    // ===== UI更新 =====
-    _renderResult({ character, message, score }) {
-      if (!this.elements.resultSection || !this.elements.resultBox) {
-        console.error('Result elements not found');
         return;
       }
 
-      // スコアに応じた表示調整
-      const scoreText = this._getScoreText(score);
-      const scoreClass = this._getScoreClass(score);
+      const key = formatMMDD(date);
+      const list = this._quotesCache?.[key];
 
-      let resultHTML = '';
-      
-      if (this.core.DOM && this.core.DOM.createElement) {
-        // 新しいDOM操作を使用
-        this._renderResultWithDOM({ character, message, score, scoreText, scoreClass });
-      } else {
-        // フォールバック: innerHTML使用
-        const escapedMessage = this.core.esc ? this.core.esc(message) : this._escapeHtml(message);
-        const escapedCharacter = character ? (this.core.esc ? this.core.esc(character) : this._escapeHtml(character)) : null;
-        
-        resultHTML = `
-          <h3>${escapedCharacter ? `${escapedCharacter} からの今日の言葉` : '今日の言葉'}</h3>
-          ${scoreText ? `<div class="score ${scoreClass}">${scoreText}</div>` : ''}
-          <p>${escapedMessage}</p>
-          <div class="paywall">
-            <p class="lead">9カテゴリの詳細は有料会員限定です。</p>
-            <div class="actions">
-              <button class="btn">会員登録</button>
-              <button class="btn ghost">詳細</button>
-            </div>
-          </div>
-        `;
-        
-        this.elements.resultBox.innerHTML = resultHTML;
+      let text = '静かな観察が、次の一手を照らす。';
+      let author = '— 銀竜の記録より';
+
+      if (Array.isArray(list) && list.length) {
+        const pick = list[Math.floor(Math.random() * list.length)];
+        if (pick && typeof pick === 'object') {
+          if (typeof pick.text === 'string' && pick.text.trim()) text = pick.text;
+          if (typeof pick.author === 'string' && pick.author.trim()) author = pick.author;
+        }
       }
 
-      this.elements.resultSection.style.display = 'block';
-      this.elements.resultSection.setAttribute('aria-live', 'polite');
+      this._applyQuoteToDOM({ text, author });
     }
 
-    _renderResultWithDOM({ character, message, score, scoreText, scoreClass }) {
-      const heading = this.core.DOM.createElement('h3', {}, [
-        character ? `${character} からの今日の言葉` : '今日の言葉'
-      ]);
-
-      const messageP = this.core.DOM.createElement('p', {}, [message]);
-
-      const paywall = this.core.DOM.createElement('div', { className: 'paywall' });
-      const paywallText = this.core.DOM.createElement('p', { className: 'lead' }, [
-        '9カテゴリの詳細は有料会員限定です。'
-      ]);
-      paywall.appendChild(paywallText);
-
-      this.elements.resultBox.innerHTML = '';
-      this.elements.resultBox.appendChild(heading);
-      
-      if (scoreText) {
-        const scoreDiv = this.core.DOM.createElement('div', {
-          className: `score ${scoreClass}`
-        }, [scoreText]);
-        this.elements.resultBox.appendChild(scoreDiv);
-      }
-      
-      this.elements.resultBox.appendChild(messageP);
-      this.elements.resultBox.appendChild(paywall);
-    }
-
-    _renderError(errorMessage) {
-      if (!this.elements.resultSection || !this.elements.resultBox) return;
-
-      const escapedMessage = this.core.esc ? this.core.esc(errorMessage) : this._escapeHtml(errorMessage);
-      
-      this.elements.resultBox.innerHTML = `
-        <div class="error-message" style="color: #ff6b6b; font-weight: bold; padding: 1rem; border: 1px solid #ff6b6b; border-radius: 0.5rem;">
-          ${escapedMessage}
-        </div>
-      `;
-      
-      this.elements.resultSection.style.display = 'block';
-    }
-
-    _updateCalendar() {
-      if (!this.elements.calendarDate) return;
-
-      const baseDate = new Date();
-      const targetDate = new Date(
-        baseDate.getFullYear(),
-        baseDate.getMonth(),
-        baseDate.getDate() + this.offsetDays
-      );
-
-      const formattedDate = this._formatDate(targetDate);
-      
-      if (this.core.Security) {
-        this.core.Security.updateContent(this.elements.calendarDate, formattedDate);
-      } else {
-        this.elements.calendarDate.textContent = formattedDate;
-      }
-
-      // 祝日チェック（簡易版）
-      this._updateHoliday(targetDate);
-    }
-
-    _updateHoliday(date) {
-      const calendarHoliday = this.elements.calendarDate?.parentElement?.parentElement?.querySelector('#calHoliday');
-      if (!calendarHoliday) return;
-
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      
-      // 簡易的な祝日判定
-      const holidays = {
-        '1-1': '元日',
-        '2-11': '建国記念の日',
-        '3-21': '春分の日',
-        '4-29': '昭和の日',
-        '5-3': '憲法記念日',
-        '5-4': 'みどりの日',
-        '5-5': 'こどもの日',
-        '7-3': '海の日（第3月曜）',
-        '8-11': '山の日',
-        '9-3': '敬老の日（第3月曜）',
-        '9-23': '秋分の日',
-        '10-2': 'スポーツの日（第2月曜）',
-        '11-3': '文化の日',
-        '11-23': '勤労感謝の日',
-        '12-23': '天皇誕生日'
-      };
-
-      const key = `${month}-${day}`;
-      const holiday = holidays[key];
-      
-      if (holiday) {
-        calendarHoliday.textContent = `🎌 ${holiday}`;
-        calendarHoliday.style.display = 'block';
-      } else {
-        calendarHoliday.textContent = '';
-        calendarHoliday.style.display = 'none';
-      }
-    }
-
-    async _updateQuote() {
-      const quoteData = {
-        text: '静かな観察が、次の一手を照らす。',
-        author: '— 銀竜の記録より'
-      };
-
+    _applyQuoteToDOM({ text, author }) {
       if (this.elements.quoteText) {
-        if (this.core.Security) {
-          this.core.Security.updateContent(this.elements.quoteText, quoteData.text);
+        if (this.core.Security?.updateContent) {
+          this.core.Security.updateContent(this.elements.quoteText, text);
         } else {
-          this.elements.quoteText.textContent = quoteData.text;
+          this.elements.quoteText.textContent = text;
         }
       }
-
       if (this.elements.quoteAuthor) {
-        if (this.core.Security) {
-          this.core.Security.updateContent(this.elements.quoteAuthor, quoteData.author);
+        if (this.core.Security?.updateContent) {
+          this.core.Security.updateContent(this.elements.quoteAuthor, author);
         } else {
-          this.elements.quoteAuthor.textContent = quoteData.author;
+          this.elements.quoteAuthor.textContent = author;
         }
       }
     }
 
-    // ===== ユーティリティ =====
-    _formatDate(date) {
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      return `${month}月${day}日`;
+    // ---------- Fortune (fortune_messages.json) ----------
+    async _loadFortuneIfNeeded() {
+      if (this._fortuneCache) return;
+      const url = this.preload.fortune || './assets/data/fortune_messages.json';
+      const res = await fetch(url, { cache: 'no-cache', headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(`fortune_messages.json HTTP ${res.status}`);
+      this._fortuneCache = await res.json();
     }
 
-    _getScoreText(score) {
-      const scoreMap = {
-        '5': '絶好調',
-        '4': '好調',
-        '3': '普通',
-        '2': '注意',
-        '1': '休息'
-      };
-      return scoreMap[String(score)] || '';
-    }
-
-    _getScoreClass(score) {
-      const classMap = {
-        '5': 'excellent',
-        '4': 'good', 
-        '3': 'normal',
-        '2': 'caution',
-        '1': 'rest'
-      };
-      return classMap[String(score)] || 'normal';
-    }
-
-    _escapeHtml(text) {
-      return String(text || '').replace(/[&<>"']/g, m => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      }[m]));
-    }
-
-    // ===== クリーンアップ =====
-    destroy() {
-      if (this.core && this.core.EventManager) {
-        this.core.EventManager.removeAll();
-      }
-      this.isInitialized = false;
-    }
-  }
-
-  // ===== ナビゲーション管理（元の機能を維持） =====
-  function updateNavigation() {
-    const path = location.pathname.split('/').pop() || 'index.html';
-    
-    // 下部ナビゲーション
-    document.querySelectorAll('.bottom-nav a, nav.gnav a').forEach(a => {
-      const href = a.getAttribute('href') || '';
-      const active = href.endsWith(path);
-      if (active) {
-        a.classList.add('bn-accent');
-        a.setAttribute('aria-current', 'page');
-      } else {
-        a.classList.remove('bn-accent');
-        a.removeAttribute('aria-current');
-      }
-    });
-
-    // タブバー
-    document.querySelectorAll('.tabbar .tabbar-item').forEach(a => {
-      const href = (a.getAttribute('href') || '').split('/').pop();
-      if (href === path) {
-        a.classList.add('is-active');
-        a.setAttribute('aria-current', 'page');
-      } else {
-        a.classList.remove('is-active');
-        a.removeAttribute('aria-current');
-      }
-    });
-  }
-
-  // ===== アプリケーション初期化 =====
-  let app = null;
-
-  async function initializeApp() {
-    try {
-      // SiteCoreの準備完了を待つ（最大3秒）
-      let attempts = 0;
-      const maxAttempts = 30;
-      
-      while (!window.SiteCore && attempts < maxAttempts) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-      
-      if (window.SiteCore) {
-        console.log('SiteCore detected, using enhanced features');
-        core = window.SiteCore;
-      } else {
-        console.log('SiteCore not available, using fallback functionality');
-        core = fallback;
-      }
-
-      app = new FortuneApp();
-      await app.init();
-      updateNavigation();
-      
-      console.log('App initialized successfully');
-    } catch (error) {
-      console.error('App initialization failed:', error);
-      
-      // 基本的な機能だけでも動作させる
+    /**
+     * 現在の fortune_messages.json スキーマ（meta / weights / categories / messages）に対応。
+     * 1) 日付から deterministic に score と character を選ぶ
+     * 2) summary は「総合」カテゴリの文
+     * 3) details は categories を列挙（有料項目はロック表示の例）
+     */
+    async _updateFortune(date = new Date()) {
       try {
-        updateNavigation();
-        console.log('Basic navigation initialized');
-      } catch (navError) {
-        console.error('Navigation initialization failed:', navError);
+        await this._loadFortuneIfNeeded();
+      } catch (e) {
+        console.error('fortune loading failed:', e);
+        this._applyFortuneToDOM({
+          summary: '今日は足元を整えると良い兆し。焦らず、一歩ずつ。',
+          details: []
+        });
+        return;
+      }
+
+      const f = this._fortuneCache;
+      const meta = f?.meta || {};
+      const weights = f?.weights || {};
+      const categories = Array.isArray(f?.categories) ? f.categories : [];
+      const messages = f?.messages || {};
+
+      const ymd = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+      const seed = hashString(ymd);
+
+      const score = pickByWeights(weights, seededRandom(seed + 11));         // 1..5
+      const chars = Array.isArray(meta.characters) ? meta.characters : [];
+      const char = chars.length ? chars[Math.floor(seededRandom(seed + 23) * chars.length)] : null;
+
+      const summary =
+        messages?.['総合']?.[String(score)]?.[char] ||
+        '静かな巡りの中に、確かな兆しがある。';
+
+      const freeCats = new Set(Array.isArray(meta.free_categories) ? meta.free_categories : []);
+      const details = [];
+
+      for (const c of categories) {
+        const key = c.key;         // 例: "健康", "対人", ...
+        const paid = !!c.paid;
+
+        const text = messages?.[key]?.[String(score)]?.[char] || '';
+        if (!text) continue;
+
+        if (paid && !freeCats.has(key)) {
+          details.push({
+            title: key,
+            message: '🔒 この項目は会員限定です。ログイン/ご登録で表示されます。'
+          });
+        } else {
+          details.push({ title: key, message: text });
+        }
+      }
+
+      this._applyFortuneToDOM({ summary, details });
+    }
+
+    _applyFortuneToDOM({ summary, details }) {
+      if (this.elements.fortuneSummary) {
+        if (this.core.Security?.updateContent) {
+          this.core.Security.updateContent(this.elements.fortuneSummary, summary);
+        } else {
+          this.elements.fortuneSummary.textContent = summary;
+        }
+      }
+
+      if (this.elements.fortuneDetails) {
+        this.elements.fortuneDetails.innerHTML = '';
+
+        if (Array.isArray(details) && details.length) {
+          for (const item of details) {
+            const row = document.createElement('div');
+            row.className = 'fortune-row';
+
+            const h = document.createElement('div');
+            h.className = 'fortune-title';
+            h.textContent = item.title || '';
+
+            const p = document.createElement('div');
+            p.className = 'fortune-message';
+            p.textContent = item.message || '';
+
+            row.appendChild(h);
+            row.appendChild(p);
+            this.elements.fortuneDetails.appendChild(row);
+          }
+        } else {
+          const empty = document.createElement('div');
+          empty.className = 'fortune-empty';
+          empty.textContent = '詳細メッセージは準備中です。';
+          this.elements.fortuneDetails.appendChild(empty);
+        }
       }
     }
   }
 
-  // ===== DOM準備完了時の初期化 =====
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
-  } else {
-    // すでにDOMが読み込まれている場合
-    setTimeout(initializeApp, 0);
-  }
-
-  // クリーンアップ
-  window.addEventListener('beforeunload', () => {
-    if (app && app.destroy) {
-      app.destroy();
-    }
-  });
-
+  window.SilverDragonApp = SilverDragonApp;
 })();
