@@ -11,20 +11,163 @@
   <link rel="stylesheet" href="./assets/css/index.css">
   
   <link rel="preload" href="./assets/data/fortune_messages.json" as="fetch" crossorigin>
+  
+  <style>
+    /* カレンダーUI改善のための追加CSS */
+    .calendar-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+    
+    .calendar-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .calendar-title {
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .calendar-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .calendar-nav-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    
+    .calendar-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .calendar-date {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      min-width: 150px;
+    }
+    
+    .calendar-holiday {
+      text-align: center;
+      margin-bottom: 16px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 14px;
+      color: #ffeaa7;
+      font-weight: 500;
+    }
+    
+    .calendar-quote {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .calendar-quote blockquote {
+      margin: 0;
+      position: relative;
+      padding: 0;
+    }
+    
+    .calendar-quote blockquote::before {
+      content: '"';
+      position: absolute;
+      left: -10px;
+      top: -5px;
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1;
+    }
+    
+    .calendar-quote p {
+      font-style: italic;
+      line-height: 1.6;
+      margin: 0;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .quote-author {
+      text-align: right;
+      margin-top: 12px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+    
+    .calendar-actions {
+      text-align: center;
+    }
+    
+    .calendar-today-btn {
+      background: linear-gradient(45deg, #74b9ff, #0984e3);
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(9, 132, 227, 0.3);
+    }
+    
+    .calendar-today-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
+    }
+    
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+      display: inline-block;
+      height: 1em;
+      width: 200px;
+    }
+    
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
 </head>
 
 <body>
-  <div id="consent" class="consent-banner" hidden role="dialog" aria-labelledby="consent-title">
-    <div class="consent-content">
-      <h2 id="consent-title">プライバシー設定</h2>
-      <p>サービス改善のためアクセス解析を行っています。同意しますか？</p>
-      <div class="consent-actions">
-        <button id="btn-accept" class="btn">同意する</button>
-        <button id="btn-decline" class="btn ghost">拒否する</button>
-      </div>
-    </div>
-  </div>
-
   <div class="wrap">
     <section class="hero" aria-label="今日の占い">
       <h1>銀竜からのことばを<br>ワンタップで受け取ろう</h1>
@@ -64,27 +207,43 @@
     </section>
 
     <section id="calendarQuote" class="card" aria-live="polite">
-      <h2 class="label">銀竜暦カレンダー</h2>
-      <div class="calendar-navigation">
-        <button type="button" class="pill" id="btnPrevDay" aria-label="前日へ移動">← 前日</button>
-        <div class="calendar-date" id="calDate" role="heading" aria-level="3">
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <h2 class="calendar-title">銀竜暦カレンダー</h2>
         </div>
-        <button type="button" class="pill" id="btnNextDay" aria-label="翌日へ移動">翌日 →</button>
-      </div>
-      <div class="calendar-holiday" id="calHoliday">
-      </div>
-      <div class="calendar-quote" id="calQuote">
-        <blockquote>
-          <p id="quoteText">
+        
+        <div class="calendar-navigation">
+          <button type="button" class="calendar-nav-btn" id="btnPrevDay" aria-label="前日へ移動">
+            ← 前日
+          </button>
+          <div class="calendar-date" id="calDate" role="heading" aria-level="3">
+            <!-- 日付がここに表示されます -->
+          </div>
+          <button type="button" class="calendar-nav-btn" id="btnNextDay" aria-label="翌日へ移動">
+            翌日 →
+          </button>
+        </div>
+        
+        <div class="calendar-holiday" id="calHoliday">
+          <!-- 祝日情報がここに表示されます -->
+        </div>
+        
+        <div class="calendar-quote" id="calQuote">
+          <blockquote>
+            <p id="quoteText">
+              <span class="skeleton" aria-label="読み込み中"></span>
+            </p>
+          </blockquote>
+          <footer id="quoteAuthor" class="quote-author">
             <span class="skeleton" aria-label="読み込み中"></span>
-          </p>
-        </blockquote>
-        <footer id="quoteAuthor" class="quote-author">
-          <span class="skeleton" aria-label="読み込み中"></span>
-        </footer>
-      </div>
-      <div class="calendar-actions">
-        <button type="button" class="pill" id="btnToday" aria-label="今日へ戻る">今日</button>
+          </footer>
+        </div>
+        
+        <div class="calendar-actions">
+          <button type="button" class="calendar-today-btn" id="btnToday" aria-label="今日へ戻る">
+            今日
+          </button>
+        </div>
       </div>
     </section>
 
