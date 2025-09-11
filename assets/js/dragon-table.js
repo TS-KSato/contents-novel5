@@ -1,8 +1,8 @@
 // dragon-table.js — 竜の食卓（一覧 & 各キャラ）
 // 依存: core.js の esc, Avatar, nav.js(任意)
-import { esc, Avatar } from "./core.js";
+import { esc, Avatar } from "./assets/data/core.js";
 
-const JSON_PATH = "./recipe.json";
+const JSON_PATH = "./assets/data/recipe.json";
 
 /* ===== 共通ヘルパ ===== */
 const $ = (s, r=document)=>r.querySelector(s);
@@ -131,6 +131,10 @@ function renderList(items){
       renderList(list);
     }
   }catch(e){
-    console.warn("recipe.json 読み込み失敗:", e);
-    $("#todayDish") && ($("#todayDish").innerHTML = `<div class="meta">レシピの読み込みに失敗しました。recipe.json をご確認ください。</div>`);
-    $("#charLinks") &
+    console.warn("recipe.json読み込み失敗:", e);
+    todayEl.innerHTML = `<div class="meta">レシピの読み込みに失敗しました。<br>recipe.json をご確認ください。</div>`;
+    charEl.innerHTML = `
+      <div class="meta">キャラクター別の食卓は、データが読み込め次第表示します。</div>
+    `;
+  }
+})();
