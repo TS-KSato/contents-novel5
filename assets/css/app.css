@@ -1,5 +1,5 @@
 :root{
-  --bg:#0b0d12; --ink:#ffffff; --muted:#aeb7d0; --line:#27304a; --card:#151826;
+  --bg:#0b0d12; --ink:#ffffff; --muted:#fffafa; --line:#27304a; --card:#151826;
   --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
   --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
   --success:#6bd8a6; --warning:#ffd27e;
@@ -19,6 +19,7 @@ body{
   line-height:1.75; 
   -webkit-text-size-adjust:100%; 
   text-rendering:optimizeLegibility;
+  padding: 0.4rem;
 }
 .wrap{ max-width:40rem; margin:0 auto; padding:1rem; }
 
