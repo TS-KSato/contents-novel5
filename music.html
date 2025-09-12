@@ -37,10 +37,21 @@
   </main>
 
   <!-- 下部ナビゲーション -->
-  <nav class="gnav" role="navigation" aria-label="主要ナビゲーション">
-    <a href="./index.html">ホーム</a>
-    <a href="./notice.html">お知らせ</a>
-    <a href="./mypage.html">マイページ</a>
+  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html">
+        <span class="bn-icon" aria-hidden="true">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="./notice.html">
+        <span class="bn-icon" aria-hidden="true">📣</span>
+        <span>お知らせ</span>
+      </a>
+      <a class="bn-btn" href="./mypage.html">
+        <span class="bn-icon" aria-hidden="true">👤</span>
+        <span>マイページ</span>
+      </a>
+    </div>
   </nav>
 
   <!-- エラー表示用（必要に応じて表示） -->
@@ -158,7 +169,7 @@
 
     /* プリント用スタイル */
     @media print {
-      .gnav,
+      .bottom-nav,
       .error-notification,
       .music-notification,
       audio {
