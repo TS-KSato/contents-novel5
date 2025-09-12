@@ -45,6 +45,12 @@
     return Number(entries.at(-1)[0] || 3);
   }
 
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // ---------- Boot ----------
   document.addEventListener('DOMContentLoaded', () => {
     const app = new SilverDragonApp({
@@ -65,6 +71,7 @@
       this.core = SiteCoreSafe || { Security: null, Analytics: null };
 
       this.offsetDays = 0;
+      this.selectedCharacter = null;
 
       this._fortuneCache = null;
       this._quotesCache = null;
@@ -78,7 +85,13 @@
         quoteAuthor: document.getElementById('quoteAuthor'),
 
         fortuneSummary: document.getElementById('fortuneSummary'),
-        fortuneDetails: document.getElementById('fortuneDetails')
+        fortuneDetails: document.getElementById('fortuneDetails'),
+
+        // 占い師選択関連
+        charButtons: document.getElementById('charButtons'),
+        ctaButton: document.getElementById('ctaGet'),
+        resultSection: document.getElementById('result'),
+        resultBox: document.getElementById('resultBox')
       };
     }
 
@@ -94,11 +107,31 @@
     }
 
     _bindEvents() {
+      // カレンダーナビゲーション
       if (this.elements.prevBtn) {
         this.elements.prevBtn.addEventListener('click', () => this.handleCalendarNavigation('prev'));
       }
       if (this.elements.nextBtn) {
         this.elements.nextBtn.addEventListener('click', () => this.handleCalendarNavigation('next'));
+      }
+
+      // 占い師選択ボタン
+      if (this.elements.charButtons) {
+        this.elements.charButtons.addEventListener('click', (e) => {
+          const button = e.target.closest('.character-button');
+          if (button) {
+            const character = button.dataset.char;
+            const archId = button.dataset.archid;
+            this.handleCharacterSelection(character, archId, button);
+          }
+        });
+      }
+
+      // CTAボタン
+      if (this.elements.ctaButton) {
+        this.elements.ctaButton.addEventListener('click', () => {
+          this.handleCtaClick();
+        });
       }
     }
 
@@ -128,7 +161,74 @@
       this._updateQuote(target);
       this._updateFortune(target);
 
+      // 占い師が選択されている場合は結果も更新
+      if (this.selectedCharacter) {
+        this._updateCharacterFortune(target, this.selectedCharacter);
+      }
+
       this.core.Analytics?.track?.('nav_calendar', { direction, offsetDays: this.offsetDays });
+    }
+
+    handleCharacterSelection(character, archId, buttonElement) {
+      this.selectedCharacter = character;
+      
+      // 選択状態の視覚的フィードバック
+      this._updateCharacterButtonStates(buttonElement);
+      
+      // 占い師選択をストレージに保存
+      if (SiteCoreSafe?.ArchetypeStore) {
+        SiteCoreSafe.ArchetypeStore.set(archId);
+      }
+      
+      // 現在の日付で占い結果を表示
+      const base = new Date();
+      const target = new Date(base.getFullYear(), base.getMonth(), base.getDate() + this.offsetDays);
+      this._updateCharacterFortune(target, character);
+      
+      // アナリティクス
+      this.core.Analytics?.track?.('character_selected', { 
+        character, 
+        archId,
+        offsetDays: this.offsetDays 
+      });
+    }
+
+    handleCtaClick() {
+      // 占い師が選択されていない場合は促す
+      if (!this.selectedCharacter) {
+        const charSection = document.querySelector('#chooseCharacter');
+        if (charSection) {
+          charSection.scrollIntoView({ behavior: 'smooth' });
+          this._showMessage('まず占い師を選択してください', 'info');
+        }
+        return;
+      }
+
+      // 結果セクションにスクロール
+      if (this.elements.resultSection) {
+        this.elements.resultSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      this.core.Analytics?.track?.('cta_clicked', { 
+        hasCharacter: !!this.selectedCharacter 
+      });
+    }
+
+    _updateCharacterButtonStates(selectedButton) {
+      if (!this.elements.charButtons) return;
+
+      // 全てのボタンから選択状態を削除
+      const allButtons = this.elements.charButtons.querySelectorAll('.character-button');
+      allButtons.forEach(btn => {
+        btn.classList.remove('selected');
+        btn.setAttribute('aria-pressed', 'false');
+      });
+
+      // 選択されたボタンに状態を追加
+      if (selectedButton) {
+        selectedButton.classList.add('selected');
+        selectedButton.setAttribute('aria-pressed', 'true');
+      }
     }
 
     // ---------- Quotes (quotes.json) ----------
@@ -196,10 +296,7 @@
     }
 
     /**
-     * 現在の fortune_messages.json スキーマ（meta / weights / categories / messages）に対応。
-     * 1) 日付から deterministic に score と character を選ぶ
-     * 2) summary は「総合」カテゴリの文
-     * 3) details は categories を列挙（有料項目はロック表示の例）
+     * カレンダーセクションの占い表示（総合的な内容）
      */
     async _updateFortune(date = new Date()) {
       try {
@@ -222,7 +319,7 @@
       const ymd = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
       const seed = hashString(ymd);
 
-      const score = pickByWeights(weights, seededRandom(seed + 11));         // 1..5
+      const score = pickByWeights(weights, seededRandom(seed + 11));
       const chars = Array.isArray(meta.characters) ? meta.characters : [];
       const char = chars.length ? chars[Math.floor(seededRandom(seed + 23) * chars.length)] : null;
 
@@ -234,7 +331,7 @@
       const details = [];
 
       for (const c of categories) {
-        const key = c.key;         // 例: "健康", "対人", ...
+        const key = c.key;
         const paid = !!c.paid;
 
         const text = messages?.[key]?.[String(score)]?.[char] || '';
@@ -251,6 +348,65 @@
       }
 
       this._applyFortuneToDOM({ summary, details });
+    }
+
+    /**
+     * 占い師選択時の個別結果表示
+     */
+    async _updateCharacterFortune(date = new Date(), character) {
+      try {
+        await this._loadFortuneIfNeeded();
+      } catch (e) {
+        console.error('fortune loading failed:', e);
+        this._showCharacterResult({
+          character,
+          summary: '今日はあなたにとって穏やかな一日となりそうです。',
+          details: [],
+          score: 3
+        });
+        return;
+      }
+
+      const f = this._fortuneCache;
+      const weights = f?.weights || {};
+      const categories = Array.isArray(f?.categories) ? f.categories : [];
+      const messages = f?.messages || {};
+
+      const ymd = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+      const seed = hashString(ymd + character); // キャラクター別にシードを変える
+
+      const score = pickByWeights(weights, seededRandom(seed));
+
+      // 指定キャラクターのメッセージを取得
+      const summary = messages?.['総合']?.[String(score)]?.[character] || 
+                     '今日はあなたにとって穏やかな一日となりそうです。';
+
+      const freeCats = new Set(Array.isArray(f?.meta?.free_categories) ? f.meta.free_categories : []);
+      const details = [];
+
+      for (const c of categories) {
+        const key = c.key;
+        const paid = !!c.paid;
+
+        const text = messages?.[key]?.[String(score)]?.[character] || '';
+        if (!text) continue;
+
+        if (paid && !freeCats.has(key)) {
+          details.push({
+            title: key,
+            message: '🔒 この項目は会員限定です。'
+          });
+        } else {
+          details.push({ title: key, message: text });
+        }
+      }
+
+      this._showCharacterResult({
+        character,
+        summary,
+        details,
+        score
+      });
     }
 
     _applyFortuneToDOM({ summary, details }) {
@@ -288,6 +444,88 @@
           empty.textContent = '詳細メッセージは準備中です。';
           this.elements.fortuneDetails.appendChild(empty);
         }
+      }
+    }
+
+    _showCharacterResult({ character, summary, details, score }) {
+      if (!this.elements.resultSection || !this.elements.resultBox) return;
+
+      // スコアに応じたクラス
+      const scoreClass = this._getScoreClass(score);
+      const scoreName = this._getScoreName(score);
+
+      // 結果HTMLの構築
+      let html = `
+        <div class="fortune-character">
+          <div class="fortune-character-info">
+            <strong>${escapeHtml(character)}からのメッセージ</strong>
+            <span class="score ${scoreClass}">${scoreName}</span>
+          </div>
+        </div>
+        <div class="fortune-summary">
+          <p>${escapeHtml(summary)}</p>
+        </div>
+      `;
+
+      if (details.length > 0) {
+        html += '<div class="fortune-details">';
+        for (const item of details) {
+          html += `
+            <div class="fortune-detail-item">
+              <h4>${escapeHtml(item.title)}</h4>
+              <p>${escapeHtml(item.message)}</p>
+            </div>
+          `;
+        }
+        html += '</div>';
+      }
+
+      this.elements.resultBox.innerHTML = html;
+      this.elements.resultSection.style.display = 'block';
+      
+      // 結果セクションにスクロール（少し遅延させる）
+      setTimeout(() => {
+        this.elements.resultSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+
+    _getScoreClass(score) {
+      const classMap = {
+        5: 'excellent',
+        4: 'good', 
+        3: 'normal',
+        2: 'caution',
+        1: 'rest'
+      };
+      return classMap[score] || 'normal';
+    }
+
+    _getScoreName(score) {
+      const nameMap = {
+        5: '最高運',
+        4: '好調',
+        3: '普通',
+        2: '注意',
+        1: '休息'
+      };
+      return nameMap[score] || '普通';
+    }
+
+    _showMessage(message, type = 'info') {
+      // 簡単なメッセージ表示（エラーシステムを活用）
+      const errorEl = document.getElementById('errorNotification');
+      const msgEl = document.getElementById('errorMessage');
+      
+      if (errorEl && msgEl) {
+        msgEl.textContent = message;
+        errorEl.hidden = false;
+        
+        setTimeout(() => {
+          errorEl.hidden = true;
+        }, 3000);
       }
     }
   }
