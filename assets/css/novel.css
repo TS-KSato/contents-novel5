@@ -4,14 +4,20 @@
 }
 
 .progress-top{position:fixed;left:0;top:0;width:100%;height:3px;background:rgba(255,255,255,.08);z-index:50}
-.progress-top .bar{height:100%;width:0;background:var(--accent)}
+.progress-top .bar{height:100%;width:0;background:var(--accent);transition:width 0.3s ease;}
 
 .tools{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:.25rem 0 1rem}
 select,.mini-btn{
   appearance:none;border:1px solid var(--line);background:#11172a;color:#d7e6ff;
-  border-radius:.6rem;padding:.5rem .65rem;font-size:.95rem
+  border-radius:.6rem;padding:.5rem .65rem;font-size:.95rem;cursor:pointer;
+  transition:all 0.2s ease;
 }
-.mini-btn{cursor:pointer}
+select:hover,.mini-btn:hover{
+  border-color:var(--accent-2-b);background:#1a2035;
+}
+select:disabled,.mini-btn:disabled{
+  cursor:not-allowed;opacity:0.5;
+}
 
 .endcap{
   border:1px solid var(--line);
@@ -19,7 +25,7 @@ select,.mini-btn{
   border-radius:calc(var(--radius) * 1.2);padding:var(--pad);margin-top:1rem
 }
 .endcap h3{margin:.25rem 0 .5rem;font-size:1rem;color:#d7e6ff}
-.endcap .preview{color:var(--muted);font-size:.95rem;margin:.25rem 0 .75rem}
+.endcap .preview{color:var(--muted);font-size:.95rem;margin:.25rem 0 .75rem;line-height:1.6;}
 .endcap .actions{display:flex;gap:.5rem;flex-wrap:wrap}
 .endcap .actions .btn{flex:1 1 auto}
 .endcap .actions .btn.ghost{flex:0 0 auto}
@@ -28,7 +34,83 @@ select,.mini-btn{
 .resume-btn{
   position:fixed;right:.75rem;bottom:4.25rem;border:1px solid var(--accent-2-b);
   background:#0d1424;color:#e7f2ff;border-radius:.8rem;padding:.5rem .7rem;
-  font-size:.9rem;z-index:40;display:none
+  font-size:.9rem;z-index:40;display:none;cursor:pointer;
+  transition:all 0.2s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.resume-btn:hover{
+  background:#1a2035;transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.4);
+}
+.resume-btn:active{
+  transform:translateY(0);
+}
+
+/* 章コンテンツ */
+#chapterContent{
+  line-height:1.9;
+  font-family:'Noto Serif JP',serif;
+}
+
+#chapterContent h2{
+  margin:1.5rem 0 1rem;
+  color:var(--accent);
+  font-size:1.8rem;
+  border-bottom:2px solid var(--line);
+  padding-bottom:0.5rem;
+}
+
+#chapterContent h4{
+  margin:1.2rem 0 0.8rem;
+  color:#d7e6ff;
+  font-size:1.2rem;
+  font-weight:600;
+}
+
+#chapterContent p{
+  margin:1rem 0;
+  text-indent:1em;
+}
+
+/* アクセシビリティ対応 */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .tools{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .tools > div{
+    display:flex;
+    gap:0.5rem;
+  }
+  .tools > div:first-child{
+    flex:1;
+  }
+  
+  .endcap .actions{
+    flex-direction:column;
+  }
+  .endcap .actions .btn{
+    flex:1 1 auto;
+  }
+  
+  .resume-btn{
+    right:0.5rem;
+    bottom:4rem;
+    padding:0.4rem 0.6rem;
+    font-size:0.8rem;
+  }
 }
 
 /* 下部ナビは共通 (.bottom-nav) を使用 */
