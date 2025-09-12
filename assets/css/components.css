@@ -8,6 +8,7 @@
   border:1px solid var(--line);
   border-radius:var(--radius);
   padding:var(--pad);
+  opacity: 0.9;
 }
 .pill{
   display:inline-flex; align-items:center; justify-content:center;

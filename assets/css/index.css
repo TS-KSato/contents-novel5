@@ -2,7 +2,7 @@
 .hero{ position:relative; overflow:hidden; border-radius:calc(var(--radius)*1.2); border:1px solid var(--line);
   background: radial-gradient(120% 120% at 100% 0%, #1d2a4a 0%, #0c1220 55%, #0b0d12 100%);
   padding:1.25rem; margin-top:.5rem; display:flex; flex-direction:column; justify-content:center;
-  min-height:42vh; max-height:56vh;
+  min-height:42vh; max-height:56vh; opacity: 0.9;
 }
 @media (max-height:740px){ .hero{ min-height:38vh; max-height:50vh } }
 .hero h1{ margin:0 0 .25rem; font-size:clamp(1.35rem,6vw,1.75rem); line-height:1.25; letter-spacing:.02em }
@@ -160,6 +160,7 @@
   text-decoration: none;
   color: inherit;
   transition: all 0.2s ease;
+  opacity: 0.9
 }
 
 .content-tile:hover,
