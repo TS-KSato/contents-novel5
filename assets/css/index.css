@@ -382,3 +382,178 @@
     border: 2px solid #ff4444;
   }
 }
+
+/* 占い師選択の状態表示 */
+.character-button.selected {
+  background: var(--accent-2);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(159, 211, 255, 0.3);
+}
+
+.character-button.selected img {
+  border-color: var(--accent);
+}
+
+.character-button.selected div {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 結果表示セクション */
+.fortune-character {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--accent-2);
+  border: 1px solid var(--accent-2-b);
+  border-radius: 0.5rem;
+}
+
+.fortune-character-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fortune-character-info strong {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.fortune-summary {
+  margin: 1rem 0;
+}
+
+.fortune-summary p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+.fortune-details {
+  margin-top: 1.5rem;
+}
+
+.fortune-detail-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+
+.fortune-detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.fortune-detail-item h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.fortune-detail-item p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* スコア表示 */
+.score {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+.score.excellent {
+  background: #1a4d3a;
+  color: #4ade80;
+  border: 1px solid #22c55e;
+}
+
+.score.good {
+  background: #1e3a8a;
+  color: #60a5fa;
+  border: 1px solid #3b82f6;
+}
+
+.score.normal {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #6b7280;
+}
+
+.score.caution {
+  background: #92400e;
+  color: #fbbf24;
+  border: 1px solid #f59e0b;
+}
+
+.score.rest {
+  background: #7c2d12;
+  color: #fb7185;
+  border: 1px solid #ef4444;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+  .fortune-character-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .fortune-detail-item {
+    padding: 0.75rem;
+  }
+}
+
+/* アニメーション効果 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#result {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* アクセシビリティ強化 */
+.character-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.character-button[aria-pressed="true"] {
+  position: relative;
+}
+
+.character-button[aria-pressed="true"]::after {
+  content: "✓";
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
