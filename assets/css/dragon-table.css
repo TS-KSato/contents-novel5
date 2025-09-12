@@ -1,54 +1,408 @@
 /* dragon-table.css — 食卓トップ／キャラ別 共通（app.css / components.css 前提） */
 
+/* 基本レイアウト調整 */
+.wrap {
+  max-width: 960px;
+  padding-bottom: 5rem; /* bottom-nav用余白 */
+}
+
 /* 見出し */
-header{text-align:center;padding:.6rem 0 .3rem}
-h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
-.lead{color:var(--muted);font-size:.9rem}
+header {
+  text-align: center;
+  padding: .6rem 0 .3rem;
+}
+
+h1 {
+  margin: .25rem 0;
+  font-size: clamp(1.15rem, 5vw, 1.5rem);
+}
+
+.lead {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+/* 今日の一品セクション制御 */
+#todayDish {
+  max-height: 400px; /* 最大高制限 */
+  overflow: hidden;
+}
+
+#todayDish .article-head {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start; /* 上揃え */
+  margin-bottom: 1rem;
+}
+
+#todayDish .article-head .avatar-wrap {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+#todayDish .article-head > div {
+  flex: 1;
+  min-width: 0;
+}
+
+#todayDish .title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: .25rem;
+  line-height: 1.3;
+}
+
+#todayDish .meta {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+/* アバター制御 */
+.avatar-wrap {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  border: 2px solid var(--line);
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent);
+  background: var(--accent-2);
+}
 
 /* キャラ選択グリッド */
-.cast{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:.5rem 0 1rem;
+.cast {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .75rem;
+  margin: .5rem 0 1rem;
 }
-@media (min-width:560px){ .cast{grid-template-columns:repeat(4,1fr)} }
-@media (min-width:880px){ .cast{grid-template-columns:repeat(5,1fr)} }
 
-.cast .item{
-  text-align:center;background:#0f162b;border:1px solid var(--line);
-  border-radius:.85rem;padding:.6rem .5rem;transition:.15s ease;
+@media (min-width: 560px) { 
+  .cast { 
+    grid-template-columns: repeat(4, 1fr); 
+  } 
 }
-.cast .item:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.cast .item:hover{background:#14203a;border-color:#34507c}
 
-.cast .avatar{
-  /* 共通 .avatar を活かしつつサイズだけ特化 */
-  width:68px;height:68px;margin:0 auto .35rem;
+@media (min-width: 880px) { 
+  .cast { 
+    grid-template-columns: repeat(5, 1fr); 
+  } 
 }
-.cast .name{
-  font-weight:700;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  color:#e9f1ff;
+
+.cast .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #0f162b;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  padding: .8rem .5rem;
+  transition: .15s ease;
+  text-decoration: none;
+  color: inherit;
+  min-height: 120px;
+  justify-content: space-between;
 }
-.cast .role{color:#9fb0d3;font-size:.75rem}
+
+.cast .item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cast .item:hover {
+  background: #14203a;
+  border-color: #34507c;
+}
+
+.cast .avatar {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto .35rem;
+}
+
+.cast .name {
+  font-weight: 700;
+  font-size: .9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #e9f1ff;
+  width: 100%;
+}
+
+.cast .role {
+  color: #9fb0d3;
+  font-size: .75rem;
+  line-height: 1.2;
+  text-align: center;
+}
 
 /* レシピ一覧（カード） */
-.recipes{display:grid;gap:.75rem}
-.recipe{
-  display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:center;
+.recipes {
+  display: grid;
+  gap: .75rem;
 }
-.recipe .thumb{
-  width:72px;height:72px;border-radius:.75rem;border:1px solid var(--line);
-  background:#10172a center/cover no-repeat;display:grid;place-items:center;color:#cfe1ff;font-weight:800;
+
+.recipe {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .75rem;
+  align-items: center;
 }
-.recipe .meta{min-width:0}
-.recipe .title{font-weight:800;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.recipe .sub{color:#9aa3b2;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:.15rem}
-.recipe .go .btn{border:0;border-radius:.65rem;padding:.5rem .75rem;background:#22324d;color:#cfe1ff;font-weight:700}
+
+.recipe .thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: .75rem;
+  border: 1px solid var(--line);
+  background: #10172a center/cover no-repeat;
+  display: grid;
+  place-items: center;
+  color: #cfe1ff;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.recipe .meta {
+  min-width: 0;
+}
+
+.recipe .title {
+  font-weight: 800;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recipe .sub {
+  color: #9aa3b2;
+  font-size: .82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: .15rem;
+}
+
+.recipe .go .btn {
+  border: 0;
+  border-radius: .65rem;
+  padding: .5rem .75rem;
+  background: #22324d;
+  color: #cfe1ff;
+  font-weight: 700;
+}
+
+/* リスト表示 */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.list .item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #10172a;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  text-decoration: none;
+  color: inherit;
+  transition: .15s ease;
+}
+
+.list .item:hover {
+  background: #14203a;
+  border-color: #34507c;
+}
+
+.list .item .name {
+  font-weight: 700;
+  margin-bottom: .25rem;
+  color: #e9f1ff;
+}
+
+.list .item .sub {
+  color: #9aa3b2;
+  font-size: .82rem;
+  line-height: 1.3;
+}
+
+.list .item .pill {
+  margin-left: auto;
+  padding: .25rem .75rem;
+  background: #22324d;
+  border-radius: 20px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #cfe1ff;
+  flex-shrink: 0;
+}
 
 /* セクションラベル／導線 */
-.section-label{font-weight:800;color:#cfe1ff;margin:.5rem 0 .25rem}
-.more{display:flex;justify-content:flex-end;margin-top:.25rem}
-.more .btn.ghost{padding:.45rem .7rem}
+.section-label {
+  font-weight: 800;
+  color: #cfe1ff;
+  margin: .5rem 0 .25rem;
+}
+
+.more {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: .25rem;
+}
+
+.more .btn.ghost {
+  padding: .45rem .7rem;
+}
 
 /* ノート／補足 */
-.note{color:#c8d4e8;font-size:.8rem;margin:.5rem 0 0}
+.note {
+  color: #c8d4e8;
+  font-size: .8rem;
+  margin: .5rem 0 0;
+}
 
-/* 下部ナビは共通 .bottom-nav を使用（追加なし） */
+/* コンテンツセクション制御 */
+.body {
+  margin-top: 1rem;
+}
+
+.body h3 {
+  margin: .75rem 0 .5rem 0;
+  font-size: 1rem;
+  color: #cfe1ff;
+}
+
+.body ul,
+.body ol {
+  margin: .5rem 0 1rem 1.5rem;
+  padding: 0;
+}
+
+.body li {
+  margin: .25rem 0;
+  line-height: 1.4;
+}
+
+/* セパレータ */
+.sep {
+  height: 1px;
+  background: var(--line);
+  margin: 1rem 0;
+}
+
+/* エラー表示 */
+.error-message {
+  background: #2d1b1b;
+  border: 1px solid #5c2e2e;
+  border-radius: .5rem;
+  padding: 1rem;
+  color: #ffb3b3;
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* ローディング表示 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--muted);
+  min-height: 100px;
+}
+
+.loading::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: .5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* タブナビゲーション */
+.tabs {
+  display: flex;
+  gap: .5rem;
+  margin: 1rem 0 2rem 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: .5rem;
+}
+
+.tabs a {
+  padding: .75rem 1rem;
+  border-radius: .5rem;
+  text-decoration: none;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: all .2s;
+  font-weight: 500;
+}
+
+.tabs a:hover,
+.tabs a[aria-current="page"] {
+  background: var(--accent-2);
+  color: var(--accent);
+  border: 1px solid var(--accent-2-b);
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 560px) {
+  .cast {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cast .name {
+    font-size: .85rem;
+  }
+  
+  .cast .role {
+    font-size: .7rem;
+  }
+  
+  #todayDish .article-head {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #todayDish .article-head .avatar-wrap {
+    width: 80px;
+    height: 80px;
+  }
+}
