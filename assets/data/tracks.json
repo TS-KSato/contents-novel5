@@ -108,5 +108,16 @@
     "duration": 220,
     "url": "assets/bgm010.mp3",
     "art": "assets/bgm010.jpg"
+  },
+  {
+    "id": "m11",
+    "name": "Whisper of Silver Light",
+    "scene": "魔法の森",
+    "mood": "幻想的",
+    "theme": "神秘",
+    "bpm": 80,
+    "duration": 199,
+    "url": "assets/bgm011.mp3",
+    "art": "assets/bgm011.jpg"
   }
 ]
