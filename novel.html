@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/novel.css">
-
 </head>
 
 <body>
@@ -29,44 +28,62 @@
     <div class="tools">
       <div>
         <label for="chapterSelector" class="visually-hidden">章の選択</label>
-        <select id="chapterSelector" aria-label="目次"></select>
+        <select id="chapterSelector" aria-label="目次">
+          <option>読み込み中...</option>
+        </select>
       </div>
       <div>
-        <button id="prevChapter" class="mini-btn" aria-label="前へ">← 前へ</button>
-        <button id="nextChapter" class="mini-btn" aria-label="次へ">次へ →</button>
+        <button id="prevChapter" class="mini-btn" aria-label="前の章へ" disabled>← 前へ</button>
+        <button id="nextChapter" class="mini-btn" aria-label="次の章へ" disabled>次へ →</button>
       </div>
     </div>
 
     <section class="card" id="chapterCard">
-      <h2 id="currentChapterTitle" class="visually-hidden" style="margin-top:0"></h2>
-      <div id="chapterContent" tabindex="-1" style="line-height:1.9;font-family:'Noto Serif JP',serif;"></div>
+      <h2 id="currentChapterTitle" class="visually-hidden" style="margin-top:0">章タイトル</h2>
+      <div id="chapterContent" tabindex="-1" style="line-height:1.9;font-family:'Noto Serif JP',serif;">
+        <div class="muted" style="text-align:center;padding:2rem;">読み込み中...</div>
+      </div>
 
       <section class="endcap card" id="endcap" hidden aria-live="polite">
-        <h3 id="endcapHeading">次に読む</h3>
+        <h3 id="endcapHeading">次の章</h3>
         <div class="preview" id="nextPreview">次章の冒頭を表示します。</div>
         <div class="actions">
-          <button id="endcapNextBtn" class="btn" aria-label="次へ">次へ</button>
-          <button id="endcapPrevBtn" class="btn ghost" aria-label="前へ">前へ</button>
+          <button id="endcapNextBtn" class="btn" aria-label="次の章へ">次へ</button>
+          <button id="endcapPrevBtn" class="btn ghost" aria-label="前の章へ">前へ</button>
           <button id="endcapTocBtn" class="btn ghost" aria-label="目次へ">目次へ</button>
         </div>
       </section>
     </section>
 
-    <footer style="text-align:center;color:var(--muted);font-size:.8rem;margin:1rem 0 4.5rem">© 運命の銀竜暦</footer>
+    <footer style="text-align:center;color:var(--muted);font-size:.8rem;margin:1rem 0 4.5rem">
+      © 運命の銀竜暦
+    </footer>
   </div>
 
-  <button class="resume-btn" id="resumeBtn" aria-label="前回位置に戻る">再開</button>
+  <button class="resume-btn" id="resumeBtn" aria-label="前回読んでいた位置に戻る" title="前回読んでいた位置に戻る">
+    再開
+  </button>
 
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html"><span class="bn-icon">🏠</span><span>ホーム</span></a>
-      <a class="bn-btn" href="./notice.html"><span class="bn-icon">📰</span><span>お知らせ</span></a>
-      <a class="bn-btn" href="./mypage.html"><span class="bn-icon">👤</span><span>マイページ</span></a>
+      <a class="bn-btn" href="./index.html">
+        <span class="bn-icon">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="./notice.html">
+        <span class="bn-icon">📰</span>
+        <span>お知らせ</span>
+      </a>
+      <a class="bn-btn" href="./mypage.html">
+        <span class="bn-icon">👤</span>
+        <span>マイページ</span>
+      </a>
     </div>
   </nav>
 
-  <script type="module" src="./assets/js/nav.js" defer></script>
-  <script type="module" src="./assets/js/novel.js" defer></script>
+  <!-- Scripts -->
+  <script type="module" src="./assets/js/nav.js"></script>
+  <script type="module" src="./assets/js/novel.js"></script>
 </body>
 
 </html>
