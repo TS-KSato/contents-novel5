@@ -239,9 +239,9 @@
       });
     }
 
-    // キャラクターデータの事前読み込み
+    // 導き手データの事前読み込み
     try {
-      await loadCharacters();
+      await loadGuides();
     } catch (error) {
       console.error('初期化エラー:', error);
     }
