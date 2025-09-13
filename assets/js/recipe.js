@@ -1,192 +1,217 @@
-// recipe.js — assets/data/recipe.json を読み込み（no-cache）
-// 想定JSON: [{ id, title, hero, tags[], time_min, servings, ingredients[{name,qty}], steps[], note }]
-
+// recipe.js — 修正版：recipe.json の実際の構造に対応
 (() => {
-  const FILE = "./assets/data/recipe.json";
+  'use strict';
 
-  // 既存HTMLの要素があれば使う（無ければ自前で一覧描画）
-  const $list   = document.getElementById("recipe-list");     // 一覧用 <div id="recipe-list">
-  const $title  = document.getElementById("recipe-title");    // 単品表示用 タイトル
-  const $hero   = document.getElementById("recipe-hero");     // 単品表示用 .dish-hero .media (div/img)
-  const $desc   = document.getElementById("recipe-desc");     // 単品表示用 説明
-  const $facts  = document.getElementById("recipe-facts");    // 所要/人数などのコンテナ
-  const $tags   = document.getElementById("recipe-tags");     // タグのコンテナ
-  const $ings   = document.getElementById("recipe-ingredients"); // <div id="recipe-ingredients">
-  const $steps  = document.getElementById("recipe-steps");    // <div id="recipe-steps">
-  const $note   = document.getElementById("recipe-note");     // 備考
-  const $gallery= document.getElementById("recipe-gallery");  // 任意ギャラリー
-  const $root   = document.getElementById("recipe");          // ページ全体の親（任意）
+  const FILE = "./assets/data/recipe.json";
+  
+  // キャラクター別ページのリンク設定
+  const CHAR_LINKS = {
+    "アラン": "./dragon-table-alan.html",
+    "ドレイク": "./dragon-table-drake.html", 
+    "ライラ": "./dragon-table-laila.html",
+    "ネスター": "./dragon-table-nester.html"
+  };
+
+  // DOM要素取得
+  const $title = document.getElementById("title");
+  const $subtitle = document.getElementById("subtitle"); 
+  const $avatar = document.getElementById("avatar");
+  const $content = document.getElementById("content");
+  const $charLink = document.getElementById("charLink");
 
   let ALL = [];
 
-  const esc = (s) => String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  // HTMLエスケープ関数
+  const esc = (s) => String(s || "").replace(/[&<>"']/g, m => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[m]));
 
-  function loadJSON(url){
+  // アバター生成関数（dragon-table.js から移植・簡略化）
+  function avatarHTML(name, avatarUrl) {
+    const initials = esc((name || "食").slice(0, 2));
+    
+    if (avatarUrl) {
+      return `
+        <div class="avatar-wrap">
+          <img class="avatar-img" 
+               src="${esc(avatarUrl)}" 
+               alt="${esc(name || 'avatar')}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <span class="avatar-fallback" style="display:none;">${initials}</span>
+        </div>`;
+    } else {
+      return `
+        <div class="avatar-wrap">
+          <span class="avatar-fallback">${initials}</span>
+        </div>`;
+    }
+  }
+
+  // JSON読み込み
+  function loadJSON(url) {
     return fetch(url, { cache: "no-cache" }).then(r => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r.json();
     });
   }
 
-  function normalize(r){
+  // データ正規化（実際のJSONデータ構造に対応）
+  function normalize(r) {
     return {
       id: String(r.id || ""),
+      character: String(r.character || ""),
       title: String(r.title || ""),
-      hero: String(r.hero || ""),
-      desc: String(r.desc || r.description || ""),
-      tags: Array.isArray(r.tags) ? r.tags.map(x=>String(x)) : [],
-      time_min: Number.isFinite(r.time_min) ? r.time_min : null,
-      servings: Number.isFinite(r.servings) ? r.servings : null,
-      ingredients: Array.isArray(r.ingredients) ? r.ingredients.map(i => ({
-        name: String(i.name || ""),
-        qty:  String(i.qty  || "")
-      })) : [],
+      intro: String(r.intro || ""),
+      comment: String(r.comment || ""),
+      ingredients: Array.isArray(r.ingredients) ? r.ingredients.map(i => String(i)) : [],
       steps: Array.isArray(r.steps) ? r.steps.map(s => String(s)) : [],
-      note: String(r.note || ""),
-      gallery: Array.isArray(r.gallery) ? r.gallery.map(p => String(p)) : []
+      point: String(r.point || ""),
+      avatar: String(r.avatar || "")
     };
   }
 
-  function fact(label, val){
-    if (val === null || val === undefined || val === "") return "";
-    return `<span class="fact"><span>${esc(label)}</span><strong>${esc(String(val))}</strong></span>`;
-  }
-
-  function renderList(){
-    if (!$list) return false;
-    if (!ALL.length){
-      $list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+  // レシピ一覧表示（フォールバック用）
+  function renderList() {
+    if (!$content) return false;
+    
+    if (!ALL.length) {
+      $content.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
       return true;
     }
-    $list.innerHTML = ALL.map(r => `
-<article class="card recipe">
-  <div class="thumb" style="${r.hero ? `background-image:url('${esc(r.hero)}')` : ""}">${r.hero?"":"🍽"}</div>
-  <div class="meta">
-    <div class="title">${esc(r.title)}</div>
-    <div class="sub">${esc(r.desc || "")}</div>
-    <div class="tags">
-      ${r.tags.slice(0,3).map(t => `<span class="pill">${esc(t)}</span>`).join("")}
-    </div>
-  </div>
-  <div class="go"><a class="btn" href="?id=${encodeURIComponent(r.id)}">開く</a></div>
-</article>`).join("");
+
+    const recipesHTML = ALL.map(r => `
+      <article class="card recipe" style="margin-bottom: 1rem;">
+        <div style="display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: center; padding: 1rem;">
+          ${avatarHTML(r.character, r.avatar)}
+          <div style="min-width: 0;">
+            <div style="font-weight: 700; margin-bottom: .25rem;">${esc(r.title)}</div>
+            <div style="color: var(--muted); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              ${esc(r.intro || r.comment || "")}
+            </div>
+            ${r.character ? `<div style="color: var(--muted); font-size: .75rem; margin-top: .15rem;">語り手：${esc(r.character)}</div>` : ""}
+          </div>
+          <a class="btn" href="?id=${encodeURIComponent(r.id)}" style="padding: .5rem .75rem; background: var(--accent-2); color: var(--accent); text-decoration: none; border-radius: .5rem; font-weight: 600;">詳しく →</a>
+        </div>
+      </article>
+    `).join("");
+
+    $content.innerHTML = recipesHTML;
     return true;
   }
 
-  function drawOne(r){
-    // タイトル
-    if ($title) $title.textContent = r.title || "";
-
-    // ヒーロー
-    if ($hero){
-      if ($hero.tagName === "IMG"){
-        $hero.src = r.hero || "";
-        $hero.alt = r.title || "料理画像";
-      } else {
-        $hero.style.backgroundImage = r.hero ? `url("${r.hero}")` : "none";
-      }
+  // 単品レシピ表示
+  function drawOne(r) {
+    // タイトル設定
+    if ($title) {
+      $title.textContent = r.title || "レシピ";
+      document.title = `運命の銀竜暦｜${r.title || "レシピ"}`;
     }
 
-    // 説明
-    if ($desc) $desc.textContent = r.desc || "";
-
-    // タグ
-    if ($tags){
-      $tags.innerHTML = r.tags.map(t => `<span class="pill">${esc(t)}</span>`).join("");
+    // サブタイトル設定
+    if ($subtitle) {
+      $subtitle.textContent = r.intro || "エテルナリアの食卓から一皿";
     }
 
-    // ファクト
-    if ($facts){
-      $facts.innerHTML =
-        fact("所要", r.time_min ? `${r.time_min}分` : "") +
-        fact("人数", r.servings ? `${r.servings}人` : "");
+    // アバター設定
+    if ($avatar) {
+      $avatar.innerHTML = avatarHTML(r.character, r.avatar);
     }
 
-    // 材料
-    if ($ings){
-      if (!r.ingredients.length){
-        $ings.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
-      } else {
-        $ings.innerHTML = r.ingredients.map(i => `
-<div class="row">
-  <div class="name">${esc(i.name)}</div>
-  <div class="qty">${esc(i.qty)}</div>
-</div>`).join("");
-      }
+    // キャラクター別ページリンク設定
+    if ($charLink && r.character && CHAR_LINKS[r.character]) {
+      $charLink.href = CHAR_LINKS[r.character];
+      $charLink.textContent = `${r.character}の食卓へ`;
+      $charLink.style.display = "";
+    } else if ($charLink) {
+      $charLink.style.display = "none";
     }
 
-    // 手順
-    if ($steps){
-      if (!r.steps.length){
-        $steps.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
-      } else {
-        $steps.innerHTML = r.steps.map(s => `<div class="step"><p>${esc(s)}</p></div>`).join("");
-      }
-    }
+    // メインコンテンツ
+    if ($content) {
+      const ingredientsHTML = r.ingredients.length 
+        ? r.ingredients.map(ing => `<li>${esc(ing)}</li>`).join("")
+        : '<li class="muted">わかりません／情報が不足しています</li>';
 
-    // 備考
-    if ($note){
-      $note.textContent = r.note || "";
-      $note.style.display = r.note ? "" : "none";
-    }
+      const stepsHTML = r.steps.length 
+        ? r.steps.map((step, index) => `<li><strong>手順${index + 1}：</strong>${esc(step)}</li>`).join("")
+        : '<li class="muted">わかりません／情報が不足しています</li>';
 
-    // ギャラリー
-    if ($gallery){
-      if (!r.gallery.length){
-        $gallery.innerHTML = "";
-        $gallery.style.display = "none";
-      } else {
-        $gallery.style.display = "";
-        $gallery.innerHTML = r.gallery.map(p => `<div class="shot" style="background-image:url('${esc(p)}')"></div>`).join("");
-      }
+      const commentHTML = r.comment 
+        ? `<div class="sep"></div><div class="label">語り手から</div><p style="color: var(--muted); font-style: italic; line-height: 1.6;">${esc(r.comment)}</p>` 
+        : "";
+
+      const pointHTML = r.point 
+        ? `<div class="sep"></div><div class="label">調理のコツ</div><p style="background: var(--accent-2); color: var(--accent); padding: .75rem; border-radius: .5rem; font-weight: 500;">${esc(r.point)}</p>` 
+        : "";
+
+      $content.innerHTML = `
+        <div class="label">材料</div>
+        <ul style="margin: .5rem 0 1rem 1.5rem; line-height: 1.5;">
+          ${ingredientsHTML}
+        </ul>
+        
+        <div class="sep"></div>
+        
+        <div class="label">作り方</div>
+        <ol style="margin: .5rem 0 1rem 1.5rem; line-height: 1.6;">
+          ${stepsHTML}
+        </ol>
+        
+        ${pointHTML}
+        ${commentHTML}
+      `;
     }
   }
 
-  function getIdFromQuery(){
-    const p = new URLSearchParams(location.search);
-    return p.get("id");
+  // URLからIDを取得
+  function getIdFromQuery() {
+    const params = new URLSearchParams(location.search);
+    return params.get("id");
   }
 
+  // 初期化処理
   document.addEventListener("DOMContentLoaded", () => {
     loadJSON(FILE)
       .then(json => {
         ALL = Array.isArray(json) ? json.map(normalize) : [];
-        // 一覧 or 単品
+        
         const id = getIdFromQuery();
-        if (id){
-          const r = ALL.find(x => x.id === id);
-          if (r) {
-            drawOne(r);
+        if (id) {
+          // 単品表示
+          const recipe = ALL.find(x => x.id === id);
+          if (recipe) {
+            drawOne(recipe);
           } else {
-            // 見つからなければ一覧にフォールバック
-            if (!renderList() && $root){
-              $root.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+            // レシピが見つからない場合
+            if ($content) {
+              $content.innerHTML = `
+                <div class="muted" style="text-align: center; padding: 2rem;">
+                  <p>指定されたレシピが見つかりませんでした。</p>
+                  <a class="btn" href="./dragon-table.html" style="margin-top: 1rem; padding: .75rem 1.5rem; background: var(--accent-2); color: var(--accent); text-decoration: none; border-radius: .5rem; font-weight: 600;">食卓トップへ戻る</a>
+                </div>
+              `;
             }
           }
         } else {
-          if (!renderList() && $root){
-            // 一覧用コンテナが無いページは、簡易一覧を自前で出す
-            $root.innerHTML = `
-<div class="recipes">
-  ${ALL.map(r => `
-  <article class="card recipe">
-    <div class="thumb" style="${r.hero ? `background-image:url('${esc(r.hero)}')` : ""}">${r.hero?"":"🍽"}</div>
-    <div class="meta">
-      <div class="title">${esc(r.title)}</div>
-      <div class="sub">${esc(r.desc || "")}</div>
-      <div class="tags">${r.tags.slice(0,3).map(t => `<span class="pill">${esc(t)}</span>`).join("")}</div>
-    </div>
-    <div class="go"><a class="btn" href="?id=${encodeURIComponent(r.id)}">開く</a></div>
-  </article>`).join("")}
-</div>`;
-          }
+          // IDが指定されていない場合は一覧表示
+          renderList();
         }
       })
-      .catch(() => {
-        if ($list) $list.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
-        if ($root && !$list) $root.innerHTML = `<div class="muted">わかりません／情報が不足しています</div>`;
+      .catch(err => {
+        console.error("データ読み込みエラー:", err);
+        
+        // エラー表示
+        const errorMessage = `
+          <div class="muted" style="text-align: center; padding: 2rem;">
+            <p>わかりません／情報が不足しています</p>
+            <p style="font-size: .85rem; margin-top: .5rem;">データの読み込みに失敗しました。</p>
+            <a class="btn" href="./dragon-table.html" style="margin-top: 1rem; padding: .75rem 1.5rem; background: var(--accent-2); color: var(--accent); text-decoration: none; border-radius: .5rem; font-weight: 600;">食卓トップへ戻る</a>
+          </div>
+        `;
+
+        if ($content) {
+          $content.innerHTML = errorMessage;
+        }
       });
   });
 })();
