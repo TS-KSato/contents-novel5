@@ -4,12 +4,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>運命の銀竜暦｜今日の導き手（有料）</title>
+  <title>運命の銀竜暦｜今日の導き手</title>
   <meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物から今日の案内役を診断します。">
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/partner.css">
-
 </head>
 
 <body>
@@ -46,26 +45,46 @@
       </div>
 
       <div class="cta-area">
-        <button id="btnGo" class="primary">今日の導き手を見る</button>
+        <button id="btnGo" class="btn primary">今日の導き手を見る</button>
       </div>
       <div id="formErr" class="err" role="alert" aria-live="assertive"></div>
-      <p class="lead" style="margin-top:8px;font-size:13px">※ 生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
+      <p class="meta" style="margin-top:8px;font-size:13px">※ 生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
     </section>
 
-    <section id="result" role="region" aria-labelledby="p-lab" aria-live="polite"></section>
+    <section id="result" role="region" aria-live="polite">
+      <!-- 診断結果がここに表示されます -->
+    </section>
 
-    <footer>© 運命の銀竜暦</footer>
+    <footer role="contentinfo">
+      <p>&copy; 運命の銀竜暦</p>
+    </footer>
   </div>
 
-  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
     <div class="bn-grid">
-      <a class="bn-btn" href="./index.html">🏠 ホーム</a>
-      <a class="bn-btn" href="./notice.html">📣 お知らせ</a>
-      <a class="bn-btn" href="./mypage.html">👤 マイページ</a>
+      <a class="bn-btn" href="./index.html">
+        <span class="bn-icon" aria-hidden="true">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="./notice.html">
+        <span class="bn-icon" aria-hidden="true">📣</span>
+        <span>お知らせ</span>
+      </a>
+      <a class="bn-btn" href="./mypage.html">
+        <span class="bn-icon" aria-hidden="true">👤</span>
+        <span>マイページ</span>
+      </a>
     </div>
   </nav>
 
-  <script type="module" src="./assets/js/partner.js" defer></script>
+  <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
+    <p id="errorMessage"></p>
+    <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
+  </div>
+
+  <script src="./assets/js/core.js"></script>
+  <script src="./assets/js/partner.js"></script>
 </body>
 
 </html>
