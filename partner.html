@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>運命の銀竜暦｜今日の導き手</title>
-  <meta name="description" content="月・日と性別を入力して、エテルナリアの主要登場人物から今日の案内役を診断します。">
+  <meta name="description" content="エテルナリアの住人があなたの今日を静かに導きます。物語の扉を開いてください。">
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/partner.css">
@@ -13,46 +13,64 @@
 
 <body>
   <div class="wrap">
-    <header>
-      <h1>今日の導き手</h1>
-      <p class="lead">ここはエテルナリアの星占術師による診断。<br>月・日と性別を選ぶと、今日あなたを導く案内役が現れます。</p>
+    <header class="story-intro">
+      <h1>今日、あなたに寄り添う導き手</h1>
+      <p class="lead">
+        エテルナリア大陸の住人たちが、今この瞬間のあなたを静かに見つめています。<br>
+        あなたの生まれた月と日、そして心のありようを教えてください。<br>
+        今日という物語に、最もふさわしい導き手が現れるでしょう。
+      </p>
     </header>
 
-    <section class="card" aria-labelledby="lab-input">
-      <div id="lab-input" class="label">入力</div>
-      <div class="form" role="group" aria-label="誕生日と性別の入力">
-        <div class="field">
-          <label for="month">生まれた月</label>
+    <section class="card story-card" aria-labelledby="story-input">
+      <div id="story-input" class="label">あなたについて教えてください</div>
+      <div class="story-form" role="group" aria-label="あなたの情報">
+        <div class="field story-field">
+          <label for="month">生まれた月は</label>
           <select id="month" aria-label="月を選択">
-            <option value="" hidden>月を選ぶ</option>
+            <option value="" hidden>月を選んでください</option>
           </select>
+          <small class="field-note">季節の風があなたを包んだ月</small>
         </div>
-        <div class="field">
-          <label for="day">生まれた日</label>
+        <div class="field story-field">
+          <label for="day">生まれた日は</label>
           <select id="day" aria-label="日を選択">
-            <option value="" hidden>日を選ぶ</option>
+            <option value="" hidden>日を選んでください</option>
           </select>
+          <small class="field-note">星々があなたを祝福した日</small>
         </div>
-        <div class="field">
-          <label>性別</label>
-          <div class="radios" role="group" aria-label="性別">
-            <label class="radio"><input type="radio" name="gender" value="男性" checked><span>男性</span></label>
-            <label class="radio"><input type="radio" name="gender" value="女性"><span>女性</span></label>
-            <label class="radio"><input type="radio" name="gender" value="その他"><span>その他</span></label>
-            <label class="radio"><input type="radio" name="gender" value="回答しない"><span>回答しない</span></label>
+        <div class="field story-field">
+          <label>今のあなたの心は</label>
+          <div class="story-radios" role="group" aria-label="心のありよう">
+            <label class="story-radio">
+              <input type="radio" name="gender" value="男性" checked>
+              <span>力強く進みたい</span>
+            </label>
+            <label class="story-radio">
+              <input type="radio" name="gender" value="女性">
+              <span>優しく寄り添いたい</span>
+            </label>
+            <label class="story-radio">
+              <input type="radio" name="gender" value="その他">
+              <span>自由に羽ばたきたい</span>
+            </label>
+            <label class="story-radio">
+              <input type="radio" name="gender" value="回答しない">
+              <span>静かに見守りたい</span>
+            </label>
           </div>
         </div>
       </div>
 
-      <div class="cta-area">
-        <button id="btnGo" class="btn primary">今日の導き手を見る</button>
+      <div class="story-cta">
+        <button id="btnGo" class="btn primary story-btn">導き手に出会う</button>
       </div>
       <div id="formErr" class="err" role="alert" aria-live="assertive"></div>
-      <p class="meta" style="margin-top:8px;font-size:13px">※ 生年月日は<strong>月と日</strong>のみ。年の入力は不要です。</p>
+      <p class="story-note">※ 年は必要ありません。月と日だけで、あなたの物語が始まります。</p>
     </section>
 
-    <section id="result" role="region" aria-live="polite">
-      <!-- 診断結果がここに表示されます -->
+    <section id="result" class="story-result" role="region" aria-live="polite">
+      <!-- 導き手との出会いがここに現れます -->
     </section>
 
     <footer role="contentinfo">
