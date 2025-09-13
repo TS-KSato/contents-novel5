@@ -38,7 +38,7 @@
   function updateDays() {
     if (!$day) return;
     
-    $day.innerHTML = '<option value="" hidden>日を選ぶ</option>';
+    $day.innerHTML = '<option value="" hidden>日を選んでください</option>';
     
     const month = parseInt($month.value);
     if (!month) return;
@@ -55,19 +55,22 @@
     }
   }
 
-  // データ読み込み
+  // データ読み込み（正しいファイル名とデータ構造に修正）
   async function loadCharacters() {
     try {
-      const json = await fetchJSON("./assets/data/archetype_fortune.json");
-      const arr = Array.isArray(json?.characters) ? json.characters : [];
+      const json = await fetchJSON("./assets/data/partner.json");
+      // partner.json の guides フィールドを使用
+      const arr = Array.isArray(json?.guides) ? json.guides : [];
       CHARACTERS = arr.map(c => ({
         id: String(c.id || ""),
         name: String(c.name || ""),
         icon: String(c.icon || ""),
         role: String(c.role || ""),
-        archetype: String(c.archetype || c.arch || ""),
-        gender: String(c.gender || "")
+        description: String(c.description || ""),
+        element: String(c.element || ""),
+        personality: String(c.personality || "")
       }));
+      console.log('キャラクターデータ読み込み完了:', CHARACTERS.length, '件');
       return CHARACTERS;
     } catch (error) {
       console.error('キャラクターデータの読み込みに失敗:', error);
@@ -75,16 +78,23 @@
     }
   }
 
-  // 診断ロジック
+  // 診断ロジック（性別マッピングを追加）
   function pickPartner(month, day, gender) {
     if (!CHARACTERS.length) return null;
 
     let pool = CHARACTERS.slice();
 
-    // 性別でフィルタリング（キャラクターデータに gender フィールドがある場合）
-    if (gender && gender !== "回答しない") {
+    // 性別による性格フィルタリング（より柔軟なマッピング）
+    const personalityMap = {
+      "男性": ["brave", "determined", "passionate", "regal"],
+      "女性": ["gentle", "caring", "artistic", "contemplative"],
+      "その他": ["wise", "artistic", "contemplative"],
+      "回答しない": [] // 全て対象
+    };
+
+    if (gender && personalityMap[gender] && personalityMap[gender].length > 0) {
       const filtered = pool.filter(c => 
-        c.gender === gender || c.gender === "" || c.gender === "中性"
+        personalityMap[gender].includes(c.personality) || !c.personality
       );
       if (filtered.length > 0) pool = filtered;
     }
@@ -100,7 +110,7 @@
   function applyAvatar(el, name, icon) {
     if (!el) return;
     
-    if (icon) {
+    if (icon && icon !== '') {
       el.style.backgroundImage = `url("${icon}")`;
       el.textContent = "";
       el.classList.remove("fallback");
@@ -111,7 +121,7 @@
     }
   }
 
-  // 結果表示
+  // 結果表示（説明文も含める）
   function showResult(partner) {
     if (!$result) return;
 
@@ -133,7 +143,8 @@
           <div>
             <div class="pname">${esc(partner.name)}</div>
             <div class="prole">${esc(partner.role || "案内役")}</div>
-            <div class="line">今日はこの導き手が、あなたの進み方を静かに整えます。</div>
+            ${partner.element ? `<div class="element">${esc(partner.element)}</div>` : ''}
+            <div class="line">${esc(partner.description || "今日はこの導き手が、あなたの進み方を静かに整えます。")}</div>
           </div>
         </div>
       </section>
@@ -212,9 +223,9 @@
       const partner = pickPartner(month, day, gender);
       showResult(partner);
 
-      // アナリティクス
-      if (window.gtag) {
-        window.gtag('event', 'partner_diagnosis', {
+      // アナリティクス（もし利用可能な場合）
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'partner_diagnosis', {
           'custom_parameter': 'partner_selected'
         });
       }
@@ -241,7 +252,8 @@
 
     // 導き手データの事前読み込み
     try {
-      await loadGuides();
+      await loadCharacters();
+      console.log('初期化完了');
     } catch (error) {
       console.error('初期化エラー:', error);
     }
