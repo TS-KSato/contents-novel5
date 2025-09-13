@@ -13,7 +13,7 @@
 
 <body>
   <div class="wrap">
-    <header class="story-intro">
+    <header>
       <h1>今日、あなたに寄り添う導き手</h1>
       <p class="lead">
         エテルナリア大陸の住人たちが、今この瞬間のあなたを静かに見つめています。<br>
@@ -22,39 +22,37 @@
       </p>
     </header>
 
-    <section class="card story-card" aria-labelledby="story-input">
-      <div id="story-input" class="label">あなたについて教えてください</div>
-      <div class="story-form" role="group" aria-label="あなたの情報">
-        <div class="field story-field">
+    <section class="card">
+      <div class="label">あなたについて教えてください</div>
+      <div class="form">
+        <div class="field">
           <label for="month">生まれた月は</label>
           <select id="month" aria-label="月を選択">
             <option value="" hidden>月を選んでください</option>
           </select>
-          <small class="field-note">季節の風があなたを包んだ月</small>
         </div>
-        <div class="field story-field">
+        <div class="field">
           <label for="day">生まれた日は</label>
           <select id="day" aria-label="日を選択">
             <option value="" hidden>日を選んでください</option>
           </select>
-          <small class="field-note">星々があなたを祝福した日</small>
         </div>
-        <div class="field story-field">
+        <div class="field">
           <label>今のあなたの心は</label>
-          <div class="story-radios" role="group" aria-label="心のありよう">
-            <label class="story-radio">
+          <div class="radios">
+            <label class="radio">
               <input type="radio" name="gender" value="男性" checked>
               <span>力強く進みたい</span>
             </label>
-            <label class="story-radio">
+            <label class="radio">
               <input type="radio" name="gender" value="女性">
               <span>優しく寄り添いたい</span>
             </label>
-            <label class="story-radio">
+            <label class="radio">
               <input type="radio" name="gender" value="その他">
               <span>自由に羽ばたきたい</span>
             </label>
-            <label class="story-radio">
+            <label class="radio">
               <input type="radio" name="gender" value="回答しない">
               <span>静かに見守りたい</span>
             </label>
@@ -62,14 +60,13 @@
         </div>
       </div>
 
-      <div class="story-cta">
-        <button id="btnGo" class="btn primary story-btn">導き手に出会う</button>
+      <div class="cta-area">
+        <button id="btnGo" class="btn primary">導き手に出会う</button>
       </div>
       <div id="formErr" class="err" role="alert" aria-live="assertive"></div>
-      <p class="story-note">※ 年は必要ありません。月と日だけで、あなたの物語が始まります。</p>
     </section>
 
-    <section id="result" class="story-result" role="region" aria-live="polite">
+    <section id="result" role="region" aria-live="polite">
       <!-- 導き手との出会いがここに現れます -->
     </section>
 
@@ -101,7 +98,6 @@
     <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
   </div>
 
-  <script src="./assets/js/core.js"></script>
   <script src="./assets/js/partner.js"></script>
 </body>
 
