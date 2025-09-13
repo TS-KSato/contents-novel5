@@ -66,3 +66,10 @@ select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outlin
 /* 下部ナビは共通の .bottom-nav を使用（ここでの追加なし） */
 
 @media print{.bottom-nav{display:none}body{background:#fff;color:#000}.card{border-color:#999;box-shadow:none}}
+
+.element {
+  margin-top: 4px;
+  color: var(--accent);
+  font-size: 13px;
+  font-style: italic;
+}
