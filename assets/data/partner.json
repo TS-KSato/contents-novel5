@@ -1,0 +1,90 @@
+{
+  "guides": [
+    {
+      "id": "lunal",
+      "name": "ルナル",
+      "icon": "./assets/char-lunal.jpg",
+      "role": "月の導き手",
+      "description": "静寂の中で真実を見つめる者。今日は内なる声に耳を傾けることが鍵となる。",
+      "element": "月",
+      "personality": "contemplative"
+    },
+    {
+      "id": "alan",
+      "name": "アラン", 
+      "icon": "./assets/char-alan.jpg",
+      "role": "勇敢な案内人",
+      "description": "困難に立ち向かう勇気を持つ者。今日は新しい挑戦へ一歩踏み出す時。",
+      "element": "火",
+      "personality": "brave"
+    },
+    {
+      "id": "lilia",
+      "name": "リリア",
+      "icon": "./assets/char-lilia.jpg", 
+      "role": "静寂の守護者",
+      "description": "穏やかな心で周りを見守る者。今日は慎重さが良い結果を生む。",
+      "element": "水",
+      "personality": "gentle"
+    },
+    {
+      "id": "drake",
+      "name": "ドレイク",
+      "icon": "./assets/char-drake.jpg",
+      "role": "炎の戦士", 
+      "description": "情熱的に目標に向かう者。今日は積極的な行動が道を開く。",
+      "element": "火",
+      "personality": "passionate"
+    },
+    {
+      "id": "nester",
+      "name": "ネスター",
+      "icon": "./assets/char-nester.jpg",
+      "role": "知恵の探求者",
+      "description": "深い洞察で物事を見抜く者。今日は学びと発見の一日となる。",
+      "element": "風",
+      "personality": "wise"
+    },
+    {
+      "id": "laila",
+      "name": "ライラ",
+      "icon": "./assets/char-laila.jpg",
+      "role": "聖なる教導者", 
+      "description": "慈愛と導きを与える者。今日は他者への思いやりが幸運を呼ぶ。",
+      "element": "光",
+      "personality": "caring"
+    },
+    {
+      "id": "magnus",
+      "name": "マグナス",
+      "icon": "./assets/char-magnus.jpg",
+      "role": "力の象徴",
+      "description": "強い意志で道を切り開く者。今日は決断力が成功の鍵となる。",
+      "element": "土",
+      "personality": "determined"
+    },
+    {
+      "id": "king",
+      "name": "ネクサート", 
+      "icon": "./assets/char-king.jpg",
+      "role": "王なる存在",
+      "description": "全てを統べる威厳を持つ者。今日は大局的な視点で物事を判断せよ。",
+      "element": "闇",
+      "personality": "regal"
+    },
+    {
+      "id": "mireia", 
+      "name": "ミレイア",
+      "icon": "./assets/char-mireia.jpg",
+      "role": "優美なる導師",
+      "description": "美しい心で世界を彩る者。今日は創造性と芸術性が開花する。",
+      "element": "花",
+      "personality": "artistic"
+    }
+  ],
+  "meta": {
+    "title": "今日の導き手診断",
+    "description": "月日と性別から、エテルナリアの住人があなたの今日を導きます",
+    "version": "1.0"
+  }
+}
