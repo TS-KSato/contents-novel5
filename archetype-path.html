@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>今日の指針（タイプの道筋）｜運命の銀竜暦</title>
-  <meta name="description" content="タイプを確定し、十の質問で本日のヒントを受け取るためのページです。" />
+  <title>今日の指針（あなたの道筋）｜運命の銀竜暦</title>
+  <meta name="description" content="銀竜の導き手たちが、あなたの今に寄り添うひとことをそっと届けます。" />
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/archetype-path.css">
@@ -13,21 +13,21 @@
 
 <body>
   <header class="page-header" aria-label="ページヘッダー">
-    <h1>今日の指針 <small class="flavor">（タイプの道筋）</small></h1>
-    <p class="lead">最初にタイプ（気質）を決め、その後に十の質問へ進みます。</p>
+    <h1>今日の指針 <small class="flavor">〜あなたの道筋〜</small></h1>
+    <p class="lead">心の声に耳を澄まし、今のあなたに寄り添う導き手を見つけましょう。</p>
   </header>
 
   <main id="main" class="wrap" aria-live="polite">
-    <!-- Phase 1: タイプ（気質）の簡易確定 -->
-    <section id="phase1" class="card" aria-label="タイプの仮決定">
-      <h2>タイプを選ぶ <small class="note">（直感で最も近い方へ）</small></h2>
+    <!-- Phase 1: 心の傾向をそっと探る -->
+    <section id="phase1" class="card" aria-label="心の傾向を見つめる">
+      <h2>心のままに、選んでみましょう <small class="note">（直感を大切に、最も近い方へ）</small></h2>
 
       <div class="axis-list">
-        <!-- 既定4軸：左右2択スイッチ（右=checked） -->
+        <!-- 4つの軸：左右2択スイッチ（右=checked） -->
         <div class="axis">
-          <div class="axis-title">調和 ↔ 正しさ</div>
+          <div class="axis-title">みんなとの調和 ↔ 自分の正しさ</div>
           <div class="toggle" data-axis="logic">
-            <span class="opt">調和を優先</span>
+            <span class="opt">調和を大切に</span>
             <label class="switch">
               <input type="checkbox" aria-label="調和/正しさ" />
               <span class="knob"></span>
@@ -37,78 +37,89 @@
         </div>
 
         <div class="axis">
-          <div class="axis-title">風の勘 ↔ 古い地図</div>
+          <div class="axis-title">風のような直感 ↔ 地図のような経験</div>
           <div class="toggle" data-axis="spirit">
-            <span class="opt">感覚で進む</span>
+            <span class="opt">感覚で歩む</span>
             <label class="switch">
-              <input type="checkbox" aria-label="勘/地図" />
+              <input type="checkbox" aria-label="直感/経験" />
               <span class="knob"></span>
             </label>
-            <span class="opt">蓄積で進む</span>
+            <span class="opt">経験を重ねて</span>
           </div>
         </div>
 
         <div class="axis">
-          <div class="axis-title">内省 ↔ 行動</div>
+          <div class="axis-title">静かな内省 ↔ 歩みながら学ぶ</div>
           <div class="toggle" data-axis="vector">
             <span class="opt">じっくり考える</span>
             <label class="switch">
               <input type="checkbox" aria-label="内省/行動" />
               <span class="knob"></span>
             </label>
-            <span class="opt">まず動いて学ぶ</span>
+            <span class="opt">動きながら学ぶ</span>
           </div>
         </div>
 
         <div class="axis">
-          <div class="axis-title">独り ↔ 仲間</div>
+          <div class="axis-title">一人の時間 ↔ 仲間との時間</div>
           <div class="toggle" data-axis="social">
             <span class="opt">自分のペース</span>
             <label class="switch">
               <input type="checkbox" aria-label="独り/仲間" />
               <span class="knob"></span>
             </label>
-            <span class="opt">協力して進む</span>
+            <span class="opt">みんなと一緒に</span>
           </div>
         </div>
       </div>
 
       <div class="actions">
-        <button id="btnP1" class="btn primary" type="button">気質を確定する</button>
-        <button id="btnP1Reset" class="btn ghost" type="button">入力をクリア</button>
+        <button id="btnP1" class="btn primary" type="button">今の気質をそっと読み取る</button>
+        <button id="btnP1Reset" class="btn ghost" type="button">もう一度心に聞いてみる</button>
       </div>
 
-      <p class="note small">※ 気質は <code>localStorage.archetype_id</code> に保存されます（端末ローカル）。</p>
+      <p class="note small">※ 今の傾向は一時的なもの。またいつでも探り直すことができます。</p>
     </section>
 
-    <!-- 確定済みタイプのボックス（JSで中身を描画） -->
-    <section id="archetypeBox" class="card" aria-label="確定済みのタイプ" hidden>
+    <!-- 見つかった気質のボックス（JSで中身を描画） -->
+    <section id="archetypeBox" class="card" aria-label="あなたの今の気質" hidden>
       <div id="archText"><!-- JSがここに描画します --></div>
     </section>
 
-    <!-- Phase 2: 十の質問（回答必須→結果ボタン活性） -->
-    <section id="phase2" class="card" aria-label="十の質問" hidden>
-      <h2>十の質問 <small class="note">（今日の傾向を静かに測ります）</small></h2>
+    <!-- Phase 2: 心の声に耳を澄ます10の問いかけ -->
+    <section id="phase2" class="card" aria-label="心の声を聞く" hidden>
+      <h2>心の声を聞いてみましょう <small class="note">（10の問いかけが、今の傾向をそっと照らします）</small></h2>
 
       <div id="qList" class="q-list"><!-- JSがここに10問を生成 --></div>
 
       <div class="actions">
-        <button id="btnEval" class="btn primary" type="button" disabled>本日のヒントを見る</button>
-        <button id="btnClearQ" class="btn ghost" type="button">回答をクリア</button>
+        <button id="btnEval" class="btn primary" type="button" disabled>今日だけの特別なメッセージを受け取る</button>
+        <button id="btnClearQ" class="btn ghost" type="button">もう一度心に問いかける</button>
       </div>
     </section>
 
-    <!-- 評価結果（保存しない・断定しない） -->
-    <section id="resultBox" class="card" aria-label="本日のヒント" hidden>
+    <!-- 銀竜からの今日の贈り物 -->
+    <section id="resultBox" class="card" aria-label="今日の特別なメッセージ" hidden>
       <div id="roleText"><!-- JSがここに結果を描画 --></div>
     </section>
   </main>
 
-  <!-- 下部ナビ（固定） -->
-  <nav class="gnav" role="navigation" aria-label="下部ナビゲーション">
-    <a href="index.html">ホーム</a>
-    <a href="notice.html">お知らせ</a>
-    <a href="mypage.html">マイページ</a>
+  <!-- Bottom Navigation（他のページと統一） -->
+  <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
+    <div class="bn-grid">
+      <a class="bn-btn" href="./index.html">
+        <span class="bn-icon" aria-hidden="true">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="./notice.html">
+        <span class="bn-icon" aria-hidden="true">📣</span>
+        <span>お知らせ</span>
+      </a>
+      <a class="bn-btn" href="./mypage.html">
+        <span class="bn-icon" aria-hidden="true">👤</span>
+        <span>マイページ</span>
+      </a>
+    </div>
   </nav>
 
   <!-- 修正されたJS読み込み -->
