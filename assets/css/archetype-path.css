@@ -5,6 +5,70 @@ header{text-align:center;padding:.5rem 0 .25rem}
 h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
 .lead{color:var(--muted);font-size:.9rem}
 
+/* 軸選択UI */
+.axis-list { display: grid; gap: 1rem; margin: 1rem 0; }
+.axis { 
+  padding: 1rem; 
+  border: 1px solid var(--line); 
+  border-radius: 0.75rem; 
+  background: #0f162b; 
+}
+.axis-title { 
+  font-weight: 700; 
+  margin-bottom: 0.75rem; 
+  text-align: center;
+  color: var(--accent);
+}
+.toggle { 
+  display: flex; 
+  align-items: center; 
+  gap: 1rem; 
+  justify-content: space-between;
+}
+.toggle .opt { 
+  font-size: 0.9rem; 
+  color: var(--muted); 
+  min-width: 0;
+  text-align: center;
+}
+.switch { 
+  position: relative; 
+  display: inline-block; 
+  width: 3.5rem; 
+  height: 2rem; 
+  flex-shrink: 0;
+}
+.switch input { 
+  opacity: 0; 
+  width: 0; 
+  height: 0; 
+}
+.knob { 
+  position: absolute; 
+  cursor: pointer; 
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--line); 
+  border-radius: 2rem;
+  transition: 0.3s;
+}
+.knob:before { 
+  position: absolute; 
+  content: ""; 
+  height: 1.5rem; 
+  width: 1.5rem; 
+  left: 0.25rem; 
+  bottom: 0.25rem; 
+  background: white; 
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.switch input:checked + .knob { 
+  background: var(--accent-2); 
+}
+.switch input:checked + .knob:before { 
+  transform: translateX(1.5rem); 
+}
+
 /* ステップナビ（フェーズ表示） */
 .steps{
   display:grid;grid-template-columns:repeat(4,1fr);gap:.375rem;margin:.5rem 0 .75rem
@@ -80,6 +144,79 @@ h1{margin:.25rem 0;font-size:clamp(1.15rem,5vw,1.5rem)}
   background:#121829;border:1px solid var(--line);border-radius:.75rem;padding:.6rem
 }
 .oracle p{margin:.25rem 0;color:#e0e7ff;line-height:1.7}
+
+/* 結果表示の追加スタイル */
+.result-content {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: #0f162b;
+}
+.oracle-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--accent-2);
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--accent);
+}
+
+/* アーキタイプ結果表示 */
+.result-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.result-header h3 {
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.result-oracle {
+  background: var(--accent-2);
+  border: 1px solid var(--accent-2-b);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.result-oracle blockquote {
+  margin: 0;
+  font-style: italic;
+  color: var(--accent);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+.result-body {
+  display: grid;
+  gap: 1rem;
+}
+.result-message, .result-guidance, .result-keywords {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: #10172a;
+}
+.result-message h4, .result-guidance h4, .result-keywords h4 {
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+  font-size: 1rem;
+}
+.result-message p, .result-guidance p {
+  margin: 0;
+  line-height: 1.7;
+}
+.keywords {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.keyword {
+  display: inline-block;
+  background: var(--accent-2);
+  color: var(--accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  border: 1px solid var(--accent-2-b);
+}
 
 /* インジケータ（ローディング／無効化） */
 .dim{opacity:.6;pointer-events:none;filter:saturate(.7)}
