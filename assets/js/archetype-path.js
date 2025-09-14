@@ -1,4 +1,4 @@
-// archetype-path.js — アーキタイプ診断システム
+// archetype-path-improved.js — 没入型表現を適用したアーキタイプ診断システム
 (() => {
   const STATE = {
     archetypeData: null,     // archetype_fortune.json の中身
@@ -43,115 +43,110 @@
     const social = STATE.axisValues.social || false;   // false=独り, true=仲間
 
     // アーキタイプ決定ロジック
-    // Explorer: 行動的で新しいことを求める
     if (vector && !spirit) {
       return "Explorer";
     }
-    // Guardian: 他者を守り、安定を重視
     else if (social && !logic) {
       return "Guardian"; 
     }
-    // Sage: 知識と理解を重視
     else if (spirit && !vector) {
       return "Sage";
     }
-    // Creator: 新しいものを生み出す
     else if (!logic && vector) {
       return "Creator";
     }
-    // Seeker: 真理を探求
     else {
       return "Seeker";
     }
   }
 
-  // 10問の質問を生成
+  // 10問の問いかけを生成
   function generateQuestions() {
     return [
       {
         id: 'q1',
-        title: '新しい環境に入るとき、あなたは',
+        title: '新しい場所に足を踏み入れるとき',
         choices: [
-          { id: 'a', text: 'まず全体を観察して学ぼうとする', weight: 'disciple' },
-          { id: 'b', text: '積極的に行動して道を開く', weight: 'stormblade' }
+          { id: 'a', text: 'まわりを静かに観察してから動く', weight: 'disciple' },
+          { id: 'b', text: '心のままに歩き出してみる', weight: 'stormblade' }
         ]
       },
       {
         id: 'q2', 
-        title: 'グループの中での役割は',
+        title: 'みんなといるときのあなたは',
         choices: [
-          { id: 'a', text: 'みんなを導いて方向性を示す', weight: 'wind_guide' },
-          { id: 'b', text: '知識や経験を記録・共有する', weight: 'lorekeeper' }
+          { id: 'a', text: 'そっと道を示すことが多い', weight: 'wind_guide' },
+          { id: 'b', text: '大切な思い出を心に留めている', weight: 'lorekeeper' }
         ]
       },
       {
         id: 'q3',
-        title: '問題解決において重視するのは',
+        title: '何かを解決したいとき、大切にするのは',
         choices: [
-          { id: 'a', text: '正義と公正性', weight: 'knight' },
-          { id: 'b', text: '関わる人の癒しと回復', weight: 'healer' }
+          { id: 'a', text: '正しいことかどうか', weight: 'knight' },
+          { id: 'b', text: '誰かの心が癒されるか', weight: 'healer' }
         ]
       },
       {
         id: 'q4',
-        title: '学習スタイルとして好むのは',
+        title: '新しいことを身につけるなら',
         choices: [
-          { id: 'a', text: '師匠から直接学ぶ', weight: 'disciple' },
-          { id: 'b', text: '実践を通して身につける', weight: 'stormblade' }
+          { id: 'a', text: '誰かから直接教わりたい', weight: 'disciple' },
+          { id: 'b', text: '自分で試しながら覚えたい', weight: 'stormblade' }
         ]
       },
       {
         id: 'q5',
-        title: '困難に直面したとき',
+        title: '困難な道に立ったとき',
         choices: [
-          { id: 'a', text: '冷静に分析して最適解を探す', weight: 'lorekeeper' },
-          { id: 'b', text: '直感を信じて突破する', weight: 'stormblade' }
+          { id: 'a', text: 'じっくり考えて最善の道を探す', weight: 'lorekeeper' },
+          { id: 'b', text: '心の声を信じて進んでみる', weight: 'stormblade' }
         ]
       },
       {
         id: 'q6',
-        title: 'あなたの強みは',
+        title: 'あなたらしい強さは',
         choices: [
-          { id: 'a', text: '人を支え、導くこと', weight: 'wind_guide' },
-          { id: 'b', text: '傷ついた人を癒すこと', weight: 'healer' }
+          { id: 'a', text: '迷った人をそっと支えること', weight: 'wind_guide' },
+          { id: 'b', text: '傷ついた心をやさしく包むこと', weight: 'healer' }
         ]
       },
       {
         id: 'q7',
-        title: '理想的なリーダーシップとは',
+        title: '理想の導き方は',
         choices: [
-          { id: 'a', text: '正義を貫き、規範を示す', weight: 'knight' },
-          { id: 'b', text: '皆を巻き込んで成長させる', weight: 'wind_guide' }
+          { id: 'a', text: '正しい道を示し続けること', weight: 'knight' },
+          { id: 'b', text: 'みんなと一緒に歩むこと', weight: 'wind_guide' }
         ]
       },
       {
         id: 'q8',
-        title: '価値ある活動とは',
+        title: 'あなたにとって価値ある時間は',
         choices: [
-          { id: 'a', text: '知識を次世代に継承する', weight: 'lorekeeper' },
-          { id: 'b', text: '新たな可能性に挑戦する', weight: 'stormblade' }
+          { id: 'a', text: '大切な知恵を次の人に伝えること', weight: 'lorekeeper' },
+          { id: 'b', text: '新しい可能性に挑戦すること', weight: 'stormblade' }
         ]
       },
       {
         id: 'q9',
-        title: '人生における成功とは',
+        title: '心から満たされる瞬間は',
         choices: [
-          { id: 'a', text: '多くの人の役に立つこと', weight: 'healer' },
-          { id: 'b', text: '自分の信念を貫くこと', weight: 'knight' }
+          { id: 'a', text: '誰かの役に立てたとき', weight: 'healer' },
+          { id: 'b', text: '自分らしくいられたとき', weight: 'knight' }
         ]
       },
       {
         id: 'q10',
-        title: '最終的に目指すのは',
+        title: '最終的に目指したいのは',
         choices: [
-          { id: 'a', text: '深い知恵と理解を得る', weight: 'disciple' },
-          { id: 'b', text: '世界により良い変化をもたらす', weight: 'stormblade' }
+          { id: 'a', text: '深い理解と静かな知恵', weight: 'disciple' },
+          { id: 'b', text: '世界により良い変化をもたらすこと', weight: 'stormblade' }
         ]
       }
     ];
   }
 
-  // 質問回答から役割を決定
+  // 問いかけの答えから役割を見つける
   function analyzeRole() {
     const weights = {
       disciple: 0,
@@ -173,7 +168,7 @@
       });
     });
 
-    // 最高スコアの役割を選択
+    // 最も強い傾向の役割を選択
     let maxWeight = 0;
     let selectedRole = 'disciple';
     
@@ -187,15 +182,15 @@
     return selectedRole;
   }
 
-  // アーキタイプと役割の組み合わせから結果を取得
+  // アーキタイプと役割から今日のメッセージを取得
   function getResult(archetype, role) {
     if (!STATE.archetypeData || !STATE.archetypeData.base_patterns) {
       return {
-        title: '診断結果',
-        oracle: 'あなたの道が明らかになりました。',
-        message: 'これからの歩みにお役立てください。',
-        guidance: '一歩ずつ、着実に進んでいきましょう。',
-        power_words: ['成長', '発見', '希望']
+        title: '今日の導き手',
+        oracle: 'あなたの道筋が、そっと照らされました。',
+        message: 'どんな小さな一歩でも、新しい物語の始まりです。',
+        guidance: 'ゆっくりと、あなたらしいペースで歩んでいきましょう。',
+        power_words: ['やさしさ', '発見', '希望']
       };
     }
 
@@ -219,15 +214,15 @@
 
     // デフォルト
     return STATE.archetypeData.base_patterns[0] || {
-      title: '診断結果',
-      oracle: 'あなたの道が明らかになりました。',
-      message: 'これからの歩みにお役立てください。',
-      guidance: '一歩ずつ、着実に進んでいきましょう。',
-      power_words: ['成長', '発見', '希望']
+      title: '今日の導き手',
+      oracle: 'あなたの道筋が、そっと照らされました。',
+      message: 'どんな小さな一歩でも、新しい物語の始まりです。',
+      guidance: 'ゆっくりと、あなたらしいペースで歩んでいきましょう。',
+      power_words: ['やさしさ', '発見', '希望']
     };
   }
 
-  // UI更新
+  // 画面の切り替え
   function updatePhase() {
     const phase1 = document.getElementById('phase1');
     const archetypeBox = document.getElementById('archetypeBox');
@@ -268,8 +263,8 @@
     };
 
     archText.innerHTML = `
-      <h3>${esc(archetypeNames[STATE.selectedArchetype] || STATE.selectedArchetype)}</h3>
-      <p>あなたのタイプが決まりました。続いて10の質問で詳細な役割を診断します。</p>
+      <h3>今、あなたの中に「${esc(archetypeNames[STATE.selectedArchetype] || STATE.selectedArchetype)}」の気質が宿っています</h3>
+      <p>この傾向をもとに、さらに詳しくあなたの今の状態を読み解いてみましょう。心のままに、問いかけに答えてみてください。</p>
     `;
   }
 
@@ -284,7 +279,7 @@
       const qDiv = document.createElement('div');
       qDiv.className = 'q-item';
       qDiv.innerHTML = `
-        <h4 class="q-title">問${index + 1}: ${esc(q.title)}</h4>
+        <h4 class="q-title">問いかけ${index + 1}: ${esc(q.title)}</h4>
         <div class="q-choices">
           <div class="choice" data-question="${q.id}" data-answer="${q.choices[0].id}">
             <span>${esc(q.choices[0].text)}</span>
@@ -336,23 +331,24 @@
 
     roleText.innerHTML = `
       <div class="result-header">
-        <h3>${esc(result.title)}</h3>
+        <h3>銀竜からの今日の贈り物</h3>
+        <p class="result-subtitle">今のあなたに「${esc(result.title)}」の一面が輝いています</p>
         <div class="result-oracle">
           <blockquote>${esc(result.oracle)}</blockquote>
         </div>
       </div>
       <div class="result-body">
         <div class="result-message">
-          <h4>メッセージ</h4>
+          <h4>あなたの今に寄り添うメッセージ</h4>
           <p>${esc(result.message)}</p>
         </div>
         <div class="result-guidance">
-          <h4>今日の指針</h4>
+          <h4>今日という日を歩むためのささやかな指針</h4>
           <p>${esc(result.guidance)}</p>
         </div>
         ${result.power_words && result.power_words.length ? `
           <div class="result-keywords">
-            <h4>キーワード</h4>
+            <h4>今日のキーワード</h4>
             <div class="keywords">
               ${result.power_words.map(word => `<span class="keyword">${esc(word)}</span>`).join('')}
             </div>
@@ -372,7 +368,7 @@
       });
     });
 
-    // Phase 1: 確定ボタン
+    // Phase 1: 気質読み取りボタン
     const btnP1 = document.getElementById('btnP1');
     if (btnP1) {
       btnP1.addEventListener('click', () => {
@@ -393,7 +389,7 @@
       });
     }
 
-    // Phase 2: 評価ボタン
+    // Phase 2: メッセージ受け取りボタン
     const btnEval = document.getElementById('btnEval');
     if (btnEval) {
       btnEval.addEventListener('click', () => {
