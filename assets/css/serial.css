@@ -46,8 +46,81 @@ header .muted{color:#aeb7d0;font-size:.8125rem;margin:0}
   border:1px solid var(--line);border-radius:999px;font-size:.75rem;background:#0f1528;color:#cfe1ff
 }
 
+/* コンテンツ切り替えのスムーズなトランジション */
+.content-preview, .content-full {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 続きを読むボタンのスタイル */
+.toggle-content {
+  margin-top: 0.75rem !important;
+  padding: 0.5rem 1rem !important;
+  background: var(--accent) !important;
+  color: #0f1528 !important;
+  border: none !important;
+  border-radius: 0.25rem !important;
+  cursor: pointer !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+  min-width: 6rem;
+}
+
+.toggle-content:hover {
+  background: #b3deff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(159, 211, 255, 0.3) !important;
+}
+
+.toggle-content:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 2px rgba(159, 211, 255, 0.2) !important;
+}
+
+.toggle-content:focus {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* プレビューテキストが長い場合の調整 */
+.content-preview p {
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* 全文表示時のスタイル */
+.content-full p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.content-full p:last-child {
+  margin-bottom: 0;
+}
+
 /* グリッド */
 .grid{display:grid;gap:.75rem}
 
+/* 記事間のスペースを少し広げて視覚的な分離を改善 */
+.grid > .card {
+  margin-bottom: 0.5rem;
+}
+
 /* ボトムナビは共通 .bottom-nav を使用 */
 footer{text-align:center;color:#aeb7d0;font-size:.75rem;margin:1rem 0 .75rem}
+
+/* レスポンシブ対応：小さな画面では記事間のスペースを調整 */
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0.75rem 0.75rem 0;
+  }
+  
+  .grid {
+    gap: 0.5rem;
+  }
+  
+  .toggle-content {
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+}
