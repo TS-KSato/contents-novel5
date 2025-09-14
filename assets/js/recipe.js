@@ -1,4 +1,4 @@
-// recipe.js — 修正版：recipe.json の実際の構造に対応
+// recipe.js — 修正版：アバター表示問題に対処
 (() => {
   'use strict';
 
@@ -10,6 +10,14 @@
     "ドレイク": "./dragon-table-drake.html", 
     "ライラ": "./dragon-table-laila.html",
     "ネスター": "./dragon-table-nester.html"
+  };
+
+  // キャラクター別デフォルトアバター（他ページと統一）
+  const CHAR_AVATARS = {
+    "アラン": "./assets/char-alan.jpg",
+    "ドレイク": "./assets/char-drake.jpg",
+    "ライラ": "./assets/char-laila.jpg",
+    "ネスター": "./assets/char-nester.jpg"
   };
 
   // DOM要素取得
@@ -26,23 +34,34 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[m]));
 
-  // アバター生成関数（dragon-table.js から移植・簡略化）
+  // アバター生成関数（改良版）
   function avatarHTML(name, avatarUrl) {
     const initials = esc((name || "食").slice(0, 2));
     
-    if (avatarUrl) {
+    // キャラクター名からデフォルトアバターを取得
+    const defaultAvatar = name ? CHAR_AVATARS[name] : null;
+    const finalAvatarUrl = avatarUrl || defaultAvatar;
+    
+    if (finalAvatarUrl) {
       return `
         <div class="avatar-wrap">
           <img class="avatar-img" 
-               src="${esc(avatarUrl)}" 
+               src="${esc(finalAvatarUrl)}" 
                alt="${esc(name || 'avatar')}"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <span class="avatar-fallback" style="display:none;">${initials}</span>
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+          <span class="avatar-fallback" 
+                style="display:none; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+            ${initials}
+          </span>
         </div>`;
     } else {
       return `
         <div class="avatar-wrap">
-          <span class="avatar-fallback">${initials}</span>
+          <span class="avatar-fallback" 
+                style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+            ${initials}
+          </span>
         </div>`;
     }
   }
@@ -112,9 +131,12 @@
       $subtitle.textContent = r.intro || "エテルナリアの食卓から一皿";
     }
 
-    // アバター設定
+    // アバター設定（改良版）
     if ($avatar) {
       $avatar.innerHTML = avatarHTML(r.character, r.avatar);
+      // 既存のクラスをクリアして、必要なスタイルを追加
+      $avatar.className = "avatar";
+      $avatar.style.margin = "0 auto .5rem";
     }
 
     // キャラクター別ページリンク設定
