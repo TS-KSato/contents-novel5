@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>今日の指針（あなたの道筋）｜運命の銀竜暦</title>
+  <meta name="description" content="銀竜の導き手たちが、あなたの今に寄り添うひとことをそっと届けます。" />
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <link rel="stylesheet" href="./assets/css/components.css">
+  <link rel="stylesheet" href="./assets/css/archetype-path.css">
+</head>
+
+<body>
+  <header class="page-header" aria-label="ページヘッダー">
+    <h1>今日の指針 <small class="flavor">〜あなたの道筋〜</small></h1>
+    <p class="lead">心の声に耳を澄まし、今のあなたに寄り添う導き手を見つけましょう。</p>
+  </header>
+
+  <main id="main" class="wrap" aria-live="polite">
+    <!-- Phase 1: 心の傾向をそっと探る -->
+    <section id="phase1" class="card" aria-label="心の傾向を見つめる">
+      <h2>心のままに、選んでみましょう <small class="note">（直感を大切に、最も近い方へ）</small></h2>
+
+      <div class="axis-list">
+        <!-- 4つの軸：左右2択スイッチ（右=checked） -->
+        <div class="axis">
+          <div class="axis-title">みんなとの調和 ↔ 自分の正しさ</div>
+          <div class="toggle" data-axis="logic">
+            <span class="opt">調和を大切に</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="調和/正しさ" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">正しさを貫く</span>
+          </div>
+        </div>
+
+        <div class="axis">
+          <div class="axis-title">風のような直感 ↔ 地図のような経験</div>
+          <div class="toggle" data-axis="spirit">
+            <span class="opt">感覚で歩む</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="直感/経験" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">経験を重ねて</span>
+          </div>
+        </div>
+
+        <div class="axis">
+          <div class="axis-title">静かな内省 ↔ 歩みながら学ぶ</div>
+          <div class="toggle" data-axis="vector">
+            <span class="opt">じっくり考える</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="内省/行動" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">動きながら学ぶ</span>
+          </div>
+        </div>
+
+        <div class="axis">
+          <div class="axis-title">一人の時間 ↔ 仲間との時間</div>
+          <div class="toggle" data-axis="social">
+            <span class="opt">自分のペース</span>
+            <label class="switch">
+              <input type="checkbox" aria-label="独り/仲間" />
+              <span class="knob"></span>
+            </label>
+            <span class="opt">みんなと一緒に</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnP1" class="btn primary" type="button">今の気質をそっと読み取る</button>
+        <button id="btnP1Reset" class="btn ghost" type="button">もう一度心に聞いてみる</button>
+      </div>
+
+      <p class="note small">※ 今の傾向は一時的なもの。またいつでも探り直すことができます。</p>
+    </section>
+
+    <!-- 見つかった気質のボックス（JSで中身を描画） -->
+    <section id="archetypeBox" class="card" aria-label="あなたの今の気質" hidden>
+      <div id="archText"><!-- JSがここに描画します --></div>
+    </section>
+
+    <!-- Phase 2: 心の声に耳を澄ます10の問いかけ -->
+    <section id="phase2" class="card" aria-label="心の声を聞く" hidden>
+      <h2>心の声を聞いてみましょう <small class="note">（10の問いかけが、今の傾向をそっと照らします）</small></h2>
+
+      <div id="qList" class="q-list"><!-- JSがここに10問を生成 --></div>
+
+      <div class="actions">
+        <button id="btnEval" class="btn primary" type="button" disabled>今日だけの特別なメッセージを受け取る</button>
+        <button id="btnClearQ" class="btn ghost" type="button">もう一度心に問いかける</button>
+      </div>
+    </section>
+
+    <!-- 銀竜からの今日の贈り物 -->
+    <section id="resultBox" class="card" aria-label="今日の特別なメッセージ" hidden>
+      <div id="roleText"><!-- JSがここに結果を描画 --></div>
+    </section>
+  </main>
+
+  <!-- 下部ナビ（固定） -->
+  <nav class="gnav" role="navigation" aria-label="下部ナビゲーション">
+    <a href="index.html">ホーム</a>
+    <a href="notice.html">お知らせ</a>
+    <a href="mypage.html">マイページ</a>
+  </nav>
+
+  <!-- 修正されたJS読み込み -->
+  <script src="./assets/js/core.js" defer></script>
+  <script src="./assets/js/ga4.js" defer></script>
+  <script src="./assets/js/archetype-path-improved.js" defer></script>
+</body>
+
+</html>
