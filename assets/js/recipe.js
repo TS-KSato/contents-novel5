@@ -1,4 +1,4 @@
-// recipe.js — 修正版：アバター表示問題に対処
+// recipe.js — 修正版：アバター表示問題を解決
 (() => {
   'use strict';
 
@@ -34,7 +34,7 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[m]));
 
-  // アバター生成関数（改良版）
+  // アバター生成関数（修正版）
   function avatarHTML(name, avatarUrl) {
     const initials = esc((name || "食").slice(0, 2));
     
@@ -44,25 +44,20 @@
     
     if (finalAvatarUrl) {
       return `
-        <div class="avatar-wrap">
-          <img class="avatar-img" 
-               src="${esc(finalAvatarUrl)}" 
-               alt="${esc(name || 'avatar')}"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
-          <span class="avatar-fallback" 
-                style="display:none; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
-            ${initials}
-          </span>
-        </div>`;
+        <img src="${esc(finalAvatarUrl)}" 
+             alt="${esc(name || 'avatar')}"
+             style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;"
+             onerror="this.style.display='none'; this.parentElement.querySelector('.avatar-fallback').style.display='flex';">
+        <span class="avatar-fallback" 
+              style="display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); align-items: center; justify-content: center; font-weight: bold; font-size: 14px; position: absolute; top: 0; left: 0;">
+          ${initials}
+        </span>`;
     } else {
       return `
-        <div class="avatar-wrap">
-          <span class="avatar-fallback" 
-                style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
-            ${initials}
-          </span>
-        </div>`;
+        <span class="avatar-fallback" 
+              style="display: flex; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-2, #f0f0f0); color: var(--accent, #333); align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+          ${initials}
+        </span>`;
     }
   }
 
@@ -101,7 +96,9 @@
     const recipesHTML = ALL.map(r => `
       <article class="card recipe" style="margin-bottom: 1rem;">
         <div style="display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: center; padding: 1rem;">
-          ${avatarHTML(r.character, r.avatar)}
+          <div class="avatar" style="position: relative; width: 48px; height: 48px;">
+            ${avatarHTML(r.character, r.avatar)}
+          </div>
           <div style="min-width: 0;">
             <div style="font-weight: 700; margin-bottom: .25rem;">${esc(r.title)}</div>
             <div style="color: var(--muted); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -131,11 +128,13 @@
       $subtitle.textContent = r.intro || "エテルナリアの食卓から一皿";
     }
 
-    // アバター設定（改良版）
+    // アバター設定（修正版）
     if ($avatar) {
       $avatar.innerHTML = avatarHTML(r.character, r.avatar);
-      // 既存のクラスをクリアして、必要なスタイルを追加
-      $avatar.className = "avatar";
+      // position: relative を追加してフォールバックの位置調整を可能にする
+      $avatar.style.position = "relative";
+      $avatar.style.width = "48px";
+      $avatar.style.height = "48px";
       $avatar.style.margin = "0 auto .5rem";
     }
 
