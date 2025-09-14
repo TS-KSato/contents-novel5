@@ -1,5 +1,5 @@
 // serial.js — 連載データを assets/data/ から読み込み（no-cache）
-// 注意：ts（世界内日時）は JSON の値をそのまま表示。生成・改変しない。
+// プレビュー機能付きで縦長問題を解決
 
 (() => {
   // ====== 設定（四半期で差し替え）======
@@ -111,19 +111,63 @@
     return entries;
   }
 
+  // 本文のプレビュー生成（最初の2段落または250文字まで）
+  function createPreview(bodyArray) {
+    if (!Array.isArray(bodyArray) || bodyArray.length === 0) return "";
+    
+    // 最初の2段落を取得
+    const previewParagraphs = bodyArray.slice(0, 2);
+    const previewText = previewParagraphs.join("");
+    
+    // 250文字を超える場合は切り詰める
+    if (previewText.length > 250) {
+      return previewText.slice(0, 250) + "...";
+    }
+    
+    return previewText;
+  }
+
+  // 続きを読むボタンの処理
+  function toggleArticleContent(articleId) {
+    const article = document.querySelector(`[data-article-id="${articleId}"]`);
+    if (!article) return;
+
+    const previewContent = article.querySelector('.content-preview');
+    const fullContent = article.querySelector('.content-full');
+    const toggleBtn = article.querySelector('.toggle-content');
+
+    if (fullContent.style.display === 'none') {
+      // 全文表示に切り替え
+      previewContent.style.display = 'none';
+      fullContent.style.display = 'block';
+      toggleBtn.textContent = '閉じる';
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    } else {
+      // プレビュー表示に戻す
+      previewContent.style.display = 'block';
+      fullContent.style.display = 'none';
+      toggleBtn.textContent = '続きを読む';
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
   // ====== 描画 ======
   function itemHTML(e){
     const title = esc(e.title || "");
     const lead = esc(e.lead || "");
-    const preview = lead || (Array.isArray(e.body) ? esc(e.body[0] || "") : "");
     const by = esc(e.author || e.by || "語り部");
     const role = esc(e.role || "");
     const ts = esc(e.ts || "");
     const who = esc(e.who || by);
     const tags = Array.isArray(e.tags) ? e.tags.map(tag => `<span class="pill">${esc(tag)}</span>`).join("") : "";
 
+    // プレビューと全文のコンテンツを生成
+    const preview = createPreview(e.body);
+    const fullBody = Array.isArray(e.body) ? e.body.map(p => `<p>${esc(p)}</p>`).join("") : "";
+    const hasMoreContent = Array.isArray(e.body) && e.body.length > 2;
+
     return `
-<article class="card">
+<article class="card" data-article-id="${e.id}">
   <div class="article-head">
     <div class="avatar-serial" data-name="${who}"></div>
     <div class="byline">
@@ -133,11 +177,26 @@
     </div>
   </div>
   <div class="title">${title}</div>
-  ${preview ? `<p class="lead">${preview}</p>` : ""}
+  ${lead ? `<p class="lead">${lead}</p>` : ""}
   <div class="sep"></div>
-  <div class="body">
-    ${(Array.isArray(e.body) ? e.body.map(p=>`<p>${esc(p)}</p>`).join("") : "")}
+  
+  <div class="content-preview body">
+    <p>${esc(preview)}</p>
   </div>
+  
+  <div class="content-full body" style="display: none;">
+    ${fullBody}
+  </div>
+  
+  ${hasMoreContent ? `
+  <button class="toggle-content" 
+          onclick="window.serialToggleContent('${e.id}')"
+          style="margin-top: 0.75rem; padding: 0.5rem 1rem; background: var(--accent); color: #0f1528; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.875rem;"
+          aria-expanded="false">
+    続きを読む
+  </button>
+  ` : ""}
+  
   ${tags ? `<div style="margin-top:0.75rem;">${tags}</div>` : ""}
 </article>`;
   }
@@ -157,6 +216,9 @@
 
     try { window.gtagEvent && window.gtagEvent("view_serial", { count: ENTRIES.length }); } catch(_){}
   }
+
+  // グローバル関数として公開（onclick から呼び出せるように）
+  window.serialToggleContent = toggleArticleContent;
 
   // ====== 起動 ======
   document.addEventListener("DOMContentLoaded", () => {
@@ -188,7 +250,7 @@
         
         // メタ表示（任意）
         if ($head) {
-          $head.innerHTML = `<div class="meta">収録期間：第7月〜第9月（2025年第3四半期）</div>`;
+          $head.innerHTML = `<div class="meta">収録期間：第7月〜第9月（2025年第3四半期）・全${ENTRIES.length}話</div>`;
         }
         
         render();
