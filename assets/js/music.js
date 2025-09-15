@@ -1,4 +1,3 @@
-
 (function() {
   'use strict';
 
@@ -67,7 +66,7 @@
 
     async _loadTracks() {
       try {
-        const response = await fetch('./assets/data/tracks.json', {
+        const response = await fetch('./assets/data/music.json', {
           cache: 'no-cache',
           headers: { 'Accept': 'application/json' }
         });
@@ -240,14 +239,14 @@
     _buildFilterTabs() {
       if (!this.elements.tabs) return;
 
-      // ユニークなmoodとthemeを抽出（変更: archetype → theme）
+      // ユニークなmoodとthemeを抽出
       const moods = [...new Set(this.tracks.map(t => t.mood).filter(Boolean))];
       const themes = [...new Set(this.tracks.map(t => t.theme).filter(Boolean))];
 
       const tabs = [
         { label: 'すべて', value: 'all' },
-        ...moods.map(mood => ({ label: `${mood}`, value: `mood:${mood}` })),      // 変更: # を削除（日本語用）
-        ...themes.map(theme => ({ label: `◆${theme}`, value: `theme:${theme}` })) // 変更: archetype → theme, @ → ◆
+        ...moods.map(mood => ({ label: `${mood}`, value: `mood:${mood}` })),
+        ...themes.map(theme => ({ label: `◆${theme}`, value: `theme:${theme}` }))
       ];
 
       this.elements.tabs.innerHTML = tabs.map(tab => 
@@ -307,8 +306,8 @@
         if (this.activeFilter.startsWith('mood:')) {
           return track.mood === this.activeFilter.slice(5);
         }
-        if (this.activeFilter.startsWith('theme:')) {           // 変更: arch: → theme:
-          return track.theme === this.activeFilter.slice(6);    // 変更: slice(5) → slice(6)
+        if (this.activeFilter.startsWith('theme:')) {
+          return track.theme === this.activeFilter.slice(6);
         }
         return true;
       });
@@ -320,11 +319,12 @@
         : `<div class="art fallback" aria-label="アート未設定">${this._escapeHtml(track.name).slice(0,1)}</div>`;
 
       const duration = this._formatDuration(track.duration);
+      const tempo = this._formatTempo(track.bpm);
       
-      // サブ情報の表示改善（sceneを追加）
+      // サブ情報の表示改善（情景的表現を使用）
       const subInfo = [
-        track.scene ? `${track.scene}` : '',               // sceneを表示
-        track.bpm ? `${track.bpm} bpm` : '',
+        track.scene ? `${track.scene}` : '',
+        tempo ? `${tempo}` : '',
         duration ? `${duration}` : ''
       ].filter(Boolean).join(' • ');
 
@@ -352,6 +352,17 @@
       const minutes = Math.floor(seconds / 60);
       const remainingSeconds = Math.floor(seconds % 60);
       return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    _formatTempo(bpm) {
+      if (!Number.isFinite(bpm)) return '';
+      
+      if (bpm <= 60) return 'ゆったりと';
+      if (bpm <= 70) return '静寂に';
+      if (bpm <= 80) return '心地よく';
+      if (bpm <= 90) return '軽やかに';
+      if (bpm <= 100) return '躍動的に';
+      return 'エネルギッシュに';
     }
 
     _renderError(message) {
