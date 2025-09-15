@@ -251,50 +251,104 @@ header {
   background: #3a5a4a;
 }
 
-/* ===== ナビゲーション ===== */
-nav.gnav {
+/* ===== 下部ナビゲーション ===== */
+.bottom-nav {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  z-index: 1000;
+}
+
+.bn-grid {
   display: flex;
   gap: 8px;
   justify-content: space-around;
   padding: 10px 8px;
-  background: rgba(17, 17, 17, 0.95);
-  backdrop-filter: blur(8px);
-  color: #fff;
-  z-index: 1000;
-  border-top: 1px solid var(--line);
 }
 
-nav.gnav a {
+.bn-btn {
   flex: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-decoration: none;
   color: #fff;
   font-weight: 700;
-  line-height: 44px;
+  font-size: 12px;
+  padding: 8px;
   border-radius: 10px;
   background: #222;
-  outline-offset: 2px;
   transition: background 0.2s ease;
+  outline-offset: 2px;
 }
 
-nav.gnav a[aria-current="page"] {
+.bn-btn:hover {
+  background: #333;
+}
+
+.bn-btn:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+.bn-btn[aria-current="page"] {
   background: #444;
   color: var(--acc);
 }
 
-@media (hover: hover) {
-  nav.gnav a:hover {
-    background: #333;
-  }
+.bn-icon {
+  font-size: 16px;
+  margin-bottom: 4px;
 }
 
-nav.gnav a:focus-visible {
-  outline: 2px solid var(--acc);
-  outline-offset: 2px;
+/* ===== 通知システム ===== */
+.error-notification {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: #2d1a1a;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  max-width: 90vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.close-error {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* ===== レイアウト調整 ===== */
@@ -388,6 +442,16 @@ body {
     font-size: 11px;
     min-width: 70px;
   }
+
+  .bn-btn {
+    font-size: 11px;
+    padding: 6px;
+  }
+  
+  .bn-icon {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -415,7 +479,8 @@ body {
   .card,
   .tab,
   .go .btn,
-  .skeleton-card {
+  .skeleton-card,
+  .music-notification {
     transition: none;
     animation: none;
   }
@@ -436,7 +501,8 @@ body {
     border: 2px solid #000;
   }
   
-  .go .btn:focus-visible {
+  .go .btn:focus-visible,
+  .bn-btn:focus-visible {
     outline: 3px solid #fff;
     outline-offset: 2px;
   }
@@ -448,8 +514,11 @@ body {
 
 /* ===== プリント用スタイル ===== */
 @media print {
-  nav.gnav,
-  .go .btn {
+  .bottom-nav,
+  .error-notification,
+  .music-notification,
+  .go .btn,
+  audio {
     display: none;
   }
   
