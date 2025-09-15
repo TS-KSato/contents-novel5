@@ -1,0 +1,40 @@
+# .htaccess - assetsフォルダに設置
+
+# 1. 直接アクセス禁止
+<Files "*.mp3">
+    Order Deny,Allow
+    Deny from all
+    # 自サイトからのみ許可
+    SetEnvIf Referer "^https://yourdomain\.com" local_ref=1
+    Allow from env=local_ref
+</Files>
+
+<Files "*.json">
+    Order Deny,Allow
+    Deny from all
+    # 自サイトからのみ許可
+    SetEnvIf Referer "^https://yourdomain\.com" local_ref=1
+    Allow from env=local_ref
+</Files>
+
+# 2. ホットリンク防止
+RewriteEngine On
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://yourdomain\.com [NC]
+RewriteRule \.(mp3|wav|json)$ - [F]
+
+# 3. User-Agent制限
+RewriteCond %{HTTP_USER_AGENT} ^(wget|curl|libwww) [NC]
+RewriteRule \.(mp3|wav|json)$ - [F]
+
+# 4. キャッシュ制御
+<IfModule mod_headers.c>
+    <FilesMatch "\.(mp3|wav)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+</IfModule>
+
+# 5. アクセスログ記録強化
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %{X-Forwarded-For}i" custom
+CustomLog /var/log/apache2/music_access.log custom
