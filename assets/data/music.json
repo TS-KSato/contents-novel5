@@ -1,0 +1,123 @@
+[
+  {
+    "id": "m01",
+    "name": "銀翼の遺産",
+    "scene": "神聖な場所",
+    "mood": "壮大",
+    "theme": "守護",
+    "bpm": 70,
+    "duration": 210,
+    "url": "assets/bgm001.mp3",
+    "art": "assets/bgm001.jpg"
+  },
+  {
+    "id": "m02",
+    "name": "最後の守護者",
+    "scene": "古の伝承",
+    "mood": "荘厳",
+    "theme": "叡智",
+    "bpm": 60,
+    "duration": 240,
+    "url": "assets/bgm002.mp3",
+    "art": "assets/bgm002.jpg"
+  },
+  {
+    "id": "m03",
+    "name": "二つの世界を歩む者",
+    "scene": "旅の始まり",
+    "mood": "軽快",
+    "theme": "冒険",
+    "bpm": 95,
+    "duration": 180,
+    "url": "assets/bgm003.mp3",
+    "art": "assets/bgm003.jpg"
+  },
+  {
+    "id": "m04",
+    "name": "銀光の舞",
+    "scene": "魔法の森",
+    "mood": "幻想的",
+    "theme": "神秘",
+    "bpm": 72,
+    "duration": 150,
+    "url": "assets/bgm004.mp3",
+    "art": "assets/bgm004.jpg"
+  },
+  {
+    "id": "m05",
+    "name": "凍てつく夜の約束",
+    "scene": "雪降る夜",
+    "mood": "切ない",
+    "theme": "約束",
+    "bpm": 65,
+    "duration": 195,
+    "url": "assets/bgm005.mp3",
+    "art": "assets/bgm005.jpg"
+  },
+  {
+    "id": "m06",
+    "name": "永遠なる帰還",
+    "scene": "世界の理",
+    "mood": "神々しい",
+    "theme": "輪廻",
+    "bpm": 75,
+    "duration": 300,
+    "url": "assets/bgm006.mp3",
+    "art": "assets/bgm006.jpg"
+  },
+  {
+    "id": "m07",
+    "name": "聖域の囁き",
+    "scene": "癒やしの泉",
+    "mood": "穏やか",
+    "theme": "再生",
+    "bpm": 55,
+    "duration": 240,
+    "url": "assets/bgm007.mp3",
+    "art": "assets/bgm007.jpg"
+  },
+  {
+    "id": "m08",
+    "name": "新たな学びの朝",
+    "scene": "学び舎",
+    "mood": "日常",
+    "theme": "探求",
+    "bpm": 85,
+    "duration": 165,
+    "url": "assets/bgm008.mp3",
+    "art": "assets/bgm008.jpg"
+  },
+  {
+    "id": "m09",
+    "name": "銀霧の山々",
+    "scene": "霧深き山脈",
+    "mood": "神秘的",
+    "theme": "未知",
+    "bpm": 72,
+    "duration": 190,
+    "url": "assets/bgm009.mp3",
+    "art": "assets/bgm009.jpg"
+  },
+  {
+    "id": "m10",
+    "name": "継ぐ者たちへ",
+    "scene": "物語の終わり",
+    "mood": "希望",
+    "theme": "継承",
+    "bpm": 80,
+    "duration": 220,
+    "url": "assets/bgm010.mp3",
+    "art": "assets/bgm010.jpg"
+  },
+  {
+    "id": "m11",
+    "name": "Whisper of Silver Light",
+    "scene": "魔法の森",
+    "mood": "幻想的",
+    "theme": "神秘",
+    "bpm": 80,
+    "duration": 199,
+    "url": "assets/bgm011.mp3",
+    "art": "assets/bgm011.jpg"
+  }
+]
