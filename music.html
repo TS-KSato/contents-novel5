@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./assets/css/music.css">
   
   <!-- プリロード -->
-  <link rel="preload" href="./assets/data/tracks.json" as="fetch" crossorigin>
+  <link rel="preload" href="./assets/data/music.json" as="fetch" crossorigin>
 </head>
 
 <body>
@@ -30,9 +30,9 @@
   <main class="grid" id="list" aria-live="polite" role="main">
     <!-- JavaScript will populate this -->
     <div class="loading-state">
-      <div class="skeleton-card" style="height: 72px; margin-bottom: 12px; background: linear-gradient(90deg, #1a2238 25%, #2a3455 50%, #1a2238 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 12px;"></div>
-      <div class="skeleton-card" style="height: 72px; margin-bottom: 12px; background: linear-gradient(90deg, #1a2238 25%, #2a3455 50%, #1a2238 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 12px;"></div>
-      <div class="skeleton-card" style="height: 72px; margin-bottom: 12px; background: linear-gradient(90deg, #1a2238 25%, #2a3455 50%, #1a2238 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 12px;"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
   </main>
 
@@ -66,125 +66,6 @@
   <!-- JavaScript（非モジュール形式） -->
   <script src="./assets/js/core.js"></script>
   <script src="./assets/js/music.js"></script>
-
-  <style>
-    /* ローディングアニメーション */
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* エラー通知 */
-    .error-notification {
-      position: fixed;
-      top: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      background: #2d1a1a;
-      color: #ff6b6b;
-      border: 1px solid #ff6b6b;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      max-width: 90vw;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .close-error {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background: none;
-      border: none;
-      color: #ff6b6b;
-      font-size: 1.2rem;
-      cursor: pointer;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* 音楽通知 */
-    .music-notification {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 1000;
-      background: var(--card);
-      color: var(--ink);
-      border: 1px solid var(--line);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      max-width: 300px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    /* レスポンシブ対応の改善 */
-    @media (max-width: 768px) {
-      .grid {
-        padding: 12px 8px 80px;
-      }
-      
-      .tabs {
-        padding-bottom: 8px;
-      }
-      
-      .tab {
-        font-size: 12px;
-        padding: 6px 10px;
-      }
-    }
-
-    /* アクセシビリティ改善 */
-    @media (prefers-reduced-motion: reduce) {
-      .skeleton-card,
-      .music-notification {
-        animation: none;
-        transition: none;
-      }
-    }
-
-    /* 高コントラストモード対応 */
-    @media (prefers-contrast: high) {
-      .tab.active {
-        background: #fff;
-        color: #000;
-        border: 2px solid #000;
-      }
-      
-      .btn:focus-visible {
-        outline: 3px solid #fff;
-        outline-offset: 2px;
-      }
-    }
-
-    /* フォーカス管理 */
-    .tab:focus-visible,
-    .btn:focus-visible {
-      outline: 2px solid var(--acc, #6aa8ff);
-      outline-offset: 2px;
-    }
-
-    /* プリント用スタイル */
-    @media print {
-      .bottom-nav,
-      .error-notification,
-      .music-notification,
-      audio {
-        display: none;
-      }
-      
-      .card {
-        break-inside: avoid;
-      }
-      
-      .btn {
-        display: none;
-      }
-    }
-  </style>
 </body>
 
 </html>
