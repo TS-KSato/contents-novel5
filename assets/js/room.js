@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const DATA_FILE = "./assets/data/teachings_unified.json";
+  const DATA_FILE = "./assets/data/teachings.json";
   const DEBUG = true;
 
   function log(...args) {
