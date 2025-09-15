@@ -1,0 +1,272 @@
+/* room.css — 対話記録表示専用スタイル */
+
+/* ===== ヘッダー（アプリバー）===== */
+header.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #10162a;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.appbar .inner {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem var(--pad);
+}
+
+.appbar .back-btn {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--accent);
+  border-radius: .5rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.appbar .back-btn:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2-b);
+}
+
+.appbar .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #1a3358, #0f1a34);
+  color: #cfe1ff;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  font-size: 1rem;
+}
+
+.appbar h1 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: .02em;
+  color: #fff;
+}
+
+.appbar .sub {
+  display: block;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+/* ===== セクションタイトル ===== */
+.section-title {
+  margin: 0 0 .75rem;
+  font-size: 1.1rem;
+  color: #d7e6ff;
+}
+
+/* ===== 相談者情報 ===== */
+.consultant-info {
+  margin-bottom: 1rem;
+}
+
+.consultant-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.consultant-header .avatar.large {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #1a3358, #0f1a34);
+  color: #cfe1ff;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  font-size: 1.5rem;
+}
+
+.consultant-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.consultant-details h2 {
+  margin: 0 0 .25rem;
+  font-size: 1.3rem;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consultant-role {
+  margin: 0 0 .5rem;
+  color: var(--accent);
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.consultant-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.4;
+}
+
+.consultant-meta {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.consultant-meta .meta-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-2);
+  color: var(--accent);
+  border: 1px solid var(--accent-2-b);
+  border-radius: .25rem;
+  padding: .25rem .5rem;
+  font-size: .8rem;
+}
+
+/* ===== 対話スレッド ===== */
+.conversation-thread {
+  display: grid;
+  gap: .75rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-2-b) transparent;
+}
+
+.conversation-thread::-webkit-scrollbar {
+  width: 8px;
+}
+
+.conversation-thread::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.conversation-thread::-webkit-scrollbar-thumb {
+  background: var(--accent-2-b);
+  border-radius: 4px;
+}
+
+/* 日付区切り */
+.date-divider {
+  text-align: center;
+  color: #c0cbed;
+  font-size: .78rem;
+  margin: 1rem 0;
+  padding: .25rem .5rem;
+  background: rgba(192, 203, 237, 0.1);
+  border-radius: .5rem;
+}
+
+/* メッセージ */
+.message {
+  max-width: 85%;
+  background: #121829;
+  border: 1px solid var(--line);
+  border-radius: .75rem;
+  padding: .75rem;
+  margin-bottom: .5rem;
+  position: relative;
+}
+
+.message.laila {
+  margin-left: auto;
+  background: #16233c;
+  border-color: #2f3b63;
+}
+
+.message .speaker {
+  font-weight: 700;
+  font-size: .85rem;
+  margin-bottom: .5rem;
+  color: var(--accent-2-b);
+}
+
+.message.laila .speaker {
+  color: #e7f2ff;
+}
+
+.message .text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: .5rem;
+}
+
+.message .timestamp {
+  color: var(--muted);
+  font-size: .75rem;
+  text-align: right;
+}
+
+/* ===== 読み込み・エラー表示 ===== */
+.loading-message {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem;
+  font-style: italic;
+}
+
+.error-section {
+  text-align: center;
+  color: var(--muted);
+}
+
+.error-section h2 {
+  color: var(--warning);
+  margin-bottom: .5rem;
+}
+
+.error-section p {
+  margin-bottom: 1rem;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 768px) {
+  .consultant-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .consultant-header .avatar.large {
+    margin-bottom: .5rem;
+  }
+  
+  .message {
+    max-width: 95%;
+  }
+  
+  .conversation-thread {
+    max-height: 50vh;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .message {
+    border-width: 2px;
+  }
+  
+  .consultant-details h2 {
+    color: #fff;
+  }
+}
