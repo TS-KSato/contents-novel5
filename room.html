@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>対話記録｜聖竜教の教え</title>
+  <meta name="description" content="古老ライラとの対話記録">
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <link rel="stylesheet" href="./assets/css/components.css">
+  <link rel="stylesheet" href="./assets/css/room.css">
+</head>
+
+<body>
+  <header class="appbar">
+    <div class="inner">
+      <a href="teachings.html" class="back-btn" aria-label="一覧に戻る">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.42-1.41L7.83 13H20v-2z"/>
+        </svg>
+      </a>
+      <div class="avatar">対</div>
+      <div>
+        <h1 id="room-title">対話記録</h1>
+        <span class="sub" id="room-subtitle">読み込み中...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- 相談者情報 -->
+    <section class="card consultant-info" id="consultant-info" style="display: none;">
+      <div class="consultant-header">
+        <div class="avatar large" id="consultant-avatar"></div>
+        <div class="consultant-details">
+          <h2 id="consultant-name">相談者名</h2>
+          <p class="consultant-role" id="consultant-role">役職</p>
+          <p class="consultant-summary" id="consultant-summary">相談内容</p>
+        </div>
+      </div>
+      <div class="consultant-meta" id="consultant-meta">
+        <!-- メタ情報がここに表示されます -->
+      </div>
+    </section>
+
+    <!-- 対話スレッド -->
+    <section class="card">
+      <h2 class="section-title">対話の流れ</h2>
+      <div id="conversation-thread" class="conversation-thread">
+        <div class="loading-message">読み込み中...</div>
+      </div>
+    </section>
+
+    <!-- エラー表示エリア -->
+    <section class="card error-section" id="error-section" style="display: none;">
+      <h2>エラー</h2>
+      <p id="error-message">データの読み込みに失敗しました。</p>
+      <a href="teachings.html" class="btn">一覧に戻る</a>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="主要ナビゲーション">
+    <div class="bn-grid">
+      <a class="bn-btn" href="index.html">
+        <span class="bn-icon">🏠</span>
+        <span>ホーム</span>
+      </a>
+      <a class="bn-btn" href="teachings.html">
+        <span class="bn-icon">📚</span>
+        <span>教え</span>
+      </a>
+      <a class="bn-btn" href="mypage.html">
+        <span class="bn-icon">👤</span>
+        <span>マイページ</span>
+      </a>
+    </div>
+  </nav>
+
+  <script type="module" src="./assets/js/core.js"></script>
+  <script type="module" src="./assets/js/room.js"></script>
+</body>
+
+</html>
