@@ -48,6 +48,30 @@ header.appbar {
   font-weight: 700;
   border: 1px solid var(--line);
   font-size: 1rem;
+  position: relative;
+}
+
+.appbar .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.appbar .avatar .avatar-fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3358, #0f1a34);
+  color: #cfe1ff;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .appbar h1 {
