@@ -1,4 +1,4 @@
-// teachings.js — 相談者一覧表示専用（全書き換え版）
+// teachings.js — 相談者一覧表示専用（アバター改善版）
 (() => {
   'use strict';
 
@@ -22,6 +22,43 @@
   const esc = (str) => String(str || '').replace(/[&<>"']/g, m => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[m]));
+
+  // 名前から色を生成する関数
+  function generateColorFromName(name) {
+    if (!name) return { bg: '#1a3358', text: '#cfe1ff' };
+    
+    // 名前の文字コードから色を生成
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // HSLベースでバランス良い色を生成
+    const hue = Math.abs(hash) % 360;
+    const saturation = 60 + (Math.abs(hash) % 20); // 60-80%
+    const lightness = 25 + (Math.abs(hash) % 15); // 25-40%
+    
+    const bgColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    const textColor = lightness > 30 ? '#ffffff' : '#ffffff'; // 常に白文字で統一
+    
+    return { bg: bgColor, text: textColor };
+  }
+
+  // 名前から適切なイニシャルを取得
+  function getInitials(name) {
+    if (!name) return '人';
+    
+    const cleaned = name.trim();
+    if (!cleaned) return '人';
+    
+    // 日本語の場合は最初の1-2文字
+    if (/[ひらがなカタカナ漢字]/.test(cleaned)) {
+      return cleaned.slice(0, 2);
+    }
+    
+    // 英語の場合は最初の1文字
+    return cleaned.slice(0, 1).toUpperCase();
+  }
 
   // データ読み込み
   async function loadData() {
@@ -101,23 +138,46 @@
     return card;
   }
 
-  // アバター適用
+  // アバター適用（改善版）
   function applyAvatar(element, name) {
     if (!element) return;
 
-    // SiteCore.Avatarが利用可能な場合は使用
-    if (window.SiteCore?.Avatar?.create) {
-      const avatar = window.SiteCore.Avatar.create({ name });
-      avatar.className = 'card-avatar-img';
-      element.appendChild(avatar);
-      return;
-    }
+    const colors = generateColorFromName(name);
+    const initials = getInitials(name);
+    
+    // 美しいグラデーションアバターを作成
+    element.innerHTML = `
+      <div style="
+        width: 100%; 
+        height: 100%; 
+        border-radius: 50%;
+        background: linear-gradient(135deg, ${colors.bg}, ${adjustBrightness(colors.bg, 20)});
+        color: ${colors.text};
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-weight: 700; 
+        font-size: 1.1rem;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        border: 2px solid rgba(255,255,255,0.1);
+      ">
+        ${esc(initials)}
+      </div>
+    `;
+    
+    log('Applied generated avatar for:', name, '→', initials, 'with color:', colors.bg);
+  }
 
-    // フォールバック処理
-    const initial = String(name || '?').trim().slice(0, 1).toUpperCase();
-    element.textContent = initial;
-    element.classList.add('fallback');
-    log('Applied fallback avatar for:', name, '→', initial);
+  // 色の明度を調整する関数
+  function adjustBrightness(color, percent) {
+    // HSL形式の色から明度を調整
+    if (color.startsWith('hsl')) {
+      return color.replace(/(\d+)%\)$/, (match, lightness) => {
+        const newLightness = Math.max(0, Math.min(100, parseInt(lightness) + percent));
+        return `${newLightness}%)`;
+      });
+    }
+    return color;
   }
 
   // 相談者一覧描画
@@ -203,7 +263,9 @@
     window.TeachingsDebug = {
       elements,
       loadData,
-      renderConsultants
+      renderConsultants,
+      generateColorFromName,
+      getInitials
     };
   }
 })();
