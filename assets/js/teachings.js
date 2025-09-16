@@ -145,22 +145,13 @@
     const colors = generateColorFromName(name);
     const initials = getInitials(name);
     
-    // 美しいグラデーションアバターを作成
+    // 美しいグラデーションアバターを作成（CSS変数を使用）
+    element.style.setProperty('--avatar-bg', colors.bg);
+    element.style.setProperty('--avatar-bg-light', adjustBrightness(colors.bg, 20));
+    element.style.setProperty('--avatar-text', colors.text);
+    
     element.innerHTML = `
-      <div style="
-        width: 100%; 
-        height: 100%; 
-        border-radius: 50%;
-        background: linear-gradient(135deg, ${colors.bg}, ${adjustBrightness(colors.bg, 20)});
-        color: ${colors.text};
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        font-weight: 700; 
-        font-size: 1.1rem;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        border: 2px solid rgba(255,255,255,0.1);
-      ">
+      <div class="generated-avatar">
         ${esc(initials)}
       </div>
     `;
