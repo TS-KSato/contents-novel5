@@ -111,12 +111,34 @@ header.appbar {
   height: 60px;
   border-radius: 50%;
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #1a3358, #0f1a34);
   color: #cfe1ff;
   font-weight: 700;
   border: 1px solid var(--line);
+  font-size: 1.5rem;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.generated-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--avatar-bg, #1a3358), var(--avatar-bg-light, #0f1a34));
+  color: var(--avatar-text, #cfe1ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.1);
+  aspect-ratio: 1 / 1;
+}
+
+.consultant-header .avatar.large .generated-avatar {
   font-size: 1.5rem;
 }
 
@@ -192,19 +214,20 @@ header.appbar {
 /* 日付区切り */
 .date-divider {
   text-align: center;
-  color: #c0cbed;
+  color: #ffffff;
   font-size: .78rem;
   margin: 1rem 0;
   padding: .25rem .5rem;
-  background: rgba(192, 203, 237, 0.1);
+  background: rgba(159, 211, 255, 0.15);
   border-radius: .5rem;
+  font-weight: 600;
 }
 
 /* メッセージ */
 .message {
   max-width: 85%;
-  background: #121829;
-  border: 1px solid var(--line);
+  background: #1a2540;
+  border: 1px solid #34507c;
   border-radius: .75rem;
   padding: .75rem;
   margin-bottom: .5rem;
@@ -213,31 +236,31 @@ header.appbar {
 
 .message.laila {
   margin-left: auto;
-  background: #16233c;
-  border-color: #2f3b63;
+  background: #1e3a5f;
+  border-color: #4a6b94;
 }
 
 .message .speaker {
   font-weight: 700;
   font-size: .85rem;
   margin-bottom: .5rem;
-  color: var(--accent-2-b);
+  color: #9fd3ff;
 }
 
 .message.laila .speaker {
-  color: #e7f2ff;
+  color: #ffffff;
 }
 
 .message .text {
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.6;
-  color: var(--ink);
+  color: #ffffff;
   margin-bottom: .5rem;
 }
 
 .message .timestamp {
-  color: var(--muted);
+  color: #b0c4de;
   font-size: .75rem;
   text-align: right;
 }
