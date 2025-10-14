@@ -1,63 +1,233 @@
-:root{
-  --bg:#0b0d12; --ink:#ffffff; --muted:#fffafa; --line:#27304a; --card:#151826;
-  --accent:#9fd3ff; --accent-2:#1a3358; --accent-2-b:#34507c;
-  --radius:.875rem; --pad:1rem; --gap:.75rem; --tap:2.75rem;
-  --success:#6bd8a6; --warning:#ffd27e;
+/* ========================================
+   app.css - 改善版背景システム
+   ======================================== */
+
+:root {
+  /* カラーパレット（既存を維持） */
+  --bg: #0b0d12;
+  --ink: #ffffff;
+  --muted: #fffafa;
+  --line: #27304a;
+  --card: #151826;
+  --accent: #9fd3ff;
+  --accent-2: #1a3358;
+  --accent-2-b: #34507c;
+  --radius: .875rem;
+  --pad: 1rem;
+  --gap: .75rem;
+  --tap: 2.75rem;
+  --success: #6bd8a6;
+  --warning: #ffd27e;
+  
+  /* 新規：背景システム */
+  --bg-gradient-top: #1a2332;
+  --bg-gradient-mid: #0e1220;
+  --bg-gradient-bottom: #0b0d12;
+  --bg-accent-glow: rgba(159, 211, 255, 0.03);
+  
+  /* カード透明度の最適化 */
+  --card-opacity: 0.92;
+  --card-backdrop-blur: 12px;
 }
-*{ box-sizing:border-box }
-html{ font-size:16px }
-body{ 
-  margin:0; 
-  background:var(--bg);
-  background-image: url('../background.jpg');
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color:var(--ink);
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-  line-height:1.75; 
-  -webkit-text-size-adjust:100%; 
-  text-rendering:optimizeLegibility;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
   padding: 0.4rem;
+  
+  /* ========================================
+     改善版背景（3層構造）
+     ======================================== */
+  
+  /* ベース色 */
+  background-color: var(--bg);
+  
+  /* 背景レイヤー構成 */
+  background-image:
+    /* Layer 3: 微細なノイズテクスチャ（最前面） */
+    url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii45IiBudW1PY3RhdmVzPSI0Ii8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1Ii8+PC9zdmc+'),
+    
+    /* Layer 2: かすかな星の輝き */
+    radial-gradient(circle at 15% 25%, var(--bg-accent-glow) 0%, transparent 25%),
+    radial-gradient(circle at 85% 60%, var(--bg-accent-glow) 0%, transparent 20%),
+    radial-gradient(circle at 50% 80%, rgba(107, 216, 166, 0.02) 0%, transparent 30%),
+    
+    /* Layer 1: 深みのある基本グラデーション（最奥） */
+    radial-gradient(ellipse at top, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
+  
+  /* 背景の配置設定 */
+  background-attachment: scroll, scroll, scroll, scroll, scroll; /* fixed を廃止 */
+  background-size: 
+    300px 300px,  /* ノイズ */
+    600px 600px,  /* 星1 */
+    500px 500px,  /* 星2 */
+    700px 700px,  /* 星3 */
+    100% 100%;    /* ベースグラデーション */
+  background-position: 
+    0 0,          /* ノイズ */
+    15% 25%,      /* 星1 */
+    85% 60%,      /* 星2 */
+    50% 80%,      /* 星3 */
+    center;       /* ベース */
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
-.wrap{ max-width:40rem; margin:0 auto; padding:1rem; }
 
-.btn{ appearance:none; border:1px solid var(--accent-2-b); background:var(--accent-2);
-  color:#fff; border-radius:.75rem; padding:.625rem .9rem; min-height:var(--tap); font-size:1rem; cursor:pointer;
-}
-.btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
-.btn.secondary{ background:#11172a; border-color:#2f3b63; color:#d7e6ff }
+/* ========================================
+   カードの透明度最適化
+   ======================================== */
 
-.pills{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
-.pill{ display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line);
-  background:#11172a; color:#cfe1ff; border-radius:999px; padding:.25rem .6rem; font-size:.8rem;
+.card {
+  background: rgba(21, 24, 38, var(--card-opacity));
+  backdrop-filter: blur(var(--card-backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--card-backdrop-blur));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  margin: .75rem 0;
 }
-#calendarQuote .pill{ background:var(--accent-2); color:var(--accent); border:1px solid var(--accent-2-b) }
-#calendarQuote .pill:active{ transform:translateY(1px) }
-.card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin:.75rem 0 }
-.label{ font-size:.95rem; color:#cfe1ff; margin-bottom:.5rem }
-.meta{ color:var(--muted); font-size:.85rem }
-.bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9);
-  backdrop-filter:blur(8px); border-top:1px solid var(--line)
+
+/* ヒーローセクションの背景強化（index.htmlのみ） */
+.hero {
+  background: 
+    radial-gradient(120% 120% at 100% 0%, rgba(29, 42, 74, 0.9) 0%, rgba(12, 18, 32, 0.9) 55%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-.bn-grid{ max-width:40rem; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr) }
-.bn-btn{ appearance:none; background:none; border:0; color:#cfe1ff; text-decoration:none;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:.375rem 0; min-height:3.25rem; font-size:.75rem;
+
+/* ========================================
+   その他既存スタイル（変更なし）
+   ======================================== */
+
+.wrap {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
 }
-.bn-icon{ width:20px; height:20px; margin-bottom:.125rem; border-radius:4px; border:1px solid var(--line);
-  background:#16213c; display:flex; align-items:center; justify-content:center; font-size:.75rem;
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--accent-2-b);
+  background: var(--accent-2);
+  color: #fff;
+  border-radius: .75rem;
+  padding: .625rem .9rem;
+  min-height: var(--tap);
+  font-size: 1rem;
+  cursor: pointer;
 }
-.bn-accent{ color:#fff }
-.tabbar{ composes: bottom-nav; }
-.tabbar{ position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(10,14,22,.9);
-  backdrop-filter:blur(8px); border-top:1px solid var(--line);
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
-.tabbar .tabbar-item{ display:flex; align-items:center; justify-content:center; min-height:3.25rem;
-  color:#cfe1ff; text-decoration:none; border:0; font-size:.85rem; padding:.375rem 0;
+
+.btn.secondary {
+  background: #11172a;
+  border-color: #2f3b63;
+  color: #d7e6ff;
 }
-.tabbar .tabbar-item.is-active{ color:#fff }
+
+.pills {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-top: .5rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #11172a;
+  color: #cfe1ff;
+  border-radius: 999px;
+  padding: .25rem .6rem;
+  font-size: .8rem;
+}
+
+#calendarQuote .pill {
+  background: var(--accent-2);
+  color: var(--accent);
+  border: 1px solid var(--accent-2-b);
+}
+
+#calendarQuote .pill:active {
+  transform: translateY(1px);
+}
+
+.label {
+  font-size: .95rem;
+  color: #cfe1ff;
+  margin-bottom: .5rem;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(10, 14, 22, .9);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+}
+
+.bn-grid {
+  max-width: 40rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.bn-btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  color: #cfe1ff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: .375rem 0;
+  min-height: 3.25rem;
+  font-size: .75rem;
+}
+
+.bn-icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: .125rem;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: #16213c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+}
+
+.bn-accent {
+  color: #fff;
+}
 
 footer[role="contentinfo"] {
   display: flex;
@@ -66,4 +236,46 @@ footer[role="contentinfo"] {
   padding: 1rem;
   margin-top: auto;
   border-top: 1px solid var(--line);
+}
+
+/* ========================================
+   モバイル最適化
+   ======================================== */
+
+@media (max-width: 480px) {
+  body {
+    /* モバイルではノイズを軽量化 */
+    background-size: 
+      200px 200px,  /* ノイズ縮小 */
+      400px 400px,
+      350px 350px,
+      500px 500px,
+      100% 100%;
+  }
+}
+
+/* ========================================
+   ダークモード対応（将来的な拡張用）
+   ======================================== */
+
+@media (prefers-color-scheme: light) {
+  /* ライトモードが選択された場合の対応（現状は不要） */
+}
+
+/* ========================================
+   アクセシビリティ：動きを減らす設定
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+/* ========================================
+   高解像度ディスプレイ対応
+   ======================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Retina対応は現状CSS背景のみなので追加対応不要 */
 }
