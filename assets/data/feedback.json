@@ -1,0 +1,333 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "title": "今週のひとこと - 潜在欲求継続モニタリング",
+    "description": "ユーザーの本質的な価値認識と行動動機を理解するための4週間ローテーション調査",
+    "rotation_cycle": "weekly",
+    "total_weeks": 4,
+    "ethics": {
+      "anonymity": true,
+      "optional_questions": true,
+      "bias_detection": true
+    }
+  },
+  "rotations": {
+    "week_1": [
+      {
+        "id": "q1_info_seeking_context",
+        "type": "single_choice",
+        "question": "最近1週間で、何かを決める前に「情報を集めたい」と感じた場面はありましたか？",
+        "options": [
+          "重要な決断の前",
+          "日常の小さな選択の前",
+          "なんとなく不安なとき",
+          "特に何もないとき",
+          "そういう場面はなかった"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "decision_trigger",
+        "analysis_category": "行動動機"
+      },
+      {
+        "id": "q2_decision_readiness",
+        "type": "single_choice",
+        "question": "何かを決めるとき、あなたは次のうちどちらに近いですか？",
+        "options": [
+          "できるだけ早く決めて進みたい",
+          "少し時間をかけて考えたい",
+          "誰かに背中を押してほしい",
+          "選択肢を整理したい"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "decision_style",
+        "analysis_category": "行動動機"
+      },
+      {
+        "id": "q3_info_trust",
+        "type": "multiple_choice",
+        "question": "日常的に信頼している情報源はどれですか？（複数選択可）",
+        "options": [
+          "友人・家族の意見",
+          "専門家の見解",
+          "データや統計",
+          "自分の直感",
+          "占いや運勢",
+          "SNSの反応",
+          "その他"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "info_trust_pattern",
+        "analysis_category": "行動動機"
+      }
+    ],
+    "week_2": [
+      {
+        "id": "q4_projection_why_others",
+        "type": "single_choice",
+        "question": "あなたの友人が「占い」を見るとしたら、どんな理由だと思いますか？",
+        "options": [
+          "背中を押してほしいから",
+          "選択肢を整理したいから",
+          "気分転換や楽しみとして",
+          "自分を知るきっかけとして",
+          "不安を和らげたいから"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "projected_motivation",
+        "analysis_category": "価値認識",
+        "note": "投影法による本音抽出"
+      },
+      {
+        "id": "q5_value_comparison",
+        "type": "ranking",
+        "question": "以下のうち、あなたが「価値がある」と感じる順に並べてください",
+        "options": [
+          "新しい視点を得ること",
+          "自分の考えを確認すること",
+          "迷いを解消すること",
+          "気持ちを前向きにすること"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "value_hierarchy",
+        "analysis_category": "価値認識"
+      },
+      {
+        "id": "q6_emotional_outcome",
+        "type": "single_choice",
+        "question": "情報を得た後、どんな状態になっていたいですか？",
+        "options": [
+          "スッキリして行動できる",
+          "納得して安心できる",
+          "ワクワクして楽しい",
+          "自分を理解できている"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "desired_emotional_state",
+        "analysis_category": "価値認識"
+      }
+    ],
+    "week_3": [
+      {
+        "id": "q7_reading_depth",
+        "type": "single_choice",
+        "question": "オンラインで情報を見るとき、あなたの読み方は？",
+        "options": [
+          "じっくり全部読む",
+          "重要な部分だけ読む",
+          "見出しや要約だけ見る",
+          "流し読みして雰囲気をつかむ"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "consumption_depth",
+        "analysis_category": "情報消費行動"
+      },
+      {
+        "id": "q8_revisit_pattern",
+        "type": "single_choice",
+        "question": "気に入った情報は、どうすることが多いですか？",
+        "options": [
+          "すぐ忘れても問題ない",
+          "覚えておいて後で思い出す",
+          "メモやスクショで保存する",
+          "何度も見返したくなる"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "retention_behavior",
+        "analysis_category": "情報消費行動"
+      },
+      {
+        "id": "q9_timing_preference",
+        "type": "single_choice",
+        "question": "情報を得るのに「ちょうどいい」タイミングは？",
+        "options": [
+          "朝の始まり",
+          "仕事や用事の合間",
+          "夜のリラックスタイム",
+          "特に決まっていない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "timing_context",
+        "analysis_category": "情報消費行動"
+      }
+    ],
+    "week_4": [
+      {
+        "id": "q10_week_change",
+        "type": "single_choice",
+        "question": "先週と比べて、今週の気分は？",
+        "options": [
+          "かなり良くなった",
+          "少し良くなった",
+          "あまり変わらない",
+          "少し落ち込んだ",
+          "かなり落ち込んだ"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "emotional_trajectory",
+        "analysis_category": "感情状態"
+      },
+      {
+        "id": "q11_seeking_state",
+        "type": "single_choice",
+        "question": "今、あなたが求めているものに最も近いのは？",
+        "options": [
+          "前に進む勇気",
+          "心の安定",
+          "新しい発見",
+          "自分らしさの確認"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "current_need_state",
+        "analysis_category": "感情状態"
+      },
+      {
+        "id": "q12_open_reflection",
+        "type": "text",
+        "question": "もし何でも叶うとしたら、今の生活で「こうなったらいいな」と思うことは？（任意）",
+        "placeholder": "自由にお書きください...",
+        "optional": true,
+        "max_length": 200,
+        "ai_label": "latent_wish_nlp",
+        "analysis_category": "潜在願望",
+        "note": "NLP分析対象"
+      }
+    ]
+  },
+  "ai_analysis_schema": {
+    "behavioral_profile": {
+      "decision_trigger": {
+        "type": "categorical",
+        "values": ["重要な決断の前", "日常の小さな選択の前", "なんとなく不安なとき", "特に何もないとき", "そういう場面はなかった"]
+      },
+      "decision_style": {
+        "type": "categorical",
+        "values": ["できるだけ早く決めて進みたい", "少し時間をかけて考えたい", "誰かに背中を押してほしい", "選択肢を整理したい"]
+      },
+      "info_trust_pattern": {
+        "type": "multi_categorical",
+        "values": ["友人・家族の意見", "専門家の見解", "データや統計", "自分の直感", "占いや運勢", "SNSの反応", "その他"]
+      }
+    },
+    "value_structure": {
+      "projected_motivation": {
+        "type": "categorical",
+        "values": ["背中を押してほしいから", "選択肢を整理したいから", "気分転換や楽しみとして", "自分を知るきっかけとして", "不安を和らげたいから"]
+      },
+      "value_hierarchy": {
+        "type": "ranking",
+        "items": ["新しい視点を得ること", "自分の考えを確認すること", "迷いを解消すること", "気持ちを前向きにすること"]
+      },
+      "desired_emotional_state": {
+        "type": "categorical",
+        "values": ["スッキリして行動できる", "納得して安心できる", "ワクワクして楽しい", "自分を理解できている"]
+      }
+    },
+    "consumption_behavior": {
+      "reading_depth": {
+        "type": "categorical",
+        "values": ["じっくり全部読む", "重要な部分だけ読む", "見出しや要約だけ見る", "流し読みして雰囲気をつかむ"]
+      },
+      "retention_behavior": {
+        "type": "categorical",
+        "values": ["すぐ忘れても問題ない", "覚えておいて後で思い出す", "メモやスクショで保存する", "何度も見返したくなる"]
+      },
+      "timing_context": {
+        "type": "categorical",
+        "values": ["朝の始まり", "仕事や用事の合間", "夜のリラックスタイム", "特に決まっていない"]
+      }
+    },
+    "psychological_state": {
+      "emotional_trajectory": {
+        "type": "ordinal",
+        "scale": [-2, -1, 0, 1, 2],
+        "values": ["かなり落ち込んだ", "少し落ち込んだ", "あまり変わらない", "少し良くなった", "かなり良くなった"]
+      },
+      "current_need_state": {
+        "type": "categorical",
+        "values": ["前に進む勇気", "心の安定", "新しい発見", "自分らしさの確認"]
+      },
+      "latent_wish_keywords": {
+        "type": "text_nlp",
+        "analysis": ["sentiment", "keywords", "topics"]
+      }
+    }
+  },
+  "user_segments": {
+    "decision_support_seeker": {
+      "description": "意思決定の補助を求める層",
+      "characteristics": [
+        "decision_trigger: 重要な決断の前",
+        "desired_emotional_state: スッキリして行動できる",
+        "value_hierarchy: 迷いを解消すること (top)"
+      ],
+      "recommended_content": ["行動指針", "明確なステップ", "背中を押すメッセージ"]
+    },
+    "emotional_reassurance_seeker": {
+      "description": "感情的安心を求める層",
+      "characteristics": [
+        "decision_trigger: なんとなく不安なとき",
+        "desired_emotional_state: 納得して安心できる",
+        "projected_motivation: 不安を和らげたいから"
+      ],
+      "recommended_content": ["共感的メッセージ", "安心感の提供", "穏やかなトーン"]
+    },
+    "novelty_explorer": {
+      "description": "新しい発見を求める層",
+      "characteristics": [
+        "value_hierarchy: 新しい視点を得ること (top)",
+        "desired_emotional_state: ワクワクして楽しい",
+        "reading_depth: じっくり全部読む"
+      ],
+      "recommended_content": ["意外な発見", "深い洞察", "知的好奇心を刺激"]
+    },
+    "self_understanding_seeker": {
+      "description": "自己理解を求める層",
+      "characteristics": [
+        "projected_motivation: 自分を知るきっかけとして",
+        "desired_emotional_state: 自分を理解できている",
+        "current_need_state: 自分らしさの確認"
+      ],
+      "recommended_content": ["内省的メッセージ", "パターン分析", "自己発見"]
+    },
+    "casual_entertainment_user": {
+      "description": "気軽な娯楽として利用する層",
+      "characteristics": [
+        "projected_motivation: 気分転換や楽しみとして",
+        "reading_depth: 見出しや要約だけ見る",
+        "retention_behavior: すぐ忘れても問題ない"
+      ],
+      "recommended_content": ["軽快なトーン", "短時間で楽しめる", "カジュアル"]
+    }
+  },
+  "bias_detection_rules": {
+    "order_effect": {
+      "threshold": 0.15,
+      "description": "選択肢の順序による選択率の偏り"
+    },
+    "social_desirability": {
+      "threshold": 0.80,
+      "description": "社会的に望ましい回答への集中"
+    },
+    "response_distribution": {
+      "entropy_threshold": 0.5,
+      "description": "回答分布の偏り検出"
+    }
+  },
+  "privacy": {
+    "data_retention": "90_days",
+    "anonymization": "user_id_hashed",
+    "opt_out": true,
+    "gdpr_compliant": true
+  }
+}
