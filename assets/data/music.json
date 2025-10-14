@@ -130,6 +130,17 @@
   "duration": 260,
   "url": "assets/bgm012.mp3",
   "art": "assets/bgm012.jpg"
+},
+{
+  "id": "bgm013",
+  "name": "Beast Groove",
+  "scene": "異種の鼓動",
+  "mood": "原始・躍動",
+  "theme": "異文化衝撃",
+  "bpm": 92,
+  "duration": 255,
+  "url": "assets/bgm013.mp3",
+  "art": "assets/bgm013.jpg"
 }
 
 ]
