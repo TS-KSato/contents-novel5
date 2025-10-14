@@ -114,15 +114,21 @@
     }
 
     _determineWeekRotation() {
-      // 週次でローテーション（1-4週）
-      const week = getWeekNumber();
-      this.weekRotation = ((week - 1) % 4) + 1;
-      
-      const rotationKey = `week_${this.weekRotation}`;
-      this.questions = this.surveyConfig.rotations[rotationKey] || [];
+  // 週次でローテーション（JSONから total_weeks を読み取る）
+  const week = getWeekNumber();
+  const totalWeeks = this.surveyConfig.meta.total_weeks || 4;  // ← この行を追加
+  
+  // 13週サイクルの場合、年間で4サイクル繰り返す
+  this.weekRotation = ((week - 1) % totalWeeks) + 1;
+  
+  const rotationKey = `week_${this.weekRotation}`;
+  this.questions = this.surveyConfig.rotations[rotationKey] || [];
 
-      this.surveyData.metadata.rotation_key = rotationKey;
-    }
+  this.surveyData.metadata.rotation_key = rotationKey;
+  
+  // サイクル番号も記録（四半期比較用）
+  this.surveyData.metadata.cycle = Math.floor((week - 1) / totalWeeks) + 1;
+}
 
     _updateProgress() {
       const progress = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
