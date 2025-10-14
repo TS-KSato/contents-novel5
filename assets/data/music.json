@@ -163,6 +163,17 @@
   "duration": 276,
   "url": "assets/bgm015.mp3",
   "art": "assets/bgm015.jpg"
+},
+{
+  "id": "bgm016",
+  "name": "Home in the Morning Light",
+  "scene": "静かな記憶",
+  "mood": "優しさ・郷愁",
+  "theme": "家族と日常",
+  "bpm": 118,
+  "duration": 284,
+  "url": "assets/bgm016.mp3",
+  "art": "assets/bgm016.jpg"
 }
 
 ]
