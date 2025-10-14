@@ -1,0 +1,467 @@
+/* feedback.css — 今週のひとこと（潜在欲求フィードバック） */
+
+/* ===== プログレスバー ===== */
+.feedback-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(39, 48, 74, 0.5);
+  z-index: 100;
+}
+
+.feedback-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), #6bd8a6);
+  transition: width 0.3s ease;
+}
+
+/* ===== ヘッダー ===== */
+.feedback-header {
+  text-align: center;
+  margin: 2rem 0 1.5rem;
+}
+
+.feedback-header h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.feedback-header .lead {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.feedback-meta {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ===== 質問コンテナ ===== */
+.question-container {
+  min-height: 400px;
+}
+
+/* ===== 質問カード ===== */
+.question-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question-card.exiting {
+  animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.question-number {
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.question-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ===== 選択肢 ===== */
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 単一選択 */
+.option-single,
+.option-multiple {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(21, 24, 38, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 3.5rem;
+}
+
+.option-single:hover,
+.option-multiple:hover {
+  background: rgba(26, 48, 88, 0.3);
+  border-color: var(--accent-2-b);
+  transform: translateX(2px);
+}
+
+.option-single.selected,
+.option-multiple.selected {
+  background: var(--accent-2);
+  border-color: var(--accent-2-b);
+  box-shadow: 0 0 0 1px rgba(159, 211, 255, 0.3);
+}
+
+.option-single input[type="radio"],
+.option-multiple input[type="checkbox"] {
+  margin-right: 0.75rem;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.option-single label,
+.option-multiple label {
+  cursor: pointer;
+  user-select: none;
+  flex: 1;
+  line-height: 1.4;
+  font-size: 0.95rem;
+}
+
+/* ランキング */
+.ranking-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: rgba(21, 24, 38, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.ranking-item:hover {
+  border-color: var(--accent-2-b);
+  background: rgba(26, 48, 88, 0.3);
+}
+
+.ranking-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.drag-handle {
+  color: var(--muted);
+  font-size: 1.25rem;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.rank-number {
+  min-width: 28px;
+  height: 28px;
+  background: var(--accent-2);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ranking-text {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* テキスト入力 */
+.question-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.875rem;
+  background: rgba(21, 24, 38, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.question-textarea:focus {
+  outline: none;
+  border-color: var(--accent-2-b);
+  background: rgba(26, 48, 88, 0.2);
+}
+
+.question-textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.textarea-optional {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* ===== ボタン ===== */
+.question-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-feedback-skip {
+  flex: 1;
+  background: rgba(17, 23, 42, 0.8);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.btn-feedback-skip:hover {
+  background: rgba(26, 48, 88, 0.5);
+  color: var(--ink);
+}
+
+.btn-feedback-next {
+  flex: 2;
+  background: var(--accent-2);
+  border: 1px solid var(--accent-2-b);
+  color: #fff;
+}
+
+.btn-feedback-next:hover:not(:disabled) {
+  background: var(--accent-2-b);
+  transform: translateY(-1px);
+}
+
+.btn-feedback-next:disabled {
+  background: rgba(39, 48, 74, 0.5);
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ===== 完了画面 ===== */
+.feedback-completion {
+  text-align: center;
+  padding: 2rem;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.completion-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.completion-title {
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.completion-message {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.completion-meta {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(21, 24, 38, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-value {
+  font-size: 1rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.completion-actions {
+  margin-top: 1.5rem;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 768px) {
+  .feedback-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .question-text {
+    font-size: 1rem;
+  }
+
+  .completion-meta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .question-actions {
+    flex-direction: column;
+  }
+
+  .btn-feedback-skip,
+  .btn-feedback-next {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .feedback-header {
+    margin: 1rem 0;
+  }
+
+  .question-card {
+    padding: 1rem;
+  }
+
+  .option-single,
+  .option-multiple {
+    padding: 0.75rem;
+    min-height: 3rem;
+  }
+
+  .ranking-item {
+    padding: 0.75rem;
+  }
+
+  .question-textarea {
+    min-height: 100px;
+    font-size: 0.9rem;
+  }
+
+  .completion-icon {
+    font-size: 3rem;
+  }
+
+  .completion-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===== アクセシビリティ ===== */
+.option-single:focus-within,
+.option-multiple:focus-within,
+.ranking-item:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.question-textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 動きを減らす設定 */
+@media (prefers-reduced-motion: reduce) {
+  .question-card,
+  .feedback-completion,
+  .completion-icon {
+    animation: none;
+    transition: none;
+  }
+
+  .option-single:hover,
+  .option-multiple:hover,
+  .ranking-item:hover {
+    transform: none;
+  }
+}
+
+/* 高コントラストモード */
+@media (prefers-contrast: high) {
+  .option-single.selected,
+  .option-multiple.selected {
+    border: 3px solid var(--accent);
+  }
+
+  .rank-number {
+    border: 2px solid var(--accent);
+  }
+}
+
+/* 印刷用 */
+@media print {
+  .feedback-progress,
+  .question-actions,
+  .bottom-nav,
+  .error-notification {
+    display: none;
+  }
+
+  .question-card {
+    break-inside: avoid;
+  }
+}
