@@ -152,6 +152,17 @@
   "duration": 255,
   "url": "assets/bgm014.mp3",
   "art": "assets/bgm014.jpg"
+},
+{
+  "id": "bgm015",
+  "name": "Crown of Ashes",
+  "scene": "王の覚悟",
+  "mood": "威厳・宿命",
+  "theme": "血統と決断",
+  "bpm": 132,
+  "duration": 276,
+  "url": "assets/bgm015.mp3",
+  "art": "assets/bgm015.jpg"
 }
 
 ]
