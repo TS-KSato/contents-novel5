@@ -119,5 +119,17 @@
     "duration": 199,
     "url": "assets/bgm011.mp3",
     "art": "assets/bgm011.jpg"
-  }
+  },
+  {
+  "id": "bgm012",
+  "name": "AquaLoom",
+  "scene": "星降る街の水面",
+  "mood": "幻想・浮遊",
+  "theme": "魔力と都会の融合",
+  "bpm": 95,
+  "duration": 260,
+  "url": "assets/bgm012.mp3",
+  "art": "assets/bgm012.jpg"
+}
+
 ]
