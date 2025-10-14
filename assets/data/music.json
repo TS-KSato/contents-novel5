@@ -144,12 +144,12 @@
 },
 {
   "id": "bgm014",
-  "name": "Beast Groove",
-  "scene": "異種の鼓動",
-  "mood": "原始・躍動",
-  "theme": "異文化衝撃",
-  "bpm": 92,
-  "duration": 255,
+  "name": "獅子の先陣",
+  "scene": "獅子王の進撃",
+  "mood": "熱狂・悲哀",
+  "theme": "戦場と決意",
+  "bpm": 148,
+  "duration": 268,
   "url": "assets/bgm014.mp3",
   "art": "assets/bgm014.jpg"
 },
