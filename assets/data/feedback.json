@@ -1,10 +1,12 @@
 {
   "meta": {
-    "version": "1.0.0",
-    "title": "今週のひとこと - 潜在欲求継続モニタリング",
-    "description": "ユーザーの本質的な価値認識と行動動機を理解するための4週間ローテーション調査",
-    "rotation_cycle": "weekly",
-    "total_weeks": 4,
+    "version": "2.0.0",
+    "title": "想いの暦 - 13週サイクル",
+    "description": "13週間を1サイクルとし、年4回繰り返すことで四半期比較が可能なフィードバックシステム",
+    "rotation_cycle": "sequential",
+    "total_weeks": 13,
+    "cycles_per_year": 4,
+    "last_updated": "2025-10-15",
     "ethics": {
       "anonymity": true,
       "optional_questions": true,
@@ -78,8 +80,7 @@
         "randomize": true,
         "optional": false,
         "ai_label": "projected_motivation",
-        "analysis_category": "価値認識",
-        "note": "投影法による本音抽出"
+        "analysis_category": "価値認識"
       },
       {
         "id": "q5_value_comparison",
@@ -199,115 +200,491 @@
         "optional": true,
         "max_length": 200,
         "ai_label": "latent_wish_nlp",
-        "analysis_category": "潜在願望",
-        "note": "NLP分析対象"
+        "analysis_category": "潜在願望"
+      }
+    ],
+    "week_5": [
+      {
+        "id": "q13_time_priority",
+        "type": "single_choice",
+        "question": "今の時期、あなたが最も大切にしたいと思うことは？",
+        "options": [
+          "新しいことに挑戦する",
+          "今あるものを守る",
+          "バランスを保つ",
+          "流れに身を任せる"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "current_priority",
+        "analysis_category": "時間感覚"
+      },
+      {
+        "id": "q14_pace_preference",
+        "type": "single_choice",
+        "question": "日々の過ごし方として、あなたはどちらに近いですか？",
+        "options": [
+          "計画を立てて着実に進める",
+          "その時々で柔軟に決める",
+          "大きな流れだけ決めておく",
+          "特に決めずに自然に任せる"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "pace_style",
+        "analysis_category": "時間感覚"
+      },
+      {
+        "id": "q15_moment_awareness",
+        "type": "single_choice",
+        "question": "「今この瞬間」を意識することは、どのくらいありますか？",
+        "options": [
+          "常に意識している",
+          "時々意識する",
+          "あまり意識しない",
+          "考えたことがない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "mindfulness_level",
+        "analysis_category": "時間感覚"
+      }
+    ],
+    "week_6": [
+      {
+        "id": "q16_recent_change",
+        "type": "single_choice",
+        "question": "最近、あなたの生活や気持ちに変化はありましたか？",
+        "options": [
+          "大きな変化があった",
+          "小さな変化があった",
+          "特に変化はない",
+          "変化を求めている"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "life_change_status",
+        "analysis_category": "変化・成長"
+      },
+      {
+        "id": "q17_growth_direction",
+        "type": "multiple_choice",
+        "question": "今後、成長したいと思う分野はどれですか？（複数選択可）",
+        "options": [
+          "仕事・スキル",
+          "人間関係",
+          "心の豊かさ",
+          "趣味・楽しみ",
+          "健康・体力",
+          "特にない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "growth_aspiration",
+        "analysis_category": "変化・成長"
+      },
+      {
+        "id": "q18_change_readiness",
+        "type": "single_choice",
+        "question": "変化に対して、あなたはどう感じますか？",
+        "options": [
+          "積極的に求めたい",
+          "自然に受け入れたい",
+          "慎重に見極めたい",
+          "できれば避けたい"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "change_attitude",
+        "analysis_category": "変化・成長"
+      }
+    ],
+    "week_7": [
+      {
+        "id": "q19_connection_desire",
+        "type": "single_choice",
+        "question": "同じ興味や価値観を持つ人と繋がりたいと思いますか？",
+        "options": [
+          "とても思う",
+          "少し思う",
+          "あまり思わない",
+          "全く思わない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "community_desire",
+        "analysis_category": "つながり・帰属"
+      },
+      {
+        "id": "q20_belonging_feeling",
+        "type": "single_choice",
+        "question": "「ここは自分の居場所だ」と感じる場所や活動はありますか？",
+        "options": [
+          "いくつかある",
+          "一つある",
+          "探している",
+          "特に必要ない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "belonging_status",
+        "analysis_category": "つながり・帰属"
+      },
+      {
+        "id": "q21_sharing_preference",
+        "type": "single_choice",
+        "question": "経験や感想を誰かと共有したいと思うことは？",
+        "options": [
+          "よくある",
+          "時々ある",
+          "あまりない",
+          "ほとんどない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "sharing_tendency",
+        "analysis_category": "つながり・帰属"
+      }
+    ],
+    "week_8": [
+      {
+        "id": "q22_satisfaction_level",
+        "type": "single_choice",
+        "question": "このサービスを利用して、どう感じていますか？",
+        "options": [
+          "とても満足している",
+          "満足している",
+          "どちらとも言えない",
+          "やや不満がある",
+          "不満がある"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "satisfaction_score",
+        "analysis_category": "満足度"
+      },
+      {
+        "id": "q23_expectation_match",
+        "type": "single_choice",
+        "question": "最初に期待していたことと比べて、実際の体験は？",
+        "options": [
+          "期待以上だった",
+          "期待通りだった",
+          "まあ期待通り",
+          "少し期待外れだった",
+          "かなり期待外れだった"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "expectation_gap",
+        "analysis_category": "満足度"
+      },
+      {
+        "id": "q24_value_perception",
+        "type": "single_choice",
+        "question": "このサービスを使い続ける理由として、最も大きいのは？",
+        "options": [
+          "役に立つから",
+          "楽しいから",
+          "習慣になっているから",
+          "他にないから",
+          "特に理由はない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "retention_reason",
+        "analysis_category": "満足度"
+      }
+    ],
+    "week_9": [
+      {
+        "id": "q25_future_feature",
+        "type": "multiple_choice",
+        "question": "今後、あったらいいなと思う機能はどれですか？（複数選択可）",
+        "options": [
+          "より詳しい占い結果",
+          "自分だけの記録機能",
+          "他の人との交流機能",
+          "学びのコンテンツ",
+          "通知・リマインダー",
+          "特にない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "feature_request",
+        "analysis_category": "未来志向"
+      },
+      {
+        "id": "q26_ideal_experience",
+        "type": "single_choice",
+        "question": "理想的には、このサービスにどんな役割を期待しますか？",
+        "options": [
+          "毎日の習慣の一部",
+          "大切な時の支え",
+          "気分転換の場",
+          "学びの場",
+          "特に期待していない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "ideal_role",
+        "analysis_category": "未来志向"
+      },
+      {
+        "id": "q27_future_usage",
+        "type": "single_choice",
+        "question": "今後もこのサービスを使い続けると思いますか？",
+        "options": [
+          "必ず使い続ける",
+          "たぶん使い続ける",
+          "わからない",
+          "たぶん使わなくなる",
+          "使わなくなると思う"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "future_intent",
+        "analysis_category": "未来志向"
+      }
+    ],
+    "week_10": [
+      {
+        "id": "q28_world_feeling",
+        "type": "single_choice",
+        "question": "「銀竜暦」の世界観について、どう感じていますか？",
+        "options": [
+          "とても好き",
+          "好き",
+          "どちらとも言えない",
+          "あまり気にしていない",
+          "合わないと感じる"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "worldview_affinity",
+        "analysis_category": "世界観共感"
+      },
+      {
+        "id": "q29_immersion_level",
+        "type": "single_choice",
+        "question": "物語や世界観に「浸りたい」と思いますか？",
+        "options": [
+          "深く浸りたい",
+          "ある程度浸りたい",
+          "雰囲気だけ楽しみたい",
+          "実用性があればいい",
+          "世界観は重視しない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "immersion_preference",
+        "analysis_category": "世界観共感"
+      },
+      {
+        "id": "q30_character_connection",
+        "type": "single_choice",
+        "question": "登場人物（ルナル、アランなど）に、親しみを感じますか？",
+        "options": [
+          "とても感じる",
+          "少し感じる",
+          "どちらとも言えない",
+          "あまり感じない",
+          "全く感じない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "character_affinity",
+        "analysis_category": "世界観共感"
+      }
+    ],
+    "week_11": [
+      {
+        "id": "q31_visit_frequency_change",
+        "type": "single_choice",
+        "question": "最近、訪問する頻度は変わりましたか？",
+        "options": [
+          "増えた",
+          "少し増えた",
+          "変わらない",
+          "少し減った",
+          "減った"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "frequency_change",
+        "analysis_category": "習慣変化"
+      },
+      {
+        "id": "q32_usage_pattern",
+        "type": "single_choice",
+        "question": "現在、どのくらいの頻度で訪れていますか？",
+        "options": [
+          "ほぼ毎日",
+          "週に数回",
+          "週に1回程度",
+          "月に数回",
+          "たまに思い出したとき"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "current_frequency",
+        "analysis_category": "習慣変化"
+      },
+      {
+        "id": "q33_habit_formation",
+        "type": "single_choice",
+        "question": "このサービスは、あなたの習慣の一部になっていますか？",
+        "options": [
+          "完全に習慣になっている",
+          "ある程度習慣になっている",
+          "まだ習慣ではない",
+          "習慣にしたいと思っている",
+          "習慣にする気はない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "habit_status",
+        "analysis_category": "習慣変化"
+      }
+    ],
+    "week_12": [
+      {
+        "id": "q34_recommendation_likelihood",
+        "type": "single_choice",
+        "question": "このサービスを友人や家族に勧めたいと思いますか？",
+        "options": [
+          "ぜひ勧めたい",
+          "勧めたい",
+          "どちらとも言えない",
+          "あまり勧めたくない",
+          "勧めたくない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "nps_score",
+        "analysis_category": "推奨度"
+      },
+      {
+        "id": "q35_recommendation_reason",
+        "type": "single_choice",
+        "question": "もし勧めるとしたら、どんな理由で勧めますか？",
+        "options": [
+          "役に立つから",
+          "楽しいから",
+          "癒されるから",
+          "世界観が素敵だから",
+          "他にないものだから",
+          "勧めない"
+        ],
+        "randomize": true,
+        "optional": false,
+        "ai_label": "recommendation_reason",
+        "analysis_category": "推奨度"
+      },
+      {
+        "id": "q36_word_of_mouth",
+        "type": "single_choice",
+        "question": "実際に誰かにこのサービスについて話したことはありますか？",
+        "options": [
+          "何度もある",
+          "一度ある",
+          "まだない",
+          "話す予定はない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "wom_behavior",
+        "analysis_category": "推奨度"
+      }
+    ],
+    "week_13": [
+      {
+        "id": "q37_overall_feeling",
+        "type": "single_choice",
+        "question": "全体として、今のあなたの状態をどう感じていますか？",
+        "options": [
+          "とても良い",
+          "良い",
+          "普通",
+          "あまり良くない",
+          "良くない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "overall_wellbeing",
+        "analysis_category": "総括"
+      },
+      {
+        "id": "q38_gratitude_feeling",
+        "type": "single_choice",
+        "question": "最近、感謝したいことはありますか？",
+        "options": [
+          "たくさんある",
+          "いくつかある",
+          "少しある",
+          "特にない",
+          "考えたことがない"
+        ],
+        "randomize": false,
+        "optional": false,
+        "ai_label": "gratitude_awareness",
+        "analysis_category": "総括"
+      },
+      {
+        "id": "q39_open_feedback",
+        "type": "text",
+        "question": "今、銀竜暦に伝えたいことを自由にお聞かせください（任意）",
+        "placeholder": "感謝、要望、感想、何でもどうぞ...",
+        "optional": true,
+        "max_length": 500,
+        "ai_label": "open_feedback_text",
+        "analysis_category": "総括"
       }
     ]
   },
   "ai_analysis_schema": {
-    "behavioral_profile": {
-      "decision_trigger": {
-        "type": "categorical",
-        "values": ["重要な決断の前", "日常の小さな選択の前", "なんとなく不安なとき", "特に何もないとき", "そういう場面はなかった"]
-      },
-      "decision_style": {
-        "type": "categorical",
-        "values": ["できるだけ早く決めて進みたい", "少し時間をかけて考えたい", "誰かに背中を押してほしい", "選択肢を整理したい"]
-      },
-      "info_trust_pattern": {
-        "type": "multi_categorical",
-        "values": ["友人・家族の意見", "専門家の見解", "データや統計", "自分の直感", "占いや運勢", "SNSの反応", "その他"]
-      }
+    "core_metrics": {
+      "decision_trigger": "行動のトリガーパターン",
+      "decision_style": "意思決定スタイル",
+      "value_hierarchy": "価値の優先順位",
+      "desired_emotional_state": "求める感情状態",
+      "consumption_depth": "情報消費の深度"
     },
-    "value_structure": {
-      "projected_motivation": {
-        "type": "categorical",
-        "values": ["背中を押してほしいから", "選択肢を整理したいから", "気分転換や楽しみとして", "自分を知るきっかけとして", "不安を和らげたいから"]
-      },
-      "value_hierarchy": {
-        "type": "ranking",
-        "items": ["新しい視点を得ること", "自分の考えを確認すること", "迷いを解消すること", "気持ちを前向きにすること"]
-      },
-      "desired_emotional_state": {
-        "type": "categorical",
-        "values": ["スッキリして行動できる", "納得して安心できる", "ワクワクして楽しい", "自分を理解できている"]
-      }
+    "advanced_metrics": {
+      "current_priority": "現在の優先事項",
+      "life_change_status": "ライフステージの変化",
+      "community_desire": "コミュニティ欲求",
+      "satisfaction_score": "満足度スコア",
+      "nps_score": "推奨度（NPS）"
     },
-    "consumption_behavior": {
-      "reading_depth": {
-        "type": "categorical",
-        "values": ["じっくり全部読む", "重要な部分だけ読む", "見出しや要約だけ見る", "流し読みして雰囲気をつかむ"]
-      },
-      "retention_behavior": {
-        "type": "categorical",
-        "values": ["すぐ忘れても問題ない", "覚えておいて後で思い出す", "メモやスクショで保存する", "何度も見返したくなる"]
-      },
-      "timing_context": {
-        "type": "categorical",
-        "values": ["朝の始まり", "仕事や用事の合間", "夜のリラックスタイム", "特に決まっていない"]
-      }
-    },
-    "psychological_state": {
-      "emotional_trajectory": {
-        "type": "ordinal",
-        "scale": [-2, -1, 0, 1, 2],
-        "values": ["かなり落ち込んだ", "少し落ち込んだ", "あまり変わらない", "少し良くなった", "かなり良くなった"]
-      },
-      "current_need_state": {
-        "type": "categorical",
-        "values": ["前に進む勇気", "心の安定", "新しい発見", "自分らしさの確認"]
-      },
-      "latent_wish_keywords": {
-        "type": "text_nlp",
-        "analysis": ["sentiment", "keywords", "topics"]
-      }
-    }
+    "quarterly_comparison": [
+      "emotional_trajectory",
+      "frequency_change",
+      "satisfaction_score",
+      "nps_score",
+      "habit_status"
+    ]
   },
   "user_segments": {
     "decision_support_seeker": {
       "description": "意思決定の補助を求める層",
-      "characteristics": [
-        "decision_trigger: 重要な決断の前",
-        "desired_emotional_state: スッキリして行動できる",
-        "value_hierarchy: 迷いを解消すること (top)"
-      ],
-      "recommended_content": ["行動指針", "明確なステップ", "背中を押すメッセージ"]
+      "recommended_content": ["明確な行動指針", "次のステップ提示"]
     },
     "emotional_reassurance_seeker": {
       "description": "感情的安心を求める層",
-      "characteristics": [
-        "decision_trigger: なんとなく不安なとき",
-        "desired_emotional_state: 納得して安心できる",
-        "projected_motivation: 不安を和らげたいから"
-      ],
-      "recommended_content": ["共感的メッセージ", "安心感の提供", "穏やかなトーン"]
+      "recommended_content": ["共感的メッセージ", "安心感の提供"]
     },
     "novelty_explorer": {
       "description": "新しい発見を求める層",
-      "characteristics": [
-        "value_hierarchy: 新しい視点を得ること (top)",
-        "desired_emotional_state: ワクワクして楽しい",
-        "reading_depth: じっくり全部読む"
-      ],
-      "recommended_content": ["意外な発見", "深い洞察", "知的好奇心を刺激"]
+      "recommended_content": ["意外な発見", "深い洞察"]
     },
     "self_understanding_seeker": {
       "description": "自己理解を求める層",
-      "characteristics": [
-        "projected_motivation: 自分を知るきっかけとして",
-        "desired_emotional_state: 自分を理解できている",
-        "current_need_state: 自分らしさの確認"
-      ],
-      "recommended_content": ["内省的メッセージ", "パターン分析", "自己発見"]
+      "recommended_content": ["内省的メッセージ", "パターン分析"]
     },
     "casual_entertainment_user": {
       "description": "気軽な娯楽として利用する層",
-      "characteristics": [
-        "projected_motivation: 気分転換や楽しみとして",
-        "reading_depth: 見出しや要約だけ見る",
-        "retention_behavior: すぐ忘れても問題ない"
-      ],
-      "recommended_content": ["軽快なトーン", "短時間で楽しめる", "カジュアル"]
+      "recommended_content": ["軽快なトーン", "短時間で楽しめる"]
     }
   },
   "bias_detection_rules": {
