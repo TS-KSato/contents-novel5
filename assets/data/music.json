@@ -174,6 +174,28 @@
   "duration": 284,
   "url": "assets/bgm016.mp3",
   "art": "assets/bgm016.jpg"
+},
+{
+  "id": "bgm017",
+  "name": "Threads of Light",
+  "scene": "時の観測者",
+  "mood": "幻想・慈愛",
+  "theme": "記憶の織り手",
+  "bpm": 112,
+  "duration": 296,
+  "url": "assets/bgm017.mp3",
+  "art": "assets/bgm017.jpg"
+},
+{
+  "id": "bgm018",
+  "name": "Words I Never Say",
+  "scene": "静かな愛の告白",
+  "mood": "優しさ・感謝",
+  "theme": "支え合う愛",
+  "bpm": 92,
+  "duration": 278,
+  "url": "assets/bgm018.mp3",
+  "art": "assets/bgm018.jpg"
 }
 
 ]
