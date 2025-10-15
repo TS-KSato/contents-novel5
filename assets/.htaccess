@@ -1,4 +1,4 @@
-# .htaccess - assetsフォルダに設置
+# .htaccess - assetsフォルダに設置（セキュリティ強化版）
 
 # 1. 直接アクセス禁止
 <Files "*.mp3">
@@ -27,14 +27,59 @@ RewriteRule \.(mp3|wav|json)$ - [F]
 RewriteCond %{HTTP_USER_AGENT} ^(wget|curl|libwww) [NC]
 RewriteRule \.(mp3|wav|json)$ - [F]
 
-# 4. キャッシュ制御
+# 4. Range Request制限（部分DL防止）
+<FilesMatch "\.(mp3|wav)$">
+    Header set Accept-Ranges "none"
+</FilesMatch>
+
+# 5. キャッシュ制御
 <IfModule mod_headers.c>
     <FilesMatch "\.(mp3|wav)$">
-        Header set Cache-Control "no-store, no-cache, must-revalidate"
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
         Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+    
+    <FilesMatch "\.json$">
+        Header set Cache-Control "no-cache, must-revalidate"
     </FilesMatch>
 </IfModule>
 
-# 5. アクセスログ記録強化
-LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %{X-Forwarded-For}i" custom
-CustomLog /var/log/apache2/music_access.log custom
+# 6. CORS制限（自ドメインのみ）
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "https://yourdomain.com"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "X-Requested-With"
+</IfModule>
+
+# 7. Rate Limiting（mod_evasive が利用可能な場合）
+<IfModule mod_evasive20.c>
+    DOSHashTableSize 3097
+    DOSPageCount 10
+    DOSSiteCount 100
+    DOSPageInterval 1
+    DOSBlockingPeriod 10
+</IfModule>
+
+# 8. アクセスログ記録強化
+<IfModule mod_log_config.c>
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %{X-Forwarded-For}i" music_custom
+    CustomLog ${APACHE_LOG_DIR}/music_access.log music_custom
+</IfModule>
+
+# 9. ディレクトリリスティング無効化
+Options -Indexes
+
+# 10. サーバー情報の隠蔽
+<IfModule mod_headers.c>
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
+# 11. 特定IPからのアクセス制限（必要に応じて）
+# <FilesMatch "\.(mp3|json)$">
+#     Order Deny,Allow
+#     Deny from all
+#     Allow from 192.168.1.0/24
+#     Allow from 10.0.0.0/8
+# </FilesMatch>
