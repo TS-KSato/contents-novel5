@@ -566,9 +566,16 @@
   
   console.log('[MusicApp] Rendering', filteredTracks.length, 'tracks');
   
+  // ローディング状態を強制削除
+  const loadingState = this.elements.grid.querySelector('.loading-state');
+  if (loadingState) {
+    loadingState.remove();
+    console.log('[MusicApp] Loading state removed');
+  }
+  
   if (filteredTracks.length === 0) {
     this.elements.grid.innerHTML = `
-      <div class="muted" style="grid-column: 1/-1;">
+      <div class="muted" style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #9aa3b2;">
         該当する楽曲が見つかりませんでした。
       </div>
     `;
@@ -585,14 +592,39 @@
     }
   }).filter(html => html).join('');
 
-  // DOMに反映
-  this.elements.grid.innerHTML = cardsHTML;
+  // DOMを完全にクリアしてから挿入
+  this.elements.grid.innerHTML = '';
+  this.elements.grid.insertAdjacentHTML('beforeend', cardsHTML);
+
+  // グリッドスタイルを確実に適用
+  this.elements.grid.style.display = 'grid';
+  this.elements.grid.style.minHeight = 'auto';
 
   // ボタン状態を更新
   this._updatePlayButtons();
   
-  console.log('[MusicApp] Render complete, cards inserted:', 
-    this.elements.grid.querySelectorAll('.card').length);
+  const cardCount = this.elements.grid.querySelectorAll('.card').length;
+  console.log('[MusicApp] Render complete, cards inserted:', cardCount);
+  
+  // 検証
+  setTimeout(() => {
+    const firstCard = this.elements.grid.querySelector('.card');
+    if (firstCard) {
+      const rect = firstCard.getBoundingClientRect();
+      console.log('[MusicApp] First card visible:', {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top,
+        visible: rect.height > 0 && rect.width > 0
+      });
+      
+      if (rect.height === 0) {
+        console.error('[MusicApp] Cards exist but have no height! CSS issue detected.');
+      }
+    } else {
+      console.error('[MusicApp] No cards found after render!');
+    }
+  }, 100);
 }
 
     _filterTracks() {
