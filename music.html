@@ -12,7 +12,7 @@
     default-src 'self';
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https:;
+    img-src 'self' data: https: blob:;
     media-src 'self' blob:;
     connect-src 'self';
     font-src 'self';
@@ -37,7 +37,13 @@
 <body>
   <!-- ヘッダー（スティッキー） -->
   <header role="banner">
-    <div class="title">エテルナリア音楽館</div>
+    <div class="header-top">
+      <div class="title">エテルナリア音楽館</div>
+      <div class="volume-control">
+        <label for="volumeSlider" class="volume-label">🔊</label>
+        <input type="range" min="0" max="100" value="80" id="volumeSlider" aria-label="音量調整">
+      </div>
+    </div>
     <div class="tabs" id="tabs" role="tablist" aria-label="音楽フィルター">
       <button class="tab active" role="tab" aria-selected="true" data-filter="all">すべて</button>
     </div>
@@ -74,6 +80,12 @@
   <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
     <p id="errorMessage"></p>
     <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
+  </div>
+
+  <!-- バッファリング表示 -->
+  <div id="bufferingIndicator" class="buffering-indicator" hidden>
+    <div class="buffering-spinner"></div>
+    <span>読み込み中...</span>
   </div>
 
   <!-- 隠しオーディオ要素（音楽再生用） -->
