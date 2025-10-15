@@ -7,6 +7,24 @@
   <title>エテルナリア音楽館｜運命の銀竜暦</title>
   <meta name="description" content="エテルナリア大陸の音楽を気分で探す" />
   
+  <!-- セキュリティヘッダー -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    media-src 'self' blob:;
+    connect-src 'self';
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
   <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
@@ -21,14 +39,12 @@
   <header role="banner">
     <div class="title">エテルナリア音楽館</div>
     <div class="tabs" id="tabs" role="tablist" aria-label="音楽フィルター">
-      <!-- JavaScript will populate this -->
       <button class="tab active" role="tab" aria-selected="true" data-filter="all">すべて</button>
     </div>
   </header>
 
   <!-- メインコンテンツ -->
   <main class="grid" id="list" aria-live="polite" role="main">
-    <!-- JavaScript will populate this -->
     <div class="loading-state">
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
@@ -54,7 +70,7 @@
     </div>
   </nav>
 
-  <!-- エラー表示用（必要に応じて表示） -->
+  <!-- エラー表示用 -->
   <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
     <p id="errorMessage"></p>
     <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
