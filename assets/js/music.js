@@ -69,7 +69,6 @@
         document.body.appendChild(this.audio);
       }
 
-      // オーディオイベントリスナー
       this.audio.addEventListener('ended', () => this._onTrackEnded());
       this.audio.addEventListener('error', (e) => this._onAudioError(e));
       this.audio.addEventListener('timeupdate', () => this._onTimeUpdate());
@@ -97,7 +96,6 @@
         console.log('[MusicApp] Web Audio API initialized');
       } catch (error) {
         console.warn('[MusicApp] Web Audio API setup failed:', error);
-        // Web Audio APIが使えなくても続行
       }
     }
 
@@ -557,75 +555,78 @@
     }
 
     _render() {
-  if (!this.elements.grid) {
-    console.error('[MusicApp] Grid element not found in _render');
-    return;
-  }
-
-  const filteredTracks = this._filterTracks();
-  
-  console.log('[MusicApp] Rendering', filteredTracks.length, 'tracks');
-  
-  // ローディング状態を強制削除
-  const loadingState = this.elements.grid.querySelector('.loading-state');
-  if (loadingState) {
-    loadingState.remove();
-    console.log('[MusicApp] Loading state removed');
-  }
-  
-  if (filteredTracks.length === 0) {
-    this.elements.grid.innerHTML = `
-      <div class="muted" style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #9aa3b2;">
-        該当する楽曲が見つかりませんでした。
-      </div>
-    `;
-    return;
-  }
-
-  // トラックカードを生成
-  const cardsHTML = filteredTracks.map(track => {
-    try {
-      return this._createTrackCard(track);
-    } catch (error) {
-      console.error('[MusicApp] Failed to create card for track:', track.id, error);
-      return '';
-    }
-  }).filter(html => html).join('');
-
-  // DOMを完全にクリアしてから挿入
-  this.elements.grid.innerHTML = '';
-  this.elements.grid.insertAdjacentHTML('beforeend', cardsHTML);
-
-  // グリッドスタイルを確実に適用
-  this.elements.grid.style.display = 'grid';
-  this.elements.grid.style.minHeight = 'auto';
-
-  // ボタン状態を更新
-  this._updatePlayButtons();
-  
-  const cardCount = this.elements.grid.querySelectorAll('.card').length;
-  console.log('[MusicApp] Render complete, cards inserted:', cardCount);
-  
-  // 検証
-  setTimeout(() => {
-    const firstCard = this.elements.grid.querySelector('.card');
-    if (firstCard) {
-      const rect = firstCard.getBoundingClientRect();
-      console.log('[MusicApp] First card visible:', {
-        width: rect.width,
-        height: rect.height,
-        top: rect.top,
-        visible: rect.height > 0 && rect.width > 0
-      });
-      
-      if (rect.height === 0) {
-        console.error('[MusicApp] Cards exist but have no height! CSS issue detected.');
+      if (!this.elements.grid) {
+        console.error('[MusicApp] Grid element not found in _render');
+        return;
       }
-    } else {
-      console.error('[MusicApp] No cards found after render!');
+
+      console.log('[MusicApp] Rendering started');
+      console.log('[MusicApp] Grid current HTML length:', this.elements.grid.innerHTML.length);
+      console.log('[MusicApp] Grid children count:', this.elements.grid.children.length);
+
+      const filteredTracks = this._filterTracks();
+      console.log('[MusicApp] Filtered tracks:', filteredTracks.length);
+      
+      // 完全にDOMをクリア
+      this.elements.grid.innerHTML = '';
+      console.log('[MusicApp] Grid cleared, innerHTML length:', this.elements.grid.innerHTML.length);
+      
+      if (filteredTracks.length === 0) {
+        this.elements.grid.innerHTML = `
+          <div class="muted" style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #9aa3b2;">
+            該当する楽曲が見つかりませんでした。
+          </div>
+        `;
+        return;
+      }
+
+      // トラックカードを生成
+      const cardsHTML = filteredTracks.map(track => {
+        try {
+          return this._createTrackCard(track);
+        } catch (error) {
+          console.error('[MusicApp] Failed to create card for track:', track.id, error);
+          return '';
+        }
+      }).filter(html => html).join('');
+
+      console.log('[MusicApp] Cards HTML generated, length:', cardsHTML.length);
+
+      // DOMに挿入
+      this.elements.grid.innerHTML = cardsHTML;
+
+      // ボタン状態を更新
+      this._updatePlayButtons();
+      
+      const cardCount = this.elements.grid.querySelectorAll('.card').length;
+      console.log('[MusicApp] Render complete, cards inserted:', cardCount);
+      
+      // 検証
+      setTimeout(() => {
+        const cards = this.elements.grid.querySelectorAll('.card');
+        console.log('[MusicApp] Post-render verification:');
+        console.log('  - Card count:', cards.length);
+        console.log('  - Grid innerHTML length:', this.elements.grid.innerHTML.length);
+        
+        if (cards.length > 0) {
+          const firstCard = cards[0];
+          const rect = firstCard.getBoundingClientRect();
+          console.log('  - First card rect:', {
+            width: rect.width,
+            height: rect.height,
+            top: rect.top,
+            left: rect.left
+          });
+          
+          const computed = window.getComputedStyle(firstCard);
+          console.log('  - First card computed:', {
+            display: computed.display,
+            visibility: computed.visibility,
+            opacity: computed.opacity
+          });
+        }
+      }, 200);
     }
-  }, 100);
-}
 
     _filterTracks() {
       return this.tracks.filter(track => {
@@ -765,7 +766,7 @@
       const grid = document.getElementById('list') || document.querySelector('main');
       if (grid) {
         grid.innerHTML = `
-          <div style="text-align: center; padding: 2rem; color: var(--muted);">
+          <div style="text-align: center; padding: 2rem; color: #9aa3b2;">
             音楽アプリの初期化に失敗しました。<br>
             ブラウザのコンソールでエラーを確認してください。<br><br>
             エラー: ${error.message}
