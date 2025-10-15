@@ -642,47 +642,69 @@
     }
 
     _createTrackCard(track) {
-      const artElement = track.art 
-        ? `<div class="art" style="background-image:url('${this._escapeHtml(track.art)}')"></div>`
-        : `<div class="art fallback" aria-label="アート未設定">${this._escapeHtml(track.name).slice(0,1)}</div>`;
+  const artElement = track.art 
+    ? `<div class="art" style="background-image:url('${this._escapeHtml(track.art)}'); width: 72px; height: 72px; border-radius: 12px; background: linear-gradient(135deg, #2b3446, #3c5076); background-size: cover; background-position: center; flex-shrink: 0;"></div>`
+    : `<div class="art fallback" style="width: 72px; height: 72px; border-radius: 12px; background: linear-gradient(135deg, #2b3446, #3c5076); display: grid; place-items: center; color: #cfe1ff; font-weight: 800; font-size: 22px;" aria-label="アート未設定">${this._escapeHtml(track.name).slice(0,1)}</div>`;
 
-      const duration = this._formatDuration(track.duration);
-      const tempo = this._formatTempo(track.bpm);
-      
-      const subInfo = [
-        track.scene ? `${track.scene}` : '',
-        tempo ? `${tempo}` : '',
-        duration ? `${duration}` : ''
-      ].filter(Boolean).join(' • ');
+  const duration = this._formatDuration(track.duration);
+  const tempo = this._formatTempo(track.bpm);
+  
+  const subInfo = [
+    track.scene ? `${track.scene}` : '',
+    tempo ? `${tempo}` : '',
+    duration ? `${duration}` : ''
+  ].filter(Boolean).join(' • ');
 
-      return `
-        <article class="card" data-id="${this._escapeHtml(track.id)}">
-          ${artElement}
-          <div class="meta">
-            <div class="name" title="${this._escapeHtml(track.name)}">
-              ${this._escapeHtml(track.name)}
-            </div>
-            <div class="sub" title="${this._escapeHtml(subInfo)}">${this._escapeHtml(subInfo)}</div>
-            <div class="pill">${this._escapeHtml(track.mood || 'mood')}</div>
-          </div>
-          <div class="go">
-            <button class="btn" data-action="play" ${track.paid ? 'aria-disabled="true"' : ''}>
-              ${track.paid ? '購入後再生' : '再生'}
-            </button>
-          </div>
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-buffer"></div>
-              <div class="progress-fill"></div>
-            </div>
-            <div class="time-display">
-              <span class="current-time">0:00</span>
-              <span class="total-time">${duration}</span>
-            </div>
-          </div>
-        </article>
-      `;
-    }
+  return `
+    <article class="card" data-id="${this._escapeHtml(track.id)}" style="
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      background: #151820;
+      border: 1px solid #273144;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 12px;
+    ">
+      ${artElement}
+      <div class="meta" style="display: grid; gap: 3px; min-width: 0; grid-column: 2; grid-row: 1;">
+        <div class="name" style="font-weight: 700; font-size: 14px; color: #e8edf5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${this._escapeHtml(track.name)}">
+          ${this._escapeHtml(track.name)}
+        </div>
+        <div class="sub" style="color: #9aa3b2; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${this._escapeHtml(subInfo)}">${this._escapeHtml(subInfo)}</div>
+        <div class="pill" style="display: inline-block; margin-top: 4px; padding: 2px 8px; background: rgba(106, 168, 255, 0.15); border: 1px solid rgba(106, 168, 255, 0.3); border-radius: 999px; color: #6aa8ff; font-size: 11px; font-weight: 600; max-width: fit-content;">${this._escapeHtml(track.mood || 'mood')}</div>
+      </div>
+      <div class="go" style="grid-column: 3; grid-row: 1;">
+        <button class="btn" data-action="play" style="
+          border: 0;
+          border-radius: 10px;
+          padding: 10px 12px;
+          background: #22324d;
+          color: #cfe1ff;
+          font-weight: 700;
+          font-size: 12px;
+          cursor: pointer;
+          min-width: 80px;
+        " ${track.paid ? 'aria-disabled="true"' : ''}>
+          ${track.paid ? '購入後再生' : '再生'}
+        </button>
+      </div>
+      <div class="progress-container" style="grid-column: 1 / -1; grid-row: 2; width: 100%; margin-top: 4px;">
+        <div class="progress-bar" style="width: 100%; height: 4px; background: #1b2230; border-radius: 2px; cursor: pointer; position: relative; overflow: hidden;">
+          <div class="progress-buffer" style="position: absolute; top: 0; left: 0; height: 100%; background: rgba(106, 168, 255, 0.3); border-radius: 2px; width: 0%;"></div>
+          <div class="progress-fill" style="height: 100%; background: #6aa8ff; border-radius: 2px; width: 0%;"></div>
+        </div>
+        <div class="time-display" style="display: flex; justify-content: space-between; font-size: 10px; color: #7a8494; margin-top: 2px;">
+          <span class="current-time">0:00</span>
+          <span class="total-time">${duration}</span>
+        </div>
+      </div>
+    </article>
+  `;
+}
 
     _formatDuration(seconds) {
       if (!Number.isFinite(seconds)) return '';
