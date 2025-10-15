@@ -9,8 +9,8 @@
       this.activeFilter = "all";
       this.audio = null;
       this.elements = {};
-      this.blobUrls = new Map(); // Blob URLのキャッシュ
-      this.preloadedTracks = new Map(); // プリロードされたトラック
+      this.blobUrls = new Map();
+      this.preloadedTracks = new Map();
       this.devToolsCheckInterval = null;
       
       this.init();
@@ -18,31 +18,52 @@
 
     async init() {
       try {
-        this._setupAudio();
-        this._setupWebAudio();
-        this._cacheElements();
-        await this._loadTracks();
-        this._setupEventListeners();
-        this._setupVolumeControl();
-        this._setupProtection();
-        this._startDevToolsDetection();
-        this._buildFilterTabs();
-        this._render();
+        console.log('[MusicApp] Initialization started');
         
-        console.log('MusicApp initialized successfully');
+        this._setupAudio();
+        console.log('[MusicApp] Audio setup complete');
+        
+        this._setupWebAudio();
+        console.log('[MusicApp] Web Audio setup complete');
+        
+        this._cacheElements();
+        console.log('[MusicApp] Elements cached');
+        
+        await this._loadTracks();
+        console.log('[MusicApp] Tracks loaded:', this.tracks.length);
+        
+        this._setupEventListeners();
+        console.log('[MusicApp] Event listeners setup');
+        
+        this._setupVolumeControl();
+        console.log('[MusicApp] Volume control setup');
+        
+        this._setupProtection();
+        console.log('[MusicApp] Protection setup');
+        
+        this._startDevToolsDetection();
+        console.log('[MusicApp] DevTools detection started');
+        
+        this._buildFilterTabs();
+        console.log('[MusicApp] Filter tabs built');
+        
+        this._render();
+        console.log('[MusicApp] Initial render complete');
+        
+        console.log('[MusicApp] Initialization successful');
       } catch (error) {
-        console.error('MusicApp initialization failed:', error);
-        this._renderError('音楽データの読み込みに失敗しました。');
+        console.error('[MusicApp] Initialization failed:', error);
+        this._renderError('音楽データの読み込みに失敗しました: ' + error.message);
       }
     }
 
-    // ===== セットアップ関連 =====
-
     _setupAudio() {
-      this.audio = document.querySelector('audio');
+      this.audio = document.querySelector('audio#musicPlayer');
       
       if (!this.audio) {
+        console.warn('[MusicApp] Audio element not found, creating new one');
         this.audio = document.createElement('audio');
+        this.audio.id = 'musicPlayer';
         this.audio.preload = 'metadata';
         this.audio.style.display = 'none';
         document.body.appendChild(this.audio);
@@ -56,21 +77,27 @@
       this.audio.addEventListener('waiting', () => this._onWaiting());
       this.audio.addEventListener('canplay', () => this._onCanPlay());
       this.audio.addEventListener('loadedmetadata', () => this._onLoadedMetadata());
-
-      // 右クリック・ドラッグ防止
       this.audio.addEventListener('contextmenu', e => e.preventDefault());
       this.audio.addEventListener('dragstart', e => e.preventDefault());
     }
 
     _setupWebAudio() {
       try {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) {
+          console.warn('[MusicApp] Web Audio API not supported');
+          return;
+        }
+        
+        this.audioContext = new AudioContext();
         this.audioSource = this.audioContext.createMediaElementSource(this.audio);
         this.gainNode = this.audioContext.createGain();
         this.audioSource.connect(this.gainNode);
         this.gainNode.connect(this.audioContext.destination);
+        console.log('[MusicApp] Web Audio API initialized');
       } catch (error) {
-        console.warn('Web Audio API not available:', error);
+        console.warn('[MusicApp] Web Audio API setup failed:', error);
+        // Web Audio APIが使えなくても続行
       }
     }
 
@@ -82,88 +109,105 @@
         bufferingIndicator: document.getElementById('bufferingIndicator')
       };
 
+      console.log('[MusicApp] Elements found:', {
+        grid: !!this.elements.grid,
+        tabs: !!this.elements.tabs,
+        volumeSlider: !!this.elements.volumeSlider,
+        bufferingIndicator: !!this.elements.bufferingIndicator
+      });
+
       if (!this.elements.grid) {
-        console.warn('Grid element not found, creating fallback');
-        this.elements.grid = document.querySelector('main') || document.body;
+        throw new Error('Grid element (#list) not found');
       }
     }
 
     _setupVolumeControl() {
-      if (!this.elements.volumeSlider) return;
-
-      // 保存された音量を復元
-      const savedVolume = localStorage.getItem('music_volume');
-      if (savedVolume) {
-        this.elements.volumeSlider.value = savedVolume;
-        this.audio.volume = savedVolume / 100;
-      } else {
-        this.audio.volume = this.elements.volumeSlider.value / 100;
+      if (!this.elements.volumeSlider) {
+        console.warn('[MusicApp] Volume slider not found');
+        return;
       }
 
-      // 音量変更イベント
-      this.elements.volumeSlider.addEventListener('input', (e) => {
-        this.audio.volume = e.target.value / 100;
-        localStorage.setItem('music_volume', e.target.value);
-      });
+      try {
+        const savedVolume = localStorage.getItem('music_volume');
+        if (savedVolume) {
+          this.elements.volumeSlider.value = savedVolume;
+          this.audio.volume = savedVolume / 100;
+        } else {
+          this.audio.volume = this.elements.volumeSlider.value / 100;
+        }
+
+        this.elements.volumeSlider.addEventListener('input', (e) => {
+          this.audio.volume = e.target.value / 100;
+          localStorage.setItem('music_volume', e.target.value);
+        });
+      } catch (error) {
+        console.warn('[MusicApp] Volume control setup failed:', error);
+      }
     }
 
     _setupProtection() {
-      // 右クリック防止（カード全体）
-      if (this.elements.grid) {
-        this.elements.grid.addEventListener('contextmenu', (e) => {
-          if (e.target.closest('.card')) {
-            e.preventDefault();
-          }
-        });
+      if (!this.elements.grid) return;
 
-        // ドラッグ防止
-        this.elements.grid.addEventListener('dragstart', (e) => {
-          if (e.target.closest('.card')) {
-            e.preventDefault();
-          }
-        });
-      }
+      this.elements.grid.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.card')) {
+          e.preventDefault();
+        }
+      });
+
+      this.elements.grid.addEventListener('dragstart', (e) => {
+        if (e.target.closest('.card')) {
+          e.preventDefault();
+        }
+      });
     }
 
     _startDevToolsDetection() {
-      // Developer Tools検知（軽度の抑止力）
-      const threshold = 160;
-      this.devToolsCheckInterval = setInterval(() => {
-        if (window.outerWidth - window.innerWidth > threshold ||
-            window.outerHeight - window.innerHeight > threshold) {
-          if (this.currentTrack && !this.audio.paused) {
-            this._pauseTrack();
-            this._showNotification('開発者ツールが検出されました');
+      try {
+        const threshold = 160;
+        this.devToolsCheckInterval = setInterval(() => {
+          if (window.outerWidth - window.innerWidth > threshold ||
+              window.outerHeight - window.innerHeight > threshold) {
+            if (this.currentTrack && !this.audio.paused) {
+              this._pauseTrack();
+              this._showNotification('開発者ツールが検出されました');
+            }
           }
-        }
-      }, 2000);
+        }, 2000);
+      } catch (error) {
+        console.warn('[MusicApp] DevTools detection setup failed:', error);
+      }
     }
-
-    // ===== データ読み込み =====
 
     async _loadTracks() {
       try {
+        console.log('[MusicApp] Fetching music.json...');
         const response = await fetch('./assets/data/music.json', {
           cache: 'no-cache',
           headers: { 
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'Accept': 'application/json'
           }
         });
+
+        console.log('[MusicApp] Response status:', response.status);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
-        this.tracks = (Array.isArray(data) ? data : []).map(this._normalizeTrack);
+        console.log('[MusicApp] JSON parsed, tracks count:', data.length);
+        
+        this.tracks = (Array.isArray(data) ? data : []).map(t => this._normalizeTrack(t));
         
         if (this.tracks.length === 0) {
           throw new Error('トラックデータが見つかりませんでした');
         }
+
+        console.log('[MusicApp] Normalized tracks:', this.tracks.length);
       } catch (error) {
-        console.error('Tracks loading failed:', error);
+        console.error('[MusicApp] Track loading failed:', error);
         this.tracks = this._getFallbackTracks();
+        console.log('[MusicApp] Using fallback tracks:', this.tracks.length);
       }
     }
 
@@ -195,22 +239,30 @@
           url: '#',
           art: '',
           paid: false
+        },
+        {
+          id: 'f02',
+          name: '最後の守護者',
+          scene: '古の伝承',
+          mood: '荘厳',
+          theme: '叡智',
+          bpm: 60,
+          duration: 240,
+          url: '#',
+          art: '',
+          paid: false
         }
       ];
     }
 
-    // ===== セキュリティ: Blob URL方式 =====
-
     async _loadSecureAudio(url) {
-      // 既にBlobURLがキャッシュされている場合
       if (this.blobUrls.has(url)) {
         return this.blobUrls.get(url);
       }
 
       try {
         const response = await fetch(url, {
-          credentials: 'same-origin',
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          credentials: 'same-origin'
         });
 
         if (!response.ok) {
@@ -220,7 +272,6 @@
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
         
-        // キャッシュに保存（メモリ管理のため最大10件）
         if (this.blobUrls.size >= 10) {
           const firstKey = this.blobUrls.keys().next().value;
           const firstValue = this.blobUrls.get(firstKey);
@@ -231,34 +282,14 @@
         this.blobUrls.set(url, blobUrl);
         return blobUrl;
       } catch (error) {
-        console.error('Secure audio loading failed:', error);
-        return url; // フォールバック
+        console.error('[MusicApp] Secure audio loading failed:', error);
+        return url;
       }
     }
-
-    // ===== 時限トークン（擬似実装） =====
-
-    _generateToken(trackId) {
-      const timestamp = Date.now();
-      const expiresIn = 5 * 60 * 1000; // 5分
-      return btoa(`${trackId}:${timestamp}:${expiresIn}`);
-    }
-
-    _validateToken(token, trackId) {
-      try {
-        const [id, timestamp, expires] = atob(token).split(':');
-        return id === trackId && (Date.now() - parseInt(timestamp) < parseInt(expires));
-      } catch {
-        return false;
-      }
-    }
-
-    // ===== イベントリスナー =====
 
     _setupEventListeners() {
       if (!this.elements.grid) return;
 
-      // 再生ボタンのクリック処理
       this.elements.grid.addEventListener('click', async (event) => {
         const button = event.target.closest('button.btn, a.btn');
         if (button) {
@@ -273,7 +304,6 @@
           return;
         }
 
-        // プログレスバーのクリック処理
         const progressBar = event.target.closest('.progress-bar');
         if (progressBar && this.currentTrack) {
           const rect = progressBar.getBoundingClientRect();
@@ -291,19 +321,12 @@
 
       const action = button.dataset.action || 'play';
       
-      switch (action) {
-        case 'play':
-          await this._playTrackWithRetry(track);
-          break;
-        case 'pause':
-          this._pauseTrack();
-          break;
-        default:
-          await this._playTrackWithRetry(track);
+      if (action === 'pause') {
+        this._pauseTrack();
+      } else {
+        await this._playTrackWithRetry(track);
       }
     }
-
-    // ===== 再生制御 =====
 
     async _playTrackWithRetry(track, maxRetries = 3) {
       for (let i = 0; i < maxRetries; i++) {
@@ -311,7 +334,7 @@
           await this._playTrack(track);
           return;
         } catch (error) {
-          console.error(`Play attempt ${i + 1} failed:`, error);
+          console.error(`[MusicApp] Play attempt ${i + 1} failed:`, error);
           if (i === maxRetries - 1) {
             this._showNotification('音楽の再生に失敗しました。');
           } else {
@@ -327,7 +350,6 @@
         return;
       }
 
-      // Blob URL方式で読み込み
       const secureUrl = await this._loadSecureAudio(track.url);
       
       this.currentTrack = track.id;
@@ -339,7 +361,6 @@
       this._savePlayHistory(track);
       this._preloadNextTrack();
       
-      // アナリティクス
       if (this.core && this.core.Analytics) {
         this.core.Analytics.track('music_play', {
           track_id: track.id,
@@ -361,12 +382,10 @@
     }
 
     _onAudioError(e) {
-      console.error('Audio playback error:', e);
+      console.error('[MusicApp] Audio error:', e);
       this._hideBuffering();
       this._showNotification('音楽の再生に失敗しました。');
     }
-
-    // ===== プリロード戦略 =====
 
     _preloadNextTrack() {
       const currentIndex = this.tracks.findIndex(t => t.id === this.currentTrack);
@@ -378,12 +397,10 @@
         this._loadSecureAudio(nextTrack.url).then(blobUrl => {
           this.preloadedTracks.set(nextTrack.id, blobUrl);
         }).catch(error => {
-          console.warn('Preload failed:', error);
+          console.warn('[MusicApp] Preload failed:', error);
         });
       }
     }
-
-    // ===== 再生履歴 =====
 
     _savePlayHistory(track) {
       try {
@@ -393,17 +410,11 @@
           name: track.name,
           playedAt: new Date().toISOString()
         });
-        
-        // 最新50件のみ保持
-        localStorage.setItem('music_play_history', 
-          JSON.stringify(history.slice(0, 50))
-        );
+        localStorage.setItem('music_play_history', JSON.stringify(history.slice(0, 50)));
       } catch (error) {
-        console.warn('Failed to save play history:', error);
+        console.warn('[MusicApp] Failed to save play history:', error);
       }
     }
-
-    // ===== オーディオイベント =====
 
     _onTimeUpdate() {
       if (!this.currentTrack) return;
@@ -458,8 +469,6 @@
       }
     }
 
-    // ===== バッファリング表示 =====
-
     _showBuffering() {
       if (this.elements.bufferingIndicator) {
         this.elements.bufferingIndicator.hidden = false;
@@ -471,8 +480,6 @@
         this.elements.bufferingIndicator.hidden = true;
       }
     }
-
-    // ===== UI更新 =====
 
     _updatePlayButtons() {
       if (!this.elements.grid) return;
@@ -486,7 +493,6 @@
         const track = this.tracks.find(t => t.id === trackId);
         if (!track) return;
 
-        // data-playing属性を更新
         if (trackId === this.currentTrack && !this.audio.paused) {
           card.setAttribute('data-playing', 'true');
         } else {
@@ -508,8 +514,6 @@
         }
       });
     }
-
-    // ===== フィルタータブ =====
 
     _buildFilterTabs() {
       if (!this.elements.tabs) return;
@@ -552,12 +556,12 @@
       });
     }
 
-    // ===== レンダリング =====
-
     _render() {
       if (!this.elements.grid) return;
 
       const filteredTracks = this._filterTracks();
+      
+      console.log('[MusicApp] Rendering', filteredTracks.length, 'tracks');
       
       if (filteredTracks.length === 0) {
         this.elements.grid.innerHTML = `
@@ -631,8 +635,6 @@
       `;
     }
 
-    // ===== ユーティリティ =====
-
     _formatDuration(seconds) {
       if (!Number.isFinite(seconds)) return '';
       const minutes = Math.floor(seconds / 60);
@@ -676,7 +678,7 @@
     }
 
     _escapeHtml(text) {
-      if (this.core && this.core.Security) {
+      if (this.core && this.core.Security && this.core.Security.escapeHtml) {
         return this.core.Security.escapeHtml(text);
       }
       
@@ -685,20 +687,16 @@
       }[m]));
     }
 
-    // ===== クリーンアップ =====
-
     destroy() {
       if (this.audio) {
         this.audio.pause();
         this.audio.src = '';
       }
 
-      // Blob URLのクリーンアップ
       this.blobUrls.forEach(url => URL.revokeObjectURL(url));
       this.blobUrls.clear();
       this.preloadedTracks.clear();
 
-      // Developer Tools検知の停止
       if (this.devToolsCheckInterval) {
         clearInterval(this.devToolsCheckInterval);
       }
@@ -707,21 +705,22 @@
     }
   }
 
-  // ===== グローバル初期化 =====
-
   let musicApp = null;
 
   function initializeMusicApp() {
     try {
+      console.log('[MusicApp] Starting initialization...');
       musicApp = new MusicApp();
     } catch (error) {
-      console.error('Music app initialization failed:', error);
+      console.error('[MusicApp] Initialization failed:', error);
       
       const grid = document.getElementById('list') || document.querySelector('main');
       if (grid) {
         grid.innerHTML = `
           <div style="text-align: center; padding: 2rem; color: var(--muted);">
-            音楽アプリの初期化に失敗しました。ページをリロードしてください。
+            音楽アプリの初期化に失敗しました。<br>
+            ブラウザのコンソールでエラーを確認してください。<br><br>
+            エラー: ${error.message}
           </div>
         `;
       }
