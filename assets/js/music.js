@@ -705,6 +705,13 @@
     </article>
   `;
 }
+console.log('=== 完全診断 ===');
+const grid = document.getElementById('list');
+console.log('1. Grid要素:', grid);
+console.log('2. Grid innerHTML長:', grid.innerHTML.length);
+console.log('3. loading-state要素:', grid.querySelector('.loading-state'));
+console.log('4. card要素数:', grid.querySelectorAll('.card').length);
+console.log('5. 最初の100文字:', grid.innerHTML.substring(0, 100));
 
     _formatDuration(seconds) {
       if (!Number.isFinite(seconds)) return '';
