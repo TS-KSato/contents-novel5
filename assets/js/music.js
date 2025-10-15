@@ -9,6 +9,9 @@
       this.activeFilter = "all";
       this.audio = null;
       this.elements = {};
+      this.blobUrls = new Map(); // Blob URLのキャッシュ
+      this.preloadedTracks = new Map(); // プリロードされたトラック
+      this.devToolsCheckInterval = null;
       
       this.init();
     }
@@ -16,9 +19,13 @@
     async init() {
       try {
         this._setupAudio();
+        this._setupWebAudio();
         this._cacheElements();
         await this._loadTracks();
         this._setupEventListeners();
+        this._setupVolumeControl();
+        this._setupProtection();
+        this._startDevToolsDetection();
         this._buildFilterTabs();
         this._render();
         
@@ -29,8 +36,9 @@
       }
     }
 
+    // ===== セットアップ関連 =====
+
     _setupAudio() {
-      // 既存のaudio要素があるかチェック
       this.audio = document.querySelector('audio');
       
       if (!this.audio) {
@@ -41,34 +49,106 @@
       }
 
       // オーディオイベントリスナー
-      this.audio.addEventListener('ended', () => {
-        this._onTrackEnded();
-      });
+      this.audio.addEventListener('ended', () => this._onTrackEnded());
+      this.audio.addEventListener('error', (e) => this._onAudioError(e));
+      this.audio.addEventListener('timeupdate', () => this._onTimeUpdate());
+      this.audio.addEventListener('progress', () => this._onProgress());
+      this.audio.addEventListener('waiting', () => this._onWaiting());
+      this.audio.addEventListener('canplay', () => this._onCanPlay());
+      this.audio.addEventListener('loadedmetadata', () => this._onLoadedMetadata());
 
-      this.audio.addEventListener('error', (e) => {
-        console.error('Audio playback error:', e);
-        this._showNotification('音楽の再生に失敗しました。');
-      });
+      // 右クリック・ドラッグ防止
+      this.audio.addEventListener('contextmenu', e => e.preventDefault());
+      this.audio.addEventListener('dragstart', e => e.preventDefault());
+    }
+
+    _setupWebAudio() {
+      try {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.audioSource = this.audioContext.createMediaElementSource(this.audio);
+        this.gainNode = this.audioContext.createGain();
+        this.audioSource.connect(this.gainNode);
+        this.gainNode.connect(this.audioContext.destination);
+      } catch (error) {
+        console.warn('Web Audio API not available:', error);
+      }
     }
 
     _cacheElements() {
       this.elements = {
-        grid: document.getElementById('list'),  // music.htmlでは id="list"
-        tabs: document.getElementById('tabs')
+        grid: document.getElementById('list'),
+        tabs: document.getElementById('tabs'),
+        volumeSlider: document.getElementById('volumeSlider'),
+        bufferingIndicator: document.getElementById('bufferingIndicator')
       };
 
-      // 要素が見つからない場合のフォールバック
       if (!this.elements.grid) {
         console.warn('Grid element not found, creating fallback');
         this.elements.grid = document.querySelector('main') || document.body;
       }
     }
 
+    _setupVolumeControl() {
+      if (!this.elements.volumeSlider) return;
+
+      // 保存された音量を復元
+      const savedVolume = localStorage.getItem('music_volume');
+      if (savedVolume) {
+        this.elements.volumeSlider.value = savedVolume;
+        this.audio.volume = savedVolume / 100;
+      } else {
+        this.audio.volume = this.elements.volumeSlider.value / 100;
+      }
+
+      // 音量変更イベント
+      this.elements.volumeSlider.addEventListener('input', (e) => {
+        this.audio.volume = e.target.value / 100;
+        localStorage.setItem('music_volume', e.target.value);
+      });
+    }
+
+    _setupProtection() {
+      // 右クリック防止（カード全体）
+      if (this.elements.grid) {
+        this.elements.grid.addEventListener('contextmenu', (e) => {
+          if (e.target.closest('.card')) {
+            e.preventDefault();
+          }
+        });
+
+        // ドラッグ防止
+        this.elements.grid.addEventListener('dragstart', (e) => {
+          if (e.target.closest('.card')) {
+            e.preventDefault();
+          }
+        });
+      }
+    }
+
+    _startDevToolsDetection() {
+      // Developer Tools検知（軽度の抑止力）
+      const threshold = 160;
+      this.devToolsCheckInterval = setInterval(() => {
+        if (window.outerWidth - window.innerWidth > threshold ||
+            window.outerHeight - window.innerHeight > threshold) {
+          if (this.currentTrack && !this.audio.paused) {
+            this._pauseTrack();
+            this._showNotification('開発者ツールが検出されました');
+          }
+        }
+      }, 2000);
+    }
+
+    // ===== データ読み込み =====
+
     async _loadTracks() {
       try {
         const response = await fetch('./assets/data/music.json', {
           cache: 'no-cache',
-          headers: { 'Accept': 'application/json' }
+          headers: { 
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         });
 
         if (!response.ok) {
@@ -115,43 +195,95 @@
           url: '#',
           art: '',
           paid: false
-        },
-        {
-          id: 'f02',
-          name: '最後の守護者',
-          scene: '古の伝承',
-          mood: '荘厳',
-          theme: '叡智',
-          bpm: 60,
-          duration: 240,
-          url: '#',
-          art: '',
-          paid: false
         }
       ];
     }
+
+    // ===== セキュリティ: Blob URL方式 =====
+
+    async _loadSecureAudio(url) {
+      // 既にBlobURLがキャッシュされている場合
+      if (this.blobUrls.has(url)) {
+        return this.blobUrls.get(url);
+      }
+
+      try {
+        const response = await fetch(url, {
+          credentials: 'same-origin',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch audio: ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        // キャッシュに保存（メモリ管理のため最大10件）
+        if (this.blobUrls.size >= 10) {
+          const firstKey = this.blobUrls.keys().next().value;
+          const firstValue = this.blobUrls.get(firstKey);
+          URL.revokeObjectURL(firstValue);
+          this.blobUrls.delete(firstKey);
+        }
+        
+        this.blobUrls.set(url, blobUrl);
+        return blobUrl;
+      } catch (error) {
+        console.error('Secure audio loading failed:', error);
+        return url; // フォールバック
+      }
+    }
+
+    // ===== 時限トークン（擬似実装） =====
+
+    _generateToken(trackId) {
+      const timestamp = Date.now();
+      const expiresIn = 5 * 60 * 1000; // 5分
+      return btoa(`${trackId}:${timestamp}:${expiresIn}`);
+    }
+
+    _validateToken(token, trackId) {
+      try {
+        const [id, timestamp, expires] = atob(token).split(':');
+        return id === trackId && (Date.now() - parseInt(timestamp) < parseInt(expires));
+      } catch {
+        return false;
+      }
+    }
+
+    // ===== イベントリスナー =====
 
     _setupEventListeners() {
       if (!this.elements.grid) return;
 
       // 再生ボタンのクリック処理
-      this.elements.grid.addEventListener('click', (event) => {
+      this.elements.grid.addEventListener('click', async (event) => {
         const button = event.target.closest('button.btn, a.btn');
-        if (!button) return;
+        if (button) {
+          const card = event.target.closest('.card, .item');
+          if (card) {
+            const trackId = card.getAttribute('data-id');
+            const track = this.tracks.find(t => t.id === trackId);
+            if (track) {
+              await this._handleTrackAction(track, button);
+            }
+          }
+          return;
+        }
 
-        const card = event.target.closest('.card, .item');
-        if (!card) return;
-
-        const trackId = card.getAttribute('data-id');
-        const track = this.tracks.find(t => t.id === trackId);
-        
-        if (!track) return;
-
-        this._handleTrackAction(track, button);
+        // プログレスバーのクリック処理
+        const progressBar = event.target.closest('.progress-bar');
+        if (progressBar && this.currentTrack) {
+          const rect = progressBar.getBoundingClientRect();
+          const percent = (event.clientX - rect.left) / rect.width;
+          this.audio.currentTime = this.audio.duration * percent;
+        }
       });
     }
 
-    _handleTrackAction(track, button) {
+    async _handleTrackAction(track, button) {
       if (track.paid) {
         this._showNotification('この楽曲は購入後にお楽しみいただけます。');
         return;
@@ -161,39 +293,59 @@
       
       switch (action) {
         case 'play':
-          this._playTrack(track);
+          await this._playTrackWithRetry(track);
           break;
         case 'pause':
           this._pauseTrack();
           break;
         default:
-          this._playTrack(track);
+          await this._playTrackWithRetry(track);
       }
     }
 
-    _playTrack(track) {
+    // ===== 再生制御 =====
+
+    async _playTrackWithRetry(track, maxRetries = 3) {
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          await this._playTrack(track);
+          return;
+        } catch (error) {
+          console.error(`Play attempt ${i + 1} failed:`, error);
+          if (i === maxRetries - 1) {
+            this._showNotification('音楽の再生に失敗しました。');
+          } else {
+            await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+          }
+        }
+      }
+    }
+
+    async _playTrack(track) {
       if (!track.url || track.url === '#') {
         this._showNotification('音楽ファイルが見つかりません。');
         return;
       }
 
-      this.currentTrack = track.id;
-      this.audio.src = track.url;
+      // Blob URL方式で読み込み
+      const secureUrl = await this._loadSecureAudio(track.url);
       
-      this.audio.play().catch(error => {
-        console.error('Play failed:', error);
-        this._showNotification('音楽の再生に失敗しました。');
-      });
+      this.currentTrack = track.id;
+      this.audio.src = secureUrl;
+      
+      await this.audio.play();
 
       this._updatePlayButtons();
+      this._savePlayHistory(track);
+      this._preloadNextTrack();
       
-      // アナリティクス（日本語値に対応）
+      // アナリティクス
       if (this.core && this.core.Analytics) {
         this.core.Analytics.track('music_play', {
           track_id: track.id,
           track_name: track.name,
-          mood: track.mood,           // 日本語値
-          theme: track.theme          // theme フィールドを追加
+          mood: track.mood,
+          theme: track.theme
         });
       }
     }
@@ -208,6 +360,120 @@
       this._updatePlayButtons();
     }
 
+    _onAudioError(e) {
+      console.error('Audio playback error:', e);
+      this._hideBuffering();
+      this._showNotification('音楽の再生に失敗しました。');
+    }
+
+    // ===== プリロード戦略 =====
+
+    _preloadNextTrack() {
+      const currentIndex = this.tracks.findIndex(t => t.id === this.currentTrack);
+      if (currentIndex === -1) return;
+
+      const nextTrack = this.tracks[currentIndex + 1];
+      
+      if (nextTrack && !this.preloadedTracks.has(nextTrack.id)) {
+        this._loadSecureAudio(nextTrack.url).then(blobUrl => {
+          this.preloadedTracks.set(nextTrack.id, blobUrl);
+        }).catch(error => {
+          console.warn('Preload failed:', error);
+        });
+      }
+    }
+
+    // ===== 再生履歴 =====
+
+    _savePlayHistory(track) {
+      try {
+        const history = JSON.parse(localStorage.getItem('music_play_history') || '[]');
+        history.unshift({
+          id: track.id,
+          name: track.name,
+          playedAt: new Date().toISOString()
+        });
+        
+        // 最新50件のみ保持
+        localStorage.setItem('music_play_history', 
+          JSON.stringify(history.slice(0, 50))
+        );
+      } catch (error) {
+        console.warn('Failed to save play history:', error);
+      }
+    }
+
+    // ===== オーディオイベント =====
+
+    _onTimeUpdate() {
+      if (!this.currentTrack) return;
+
+      const card = this.elements.grid.querySelector(`[data-id="${this.currentTrack}"]`);
+      if (!card) return;
+
+      const progressFill = card.querySelector('.progress-fill');
+      const currentTimeEl = card.querySelector('.current-time');
+
+      if (progressFill && this.audio.duration) {
+        const percent = (this.audio.currentTime / this.audio.duration) * 100;
+        progressFill.style.width = `${percent}%`;
+      }
+
+      if (currentTimeEl) {
+        currentTimeEl.textContent = this._formatDuration(this.audio.currentTime);
+      }
+    }
+
+    _onProgress() {
+      if (!this.currentTrack) return;
+
+      const card = this.elements.grid.querySelector(`[data-id="${this.currentTrack}"]`);
+      if (!card) return;
+
+      const progressBuffer = card.querySelector('.progress-buffer');
+
+      if (progressBuffer && this.audio.buffered.length > 0 && this.audio.duration) {
+        const bufferedPercent = (this.audio.buffered.end(0) / this.audio.duration) * 100;
+        progressBuffer.style.width = `${bufferedPercent}%`;
+      }
+    }
+
+    _onWaiting() {
+      this._showBuffering();
+    }
+
+    _onCanPlay() {
+      this._hideBuffering();
+    }
+
+    _onLoadedMetadata() {
+      if (!this.currentTrack) return;
+
+      const card = this.elements.grid.querySelector(`[data-id="${this.currentTrack}"]`);
+      if (!card) return;
+
+      const totalTimeEl = card.querySelector('.total-time');
+      if (totalTimeEl) {
+        totalTimeEl.textContent = this._formatDuration(this.audio.duration);
+      }
+    }
+
+    // ===== バッファリング表示 =====
+
+    _showBuffering() {
+      if (this.elements.bufferingIndicator) {
+        this.elements.bufferingIndicator.hidden = false;
+      }
+    }
+
+    _hideBuffering() {
+      if (this.elements.bufferingIndicator) {
+        this.elements.bufferingIndicator.hidden = true;
+      }
+    }
+
+    // ===== UI更新 =====
+
     _updatePlayButtons() {
       if (!this.elements.grid) return;
 
@@ -219,6 +485,13 @@
 
         const track = this.tracks.find(t => t.id === trackId);
         if (!track) return;
+
+        // data-playing属性を更新
+        if (trackId === this.currentTrack && !this.audio.paused) {
+          card.setAttribute('data-playing', 'true');
+        } else {
+          card.removeAttribute('data-playing');
+        }
 
         if (track.paid) {
           button.textContent = '購入後再生';
@@ -236,10 +509,11 @@
       });
     }
 
+    // ===== フィルタータブ =====
+
     _buildFilterTabs() {
       if (!this.elements.tabs) return;
 
-      // ユニークなmoodとthemeを抽出
       const moods = [...new Set(this.tracks.map(t => t.mood).filter(Boolean))];
       const themes = [...new Set(this.tracks.map(t => t.theme).filter(Boolean))];
 
@@ -258,7 +532,6 @@
          </button>`
       ).join('');
 
-      // タブクリックイベント
       this.elements.tabs.addEventListener('click', (event) => {
         const tab = event.target.closest('.tab');
         if (!tab) return;
@@ -279,6 +552,8 @@
       });
     }
 
+    // ===== レンダリング =====
+
     _render() {
       if (!this.elements.grid) return;
 
@@ -286,7 +561,7 @@
       
       if (filteredTracks.length === 0) {
         this.elements.grid.innerHTML = `
-          <div class="muted" style="text-align: center; padding: 2rem; color: var(--muted);">
+          <div class="muted">
             該当する楽曲が見つかりませんでした。
           </div>
         `;
@@ -321,7 +596,6 @@
       const duration = this._formatDuration(track.duration);
       const tempo = this._formatTempo(track.bpm);
       
-      // サブ情報の表示改善（情景的表現を使用）
       const subInfo = [
         track.scene ? `${track.scene}` : '',
         tempo ? `${tempo}` : '',
@@ -343,9 +617,21 @@
               ${track.paid ? '購入後再生' : '再生'}
             </button>
           </div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-buffer"></div>
+              <div class="progress-fill"></div>
+            </div>
+            <div class="time-display">
+              <span class="current-time">0:00</span>
+              <span class="total-time">${duration}</span>
+            </div>
+          </div>
         </article>
       `;
     }
+
+    // ===== ユーティリティ =====
 
     _formatDuration(seconds) {
       if (!Number.isFinite(seconds)) return '';
@@ -369,55 +655,23 @@
       if (!this.elements.grid) return;
 
       this.elements.grid.innerHTML = `
-        <div class="error-message" style="
-          text-align: center; 
-          padding: 2rem; 
-          color: #ff6b6b; 
-          border: 1px solid #ff6b6b; 
-          border-radius: 0.5rem; 
-          background: rgba(255, 107, 107, 0.1);
-        ">
+        <div class="error-message">
           ${this._escapeHtml(message)}
         </div>
       `;
     }
 
     _showNotification(message) {
-      // 簡易通知システム
       const notification = document.createElement('div');
       notification.className = 'music-notification';
-      notification.style.cssText = `
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1000;
-        background: var(--card);
-        color: var(--ink);
-        border: 1px solid var(--line);
-        border-radius: 0.5rem;
-        padding: 1rem;
-        max-width: 300px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-      `;
       notification.textContent = message;
 
       document.body.appendChild(notification);
 
-      // アニメーション
       setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-      }, 100);
-
-      // 3秒後に削除
-      setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
       }, 3000);
     }
 
@@ -431,17 +685,30 @@
       }[m]));
     }
 
-    // クリーンアップ
+    // ===== クリーンアップ =====
+
     destroy() {
       if (this.audio) {
         this.audio.pause();
         this.audio.src = '';
       }
+
+      // Blob URLのクリーンアップ
+      this.blobUrls.forEach(url => URL.revokeObjectURL(url));
+      this.blobUrls.clear();
+      this.preloadedTracks.clear();
+
+      // Developer Tools検知の停止
+      if (this.devToolsCheckInterval) {
+        clearInterval(this.devToolsCheckInterval);
+      }
+
       this.currentTrack = null;
     }
   }
 
-  // グローバル初期化
+  // ===== グローバル初期化 =====
+
   let musicApp = null;
 
   function initializeMusicApp() {
@@ -450,7 +717,6 @@
     } catch (error) {
       console.error('Music app initialization failed:', error);
       
-      // フォールバック表示
       const grid = document.getElementById('list') || document.querySelector('main');
       if (grid) {
         grid.innerHTML = `
@@ -462,14 +728,12 @@
     }
   }
 
-  // DOM準備完了時の初期化
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeMusicApp);
   } else {
     setTimeout(initializeMusicApp, 0);
   }
 
-  // クリーンアップ
   window.addEventListener('beforeunload', () => {
     if (musicApp && musicApp.destroy) {
       musicApp.destroy();
