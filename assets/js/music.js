@@ -18,8 +18,6 @@
         this._setupAudio();
         this._cacheElements();
         
-        // ✅ ローディング表示を完全削除
-        
         await this._loadTracks();
         this._setupEventListeners();
         this._buildFilterTabs();
@@ -43,8 +41,6 @@
       }
 
       this.audio.addEventListener('ended', () => this._onTrackEnded());
-      
-      // ✅ エラーログのみ、通知は削除
       this.audio.addEventListener('error', (e) => {
         console.error('Audio playback error:', e);
       });
@@ -61,10 +57,6 @@
         this.elements.grid = document.querySelector('main') || document.body;
       }
     }
-
-    // ✅ _showLoading()を完全削除
-
-    // ✅ _hideLoading()を完全削除
 
     async _loadTracks() {
       try {
@@ -142,7 +134,6 @@
 
     _handleTrackAction(track, button) {
       if (track.paid) {
-        // ✅ 通知を削除、コンソールログのみ
         console.log('Paid content:', track.name);
         return;
       }
@@ -158,7 +149,6 @@
 
     _playTrack(track) {
       if (!track.url || track.url === '#') {
-        // ✅ 通知を削除、コンソールログのみ
         console.warn('No audio file for:', track.name);
         return;
       }
@@ -168,7 +158,6 @@
       
       this.audio.play().catch(error => {
         console.error('Play failed:', error);
-        // ✅ 通知を削除
       });
 
       this._updatePlayButtons();
@@ -356,8 +345,6 @@
         </div>
       `;
     }
-
-    // ✅ _showNotification()を完全削除
 
     _escapeHtml(text) {
       if (this.core && this.core.Security) {
