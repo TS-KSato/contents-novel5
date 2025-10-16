@@ -118,5 +118,15 @@
     "aspect": "1088x1920",
     "url": "assets/wp012.jpg",
     "paid": true
+  },
+  {
+    "id": "wp13",
+    "name": "銀竜と少年 ― 運命の選択",
+    "caption": "育ての父は伝説の竜。少年は人と竜の狭間で、愛と使命の答えを見つける。",
+    "archetype": "life",
+    "tags": ["human","dragon"],
+    "aspect": "1088x1920",
+    "url": "assets/wp013.jpg",
+    "paid": true
   }
 ]
