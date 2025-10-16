@@ -286,6 +286,18 @@
   "url": "assets/bgm024.mp3",
   "art": "assets/bgm024.jpg",
   "paid": true
+},
+{
+  "id": "bgm_025",
+  "name": "原初の空",
+  "scene": "太古の時代、天空を支配していたドラゴンたちの存在",
+  "mood": "壮大・原初・神秘",
+  "theme": "天空と自然法則の象徴",
+  "bpm": 48,
+  "duration": 340,
+  "url": "assets/bgm025.mp3",
+  "art": "assets/bgm025.jpg",
+  "paid": true
 }
 
 ]
