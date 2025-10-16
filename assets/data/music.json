@@ -250,6 +250,18 @@
   "url": "assets/bgm021.mp3",
   "art": "assets/bgm021.jpg",
   "paid": false
+},
+{
+  "id": "bgm_022",
+  "name": "時の王冠",
+  "scene": "ネクサート王とマグナスの思想と宿命",
+  "mood": "荘厳・威厳・孤独",
+  "theme": "為政者の焦燥と決意",
+  "bpm": 60,
+  "duration": 320,
+  "url": "assets/bgm022.mp3",
+  "art": "assets/bgm022.jpg",
+  "paid": true
 }
 
 
