@@ -313,12 +313,12 @@
 },
 {
   "id": "bgm_027",
-  "name": "観測者の眼",
-  "scene": "白き竜の視点から描かれる、人間たちを見守るだけの存在",
-  "mood": "静謐",
-  "theme": "観察と存在の本質",
-  "bpm": 48,
-  "duration": 210,
+  "name": "風のような眼差し",
+  "scene": "白き竜が脆弱な生命たちをただ観察し、見守っている",
+  "mood": "静穏",
+  "theme": "観察と慈愛の無意識化",
+  "bpm": 50,
+  "duration": 240,
   "url": "assets/bgm027.mp3",
   "art": "assets/bgm027.jpg",
   "paid": true
