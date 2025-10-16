@@ -98,8 +98,7 @@
     "aspect": "1088x1920",
     "url": "assets/wp010.jpg",
     "paid": true
-  }
-  ,
+  },
   {
     "id": "wp11",
     "name": "知の深淵",
@@ -108,6 +107,16 @@
     "tags": ["human"],
     "aspect": "1088x1920",
     "url": "assets/wp011.jpg",
+    "paid": true
+  },
+  {
+    "id": "wp12",
+    "name": "シルバーミスト学院の朝",
+    "caption": "銀竜に育てられた青年教師が、妖精と共に次世代へ愛の魔法を伝える。",
+    "archetype": "life",
+    "tags": ["human","fairy"],
+    "aspect": "1088x1920",
+    "url": "assets/wp012.jpg",
     "paid": true
   }
 ]
