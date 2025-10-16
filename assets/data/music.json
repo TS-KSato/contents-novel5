@@ -289,12 +289,12 @@
 },
 {
   "id": "bgm_025",
-  "name": "原初の空",
-  "scene": "太古の時代、天空を支配していたドラゴンたち",
-  "mood": "壮大",
-  "theme": "天空と自然法則の象徴",
-  "bpm": 48,
-  "duration": 340,
+  "name": "原初の飛翔",
+  "scene": "太古の天空でドラゴンたちが空を支配していた時代",
+  "mood": "圧倒",
+  "theme": "存在の超越と人の無力",
+  "bpm": 46,
+  "duration": 360,
   "url": "assets/bgm025.mp3",
   "art": "assets/bgm025.jpg",
   "paid": true
