@@ -262,6 +262,18 @@
   "url": "assets/bgm022.mp3",
   "art": "assets/bgm022.jpg",
   "paid": true
+},
+{
+  "id": "bgm_023",
+  "name": "風の導き手",
+  "scene": "鳥人ネスターの思想と存在を象徴する描写",
+  "mood": "軽やか・哲学的・自由",
+  "theme": "俯瞰と知性",
+  "bpm": 78,
+  "duration": 260,
+  "url": "assets/bgm023.mp3",
+  "art": "assets/bgm023.jpg",
+  "paid": false
 }
 
 
