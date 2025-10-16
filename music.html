@@ -50,7 +50,6 @@
   </header>
 
   <!-- メインコンテンツ -->
-  <!-- ✅ 修正: HTMLからローディングを完全削除。JavaScriptで管理 -->
   <main class="grid" id="list" aria-live="polite" role="main"></main>
 
   <!-- 下部ナビゲーション -->
@@ -70,18 +69,6 @@
       </a>
     </div>
   </nav>
-
-  <!-- エラー表示用 -->
-  <div id="errorNotification" class="error-notification" hidden role="alert" aria-live="assertive">
-    <p id="errorMessage"></p>
-    <button type="button" id="closeError" class="close-error" aria-label="エラーを閉じる">×</button>
-  </div>
-
-  <!-- バッファリング表示 -->
-  <div id="bufferingIndicator" class="buffering-indicator" hidden>
-    <div class="buffering-spinner"></div>
-    <span>読み込み中...</span>
-  </div>
 
   <!-- 隠しオーディオ要素（音楽再生用） -->
   <audio id="musicPlayer" preload="metadata" style="display: none;" aria-hidden="true"></audio>
