@@ -17,18 +17,17 @@
       try {
         this._setupAudio();
         this._cacheElements();
-        this._showLoading();
+        
+        // ✅ ローディング表示を完全削除
         
         await this._loadTracks();
         this._setupEventListeners();
         this._buildFilterTabs();
-        this._hideLoading();
         this._render();
         
         console.log('MusicApp initialized successfully');
       } catch (error) {
         console.error('MusicApp initialization failed:', error);
-        this._hideLoading();
         this._renderError('音楽データの読み込みに失敗しました。');
       }
     }
@@ -44,9 +43,10 @@
       }
 
       this.audio.addEventListener('ended', () => this._onTrackEnded());
+      
+      // ✅ エラーログのみ、通知は削除
       this.audio.addEventListener('error', (e) => {
         console.error('Audio playback error:', e);
-        this._showNotification('音楽の再生に失敗しました。');
       });
     }
 
@@ -62,32 +62,9 @@
       }
     }
 
-    _showLoading() {
-      if (!this.elements.grid) return;
-      
-      this._hideLoading();
-      
-      this.elements.grid.innerHTML = `
-        <div class="loading-state">
-          <div class="skeleton-card"></div>
-          <div class="skeleton-card"></div>
-          <div class="skeleton-card"></div>
-        </div>
-      `;
-    }
+    // ✅ _showLoading()を完全削除
 
-    // ✅ 修正1: querySelectorAll で全て削除
-    _hideLoading() {
-      if (!this.elements.grid) return;
-      
-      const loadingStates = this.elements.grid.querySelectorAll('.loading-state');
-      loadingStates.forEach(element => element.remove());
-      
-      // デバッグ用ログ（必要に応じて削除可能）
-      if (loadingStates.length > 0) {
-        console.log(`Removed ${loadingStates.length} loading state(s)`);
-      }
-    }
+    // ✅ _hideLoading()を完全削除
 
     async _loadTracks() {
       try {
@@ -165,7 +142,8 @@
 
     _handleTrackAction(track, button) {
       if (track.paid) {
-        this._showNotification('この楽曲は購入後にお楽しみいただけます。');
+        // ✅ 通知を削除、コンソールログのみ
+        console.log('Paid content:', track.name);
         return;
       }
 
@@ -180,7 +158,8 @@
 
     _playTrack(track) {
       if (!track.url || track.url === '#') {
-        this._showNotification('音楽ファイルが見つかりません。');
+        // ✅ 通知を削除、コンソールログのみ
+        console.warn('No audio file for:', track.name);
         return;
       }
 
@@ -189,7 +168,7 @@
       
       this.audio.play().catch(error => {
         console.error('Play failed:', error);
-        this._showNotification('音楽の再生に失敗しました。');
+        // ✅ 通知を削除
       });
 
       this._updatePlayButtons();
@@ -283,7 +262,6 @@
       });
     }
 
-    // ✅ 修正2: _hideLoading() 呼び出しを削除
     _render() {
       if (!this.elements.grid) return;
 
@@ -372,8 +350,6 @@
     _renderError(message) {
       if (!this.elements.grid) return;
 
-      this._hideLoading();
-
       this.elements.grid.innerHTML = `
         <div class="error-message">
           ${this._escapeHtml(message)}
@@ -381,19 +357,7 @@
       `;
     }
 
-    _showNotification(message) {
-      const notification = document.createElement('div');
-      notification.className = 'music-notification';
-      notification.textContent = message;
-
-      document.body.appendChild(notification);
-
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 3000);
-    }
+    // ✅ _showNotification()を完全削除
 
     _escapeHtml(text) {
       if (this.core && this.core.Security) {
@@ -433,7 +397,6 @@
     }
   }
 
-  // ✅ 修正3: setTimeout(0) を削除し、即座に実行
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeMusicApp);
   } else {
