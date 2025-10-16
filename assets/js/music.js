@@ -76,12 +76,16 @@
       `;
     }
 
+    // ✅ 修正1: querySelectorAll で全て削除
     _hideLoading() {
       if (!this.elements.grid) return;
       
-      const loadingState = this.elements.grid.querySelector('.loading-state');
-      if (loadingState) {
-        loadingState.remove();
+      const loadingStates = this.elements.grid.querySelectorAll('.loading-state');
+      loadingStates.forEach(element => element.remove());
+      
+      // デバッグ用ログ（必要に応じて削除可能）
+      if (loadingStates.length > 0) {
+        console.log(`Removed ${loadingStates.length} loading state(s)`);
       }
     }
 
@@ -279,10 +283,9 @@
       });
     }
 
+    // ✅ 修正2: _hideLoading() 呼び出しを削除
     _render() {
       if (!this.elements.grid) return;
-
-      this._hideLoading();
 
       const filteredTracks = this._filterTracks();
       
@@ -430,10 +433,11 @@
     }
   }
 
+  // ✅ 修正3: setTimeout(0) を削除し、即座に実行
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeMusicApp);
   } else {
-    setTimeout(initializeMusicApp, 0);
+    initializeMusicApp();
   }
 
   window.addEventListener('beforeunload', () => {
