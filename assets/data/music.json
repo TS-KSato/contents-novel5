@@ -226,6 +226,18 @@
   "url": "assets/bgm019.mp3",
   "art": "assets/bgm019.jpg",
   "paid": true
+},
+{
+  "id": "bgm_020",
+  "name": "意志の影に潜むもの",
+  "scene": "人間社会の根源的な感情への気づき",
+  "mood": "内省・静謐・哲学的",
+  "theme": "恐れと存在理由",
+  "bpm": 58,
+  "duration": 300,
+  "url": "assets/bgm020.mp3",
+  "art": "assets/bgm020.jpg",
+  "paid": true
 }
 
 ]
