@@ -17,14 +17,18 @@
       try {
         this._setupAudio();
         this._cacheElements();
+        this._showLoading();
+        
         await this._loadTracks();
         this._setupEventListeners();
         this._buildFilterTabs();
+        this._hideLoading();
         this._render();
         
         console.log('MusicApp initialized successfully');
       } catch (error) {
         console.error('MusicApp initialization failed:', error);
+        this._hideLoading();
         this._renderError('音楽データの読み込みに失敗しました。');
       }
     }
@@ -55,6 +59,29 @@
       if (!this.elements.grid) {
         console.warn('Grid element not found, creating fallback');
         this.elements.grid = document.querySelector('main') || document.body;
+      }
+    }
+
+    _showLoading() {
+      if (!this.elements.grid) return;
+      
+      this._hideLoading();
+      
+      this.elements.grid.innerHTML = `
+        <div class="loading-state">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      `;
+    }
+
+    _hideLoading() {
+      if (!this.elements.grid) return;
+      
+      const loadingState = this.elements.grid.querySelector('.loading-state');
+      if (loadingState) {
+        loadingState.remove();
       }
     }
 
@@ -255,6 +282,8 @@
     _render() {
       if (!this.elements.grid) return;
 
+      this._hideLoading();
+
       const filteredTracks = this._filterTracks();
       
       if (filteredTracks.length === 0) {
@@ -339,6 +368,8 @@
 
     _renderError(message) {
       if (!this.elements.grid) return;
+
+      this._hideLoading();
 
       this.elements.grid.innerHTML = `
         <div class="error-message">
