@@ -1,6 +1,6 @@
 [
   {
-    "id": "m01",
+    "id": "bgm_001",
     "name": "銀翼の遺産",
     "scene": "神聖な場所",
     "mood": "壮大",
@@ -8,10 +8,11 @@
     "bpm": 70,
     "duration": 210,
     "url": "assets/bgm001.mp3",
-    "art": "assets/bgm001.jpg"
+    "art": "assets/bgm001.jpg",
+    "paid": false
   },
   {
-    "id": "m02",
+    "id": "bgm_002",
     "name": "最後の守護者",
     "scene": "古の伝承",
     "mood": "荘厳",
@@ -19,10 +20,11 @@
     "bpm": 60,
     "duration": 240,
     "url": "assets/bgm002.mp3",
-    "art": "assets/bgm002.jpg"
+    "art": "assets/bgm002.jpg",
+    "paid": false
   },
   {
-    "id": "m03",
+    "id": "bgm_003",
     "name": "二つの世界を歩む者",
     "scene": "旅の始まり",
     "mood": "軽快",
@@ -30,10 +32,11 @@
     "bpm": 95,
     "duration": 180,
     "url": "assets/bgm003.mp3",
-    "art": "assets/bgm003.jpg"
+    "art": "assets/bgm003.jpg",
+    "paid": false
   },
   {
-    "id": "m04",
+    "id": "bgm_004",
     "name": "銀光の舞",
     "scene": "魔法の森",
     "mood": "幻想的",
@@ -41,10 +44,11 @@
     "bpm": 72,
     "duration": 150,
     "url": "assets/bgm004.mp3",
-    "art": "assets/bgm004.jpg"
+    "art": "assets/bgm004.jpg",
+    "paid": false
   },
   {
-    "id": "m05",
+    "id": "bgm_005",
     "name": "凍てつく夜の約束",
     "scene": "雪降る夜",
     "mood": "切ない",
@@ -52,10 +56,11 @@
     "bpm": 65,
     "duration": 195,
     "url": "assets/bgm005.mp3",
-    "art": "assets/bgm005.jpg"
+    "art": "assets/bgm005.jpg",
+    "paid": false
   },
   {
-    "id": "m06",
+    "id": "bgm_006",
     "name": "永遠なる帰還",
     "scene": "世界の理",
     "mood": "神々しい",
@@ -63,10 +68,11 @@
     "bpm": 75,
     "duration": 300,
     "url": "assets/bgm006.mp3",
-    "art": "assets/bgm006.jpg"
+    "art": "assets/bgm006.jpg",
+    "paid": false
   },
   {
-    "id": "m07",
+    "id": "bgm_007",
     "name": "聖域の囁き",
     "scene": "癒やしの泉",
     "mood": "穏やか",
@@ -74,10 +80,11 @@
     "bpm": 55,
     "duration": 240,
     "url": "assets/bgm007.mp3",
-    "art": "assets/bgm007.jpg"
+    "art": "assets/bgm007.jpg",
+    "paid": false
   },
   {
-    "id": "m08",
+    "id": "bgm_008",
     "name": "新たな学びの朝",
     "scene": "学び舎",
     "mood": "日常",
@@ -85,10 +92,11 @@
     "bpm": 85,
     "duration": 165,
     "url": "assets/bgm008.mp3",
-    "art": "assets/bgm008.jpg"
+    "art": "assets/bgm008.jpg",
+    "paid": false
   },
   {
-    "id": "m09",
+    "id": "bgm_009",
     "name": "銀霧の山々",
     "scene": "霧深き山脈",
     "mood": "神秘的",
@@ -96,10 +104,11 @@
     "bpm": 72,
     "duration": 190,
     "url": "assets/bgm009.mp3",
-    "art": "assets/bgm009.jpg"
+    "art": "assets/bgm009.jpg",
+    "paid": false
   },
   {
-    "id": "m10",
+    "id": "bgm_010",
     "name": "継ぐ者たちへ",
     "scene": "物語の終わり",
     "mood": "希望",
@@ -107,10 +116,11 @@
     "bpm": 80,
     "duration": 220,
     "url": "assets/bgm010.mp3",
-    "art": "assets/bgm010.jpg"
+    "art": "assets/bgm010.jpg",
+    "paid": false
   },
   {
-    "id": "m11",
+    "id": "bgm_011",
     "name": "Whisper of Silver Light",
     "scene": "魔法の森",
     "mood": "幻想的",
@@ -118,84 +128,91 @@
     "bpm": 80,
     "duration": 199,
     "url": "assets/bgm011.mp3",
-    "art": "assets/bgm011.jpg"
+    "art": "assets/bgm011.jpg",
+    "paid": false
   },
   {
-  "id": "bgm012",
-  "name": "AquaLoom",
-  "scene": "星降る街の水面",
-  "mood": "幻想・浮遊",
-  "theme": "魔力と都会の融合",
-  "bpm": 95,
-  "duration": 260,
-  "url": "assets/bgm012.mp3",
-  "art": "assets/bgm012.jpg"
-},
-{
-  "id": "bgm013",
-  "name": "Beast Groove",
-  "scene": "異種の鼓動",
-  "mood": "原始・躍動",
-  "theme": "異文化衝撃",
-  "bpm": 92,
-  "duration": 255,
-  "url": "assets/bgm013.mp3",
-  "art": "assets/bgm013.jpg"
-},
-{
-  "id": "bgm014",
-  "name": "獅子の先陣",
-  "scene": "獅子王の進撃",
-  "mood": "熱狂・悲哀",
-  "theme": "戦場と決意",
-  "bpm": 148,
-  "duration": 268,
-  "url": "assets/bgm014.mp3",
-  "art": "assets/bgm014.jpg"
-},
-{
-  "id": "bgm015",
-  "name": "灰の王冠",
-  "scene": "王の覚悟",
-  "mood": "威厳・宿命",
-  "theme": "血統と決断",
-  "bpm": 132,
-  "duration": 276,
-  "url": "assets/bgm015.mp3",
-  "art": "assets/bgm015.jpg"
-},
-{
-  "id": "bgm016",
-  "name": "Home in the Morning Light",
-  "scene": "静かな記憶",
-  "mood": "優しさ・郷愁",
-  "theme": "家族と日常",
-  "bpm": 118,
-  "duration": 284,
-  "url": "assets/bgm016.mp3",
-  "art": "assets/bgm016.jpg"
-},
-{
-  "id": "bgm017",
-  "name": "Threads of Light",
-  "scene": "時の観測者",
-  "mood": "幻想・慈愛",
-  "theme": "記憶の織り手",
-  "bpm": 112,
-  "duration": 296,
-  "url": "assets/bgm017.mp3",
-  "art": "assets/bgm017.jpg"
-},
-{
-  "id": "bgm018",
-  "name": "Words I Never Say",
-  "scene": "静かな愛の告白",
-  "mood": "優しさ・感謝",
-  "theme": "支え合う愛",
-  "bpm": 92,
-  "duration": 278,
-  "url": "assets/bgm018.mp3",
-  "art": "assets/bgm018.jpg"
-}
-
+    "id": "bgm_012",
+    "name": "AquaLoom",
+    "scene": "星降る街の水面",
+    "mood": "幻想・浮遊",
+    "theme": "魔力と都会の融合",
+    "bpm": 95,
+    "duration": 260,
+    "url": "assets/bgm012.mp3",
+    "art": "assets/bgm012.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_013",
+    "name": "Beast Groove",
+    "scene": "異種の鼓動",
+    "mood": "原始・躍動",
+    "theme": "異文化衝撃",
+    "bpm": 92,
+    "duration": 255,
+    "url": "assets/bgm013.mp3",
+    "art": "assets/bgm013.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_014",
+    "name": "獅子の先陣",
+    "scene": "獅子王の進撃",
+    "mood": "熱狂・悲哀",
+    "theme": "戦場と決意",
+    "bpm": 148,
+    "duration": 268,
+    "url": "assets/bgm014.mp3",
+    "art": "assets/bgm014.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_015",
+    "name": "灰の王冠",
+    "scene": "王の覚悟",
+    "mood": "威厳・宿命",
+    "theme": "血統と決断",
+    "bpm": 132,
+    "duration": 276,
+    "url": "assets/bgm015.mp3",
+    "art": "assets/bgm015.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_016",
+    "name": "Home in the Morning Light",
+    "scene": "静かな記憶",
+    "mood": "優しさ・郷愁",
+    "theme": "家族と日常",
+    "bpm": 118,
+    "duration": 284,
+    "url": "assets/bgm016.mp3",
+    "art": "assets/bgm016.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_017",
+    "name": "Threads of Light",
+    "scene": "時の観測者",
+    "mood": "幻想・慈愛",
+    "theme": "記憶の織り手",
+    "bpm": 112,
+    "duration": 296,
+    "url": "assets/bgm017.mp3",
+    "art": "assets/bgm017.jpg",
+    "paid": false
+  },
+  {
+    "id": "bgm_018",
+    "name": "Words I Never Say",
+    "scene": "静かな愛の告白",
+    "mood": "優しさ・感謝",
+    "theme": "支え合う愛",
+    "bpm": 92,
+    "duration": 278,
+    "url": "assets/bgm018.mp3",
+    "art": "assets/bgm018.jpg",
+    "paid": false
+  }
 ]
