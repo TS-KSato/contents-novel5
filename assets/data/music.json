@@ -238,6 +238,19 @@
   "url": "assets/bgm020.mp3",
   "art": "assets/bgm020.jpg",
   "paid": true
+},
+{
+  "id": "bgm_021",
+  "name": "居場所の在り処",
+  "scene": "人の世界で友情とつながりが芽生える描写",
+  "mood": "爽やか・元気・青春的",
+  "theme": "絆と成長",
+  "bpm": 82,
+  "duration": 240,
+  "url": "assets/bgm021.mp3",
+  "art": "assets/bgm021.jpg",
+  "paid": false
 }
+
 
 ]
