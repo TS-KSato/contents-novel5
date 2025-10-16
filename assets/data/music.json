@@ -277,16 +277,15 @@
 },
 {
   "id": "bgm_024",
-  "name": "命の痕跡",
-  "scene": "ミレイアが聖域に運ばれ、わずかな命の変化が訪れる描写",
-  "mood": "希望",
-  "theme": "再生と優しさ",
-  "bpm": 56,
-  "duration": 280,
+  "name": "慈悲の灰より",
+  "scene": "ミレイアが聖域で命の兆しを見せる描写",
+  "mood": "深遠",
+  "theme": "罪と慈悲と命の連鎖",
+  "bpm": 52,
+  "duration": 310,
   "url": "assets/bgm024.mp3",
   "art": "assets/bgm024.jpg",
   "paid": true
 }
-
 
 ]
