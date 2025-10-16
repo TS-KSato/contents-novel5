@@ -214,5 +214,18 @@
     "url": "assets/bgm018.mp3",
     "art": "assets/bgm018.jpg",
     "paid": false
-  }
+  },
+  {
+  "id": "bgm_019",
+  "name": "大地へ、そして星へ",
+  "scene": "大地帰還の瞬間",
+  "mood": "神秘・荘厳・宇宙的",
+  "theme": "循環と永遠",
+  "bpm": 62,
+  "duration": 360,
+  "url": "assets/bgm019.mp3",
+  "art": "assets/bgm019.jpg",
+  "paid": true
+}
+
 ]
