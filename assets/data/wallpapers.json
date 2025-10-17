@@ -138,6 +138,16 @@
   "aspect": "1088x1920",
   "url": "assets/wp014.jpg",
   "paid": false
+  },
+{
+  "id": "wp15",
+  "name": "星空の下の自覚",
+  "caption": "自分が何者なのか――少年アランは静かに手を見つめ、人間としての自分を知り始める",
+  "archetype": "identity",
+  "tags": ["human", "fairy"],
+  "aspect": "1088x1920",
+  "url": "assets/wp015.jpg",
+  "paid": false
 }
 
 ]
