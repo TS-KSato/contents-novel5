@@ -6,7 +6,6 @@
       this.core = window.SiteCore;
       this.tracks = [];
       this.currentTrack = null;
-      this.activeFilter = "all";
       this.audio = null;
       this.elements = {};
       
@@ -20,7 +19,6 @@
         
         await this._loadTracks();
         this._setupEventListeners();
-        this._buildFilterTabs();
         this._render();
         
         console.log('MusicApp initialized successfully');
@@ -48,8 +46,7 @@
 
     _cacheElements() {
       this.elements = {
-        grid: document.getElementById('list'),
-        tabs: document.getElementById('tabs')
+        grid: document.getElementById('list')
       };
 
       if (!this.elements.grid) {
@@ -210,79 +207,23 @@
       });
     }
 
-    _buildFilterTabs() {
-      if (!this.elements.tabs) return;
-
-      const moods = [...new Set(this.tracks.map(t => t.mood).filter(Boolean))];
-      const themes = [...new Set(this.tracks.map(t => t.theme).filter(Boolean))];
-
-      const tabs = [
-        { label: 'すべて', value: 'all' },
-        ...moods.map(mood => ({ label: `${mood}`, value: `mood:${mood}` })),
-        ...themes.map(theme => ({ label: `◆${theme}`, value: `theme:${theme}` }))
-      ];
-
-      this.elements.tabs.innerHTML = tabs.map(tab => 
-        `<button class="tab ${tab.value === this.activeFilter ? 'active' : ''}" 
-                 role="tab" 
-                 aria-selected="${tab.value === this.activeFilter}"
-                 data-filter="${this._escapeHtml(tab.value)}">
-          ${this._escapeHtml(tab.label)}
-         </button>`
-      ).join('');
-
-      this.elements.tabs.addEventListener('click', (event) => {
-        const tab = event.target.closest('.tab');
-        if (!tab) return;
-
-        this.activeFilter = tab.dataset.filter || 'all';
-        this._updateActiveTab();
-        this._render();
-      });
-    }
-
-    _updateActiveTab() {
-      if (!this.elements.tabs) return;
-
-      this.elements.tabs.querySelectorAll('.tab').forEach(tab => {
-        const isActive = tab.dataset.filter === this.activeFilter;
-        tab.classList.toggle('active', isActive);
-        tab.setAttribute('aria-selected', isActive);
-      });
-    }
-
     _render() {
       if (!this.elements.grid) return;
 
-      const filteredTracks = this._filterTracks();
-      
-      if (filteredTracks.length === 0) {
+      if (this.tracks.length === 0) {
         this.elements.grid.innerHTML = `
           <div class="muted">
-            該当する楽曲が見つかりませんでした。
+            楽曲が見つかりませんでした。
           </div>
         `;
         return;
       }
 
-      this.elements.grid.innerHTML = filteredTracks.map(track => 
+      this.elements.grid.innerHTML = this.tracks.map(track => 
         this._createTrackCard(track)
       ).join('');
 
       this._updatePlayButtons();
-    }
-
-    _filterTracks() {
-      return this.tracks.filter(track => {
-        if (this.activeFilter === 'all') return true;
-        if (this.activeFilter.startsWith('mood:')) {
-          return track.mood === this.activeFilter.slice(5);
-        }
-        if (this.activeFilter.startsWith('theme:')) {
-          return track.theme === this.activeFilter.slice(6);
-        }
-        return true;
-      });
     }
 
     _createTrackCard(track) {
