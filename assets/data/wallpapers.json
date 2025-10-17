@@ -148,6 +148,16 @@
   "aspect": "1088x1920",
   "url": "assets/wp015.jpg",
   "paid": false
+},
+{
+  "id": "wp16",
+  "name": "旅立ちへの導き",
+  "caption": "エルフの賢者ライラから地図を受け取り、アランの新たな旅が始まろうとしている",
+  "archetype": "journey",
+  "tags": ["human", "elf"],
+  "aspect": "1088x1920",
+  "url": "assets/wp016.jpg",
+  "paid": false
 }
 
 ]
