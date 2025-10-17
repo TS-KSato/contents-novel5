@@ -167,7 +167,7 @@ header {
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
   gap: 10px;
-  align-items: center;
+  align-items: start; /* 追加：上揃え */
   padding: 12px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -175,7 +175,7 @@ header {
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
-  height: 96px;
+  min-height: 96px;
 }
 
 .card:hover {
