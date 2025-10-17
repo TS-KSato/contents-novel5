@@ -86,56 +86,12 @@ header {
   background: #8fc0ff;
 }
 
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-  overflow: auto;
-  padding-bottom: 6px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.tab {
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: #1b2230;
-  color: #c7d2e4;
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
-  border: 1px solid #273144;
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.tab:hover {
-  background: #233041;
-  border-color: #334155;
-}
-
-.tab.active {
-  background: #23304a;
-  color: #fff;
-  border-color: #38507a;
-  box-shadow: 0 0 0 1px rgba(56, 80, 122, 0.3);
-}
-
-.tab:focus-visible {
-  outline: 2px solid var(--acc);
-  outline-offset: 2px;
-}
-
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
   padding: 12px 12px 80px;
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 80px);
 }
 
 @media (min-width: 560px) {
@@ -169,8 +125,6 @@ header {
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
-  height: 96px;
-  overflow: hidden;
 }
 
 .card:hover {
@@ -356,16 +310,6 @@ header {
     width: 60px;
   }
   
-  .tabs {
-    gap: 6px;
-    margin-top: 8px;
-  }
-  
-  .tab {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
   .grid {
     padding: 8px 8px 80px;
     gap: 8px;
@@ -374,8 +318,6 @@ header {
   .card {
     padding: 10px;
     gap: 8px;
-    height: 84px;
-    overflow: hidden;
   }
   
   .art {
@@ -407,8 +349,6 @@ header {
   .card {
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto auto;
-    height: 140px;
-    overflow: hidden;
   }
 
   .meta {
@@ -433,7 +373,6 @@ header {
 
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .tab,
   .go .btn {
     transition: none;
     animation: none;
@@ -449,12 +388,6 @@ header {
 }
 
 @media (prefers-contrast: high) {
-  .tab.active {
-    background: #fff;
-    color: #000;
-    border: 2px solid #000;
-  }
-  
   .go .btn:focus-visible {
     outline: 3px solid #fff;
     outline-offset: 2px;
