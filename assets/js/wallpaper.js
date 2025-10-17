@@ -1,11 +1,9 @@
-// wallpaper.js — wallpapers.json を読み込んで表示（外部化 / data 配下に移行）
+// wallpaper.js — wallpapers.json を読み込んで表示
 const ALLOWED_ARCH = new Set(["nature", "life"]);
 const TAG_ORDER    = ["dragon", "human", "elf", "fairy"];
 const ALLOWED_TAGS = new Set(TAG_ORDER);
-const $list    = document.getElementById("list");
-const $filters = document.getElementById("filters");
+const $list = document.getElementById("list");
 let ALL = [];
-let active = "all";
 
 const jpTag = (t) => ({ dragon: "竜", human: "人", elf: "エルフ", fairy: "妖精" }[t] || t);
 const has   = (arr, v) => Array.isArray(arr) && arr.includes(v);
@@ -28,25 +26,8 @@ function normalize(w){
   return out;
 }
 
-function buildChips(){
-  const presentTags = TAG_ORDER.filter(t => ALL.some(w => has(w.tags, t)));
-  const btn = (label, val) => `<button class="chip${active===val?" active":""}" data-t="${val}">${label}</button>`;
-  $filters.innerHTML =
-    btn("すべて", "all") +
-    btn("自然", "arch:nature") +
-    btn("生物", "arch:life") +
-    presentTags.map(t => btn(jpTag(t), `tag:${t}`)).join("");
-}
-
 function draw(){
-  const rows = ALL.filter(w => {
-    if (active === "all") return true;
-    if (active.startsWith("arch:")) return w.archetype === active.slice(5);
-    if (active.startsWith("tag:"))  return has(w.tags, active.slice(4));
-    return true;
-  });
-
-  $list.innerHTML = rows.map(w => `
+  $list.innerHTML = ALL.map(w => `
 <article class="card">
   <img class="hero" src="${w.url}" alt="${esc(w.name)}" loading="lazy" decoding="async" />
   <div class="wrap">
@@ -60,21 +41,12 @@ function draw(){
   </div>
 </article>`).join("");
 
-  if (typeof window.gtagEvent === "function" && rows.length) {
-    window.gtagEvent("view_wallpaper", { count: rows.length });
+  if (typeof window.gtagEvent === "function" && ALL.length) {
+    window.gtagEvent("view_wallpaper", { count: ALL.length });
   }
 }
 
-$filters.addEventListener("click", (e) => {
-  const b = e.target.closest(".chip");
-  if (!b) return;
-  active = b.dataset.t || "all";
-  $filters.querySelectorAll(".chip").forEach(x => x.classList.toggle("active", x === b));
-  draw();
-});
-
-// ↓↓↓ 参照先を data/ 配下に変更
 fetch("./assets/data/wallpapers.json")
   .then(r => r.json())
-  .then(json => { if(!Array.isArray(json)) throw 0; ALL = json.map(normalize); buildChips(); draw(); })
+  .then(json => { if(!Array.isArray(json)) throw 0; ALL = json.map(normalize); draw(); })
   .catch(() => { $list.innerHTML = '<p class="note">わかりません／情報が不足しています</p>'; });
