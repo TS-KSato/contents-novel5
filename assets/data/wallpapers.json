@@ -168,6 +168,16 @@
   "aspect": "1088x1920",
   "url": "assets/wp017.jpg",
   "paid": false
+},
+{
+  "id": "wp018",
+  "name": "剣術の演武",
+  "caption": "街の広場で披露される剣技は、静と動の美を体現する",
+  "archetype": "honor",
+  "tags": ["human"],
+  "aspect": "1088x1920",
+  "url": "assets/wp018.jpg",
+  "paid": false
 }
 
 ]
