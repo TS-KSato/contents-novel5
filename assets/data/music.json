@@ -334,6 +334,18 @@
   "url": "assets/bgm028.mp3",
   "art": "assets/bgm028.jpg",
   "paid": false
+},
+{
+  "id": "bgm_029",
+  "name": "宙に溶けた願い",
+  "scene": "恋心・初恋・想いを核にした、世界観全体を包み込む叙情テーマソング",
+  "mood": "儚さ・想い・祈り・希望",
+  "theme": "恋・運命・絆・永遠",
+  "bpm": 78,
+  "duration": 265,
+  "url": "assets/bgm029.mp3",
+  "art": "assets/bgm029.jpg",
+  "paid": true
 }
 
 ]
