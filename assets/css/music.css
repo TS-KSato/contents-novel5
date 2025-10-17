@@ -416,7 +416,7 @@ header {
   .card {
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto auto;
-    height: 120px;
+    min-height: 96px;
   }
 
   .meta {
