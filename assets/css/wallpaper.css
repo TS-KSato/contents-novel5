@@ -7,23 +7,13 @@ header{
 }
 .title{font-weight:800;font-size:18px}
 
-/* フィルタ chips */
-.filters{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-.chip{
-  padding:8px 12px;border-radius:999px;background:#1b2230;color:#cfe1ff;
-  font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid #273144
-}
-.chip.active{background:#23304a;color:white;border-color:#38507a}
-
-/* 一覧 */
 main{padding:12px 12px 84px}
 .card{
-  /* .card は共通を使用。必要差分のみ追加 */
   margin-bottom:12px; overflow:hidden;
 }
 .hero{
   width:100%;
-  aspect-ratio:9/16; /* 1080x2400 相当 */
+  aspect-ratio:9/16;
   background:linear-gradient(135deg,#263145,#3f5c8a);
   object-fit:cover;
 }
@@ -37,7 +27,6 @@ main{padding:12px 12px 84px}
   background:#3b6bd9; color:#fff; font-weight:700; font-size:13px;
 }
 
-/* 簡易ボトムナビ（このページは共通 .bottom-nav ではなく簡易ナビを想定） */
 nav.bottom{
   position:fixed; left:0; right:0; bottom:0;
   background:#0f131b; border-top:1px solid #232a39;
