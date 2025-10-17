@@ -158,6 +158,16 @@
   "aspect": "1088x1920",
   "url": "assets/wp016.jpg",
   "paid": false
+},
+{
+  "id": "wp17",
+  "name": "初めての人間の家",
+  "caption": "親切な老人に迎え入れられ、アランは初めて人間の温もりに触れる夜を過ごした",
+  "archetype": "humanity",
+  "tags": ["human"],
+  "aspect": "1088x1920",
+  "url": "assets/wp017.jpg",
+  "paid": false
 }
 
 ]
