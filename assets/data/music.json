@@ -225,7 +225,7 @@
   "duration": 360,
   "url": "assets/bgm019.mp3",
   "art": "assets/bgm019.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_020",
@@ -237,7 +237,7 @@
   "duration": 300,
   "url": "assets/bgm020.mp3",
   "art": "assets/bgm020.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_021",
@@ -261,7 +261,7 @@
   "duration": 320,
   "url": "assets/bgm022.mp3",
   "art": "assets/bgm022.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_023",
@@ -285,7 +285,7 @@
   "duration": 310,
   "url": "assets/bgm024.mp3",
   "art": "assets/bgm024.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_025",
@@ -297,7 +297,7 @@
   "duration": 360,
   "url": "assets/bgm025.mp3",
   "art": "assets/bgm025.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_026",
@@ -309,7 +309,7 @@
   "duration": 240,
   "url": "assets/bgm026.mp3",
   "art": "assets/bgm026.jpg",
-  "paid": true
+  "paid": false
 },
 {
   "id": "bgm_027",
@@ -321,7 +321,19 @@
   "duration": 240,
   "url": "assets/bgm027.mp3",
   "art": "assets/bgm027.jpg",
-  "paid": true
+  "paid": false
+},
+{
+  "id": "bgm_028",
+  "name": "群青の空に",
+  "scene": "この世界で暮らす庶民や兵士、農民たちの“日常の歌”",
+  "mood": "青春",
+  "theme": "豊かさと夢、日々を生きる力",
+  "bpm": 112,
+  "duration": 260,
+  "url": "assets/bgm028.mp3",
+  "art": "assets/bgm028.jpg",
+  "paid": false
 }
 
 ]
