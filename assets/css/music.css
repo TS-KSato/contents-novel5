@@ -1,6 +1,5 @@
 /* music.css — エテルナリア音楽館スタイル */
 
-/* CSS変数 */
 :root { 
   --acc: #6aa8ff; 
   --music-card-hover: #1a2238;
@@ -11,7 +10,6 @@
   --muted: #7a8494;
 }
 
-/* ===== ヘッダー ===== */
 header {
   position: sticky; 
   top: 0;
@@ -35,7 +33,6 @@ header {
   margin: 0;
 }
 
-/* ===== ボリュームコントロール ===== */
 .volume-control {
   display: flex;
   align-items: center;
@@ -89,7 +86,6 @@ header {
   background: #8fc0ff;
 }
 
-/* ===== タブフィルター ===== */
 .tabs {
   display: flex;
   gap: 8px;
@@ -134,7 +130,6 @@ header {
   outline-offset: 2px;
 }
 
-/* ===== メイングリッド ===== */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -161,13 +156,12 @@ header {
   }
 }
 
-/* ===== 音楽カード ===== */
 .card {
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
   gap: 10px;
-  align-items: start; /* 追加：上揃え */
+  align-items: center;
   padding: 12px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -175,7 +169,8 @@ header {
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
-  min-height: 96px;
+  height: 96px;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -202,7 +197,6 @@ header {
   user-drag: none;
 }
 
-/* ===== アートワーク ===== */
 .art {
   width: 72px;
   height: 72px;
@@ -239,7 +233,6 @@ header {
   display: none;
 }
 
-/* ===== メタ情報 ===== */
 .meta {
   display: grid;
   gap: 3px;
@@ -282,7 +275,6 @@ header {
   max-width: fit-content;
 }
 
-/* ===== アクションボタン ===== */
 .go {
   flex-shrink: 0;
   grid-column: 3;
@@ -334,7 +326,6 @@ header {
   background: #3a5a4a;
 }
 
-/* ===== 状態表示 ===== */
 .muted {
   color: var(--muted);
   text-align: center;
@@ -352,7 +343,6 @@ header {
   margin: 1rem;
 }
 
-/* ===== レスポンシブ対応 ===== */
 @media (max-width: 768px) {
   header {
     padding: 12px 12px 6px;
@@ -384,7 +374,8 @@ header {
   .card {
     padding: 10px;
     gap: 8px;
-    height: 80px;
+    height: 84px;
+    overflow: hidden;
   }
   
   .art {
@@ -416,7 +407,8 @@ header {
   .card {
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto auto;
-    min-height: 96px;
+    height: 140px;
+    overflow: hidden;
   }
 
   .meta {
@@ -439,7 +431,6 @@ header {
   }
 }
 
-/* ===== アクセシビリティ ===== */
 @media (prefers-reduced-motion: reduce) {
   .card,
   .tab,
@@ -474,7 +465,6 @@ header {
   }
 }
 
-/* ===== プリント用スタイル ===== */
 @media print {
   .volume-control,
   .go .btn,
