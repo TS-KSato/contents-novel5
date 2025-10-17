@@ -345,7 +345,19 @@
   "duration": 265,
   "url": "assets/bgm029.mp3",
   "art": "assets/bgm029.jpg",
-  "paid": true
+  "paid": false
+},
+{
+  "id": "bgm_030",
+  "name": "花の彼方の夢",
+  "scene": "人間が偶然目撃した、妖精たちだけの国の情景",
+  "mood": "幻想・生命感・涙・憧れ",
+  "theme": "自然との共生・生命の輝き・無垢な存在",
+  "bpm": 76,
+  "duration": 270,
+  "url": "assets/bgm030.mp3",
+  "art": "assets/bgm030.jpg",
+  "paid": false
 }
 
 ]
