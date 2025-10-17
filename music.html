@@ -25,17 +25,14 @@
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   
-  <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/app.css">
   <link rel="stylesheet" href="./assets/css/components.css">
   <link rel="stylesheet" href="./assets/css/music.css">
   
-  <!-- プリロード -->
   <link rel="preload" href="./assets/data/music.json" as="fetch" crossorigin>
 </head>
 
 <body>
-  <!-- ヘッダー（スティッキー） -->
   <header role="banner">
     <div class="header-top">
       <div class="title">エテルナリア音楽館</div>
@@ -44,15 +41,10 @@
         <input type="range" min="0" max="100" value="80" id="volumeSlider" aria-label="音量調整">
       </div>
     </div>
-    <div class="tabs" id="tabs" role="tablist" aria-label="音楽フィルター">
-      <button class="tab active" role="tab" aria-selected="true" data-filter="all">すべて</button>
-    </div>
   </header>
 
-  <!-- メインコンテンツ -->
   <main class="grid" id="list" aria-live="polite" role="main"></main>
 
-  <!-- 下部ナビゲーション -->
   <nav class="bottom-nav" aria-label="主要ナビゲーション" role="navigation">
     <div class="bn-grid">
       <a class="bn-btn" href="./index.html">
@@ -70,10 +62,8 @@
     </div>
   </nav>
 
-  <!-- 隠しオーディオ要素（音楽再生用） -->
   <audio id="musicPlayer" preload="metadata" style="display: none;" aria-hidden="true"></audio>
 
-  <!-- JavaScript（非モジュール形式） -->
   <script src="./assets/js/core.js"></script>
   <script src="./assets/js/music.js"></script>
 </body>
