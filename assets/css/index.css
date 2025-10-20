@@ -4,7 +4,7 @@
   padding:1.25rem; margin-top:.5rem; display:flex; flex-direction:column; justify-content:center;
   min-height:42vh; max-height:56vh; opacity: 0.9;
 }
-@media (max-height:740px){ .hero{ min-height:38vh; max-height:50vh } }
+@media (max-height:740px){ .hero{ max-height:50vh } }
 .hero h1{ margin:0 0 .25rem; font-size:clamp(1.35rem,6vw,1.75rem); line-height:1.25; letter-spacing:.02em }
 .hero .lead{ color:#cfe1ff; margin:.25rem 0 .75rem; font-size:1rem }
 .cta{ display:flex; gap:.5rem; flex-wrap:wrap }
