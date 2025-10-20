@@ -23,6 +23,66 @@ body{
 }
 .wrap{ max-width:40rem; margin:0 auto; padding:1rem; }
 
+/* ===== ロゴヘッダー ===== */
+.site-header {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.logo-link {
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.logo-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.site-logo {
+  height: 2.5rem;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+@media (min-width: 640px) {
+  .site-logo {
+    height: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 1rem 0 0.75rem;
+  }
+  
+  .site-logo {
+    height: 2rem;
+  }
+}
+
+/* アクセシビリティ: モーション軽減 */
+@media (prefers-reduced-motion: reduce) {
+  .logo-link {
+    transition: none;
+  }
+  
+  .logo-link:hover {
+    transform: none;
+  }
+}
+
+/* ===== 既存のスタイル ===== */
 .btn{ appearance:none; border:1px solid var(--accent-2-b); background:var(--accent-2);
   color:#fff; border-radius:.75rem; padding:.625rem .9rem; min-height:var(--tap); font-size:1rem; cursor:pointer;
 }
@@ -66,4 +126,17 @@ footer[role="contentinfo"] {
   padding: 1rem;
   margin-top: auto;
   border-top: 1px solid var(--line);
+}
+
+/* スクリーンリーダー専用テキスト */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
